@@ -4,85 +4,14 @@
 <head>
     <meta charsert="UTF-8">
     <title>ChatCord</title>
-    <style type="text/css">
-        html,
-        body {
-            margin: 0 auto;
-            padding: 0;
-            min-width: 1200px;
-            width: auto;
-            min-height: 800px;
-            height: auto;
-            background-color: #DCDCDC;
-        }
-
-        @font-face {
-            font-family: old_game;
-            src: url('assets/Old_Game.ttf');
-            font-weight: normal;
-        }
-
-        .left {
-            float: left;
-            width: 200px;
-        }
-
-        .right {
-            margin-left: 200px;
-            height: 100vh;
-            border-left: solid #383E42;
-        }
-
-        .logo {
-            height: 100px;
-            background: center/100px no-repeat url(assets/42.png);
-        }
-
-        .channel {
-            text-align: center;
-        }
-
-        .banner {
-            height: 100px;
-            text-align: center;
-            line-height: 100px;
-            font-size: 60px;
-            color: white;
-            background-color: #383E42;
-        }
-
-        .chatbox {
-            border: solid#383E42;
-        }
-
-        .chat {
-            position: fixed;
-            margin: 0 auto;
-            bottom: 40px;
-            top: 110px;
-            left: 210px;
-            right: 10px;
-            font-size: 25px;
-            overflow: auto;
-            background-color: #B8B8B8;
-        }
-
-        .input {
-            position: absolute;
-            bottom: 5px;
-            left: 210px;
-            width: calc(100% - 228px);
-            font-family: old_game;
-            font-size: 25px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body style="font-family: old_game">
     <div class="left">
         <div class="logo">
         </div>
-        <div class="channel">
+        <div class="channel" id="channel">
             CHANNEL
         </div>
     </div>
