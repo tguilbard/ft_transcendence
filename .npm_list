@@ -1,0 +1,6 @@
+#I note here all installation required tou use my app
+
+
+npm install --save @nestjs/typeorm typeorm pg #postgres
+npm install --save dotenv # environnement variable probablemet inutile vec celui du dessous
+npm i --save @nestjs/config
