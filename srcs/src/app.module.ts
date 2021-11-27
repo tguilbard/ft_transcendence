@@ -16,13 +16,12 @@ import { UsersModule } from './users/users.module';
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'root',
-      password: 'test',
+      username: 'postgres',
+      password: 'postgres',
       database: 'test',
       autoLoadEntities: true,
       entities: ["dist/**/*.entity{.ts,.js}"],
       synchronize: true,
-      debug: true
   }),
     UsersModule
   ],
