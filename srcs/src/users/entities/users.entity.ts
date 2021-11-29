@@ -1,8 +1,8 @@
-import { isUUID } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { TimeStampEntities } from './generics/timestamp.entity';
 
 @Entity('Users')
-export class UserEntity {
+export class UserEntity extends TimeStampEntities {
 
     @PrimaryGeneratedColumn() //i dont know why it is mandatory
 	id : number
@@ -10,13 +10,13 @@ export class UserEntity {
 	@Column(
 		{
 			update: true,
-			nullable: true
+			nullable: false
 		})
     login: string;
 
 	@Column(
 		{
-			update: false,
+			update: true,
 			nullable: false
 		})
 	password : string;

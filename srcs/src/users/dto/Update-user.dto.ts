@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { IsNotEmpty, IsOptional, IsIn, IsString, MaxLength, MinLength } from "class-validator";
 
 export class UpdateUserDTO {
 	@IsString()
@@ -13,5 +13,9 @@ export class UpdateUserDTO {
 
 	@IsString()
 	@IsOptional()
-	password : string;
+	password: string;
+
+	@IsString()
+	@IsOptional()
+	password2: string;
 }
