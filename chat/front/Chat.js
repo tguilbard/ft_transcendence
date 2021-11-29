@@ -3,38 +3,57 @@ const chatMessages = document.querySelector('.chat');
 
 let chan = [];
 let muted = [];
-let room = "test";
-let username;
+let username = "test";
+let channel = "General";
+let act_div;
+let act_but;
 
 const socket = io();
-chan.push("general");
+chan.push("General");
 
 socket.on("connect", () => {
   username = socket.id;
 });
-
-socket.emit('joinRoom', { username, room });
 
 socket.on('roomUsers', ({ room, users }) => {
   outputRoomName(room);
   // outputUsers(users);
 });
 
-socket.on('msgToClient', (message) => {
-  if (muted.indexOf(message.username) == -1)
-    outputMessage(message);
+socket.on('msgToClient', (username, message, div_name) => {
+  if (muted.indexOf(username) == -1)
+    outputMessage(username, message, div_name);
 
   chatMessages.scrollTop = chatMessages.scrollHeight;
 })
 
-document.querySelectorAll('.button').forEach(item => {
-  item.addEventListener('click', (e) => {
+const g_div = document.createElement('div');
+g_div.id = "General";
+g_div.style.height = "100%";
+document.querySelector('.chat').appendChild(g_div);
+
+act_div = g_div;
+
+const g_but = document.getElementById('GeneralChannel');
+g_but.style.backgroundColor = "#B8B8B8";
+act_but = g_but;
+g_but.addEventListener('click', (e) => {
     e.preventDefault();
 
-    console.log("change chan for", item.value);
+    let my_div = g_div;
+
+    console.log("change chan for", "General");
+    channel = "General";
     //add next LATER
-  })
-})
+    act_div.style.height = "0px";
+    act_div.style.display = "none";
+    my_div.style.height = "100%";
+    my_div.style.display = "";
+    act_div = my_div;
+    act_but.style.backgroundColor = "#DCDCDC";
+    g_but.style.backgroundColor = "#B8B8B8";
+    act_but = g_but;
+});
 
 chatForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -64,7 +83,7 @@ chatForm.addEventListener('submit', (e) => {
         joinChannel(msg.substring(6));
     }
     else {
-      socket.emit('msgToServer', msg);
+      socket.emit('msgToServer', username, msg, channel);
     }
     // Clear input
     e.target.elements.msg.value = '';
@@ -76,18 +95,37 @@ function joinChannel(name) {
   chan.push(name);
   const new_input = document.querySelector('.button').cloneNode();
   new_input.value = name;
+  new_input.style.backgroundColor = "#DCDCDC";
+  // new_input.style.backgroundImage = "url('css/assets/bonobo.jpg')";
+  const div = document.createElement('div');
+  div.style.height = 0;
+  div.style.display = "none";
+  div.id = name;
+  document.querySelector('.chat').appendChild(div);
   new_input.addEventListener('click', (e) => {
     e.preventDefault()
     
+    let my_div = div;
     console.log("change chan for", name);
     //add next LATER
+    channel = name;
+    act_div.style.height = "0px";
+    act_div.style.display = "none";
+    my_div.style.height = "100%";
+    my_div.style.display = "";
+    act_div = my_div;
+    act_but.style.backgroundColor = "#DCDCDC";
+    new_input.style.backgroundColor = "#B8B8B8";
+    act_but = new_input;
   });
   document.querySelector('.channel').appendChild(new_input);
 
   socket.emit("joinServer", name);
 }
 
-function outputMessage(message) {
+function outputMessage(username ,message, div_name) {
+  console.log(username, message, div_name);
+
   const div = document.createElement('div');
   div.classList.add('message');
   const p = document.createElement('p');
@@ -99,7 +137,7 @@ function outputMessage(message) {
   para.classList.add('text');
   para.innerText = message;
   div.appendChild(para);
-  document.querySelector('.chat').appendChild(div);
+  document.getElementById(div_name).appendChild(div);
 }
 
 // function outputUsers(users) {
