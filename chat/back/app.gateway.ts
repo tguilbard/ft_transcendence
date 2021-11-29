@@ -24,6 +24,13 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     this.server.emit('msgToClient', payload);
   }
 
+
+  @SubscribeMessage('joinServer')
+  thandleMessage(client: Socket, payload: any): void
+  {
+    this.logger.log(client.id, payload);
+  }
+
   afterInit(server: Server)
   {
     /* Initialisation du chat General

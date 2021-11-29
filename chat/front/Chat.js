@@ -1,12 +1,13 @@
 const chatForm = document.getElementById('chat-form');
 const chatMessages = document.querySelector('.chat');
-const channel = document.getElementById('channel');
 
+let chan = [];
 let muted = [];
 let room = "test";
 let username;
 
 const socket = io();
+chan.push("general");
 
 socket.on("connect", () => {
   username = socket.id;
@@ -19,18 +20,21 @@ socket.on('roomUsers', ({ room, users }) => {
   // outputUsers(users);
 });
 
-//TESTING
 socket.on('msgToClient', (message) => {
-  outputMessage(message);
-})
-
-socket.on('message', (message) => {
-  console.log(message);
   if (muted.indexOf(message.username) == -1)
     outputMessage(message);
 
   chatMessages.scrollTop = chatMessages.scrollHeight;
-});
+})
+
+document.querySelectorAll('.button').forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    console.log("change chan for", item.value);
+    //add next LATER
+  })
+})
 
 chatForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -44,6 +48,7 @@ chatForm.addEventListener('submit', (e) => {
       return false;
     }
 
+    //upgrade parser
     if (msg.substring(0, 6) == "/mute ") {
       if (muted.indexOf(msg.substring(6)) == -1)
         muted.push(msg.substring(6));
@@ -54,9 +59,11 @@ chatForm.addEventListener('submit', (e) => {
       if (index != -1)
         muted.splice(index, 1);
     }
-    else
-    {
-      socket.emit('chatMessage', msg);
+    else if (msg.substring(0, 6) == "/join ") {
+      if (chan.indexOf(msg.substring(6)) == -1)
+        joinChannel(msg.substring(6));
+    }
+    else {
       socket.emit('msgToServer', msg);
     }
     // Clear input
@@ -64,6 +71,21 @@ chatForm.addEventListener('submit', (e) => {
     e.target.elements.msg.focus();
 
 });
+
+function joinChannel(name) {
+  chan.push(name);
+  const new_input = document.querySelector('.button').cloneNode();
+  new_input.value = name;
+  new_input.addEventListener('click', (e) => {
+    e.preventDefault()
+    
+    console.log("change chan for", name);
+    //add next LATER
+  });
+  document.querySelector('.channel').appendChild(new_input);
+
+  socket.emit("joinServer", name);
+}
 
 function outputMessage(message) {
   const div = document.createElement('div');
@@ -78,10 +100,6 @@ function outputMessage(message) {
   para.innerText = message;
   div.appendChild(para);
   document.querySelector('.chat').appendChild(div);
-}
-
-function outputRoomName(room) {
-  channel.innerText = room;
 }
 
 // function outputUsers(users) {

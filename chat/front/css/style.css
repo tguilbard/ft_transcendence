@@ -34,6 +34,8 @@ body {
 
 .channel {
     text-align: center;
+    overflow: auto;
+    max-height: calc(100vh - 100px);
 }
 
 .banner {
@@ -79,4 +81,18 @@ body {
 
 .message .meta span {
 	color: #777;
+}
+
+.button {
+    height: 50px;
+    width: 100%;
+    background-color: #DCDCDC;
+    border: 1px solid #383E42;
+    border-left: 0;
+    border-right: 0;
+    font-family: old_game;
+    font-size: 20px;
+    overflow-wrap: normal;
+    background: left/50px no-repeat url(assets/42.png);
+    padding-left:50px;
 }
