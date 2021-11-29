@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Socket } from 'socket.io';
 import { UserObject } from './app.entities';
 
 export enum Chantype {
@@ -72,10 +73,13 @@ export class Chan {
 
   // @SubscribeMessage('addUserServer')
   addUser(u: User): boolean {
+    // le problème vient du fait qu'on ne sait pas si il n'y a personne qui porte
+    // le même nom ou qu'il y a déjà le nom dedans
     let user = this.findUser(u);
-    if (user && user.userMode.flagIsSet(Usertype.ban)) return false;
-    this.userList.push(user);
-    // this.emit('addUserClient', u) afficher chan sur front
+    if (user) {
+      if (user.userMode.flagIsSet(Usertype.ban)) return false;
+    }
+    else this.userList.push(new UserObject(u, new UserMode(0)));
     return true;
   }
 
@@ -156,8 +160,9 @@ export class Chan {
   }
 
   findUser(u: User): UserObject | null {
+    console.log(this.userList);
     for (let user of this.userList) {
-      if (u.nick === user.user.nick) return user;
+      if (user && u.nick === user.user.nick) return user;
     }
     return null;
   }
@@ -185,10 +190,12 @@ export class User {
   // Voir si on les met en private avec des getters
   id: string;
   nick: string;
+  socket: Socket;
   // Ajouter un socket qui lui est associé en front
 
-  constructor(id: string, nick: string) {
+  constructor(id: string, nick: string, socket: Socket) {
     this.id = id;
     this.nick = nick;
+    this.socket = socket;
   }
 }
