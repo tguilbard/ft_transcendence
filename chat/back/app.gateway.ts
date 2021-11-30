@@ -8,9 +8,8 @@ import {
 } from '@nestjs/websockets';
 import { Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
-import { Chan, User, Chantype, UserMode, Usertype } from './app.service';
+import { Chan, User, ChanType, Mode, Usertype, Message } from './app.service';
 import { UserObject } from './app.entities';
-import { userInfo } from 'os';
 
 @WebSocketGateway()
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
@@ -25,17 +24,17 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   @SubscribeMessage('msgToServer')
   handleMessage(client: Socket, payload: any): void
   {
+    /* version message objet
+      let msg = new Message(payload[0], payload[1]);
+      this.server.to(payload[2]).emit('msgToClient', payload[0], msg.msg, payload[2]);
+    */
     this.server.to(payload[2]).emit('msgToClient', payload[0], payload[1], payload[2]);
   }
 
   afterInit(server: Server)
   {
-    /* Initialisation du chat General
-    * -> superAdmin : Owner du général
-    * -> chanList qui contiendra la liste des channels
-    */
     this.superAdmin = new User("0", "Root", null);
-    let chan = new Chan(this.superAdmin, "General", Chantype.public);
+    let chan = new Chan(this.superAdmin, "General", ChanType.public);
     this.chanList.push(chan);
     this.serverUsers.push(this.superAdmin);
     this.logger.log('Init');
@@ -44,9 +43,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   handleConnection(client: Socket, ...args: any[])
   {
     
-    // TEST HERE
     client.join(this.chanList[0].name);
-    //
     this.logger.log(`Client ${client.id} connected`);
     let user = new User(client.id, client.id, client);
     if (!this.addUserInChan(user, this.chanList[0])) {
@@ -65,6 +62,10 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     if (u === null || !chan.addUser(u))
       return false;
     u.socket.join(chan.name);
+    /* version message objet
+      let msg = new Message("Root", `User ${u.nick} joined ${chan.name}`);
+      this.server.to(payload[2]).emit('msgToClient', "Root", msg.msg, chan.name);
+    */
     this.server.to(chan.name).emit('msgToClient', "Root", `User ${u.nick} joined ${chan.name}`, chan.name);
     this.logger.log(`User ${u.nick} joined ${chan.name}`);
     return true;
@@ -88,8 +89,9 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     if (!targetChan) {
       let userTmp = userGeneral;
       userTmp.userMode.flag = Usertype.owner | Usertype.admin;
-      // Penser a rajouter la possibilite de set un type de chan
-      var newChan = new Chan(userTmp.user, payload, Chantype.public);
+      // Gérer avec le front la création de chan (Faire une fonction par type de
+      // chan ?)
+      var newChan = new Chan(userTmp.user, payload, ChanType.public);
       this.chanList.push(newChan);
       client.join(payload);
     }

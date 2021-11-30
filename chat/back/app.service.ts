@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Socket } from 'socket.io';
 import { UserObject } from './app.entities';
 
-export enum Chantype {
+export enum ChanType {
   public = 1,
   private = 1 << 1,
   protected = 1 << 2
@@ -12,13 +12,10 @@ export enum Usertype {
   owner = 1,
   admin = 1 << 1,
   mute = 1 << 2,
-  // On peut garder les users ban dans la listes des users.
-  // Il suffira à chaque fois de ne pas afficher l'user si il a le flag ban
-  // Réfléchir à un potentiel fichier avec le temps de ban
   ban = 1 << 3
 }
 
-export class UserMode {
+export class Mode {
   flag: number;
 
   constructor(flag?: number) {
@@ -38,48 +35,30 @@ export class UserMode {
   unsetFlag(flag: number): void {
       this.flag &= ~flag;
   }
-
-  displayFlag(): void {
-    // Pour debug
-    if (this.flagIsSet(Usertype.owner)) console.log('OWNER');
-    if (this.flagIsSet(Usertype.admin)) console.log('ADMIN');
-    if (this.flagIsSet(Usertype.mute)) console.log('MUTE');
-    if (this.flagIsSet(Usertype.ban)) console.log('BAN');
-  }
 }
 
 export class Chan {
 
-  /* Userobject
-  * User
-  * UserMode
-  */
   userList: UserObject[] = [];
-
-
-  type: Chantype;
-  
+  mode: Mode;
   pass: string;
-  name: string; // réfléchir à la gestion des private messages (nom des deux personnes)
+  name: string;
 
-  constructor(u: User, name: string, type?: Chantype, pass?: string) {
-    let userMode = new UserMode(Usertype.owner | Usertype.admin);
+  constructor(u: User, name: string, type: ChanType, pass?: string) {
+    let userMode = new Mode(Usertype.owner | Usertype.admin);
     let user = new UserObject(u, userMode);
     this.userList.push(user);
-    if (type) this.type = type;
-    else if (type === Chantype.protected) this.pass = pass ? pass : "";
+    this.mode = new Mode(type);
+    if (this.mode.flagIsSet(ChanType.protected)) this.pass = pass ? pass : "";
     this.name = name;
   }
 
-  // @SubscribeMessage('addUserServer')
   addUser(u: User): boolean {
-    // le problème vient du fait qu'on ne sait pas si il n'y a personne qui porte
-    // le même nom ou qu'il y a déjà le nom dedans
     let user = this.findUser(u);
     if (user) {
       if (user.userMode.flagIsSet(Usertype.ban)) return false;
     }
-    else this.userList.push(new UserObject(u, new UserMode(0)));
+    else this.userList.push(new UserObject(u, new Mode(0)));
     return true;
   }
 
@@ -99,23 +78,17 @@ export class Chan {
     this.removeUser(u);
   }
 
-  // en lien avec @SubscribeMessage('banUserServer')
   banUser(sender: User, u: User): boolean {
     let user = this.findUser(u);
     if (user) {
       if (this.kickUser(sender, u)) {
         user.userMode.setFlag(Usertype.ban);
-        // this.emit('banUserClient', u), récupérer l'info pour ne plus
-        // afficher sur le front le chan
         return true;
       }
     }
     return false;
-    // Renvoyer un message sinon
-    // e.g. "User ${u.nick} is not on the channel"
   }
 
-  // en lien avec @SubscribeMessage('kickUserServer')
   kickUser(sender: User, u: User): boolean {
     if (
       ((this.findAdmin(sender) && !this.findAdmin(u)) ||
@@ -123,9 +96,6 @@ export class Chan {
       this.removeUser(u)
     )
       return true;
-    // this.emit('kickUserClient', u) récupérer l'info pour ne plus
-    // afficher sur le front le chan
-    // Renvoyer un message sinon : e.g. ban user
     return false;
   }
 
@@ -150,11 +120,11 @@ export class Chan {
     return false;
   }
 
-  // en lien avec @SubcribeMessage('passServer')
-  updatePass(sender: User, pass: string) {
-    // Temporaire
-    // Crypter le pass et l'ajouter dans la db
+  updatePass(sender: User, pass: string): void {
     if (this.findOwner(sender)) {
+      if (!this.mode.flagIsSet(ChanType.protected)) {
+        this.mode.setFlag(ChanType.protected);
+      }
       this.pass = pass;
     }
   }
@@ -187,15 +157,24 @@ export class Chan {
 }
 
 export class User {
-  // Voir si on les met en private avec des getters
+
   id: string;
   nick: string;
   socket: Socket;
-  // Ajouter un socket qui lui est associé en front
 
   constructor(id: string, nick: string, socket: Socket) {
     this.id = id;
     this.nick = nick;
     this.socket = socket;
+  }
+}
+
+export class Message {
+  msg: string;
+  constructor(user?: string, content?: string) {
+    this.msg = "";
+    let dateTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    if (content && user)
+      this.msg += "[" + dateTime + "]\n" + user + ": " + content;
   }
 }
