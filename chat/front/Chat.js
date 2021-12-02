@@ -1,6 +1,7 @@
 const chatForm = document.getElementById('chat-form');
 const chatMessages = document.querySelector('.chat');
 
+
 let chan = [];
 let muted = [];
 let username = "test";
