@@ -5,7 +5,8 @@ import { UserObject } from './app.entities';
 export enum ChanType {
   public = 1,
   private = 1 << 1,
-  protected = 1 << 2
+  protected = 1 << 2,
+  privateMessage = 1 << 3
 }
 
 export enum Usertype {
@@ -45,7 +46,8 @@ export class Chan {
   name: string;
 
   constructor(u: User, name: string, type: ChanType, pass?: string) {
-    let userMode = new Mode(Usertype.owner | Usertype.admin);
+    let userMode = new Mode(type === ChanType.privateMessage ?
+                   0 : Usertype.owner | Usertype.admin);
     let user = new UserObject(u, userMode);
     this.userList.push(user);
     this.mode = new Mode(type);
@@ -130,10 +132,8 @@ export class Chan {
   }
 
   findUser(u: User): UserObject | null {
-    console.log(this.userList);
-    for (let user of this.userList) {
-      if (user && u.nick === user.user.nick) return user;
-    }
+    let found = this.userList.find(elem => elem.user.nick === u.nick);
+    if (found) return found;
     return null;
   }
 
