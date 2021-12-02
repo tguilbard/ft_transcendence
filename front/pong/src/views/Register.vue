@@ -47,7 +47,7 @@
               <label for="cb2">J'accepte les termes et conditions</label>
             </div>
 
-            <input class="button" type="submit" value="ENREGISTRER" @click="envoi()"/>
+            <input class="button" type="submit" value="ENREGISTRER" @click="envoi"/>
           </form>
         </div>
       </div>
@@ -55,7 +55,7 @@
   </div>
 </template>
 
-<script>
+<script lang="js">
 
 export default {
   data() {
@@ -75,7 +75,7 @@ export default {
       let img = this.file;
       // Création d'un formData obligatoire pour envoi de l'image
       var formData = new FormData();
-      formData.append("img", img, img.fileName);
+      formData.append("img", img, this.file.name);
       // Envoi des données sur l'url du serveur (mettez la votre) en POST en envoyant le formData contenant notre image et notre texte
       const options2 = {
       method: 'POST',
@@ -87,7 +87,7 @@ export default {
       },
       body: formData
       }
-      const response = fetch('http://localhost:3000/upload', options2);
+      fetch('http://localhost:3000/user/upload', options2);
     },
   },
 };
