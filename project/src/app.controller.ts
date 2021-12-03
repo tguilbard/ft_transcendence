@@ -8,11 +8,16 @@ import * as crypto from 'crypto'
 import * as jwt from 'jsonwebtoken'
 import { map } from 'rxjs/operators';
 import { url } from 'inspector';
+import { UsersService } from './users/users.service';
+import { blob } from 'stream/consumers';
+import { writeFile } from 'fs/promises';
+import fs from 'fs'
 
 
 @Controller()
 export class AppController {
-  constructor (private readonly httpService: HttpService, private readonly jwt: JwtService){}
+  constructor (private readonly httpService: HttpService, private readonly jwt: JwtService,
+	private readonly usersService: UsersService){}
 
   //@UseGuards(AuthenticatedGuard)
   
@@ -47,6 +52,13 @@ async register(@Body() body: Body, @Res() response: Response)
 		response.redirect('http://localhost:8080/register');
 	}
 
+	// @Get()
+	// async getAvatar(url: string, dest)
+	// 	const response = await fetch(url);
+	// 	const buffer = await response.buffer();
+	// 	fs.writeFile(`./image.jpg`, buffer, () => 
+	// 	  console.log('finished downloading!'));
+	//   }
 
   @Post('login')
 	async login(@Res() res: Response, @Req() request: Request)
@@ -86,9 +98,26 @@ async register(@Body() body: Body, @Res() response: Response)
 				'Authorization': 'Bearer ' + result.access_token
 			}
 
-			var username = await lastValueFrom(this.httpService.get(url, {headers: postData}).pipe(map(resp => resp.data)));
-			username = username.login;
+
+			
+
+
+
+			var info = await lastValueFrom(this.httpService.get(url, {headers: postData}).pipe(map(resp => resp.data)));
+			var username = info.login;
 			console.log('username = ', username);
+			console.log('photo = ', info.image_url);
+			const hes = { 
+				'responseType': "file"
+			}
+			var photo = await lastValueFrom(this.httpService.get(info.image_url, {headers: hes}).pipe(map(resp => resp.data)));
+			//console.log('photo = ', photo);
+			//var blob = await new blob(photo);
+			console.log(typeof blob);
+			const buffer = Buffer.from(photo);
+			// convert binary data to base64 encoded string
+			// const buffer = new Buffer(bitmap).toString('base64');
+			await this.usersService.addAvatar(buffer , 'intra_photo');
 			/* On envoie une erreur au client si le paramètre username est manquant */
 			if (!username)
 			{

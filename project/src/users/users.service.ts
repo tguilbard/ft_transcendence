@@ -13,11 +13,18 @@ export class UsersService {
       ) {}
      
       async addAvatar(imageBuffer: Buffer, filename: string) {
+        console.log('je suis dans addAvatar');
+        console.log(imageBuffer);
         const avatar = await this.databaseFilesService.uploadDatabaseFile(imageBuffer, filename);
         console.log('ID = ', avatar.id);
         await this.usersRepository.update(5, {
           avatarId: avatar.id
         });
+        return avatar;
+      }
+
+      async getAvatar() {
+        const avatar = await this.databaseFilesService.getFileById(31)
         return avatar;
       }
 

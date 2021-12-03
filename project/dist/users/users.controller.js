@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
+const common_2 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 let UsersController = class UsersController {
     constructor(userService) {
@@ -22,6 +23,16 @@ let UsersController = class UsersController {
     }
     async addAvatar(file) {
         return this.userService.addAvatar(file.buffer, file.originalname);
+    }
+    async getAvatar(res) {
+        console.log("je suis dans getAvatar");
+        const avatar = await this.userService.getAvatar();
+        console.log("avatar = ", avatar);
+        res.writeHead(200, {
+            'Content-Type': 'image/jpeg',
+            'Content-Length': avatar.data.length
+        });
+        res.end(avatar.data);
     }
 };
 __decorate([
@@ -32,6 +43,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "addAvatar", null);
+__decorate([
+    (0, common_1.Get)('img'),
+    __param(0, (0, common_2.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getAvatar", null);
 UsersController = __decorate([
     (0, common_1.Controller)('user'),
     __metadata("design:paramtypes", [users_service_1.UsersService])

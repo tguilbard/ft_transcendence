@@ -7,5 +7,6 @@ export declare class UsersService {
     private readonly databaseFilesService;
     constructor(usersRepository: Repository<UsersEntity>, databaseFilesService: DatabaseFilesService);
     addAvatar(imageBuffer: Buffer, filename: string): Promise<import("../Photo/databaseFile.entity").default>;
+    getAvatar(): Promise<import("../Photo/databaseFile.entity").default>;
     register(): Promise<void>;
 }

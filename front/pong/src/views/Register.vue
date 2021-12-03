@@ -55,7 +55,70 @@
   </div>
 </template>
 
-<script lang="js">
+
+<script lang="ts">
+
+import { Options, Vue } from 'vue-class-component';
+
+@Options({
+  
+  data() {
+    return {
+      srcImg: "https://cdn.intra.42.fr/users/jelarose.jpg",
+      file: "",
+      alt_text: "",
+    };
+  },
+  methods: {
+    getImg(event: any) {
+      this.file = event.target.files[0];
+      this.srcImg = URL.createObjectURL(this.file);
+    },
+    async getIntra()
+    {
+      // Récupération de l'image
+       const options: any = {
+        method: "GET",
+        responseType: "blob",
+      };
+      let response = await fetch("http://localhost:3000/user/img", options);
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP ! statut : ${response.status}`);
+      }
+      let myBlob = await response.blob();
+      let objectURL = await URL.createObjectURL(myBlob);
+      return objectURL;
+    },
+    envoi() {
+      
+      
+     // let img = this.file;
+      let img = this.getIntra();
+      // Création d'un formData obligatoire pour envoi de l'image
+      var formData = new FormData();
+     // formData.append("img", img, this.file.name);
+     formData.append("img", img, 'intra');
+      // Envoi des données sur l'url du serveur (mettez la votre) en POST en envoyant le formData contenant notre image et notre texte
+      const options2: any = {
+      method: 'POST',
+      mode: 'cors',
+      credentials: 'include',
+      headers: {
+      'Access-Control-Max-Age': '600',
+      'Cache-Control': 'no-cache'
+      },
+      body: formData
+      }
+      fetch('http://localhost:3000/user/upload', options2);
+    }
+  }
+})
+export default class Register extends Vue {
+}
+</script>
+
+<!--<script lang="js">
 
 export default {
   data() {
@@ -91,7 +154,8 @@ export default {
     },
   },
 };
-</script>
+</script>-->
+
 
 <style scoped >
 body {

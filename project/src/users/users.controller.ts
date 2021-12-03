@@ -15,5 +15,16 @@ export class UsersController {
     async addAvatar(@UploadedFile() file: Express.Multer.File) {
         return this.userService.addAvatar(file.buffer, file.originalname);
       }
+    @Get('img')
+    async getAvatar(@Res() res: Response) {
+        console.log("je suis dans getAvatar");
+        const avatar = await this.userService.getAvatar();
+        console.log("avatar = ", avatar);
+        res.writeHead(200, {
+         'Content-Type': 'image/jpeg',
+         'Content-Length': avatar.data.length
+        });
+        res.end(avatar.data); 
+      }
     
 }

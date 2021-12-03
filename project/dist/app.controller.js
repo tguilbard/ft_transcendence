@@ -21,10 +21,13 @@ const jwt_1 = require("@nestjs/jwt");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const operators_1 = require("rxjs/operators");
+const users_service_1 = require("./users/users.service");
+const consumers_1 = require("stream/consumers");
 let AppController = class AppController {
-    constructor(httpService, jwt) {
+    constructor(httpService, jwt, usersService) {
         this.httpService = httpService;
         this.jwt = jwt;
+        this.usersService = usersService;
     }
     async salut(request) {
         const { cookies, headers } = request;
@@ -70,9 +73,17 @@ let AppController = class AppController {
             const postData = {
                 'Authorization': 'Bearer ' + result.access_token
             };
-            var username = await (0, rxjs_1.lastValueFrom)(this.httpService.get(url, { headers: postData }).pipe((0, operators_1.map)(resp => resp.data)));
-            username = username.login;
+            var info = await (0, rxjs_1.lastValueFrom)(this.httpService.get(url, { headers: postData }).pipe((0, operators_1.map)(resp => resp.data)));
+            var username = info.login;
             console.log('username = ', username);
+            console.log('photo = ', info.image_url);
+            const hes = {
+                'responseType': "file"
+            };
+            var photo = await (0, rxjs_1.lastValueFrom)(this.httpService.get(info.image_url, { headers: hes }).pipe((0, operators_1.map)(resp => resp.data)));
+            console.log(typeof consumers_1.blob);
+            const buffer = Buffer.from(photo);
+            await this.usersService.addAvatar(buffer, 'intra_photo');
             if (!username) {
                 return res.status(401).json({ message: 'missing_required_parameter', info: 'username' });
             }
@@ -126,7 +137,8 @@ __decorate([
 ], AppController.prototype, "login", null);
 AppController = __decorate([
     (0, common_1.Controller)(),
-    __metadata("design:paramtypes", [axios_1.HttpService, jwt_1.JwtService])
+    __metadata("design:paramtypes", [axios_1.HttpService, jwt_1.JwtService,
+        users_service_1.UsersService])
 ], AppController);
 exports.AppController = AppController;
 //# sourceMappingURL=app.controller.js.map
