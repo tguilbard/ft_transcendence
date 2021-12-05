@@ -21,6 +21,7 @@ const resgister_middleware_1 = require("./middleware/resgister.middleware");
 const users_service_1 = require("./users/users.service");
 const databaseFiles_service_1 = require("./Photo/databaseFiles.service");
 const users_entity_1 = require("./users/entitys/users.entity");
+const users_controller_1 = require("./users/users.controller");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer
@@ -51,7 +52,7 @@ AppModule = __decorate([
             })
         ],
         controllers: [
-            app_controller_1.AppController
+            app_controller_1.AppController, users_controller_1.UsersController
         ],
         providers: [
             app_gateway_1.AppGateway, app_service_1.AppService, users_service_1.UsersService, databaseFiles_service_1.default, users_entity_1.UsersEntity

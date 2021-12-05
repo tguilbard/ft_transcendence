@@ -4,15 +4,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AppGateway } from './app.gateway';
 import { UsersModule } from './users/users.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HttpModule } from '@nestjs/axios';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthMiddleware } from './middleware/resgister.middleware';
 import { UsersService } from './users/users.service';
-import { MulterModule } from '@nestjs/platform-express';
 import DatabaseFilesService from './Photo/databaseFiles.service'
 import { UsersEntity } from './users/entitys/users.entity';
+import { UsersController } from './users/users.controller';
 
 
 @Module({
@@ -36,7 +36,7 @@ import { UsersEntity } from './users/entitys/users.entity';
       synchronize: true
   })],
   controllers: [
-    AppController],
+    AppController, UsersController],
   providers: [
     AppGateway, AppService, UsersService, DatabaseFilesService, UsersEntity],
 })

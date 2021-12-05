@@ -2,7 +2,10 @@
   <div class="form_wrapper">
     <div class="form_container">
       <div class="title_container">
-        <h2>Bienvenue, cree ton compte pour pouvoir utiliser nos services</h2>
+        <h2>
+          Bienvenue {{ user }}, cree ton compte pour pouvoir utiliser nos
+          services
+        </h2>
       </div>
       <div id="app">
         <p v-if="srcImg">
@@ -12,7 +15,7 @@
       <div class="row clearfix">
         <div class="">
           <form
-            action="http://localhost:3000/register"
+            action="http://localhost:3000/user/register"
             method="post"
             class="form-example"
           >
@@ -47,7 +50,12 @@
               <label for="cb2">J'accepte les termes et conditions</label>
             </div>
 
-            <input class="button" type="submit" value="ENREGISTRER" @click="envoi"/>
+            <input
+              class="button"
+              type="submit"
+              value="ENREGISTRER"
+              @click="envoi"
+            />
           </form>
         </div>
       </div>
@@ -57,104 +65,70 @@
 
 
 <script lang="ts">
-
-import { Options, Vue } from 'vue-class-component';
+import { Options, Vue } from "vue-class-component";
 
 @Options({
-  
-  data() {
-    return {
-      srcImg: "https://cdn.intra.42.fr/users/jelarose.jpg",
-      file: "",
-      alt_text: "",
-    };
-  },
-  methods: {
-    getImg(event: any) {
-      this.file = event.target.files[0];
-      this.srcImg = URL.createObjectURL(this.file);
-    },
-    async getIntra()
-    {
-      // Récupération de l'image
-       const options: any = {
-        method: "GET",
-        responseType: "blob",
-      };
-      let response = await fetch("http://localhost:3000/user/img", options);
-
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP ! statut : ${response.status}`);
-      }
-      let myBlob = await response.blob();
-      let objectURL = await URL.createObjectURL(myBlob);
-      return objectURL;
-    },
-    envoi() {
-      
-      
-     // let img = this.file;
-      let img = this.getIntra();
-      // Création d'un formData obligatoire pour envoi de l'image
-      var formData = new FormData();
-     // formData.append("img", img, this.file.name);
-     formData.append("img", img, 'intra');
-      // Envoi des données sur l'url du serveur (mettez la votre) en POST en envoyant le formData contenant notre image et notre texte
-      const options2: any = {
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'include',
-      headers: {
-      'Access-Control-Max-Age': '600',
-      'Cache-Control': 'no-cache'
-      },
-      body: formData
-      }
-      fetch('http://localhost:3000/user/upload', options2);
-    }
-  }
-})
-export default class Register extends Vue {
-}
-</script>
-
-<!--<script lang="js">
-
-export default {
   data() {
     return {
       srcImg: "",
       file: "",
-      alt_text: "",
+      user: "",
     };
   },
   methods: {
-    getImg(event) {
+    getImg(event: { target: { files: File[] } }) {
       this.file = event.target.files[0];
       this.srcImg = URL.createObjectURL(this.file);
     },
-    envoi() {
-      // Récupération de l'image
-      let img = this.file;
-      // Création d'un formData obligatoire pour envoi de l'image
-      var formData = new FormData();
-      formData.append("img", img, this.file.name);
-      // Envoi des données sur l'url du serveur (mettez la votre) en POST en envoyant le formData contenant notre image et notre texte
-      const options2 = {
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'include',
-      headers: {
-      'Access-Control-Max-Age': '600',
-      'Cache-Control': 'no-cache'
-      },
-      body: formData
+    async getIntra() {
+      fetch(this.srcImg)
+        .then((response) => response.blob())
+        .then((blob) => {
+          // Création d'un formData obligatoire pour envoi de l'image
+          var formData = new FormData();
+          formData.append("img", blob);
+          // Envoi des données sur l'url du serveur (mettez la votre) en POST en envoyant le formData contenant notre image et notre texte
+          fetch("http://localhost:3000/user/upload", {
+            method: "POST",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+              "Access-Control-Max-Age": "600",
+              "Cache-Control": "no-cache",
+            },
+            body: formData,
+          });
+        });
+    },
+    async envoi() {
+      if (!this.file) this.getIntra();
+      else {
+        // Création d'un formData obligatoire pour envoi de l'image
+        let img = this.file;
+        var formData = new FormData();
+        formData.append("img", img, "intra");
+        fetch("http://localhost:3000/user/upload", {
+          method: "POST",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            "Access-Control-Max-Age": "600",
+            "Cache-Control": "no-cache",
+          },
+          body: formData,
+        });
       }
-      fetch('http://localhost:3000/user/upload', options2);
     },
   },
-};
-</script>-->
+  async created() {
+    var link: string = (await localStorage.getItem("src")) || "";
+    this.srcImg = await JSON.parse(link);
+    link = (await localStorage.getItem("username")) || "";
+    this.user = await JSON.parse(link);
+  },
+})
+export default class Register extends Vue {}
+</script>
 
 
 <style scoped >

@@ -14,11 +14,18 @@ const databaseFiles_service_1 = require("../Photo/databaseFiles.service");
 const users_entity_1 = require("./entitys/users.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const databaseFile_entity_1 = require("../Photo/databaseFile.entity");
+const axios_1 = require("@nestjs/axios");
+const jwt_1 = require("@nestjs/jwt");
 let UsersModule = class UsersModule {
 };
 UsersModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([users_entity_1.UsersEntity, databaseFile_entity_1.default])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([users_entity_1.UsersEntity, databaseFile_entity_1.default]),
+            axios_1.HttpModule,
+            jwt_1.JwtModule.register({
+                secret: 'secret',
+                signOptions: { expiresIn: '60s' },
+            })],
         controllers: [users_controller_1.UsersController],
         providers: [users_service_1.UsersService, databaseFiles_service_1.default, users_entity_1.UsersEntity],
         exports: [typeorm_1.TypeOrmModule]

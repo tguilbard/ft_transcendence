@@ -1,103 +1,132 @@
 <template>
-    <div>
-
-    </div>
+  <div></div>
 </template>
 
-<script>
+<script setup lang="ts">
+function GetQueryStringVal(lQuery: string) {
+  var lDoc = String(document.location);
+  var lSignet = "";
+  var n1 = lDoc.indexOf("?");
 
-      /* On effectue la requête */
-        async function get_salut(xsrfToken)
-        {
-            const headers = await new Headers();
-            headers.append('x-xsrf-token', xsrfToken);
-        
-            const options4 = {
-              method: 'GET',
-              mode: 'cors',
-              headers,
-              credentials: 'include',
-            };
-            const response = await fetch('http://localhost:3000/salut', options4);
-          const data = await response.json();
-          console.log('msg = ', data);
-        }
-    
-    function GetQueryStringVal(lQuery)
-    {
-        
-        var lDoc=String(document.location); 
-        var lSignet = ""; 
-        var n1 = lDoc.indexOf("?"); 
-
-        if (n1 > 0) 
-        { 
-            var n2 = lDoc.indexOf("?" + lQuery + "=",n1); 
-        if (n2 < n1) 
-            n2 = lDoc.indexOf("&" + lQuery + "=",n1); 
-        if (n2 >= n1) 
-        { 
-            n2 = n2 + ("?" + lQuery + "=").length; 
-            var n3 = lDoc.indexOf("&",n2+1); 
-            if (n3 > n2) 
-            lSignet = lDoc.substring(n2, n3); 
-            else 
-            lSignet = lDoc.substring(n2); 
-        } 
-        }
-        return lSignet;
+  if (n1 > 0) {
+    var n2 = lDoc.indexOf("?" + lQuery + "=", n1);
+    if (n2 < n1) n2 = lDoc.indexOf("&" + lQuery + "=", n1);
+    if (n2 >= n1) {
+      n2 = n2 + ("?" + lQuery + "=").length;
+      var n3 = lDoc.indexOf("&", n2 + 1);
+      if (n3 > n2) lSignet = lDoc.substring(n2, n3);
+      else lSignet = lDoc.substring(n2);
     }
-    const code = GetQueryStringVal('code');
+  }
+  return lSignet;
+}
+const code = GetQueryStringVal("code");
 
-    console.log('code = ', code);
+console.log("code = ", code);
 
-    if (!code)
-    {
-        window.location.href = '';
+if (!code) {
+  window.location.href = "";
+}
+
+async function isLogin() {
+    
+    var response = await fetch("http://localhost:3000/user/isLogin", {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+        Accept: "application/json",
+        "Access-Control-Max-Age": "600",
+        "Cache-Control": "no-cache",
+        },
+    });
+    const ret = await response.json();
+    return ret;
+}
+
+/* On effectue la requête */
+async function login() {
+    
+    const ret = await isLogin();
+    if (ret.log)
+        window.location.href = "http://localhost:8080";
+    alert(ret.log);
+    var response = await fetch("http://localhost:3000/user/login", {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Max-Age": "600",
+        "Cache-Control": "no-cache",
+        },
+        body: JSON.stringify({
+        code: code,
+        }),
+    });
+    const data = await response.json();
+    await localStorage.setItem("src", JSON.stringify(data.src));
+    await localStorage.setItem("usernamee", JSON.stringify(data.username));
+    
+    
+  //   await localStorage.setItem("state", JSON.stringify(data.state));
+
+    if (data.state) {
+      window.location.href = "http://localhost:8080";
+    } else {
+      window.location.href = "http://localhost:8080/register";
     }
 
-    const options2 = {
-        method: 'POST',
-      mode: 'cors',
-      credentials: 'include',
-      headers: {
-          'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Max-Age': '600',
-      'Cache-Control': 'no-cache'
-      },
-      body: JSON.stringify({
-          code: code
-      })
-    };
+//   response = await fetch("http://localhost:3000/user/isRegister", {
+//     method: "POST",
+//     mode: "cors",
+//     credentials: "include",
+//     headers: {
+//       Accept: "application/json",
+//       "Content-Type": "application/json",
+//       "Access-Control-Max-Age": "600",
+//       "Cache-Control": "no-cache",
+//     },
+//     body: JSON.stringify({
+//       username: data.username
+//     }),
+//   });
+//   const data2 = await response;
 
-    /* On effectue la requête */
-    async function login()
-    {
-        const response = await fetch('http://localhost:3000/login', options2);
-      //const data = await response.json();
-    //   await localStorage.setItem('xsrfToken', JSON.stringify(data));
-    //   console.log('data = ', data);
-    // const Token = await localStorage.getItem('xsrfToken');
+//   if (data2)
+//   {
+//     var response = await fetch("http://localhost:3000/user/login", {
+//           method: "POST",
+//           mode: "cors",
+//           credentials: "include",
+//           headers: {
+//           Accept: "application/json",
+//           "Content-Type": "application/json",
+//           "Access-Control-Max-Age": "600",
+//           "Cache-Control": "no-cache",
+//           },
+//           body: JSON.stringify({
+//           code: code,
+//           }),
+//       });
+//     window.location.href = "http://localhost:8080/login";
+//   }
+//   else
+//     window.location.href = "http://localhost:8080/register";
 
-    // const xsrfToken = await JSON.parse(Token);
-    // console.log('tok get from localstorage = ', xsrfToken);
-    // get_salut(xsrfToken.xsrfToken);
-    window.location.href = "http://localhost:3000/register";
+  //const data = await response.json();
 
-    }
-    
-  
+  // await localStorage.setItem('xsrfToken', JSON.stringify(data));
+  //   console.log('data = ', data);
+  // const Token = await localStorage.getItem('xsrfToken');
 
-    login();
-    
-
-
-
-
-
+  // const xsrfToken = await JSON.parse(Token);
+  // console.log('tok get from localstorage = ', xsrfToken);
+  // get_salut(xsrfToken.xsrfToken);
+}
+login()
 </script>
 
 <style scoped>
-
 </style>

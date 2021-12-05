@@ -21,7 +21,19 @@ let UsersController = class UsersController {
     constructor(userService) {
         this.userService = userService;
     }
-    async addAvatar(file) {
+    async register(body, response) {
+        console.log('je suis dans post register');
+        this.userService.register(body, response);
+    }
+    async isRegister(response) {
+        this.userService.isRegister(response);
+    }
+    async isLogin(response) {
+        console.log('je suis dans islogin');
+        this.userService.isLogin(response);
+    }
+    async addAvatar(file, body) {
+        console.log('body with file = ', body);
         return this.userService.addAvatar(file.buffer, file.originalname);
     }
     async getAvatar(res) {
@@ -29,18 +41,44 @@ let UsersController = class UsersController {
         const avatar = await this.userService.getAvatar();
         console.log("avatar = ", avatar);
         res.writeHead(200, {
-            'Content-Type': 'image/jpeg',
+            'Content-Type': 'image/*',
             'Content-Length': avatar.data.length
         });
         res.end(avatar.data);
     }
+    async login(response, request) {
+        this.userService.login(response, request);
+    }
 };
+__decorate([
+    (0, common_1.Post)('register'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_2.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "register", null);
+__decorate([
+    (0, common_1.Post)('isRegister'),
+    __param(0, (0, common_2.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "isRegister", null);
+__decorate([
+    (0, common_1.Get)('isLogin'),
+    __param(0, (0, common_2.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "isLogin", null);
 __decorate([
     (0, common_1.Post)('upload'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('img')),
     __param(0, (0, common_1.UploadedFile)()),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "addAvatar", null);
 __decorate([
@@ -50,6 +88,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getAvatar", null);
+__decorate([
+    (0, common_1.Post)('login'),
+    __param(0, (0, common_2.Res)()),
+    __param(1, (0, common_2.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "login", null);
 UsersController = __decorate([
     (0, common_1.Controller)('user'),
     __metadata("design:paramtypes", [users_service_1.UsersService])

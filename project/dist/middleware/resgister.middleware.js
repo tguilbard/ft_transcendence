@@ -19,27 +19,33 @@ let AuthMiddleware = class AuthMiddleware {
     }
     use(req, res, next) {
         console.log('path = ', req.path);
-        if (req.path != '/' && req.path != '/login') {
+        const path = req.path;
+        if (path != '/user/isRegister' && path != '/user/login') {
             try {
                 const { cookies, headers } = req;
-                console.log("cookies middleware = ", req.cookies);
-                if (!cookies || !cookies.access_token) {
+                if (!cookies || !cookies.access_token && path != '/user/isLogin') {
                     console.log('problem de cookies');
                     return res.status(401).json({ message: 'Missing token in cookie' });
                 }
-                console.log('cookie = ', cookies.access_token);
-                const accessToken = cookies.access_token;
-                const decodedToken = jwt.verify(accessToken, 'secret', {
-                    algorithms: ['HS256']
-                })['xsrfToken'];
-                console.log('decode token = ', decodedToken);
-                if (!decodedToken)
-                    return res.status(401).json({ message: 'Problem de token' });
-                const username = jwt.verify(accessToken, 'secret', {
-                    algorithms: ['HS256']
-                })['firstName'];
-                console.log('user middleware = ', username);
-                res.set('User', username);
+                if (cookies && cookies.access_token) {
+                    console.log('je suis dans is cookies de middleware');
+                    const accessToken = cookies.access_token;
+                    const decodedToken = jwt.verify(accessToken, 'secret', {
+                        algorithms: ['HS256']
+                    });
+                    const session = decodedToken['id'];
+                    console.log('session = ', session);
+                    console.log('sessionToken = ', req.sessionID);
+                    if (session != req.sessionID && path != '/user/isRegister' && path != '/user/isLogin')
+                        return res.status(401).json({ message: 'Problem de session' });
+                    const username = decodedToken['login'];
+                    console.log('user middleware = ', username);
+                    const state = decodedToken['state'];
+                    if (!username || (!state && path != '/user/upload' && path != '/user/register' && path != '/user/isRegister' && path != '/user/isLogin'))
+                        return res.status(401).json({ message: 'Vous devez vous loger pour acceder a ce contenu' });
+                    res.set('User', username);
+                    res.set('State', state);
+                }
                 return next();
             }
             catch (err) {

@@ -10,5 +10,4 @@ export declare class AppController {
     salut(request: Request): Promise<any>;
     register(body: Body, response: Response): Promise<void>;
     isRegister(request: Request, response: Response): Promise<void>;
-    login(res: Response, request: Request): Promise<Response<any, Record<string, any>>>;
 }
