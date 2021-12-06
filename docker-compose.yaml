@@ -1,0 +1,19 @@
+version: '3'
+services:
+  postgres:
+    image: "postgres"
+    hostname: 127.0.0.1
+    ports:
+      - "5432:5432"
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: test
+      POSTGRES_PASSWORD: postgres
+  # frontend:
+  #   build: ./docker/frontend/Dockerfile
+  #   image: frontend
+  #   hostname: 127.0.0.1
+  #   ports:
+  #     - "8080:8080"
+  #   container_name: frontend_container
