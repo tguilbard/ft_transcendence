@@ -1,8 +1,8 @@
-import { IsNotEmpty, IsString, MaxLength, MinLength, IsIn, IsBoolean } from "class-validator";
+import { IsNotEmpty, IsString, MaxLength, MinLength, IsIn, IsBoolean, IsOptional } from "class-validator";
 
 export class AddUserDTO {
 	@IsString()
-	@IsNotEmpty()
+	@IsOptional()
 	@MinLength(3, {
 		message: "La taille minimale du login est 3"
 	})
@@ -19,9 +19,10 @@ export class AddUserDTO {
 	@MaxLength(255, {
 		message: "La taille maximale du login est 255"
 	})
-    pseudo: string;
+    username: string;
 
 	@IsBoolean()
+	@IsOptional()
     tfaActivated: boolean;
 
 	// @IsString()

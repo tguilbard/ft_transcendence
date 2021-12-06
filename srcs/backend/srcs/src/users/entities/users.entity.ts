@@ -11,7 +11,7 @@ export class UserEntity extends TimeStampEntities {
 	@Column(
 		{
 			update: true,
-			nullable: false,
+			nullable: true,
 			//unique: true
 		})
 	login: string;
@@ -22,7 +22,7 @@ export class UserEntity extends TimeStampEntities {
 			nullable: false,
 			//unique: true
 		})
-	pseudo: string;
+	username: string;
 
 	@Column(
 		{

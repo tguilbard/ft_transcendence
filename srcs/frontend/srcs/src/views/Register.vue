@@ -34,9 +34,9 @@
             <div class="input_field">
               <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
               <input
-                type="pseudo"
-                name="pseudo"
-                placeholder="Entre ton pseudo"
+                type="username"
+                name="username"
+                placeholder="Entre ton username"
                 required
               />
             </div>
@@ -219,7 +219,7 @@ body {
   padding-top: 10px;
 }
 .form_wrapper input[type="text"],
-.form_wrapper input[type="pseudo"],
+.form_wrapper input[type="username"],
 .form_wrapper input[type="password"] {
   width: 100%;
   padding: 8px 10px 9px 35px;

@@ -119,7 +119,7 @@ export class UsersService {
 			auth = true;
 		const newUser = {
 			login: response.User,
-			pseudo: body.pseudo,
+			username: body.username,
 			tfaActivated: body.tfaActivated
 		}
 
@@ -139,7 +139,7 @@ export class UsersService {
 	
 	
 	  async getAvatar() {
-		const avatar = await this.databaseFilesService.getFileById(90)
+		const avatar = await this.databaseFilesService.getFileById(1)
 		return avatar;
 	  }
 	

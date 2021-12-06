@@ -28,9 +28,9 @@
             <div class="input_field">
               <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
               <input
-                type="pseudo"
-                name="pseudo"
-                placeholder="Entre ton pseudo"
+                type="username"
+                name="username"
+                placeholder="Entre ton username"
                 required
               />
             </div>
