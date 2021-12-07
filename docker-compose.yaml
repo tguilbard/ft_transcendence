@@ -12,10 +12,10 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - ./srcs/database:/var/lib/postgresql/data
-  # frontend:
-  #   build: ./docker/frontend/Dockerfile
-  #   image: frontend
-  #   hostname: 127.0.0.1
-  #   ports:
-  #     - "8080:8080"
-  #   container_name: frontend_container
+  backend:
+    build: ./srcs/backend/Dockerfile
+    image: frontend
+    hostname: 127.0.0.1
+    ports:
+      - "3000:3000"
+    container_name: frontend_container
