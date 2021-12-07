@@ -10,6 +10,6 @@ COPY srcs .
 
 RUN npm run build
 
-EXPOSE 3000 5432 8080
+EXPOSE 3000
 
 CMD ["node", "dist/main"]

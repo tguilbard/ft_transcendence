@@ -24,7 +24,7 @@ import { AuthMiddleware } from './middleware/resgister.middleware';
    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'database',
       port: 5432,
       username: 'postgres',
       password: 'postgres',
