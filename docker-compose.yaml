@@ -1,6 +1,6 @@
 version: '3'
 services:
-  postgres:
+  database:
     image: "postgres"
     hostname: 127.0.0.1
     ports:
@@ -10,6 +10,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: test
       POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./srcs/database:/var/lib/postgresql/data
   # frontend:
   #   build: ./docker/frontend/Dockerfile
   #   image: frontend
