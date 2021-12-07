@@ -2,7 +2,6 @@ version: '3'
 services:
   database:
     image: "postgres"
-    #hostname: 127.0.0.1
     ports:
       - "5432:5432"
     container_name: postgres_container
@@ -18,9 +17,18 @@ services:
       context: srcs/backend
       dockerfile: Dockerfile
     image: frontend
-    hostname: databse
     ports:
       - "3000:3000"
     container_name: backend_container
     depends_on:
       - database
+
+  frontend:
+    build: 
+      context: srcs/frontend
+      dockerfile: Dockerfile
+    image: frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    container_name: frontend_container

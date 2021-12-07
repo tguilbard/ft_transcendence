@@ -1,15 +1,23 @@
-FROM node
+# Choose the Image which has Node installed already
+FROM node:latest
 
-WORKDIR /app
+# install simple http server for serving static content
+RUN npm install -g http-server
 
-COPY srcs/ ./
+# make the 'app' folder the current working directory
+WORKDIR /usr/src/app
 
-RUN ls -la
-# RUN npm install
+# copy both 'package.json' and 'package-lock.json' (if available)
+COPY srcs/package*.json ./
 
-# COPY $front_path .
+# install project dependencies
+RUN npm install
 
-# RUN npm run build
+# copy project files and folders to the current working directory (i.e. 'app' folder)
+COPY . .
 
-# EXPOSE 8080
-# CMD ["bash"]
+# build app for production with minification
+RUN npm run build
+
+EXPOSE 8080
+CMD [ "http-server", "dist" ]
