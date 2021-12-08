@@ -2,13 +2,15 @@ version: '3'
 services:
   database:
     image: "postgres"
+    hostname: ${DATABASE_HOST}
     ports:
-      - "5432:5432"
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
     container_name: postgres_container
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: test
-      POSTGRES_PASSWORD: postgres
+      #THAT MUST BE MOVE INSIDE SECRET
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_NAME: ${DATABASE_NAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     volumes:
       - ./srcs/database:/var/lib/postgresql/data
  
@@ -16,10 +18,21 @@ services:
     build: 
       context: srcs/backend
       dockerfile: Dockerfile
-    image: frontend
+    image: backend
+    hostname: 127.0.0.1
     ports:
-      - "3000:3000"
+      - "${BACK_PORT}:${BACK_PORT}"
     container_name: backend_container
+    environment:
+      DATABASE_TYPE: ${DATABASE_TYPE}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_ADDRESS: "${DATABASE_HOST}:${DATABASE_PORT}"
+
+      #THAT MUST BE MOVE INSIDE SECRET
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
     depends_on:
       - database
 
@@ -27,8 +40,16 @@ services:
     build: 
       context: srcs/frontend
       dockerfile: Dockerfile
+    hostname: 127.0.0.1
     image: frontend
     ports:
-      - "80:80"
-      - "443:443"
+      - "${FRONT_PORT}:${FRONT_PORT}"
+    environment:
+      FRONT_PORT: ${FRONT_PORT}
+      FRONT_HOST: ${FRONT_HOST}
+      FRONT_ADDRESS: ${FRONT_HOST}:${FRONT_PORT}
+
+      BACK_ADDRESS: ${BACK_HOST}:${BACK_PORT}
     container_name: frontend_container
+    # depends_on:
+    #   - backend
