@@ -36,6 +36,7 @@ import { type } from 'os';
         entities: ["dist/**/*.entity{.ts,.js}"],
         synchronize: true
       }),
+      inject: [ConfigService]
   }),
     UsersModule,
     TfaModule,
