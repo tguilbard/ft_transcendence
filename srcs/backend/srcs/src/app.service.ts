@@ -9,6 +9,6 @@ export class AppService {
   ){}
 
   getHello(): string {
-    return this.configService.get('PATH');
+    return this.configService.get('PORT');
   }
 }
