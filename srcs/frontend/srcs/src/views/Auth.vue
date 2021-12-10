@@ -21,7 +21,7 @@ import { Options, Vue } from "vue-class-component";
   },
   methods: {
     async getImg() {
-      await fetch("http://localhost:3000/2fa/generate", {
+      await fetch(process.env.BACK_ADRESS + "/2fa/generate", {
         method: "POST",
         mode: "cors",
         credentials: "include",

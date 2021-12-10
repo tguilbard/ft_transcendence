@@ -6,6 +6,7 @@
           Bienvenue {{ user }}, cree ton compte pour pouvoir utiliser nos
           services
         </h2>
+        <p> {{data}}</p>
       </div>
       <div id="app">
         <p v-if="srcImg">
@@ -72,7 +73,7 @@ import { Options, Vue } from "vue-class-component";
     return {
       srcImg: "",
       file: "",
-      user: "",
+      user: process.env.VUE_APP_TEST,
     };
   },
   methods: {

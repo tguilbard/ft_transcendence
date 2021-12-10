@@ -12,6 +12,7 @@ import { lastValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as crypto from 'crypto'
 import * as jwt from 'jsonwebtoken'
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
@@ -19,7 +20,9 @@ export class UsersService {
 		@InjectRepository(UserEntity)
 		private usersRepositories : Repository<UserEntity>,
 		private readonly databaseFilesService: DatabaseFilesService,
-    	private readonly httpService: HttpService, private readonly jwt: JwtService
+    	private readonly httpService: HttpService,
+		private readonly jwt: JwtService,
+		private readonly configService: ConfigService
 	){}
 
 	async FindUserById(id : number) {
@@ -126,7 +129,7 @@ export class UsersService {
 		//this.AddUser(newUser);
 		//console.log(request);
 		
-		response.redirect('http://localhost:8080/login');
+		response.redirect(this.configService.get('FRONT_ADRESS') + '/login');
 	  }
 	
 	  async isLogin(response) {
@@ -159,7 +162,7 @@ export class UsersService {
 			grant_type: 'authorization_code',
 			client_id: '61094fffbf3140a13c461779c220cbc96dfbad643921a60e345ff8a99928a7a2',
 			client_secret: 'ca81f062eb8d1c29f73449afed67fd1b2e462cdf0899e89953d740086fa4186d',
-			redirect_uri: 'http://localhost:8080/ok',
+			redirect_uri: this.configService.get('_ADDRESS') + '/ok',
 			code: code
 		  }
 		  var result;

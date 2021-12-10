@@ -28,6 +28,8 @@ services:
       HOST: ${BACK_HOST}
       ADDRESS: ${BACK_HOST}:${BACK_PORT}
 
+      FRONT_ADDRESS: ${FRONT_HOST}:${FRONT_PORT}
+
       DATABASE_TYPE: ${DATABASE_TYPE}
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_PORT: ${DATABASE_PORT}
@@ -40,20 +42,20 @@ services:
     depends_on:
       - database
 
-  # frontend:
-  #   build: 
-  #     context: srcs/frontend
-  #     dockerfile: Dockerfile
-  #   #hostname: 127.0.0.1
-  #   image: frontend
-  #   ports:
-  #     - "${FRONT_PORT}:${FRONT_PORT}"
-  #   environment:
-  #     FRONT_PORT: ${FRONT_PORT}
-  #     FRONT_HOST: ${FRONT_HOST}
-  #     FRONT_ADDRESS: ${FRONT_HOST}:${FRONT_PORT}
+  frontend:
+    build: 
+      context: srcs/frontend
+      dockerfile: Dockerfile
+    #hostname: 127.0.0.1
+    image: frontend
+    ports:
+      - "${FRONT_PORT}:${FRONT_PORT}"
+    environment:
+      PORT: ${FRONT_PORT}
+      HOST: ${FRONT_HOST}
+      ADDRESS: ${FRONT_HOST}:${FRONT_PORT}
 
-  #     BACK_ADDRESS: ${BACK_HOST}:${BACK_PORT}
-  #   container_name: frontend_container
-  #   # depends_on:
-  #   #   - backend
+      BACK_ADDRESS: ${BACK_HOST}:${BACK_PORT}
+    container_name: frontend_container
+    # depends_on:
+    #   - backend
