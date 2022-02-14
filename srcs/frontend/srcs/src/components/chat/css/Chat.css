@@ -1,0 +1,329 @@
+.menu {
+    display: block;
+   position: relative; 
+}
+
+.btn_chan {
+    display: grid;
+    grid-template-columns: minmax(min-content, auto) minmax(min-content, max-content); 
+}
+
+.btn_chan p:hover {
+    color: #fff12c;
+    cursor: grabbing;
+    -webkit-text-stroke: 1px;
+    -webkit-text-stroke-color: rgb(0, 0, 0);
+    font-family: futura;
+}
+
+.logo_connection {
+    display: grid;
+    grid-template-columns: minmax(min-content, auto) minmax(min-content, max-content);
+}
+
+.logo_connection img {
+    width: 1vmax;
+    height: 1vmax;
+}
+
+.chanButton p{
+    text-align: left;
+}
+
+.btn_select {
+    display: flex;
+    justify-content: center;
+}
+
+.btn_select input, .btn_select button {
+    padding: 0.5vmax;
+    text-align: center;
+    margin: 0.5vmax;
+    border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
+    font-family: futura;
+    font-size: 1vmax;
+    font-weight: bold;
+}
+
+.btn_select input:hover, .btn_select button:hover {
+    color: #fff12c;
+    cursor: grabbing;
+    -webkit-text-stroke: 1px;
+    -webkit-text-stroke-color: rgb(0, 0, 0);
+    font-size: 1.05vmax;
+    border-color: #fff12c;
+}
+
+.global {
+    display: grid;
+    grid-template-columns: minmax(min-content, max-content) minmax(min-content, auto); 
+    grid-gap: 1px;
+
+    margin-left: auto;
+    margin-right: auto;
+    width: 90vw;
+    height: auto;
+    margin-top: 1vh;
+    border-radius: 7px 7px 7px 7px;
+    background-color: #fff12c;
+    border: 2px solid #8f8f8f;
+    padding: 1px;
+}
+
+.list_user {
+    margin-left: 0.2vmax;
+    padding: 0.2vmax;
+    background-color: #000000;
+    background-color: #f6ecd2;
+    height: 60vh;
+    overflow: auto;
+}
+
+.list_user p {
+    color: rgb(71, 71, 71);
+    font-style: bold;
+    font-size: 1.5vmax;
+    text-decoration: none;
+}
+
+.list_user p:hover {
+    color: #fff12c;
+    cursor: grabbing;
+    -webkit-text-stroke: 1px;
+    -webkit-text-stroke-color: rgb(0, 0, 0);
+    font-family: futura;
+}
+
+.link:hover
+{
+    color: #fff12c;
+    cursor: grabbing;
+    -webkit-text-stroke: 1px;
+    -webkit-text-stroke-color: rgb(0, 0, 0);
+    font-family: futura;
+}
+
+.block_channel {
+    margin: 0.2vmax;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 0.1vmax;
+    background-color: rgb(163, 162, 162);
+    height: 61vh;
+    border: 2px solid rgb(129, 129, 129);
+}
+
+@font-face {
+    font-family: old_game;
+    src: url('assets/Old_Game.ttf');
+    font-weight: normal;
+}
+
+.left {
+    border-radius: 7px 0px 0px 7px;
+    background-color: #B8B8B8;
+    border: 2px solid #a8a8a8;
+}
+
+.right {
+    display: grid;
+    grid-template-rows: minmax(min-content, max-content) minmax(min-content, auto) minmax(min-content, max-content);
+    height: 100%;
+}
+
+.logo {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.1em;
+    margin: 0.1em;
+}
+
+.mod {
+    display: inline;
+    margin: 1px;
+}
+
+.channel {
+    padding: 0.2vmax;
+    text-align: center;
+    overflow: auto;
+    height: 60vh;
+}
+
+.banner img {
+    width: 2vmax;
+    height: 2vmax;
+}
+
+.banner {
+    display: grid;
+    grid-template-columns: auto minmax(min-content, max-content);
+    border-radius: 0px 7px 0px 0px;
+    border-bottom: 2px solid #8f8f8f;
+    border: 2px solid #8f8f8f;
+    -webkit-text-stroke: 1px;
+    -webkit-text-stroke-color: rgb(0, 0, 0);
+    font-family: futura;
+    font-weight: 900;
+    font-size: 2vmax;
+    background-color: grey;
+    color: #fff12c;
+    text-shadow: 0px -2px 100px rgb(0, 0, 0);
+    letter-spacing: 0.2vmax;
+}
+
+hr {
+    height: 1vmax;
+    background-color: #dbdbdb;
+}
+
+.chatbox {
+    position: relative;
+    border-radius: 0px 0px 7px 0px;
+    background-color: #ffffffe1;
+    border: 2px solid #8f8f8f;
+}
+
+.chat {
+    background-color: #fbfaeec5;
+    position: relative;
+    display: block;
+    margin-top: 1px;
+    margin-bottom: 0px;
+    overflow: auto;
+    height: 61vh;
+}
+
+.input {
+    word-break: break-all;
+    overflow-wrap: break-word;
+    margin-left : 0.4vmax;
+    display: block;
+    border-radius: 7px 7px 7px 7px;
+    font-size: 1.5vmax;
+    box-sizing: border-box;
+    padding: 1%;
+    min-width: calc(100% - 0.8vw);
+    max-width: calc(100% - 0.8vw);
+}
+
+.message {
+    display: inline-block;
+    width: 100%;
+    padding: 5px;
+    overflow-wrap: break-all;
+    font-size: 1.3vmax;
+    font-weight: bold;
+    color: rgb(0, 0, 255);
+    text-align: left;
+}
+
+.message p {
+    display: inline;
+    padding-left: 15px;
+    word-break: break-all;
+}
+
+.span {
+    display:inline-block;
+    word-break: break-all;
+    background-color: rgba(0, 0, 255, 0.15);
+    padding: 5px;
+    border-radius: 7px 7px 7px 7px;
+    position: relative;
+    width: auto;
+    color: rgb(188, 87, 255);
+    color: rgb(0, 207, 62);
+    color: rgb(0, 0, 255);
+    font-family: futura;
+    font-size: 1.1vmax;
+}
+
+.span_color {
+    display:inline-block;
+    word-break: break-all;
+    position: relative;
+    width: auto;
+    background-color: rgba(153, 0, 255, 0.15);
+    padding: 5px;
+    border-radius: 7px 7px 7px 7px;
+    color: rgb(245, 151, 0);
+    color: rgb(3, 199, 62);
+    color: rgb(0, 0, 255);
+    color: rgb(153, 0, 255);
+    font-weight: 900;
+    font-family: futura;
+    font-size: 1.1vmax;
+}
+
+.time {
+    position: relative;
+    display: block;
+    font-size: 0.8vmax;
+    font-family: futura;
+    color: rgb(168, 76, 1);
+}
+
+.color {
+    color: rgb(153, 0, 255);
+    font-weight: 900;
+}
+
+.button {
+    overflow-wrap: normal;
+    border-radius: 0.3vmax 0.3vmax 0.3vmax 0.3vmax;
+    -webkit-text-stroke: 1px;
+    -webkit-text-stroke-color: rgb(0, 0, 0);
+    font-family: futura;
+    font-weight: 900;
+    font-size: 1.5vmax;
+    background-color: grey;
+    color: white;
+    padding: 0.2vmax;
+}
+
+.button:hover {
+    color: #fff12c;
+    cursor: grabbing;
+    font-size: 1.55vmax;
+    border-color: #fff12c;
+}
+
+.on {
+    color: #fff12c;
+}
+
+.off{
+    color: white;
+}
+
+.block_mod {
+    display: block;
+    position: absolute;
+    border-radius: 7px 7px 7px 7px;
+    background-color: #fff12c;
+    border: 2px solid #8f8f8f;
+    padding: 1px;
+    height: 30vh;
+    width: 30vmax;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 11;
+    color: rgb(255, 255, 255);
+}
+
+.user_list_selected {
+    background-color: rgb(163, 85, 13);
+    border-radius: 0.5vmax;
+}
+
+.user_list_selected p {
+    color: #fff12c;
+    cursor: grabbing;
+    -webkit-text-stroke: 1px;
+    -webkit-text-stroke-color: rgb(0, 0, 0);
+    font-size: 1.5vmax;
+    border-color: #fff12c;
+}

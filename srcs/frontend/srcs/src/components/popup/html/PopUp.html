@@ -1,0 +1,268 @@
+<section>
+    <PopupProfil/>
+    <div v-if="GET_POPUP == 'pass' && GET_ROOM">
+        <div @click="setPopup('')" class="container_popup"></div>
+        <div class="block_popup">
+            <div class="content_popup">
+                <h1>CONFIG OF ROOM</h1>
+                <form>
+                    <form @submit="set_pass">
+                        <div class="tab_mdp">
+                            <div>
+                                <div>
+                                    <label for="mdp">Mot de passe pour le salon: </label>
+                                </div>
+                                <div>
+                                    <label for="mdp2">Verification du mot de passe: </label>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <input type="text" id="mdp" name="mdp" v-model="mdp">
+                                </div>
+                                <div>
+                                    <input type="text" id="mdp2" name="mdp2" v-model="mdp2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn_select">
+                            <div>
+                                <button @click="setPopup('')">Annuler</button>
+                            </div>
+                            <div>
+                                <input type="submit" value="Modify">
+                            </div>
+                        </div>
+                    </form>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div v-if="GET_POPUP == 'alert'">
+        <div @click="setPopup('')" class="container_popup"></div>
+        <div class="block_popup">
+            <div class="content_popup">
+                <h1>ALERT</h1>
+                <div class="grid_popup_inv">
+                    <div>
+                        <p>{{GET_MSG_ALERT}}</p>
+                    </div>
+                    <div class="btn_select">
+                        <button @click="setPopup('')">BACK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-if="GET_POPUP == 'profil_mode'">
+        <div @click="setPopup('')" class="container_popup"></div>
+        <div class="block_popup">
+            <div class="content_popup">
+                <h1>USER INFOS</h1>
+                <div class="grid_popup_mode">
+                    <div>
+                        <div class="btn_select">
+                            <button @click="active_popup_profil">SEE PROFIL OF USER</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="mod" v-if="block">
+                            <img class="link" @click="set_block" src="../../../assets/block3.png" alt="BAN">
+                        </div>
+                        <div class="mod" v-else>
+                            <img class="link" @click="set_block" src="../../../assets/unblock3.png" alt="BAN">
+                        </div>
+                        <div class="mod" v-if="modeIsSet(GET_MODE, mute)">
+                            <img class="link" @click="set_mute" src="../../../assets/mute3.png" alt="BAN">
+                        </div>
+                        <div class="mod" v-else>
+                            <img class="link" @click="set_mute" src="../../../assets/unmute3.png" alt="BAN">
+                        </div>
+                        <div class="mod" v-if="modeIsSet(GET_MODE, ban)">
+                            <img class="link" @click="set_ban" src="../../../assets/ban3.png" alt="BAN">
+                        </div>
+                        <div class="mod" v-else>
+                            <img class="link" @click="set_ban" src="../../../assets/unban3.png" alt="BAN">
+                        </div>
+                        <div class="mod" v-if="modeIsSet(GET_MODE, owner)">
+                            <img class="link" @click="set_admin" src="../../../assets/owner.png" alt="BAN">
+                        </div>
+                        <div v-else class="mod">
+                            <div class="mod" v-if="modeIsSet(GET_MODE, admin)">
+                                <img class="link" @click="set_admin" src="../../../assets/admin3.png" alt="BAN">
+                            </div>
+                            <div v-else class="mod">
+                                <img class="link" @click="set_admin" src="../../../assets/unadmin3.png" alt="BAN">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn_select">
+                        <button @click="setPopup('')">BACK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-if="GET_POPUP == 'create'">
+        <div @click="setPopup('')" class="container_popup"></div>
+        <div class="block_popup">
+            <div class="content_popup">
+                <h1>CREATION D'UN SALON</h1>
+                <form>
+                    <div class="tab_mdp">
+                        <div>
+                            <div>
+                                <label for="name">Nom du salon </label>
+                            </div>
+                            <div v-if="GET_ROOM">
+                                <label for="mdp">Mot de passe pour le salon: </label>
+                            </div>
+                            <div v-if="GET_ROOM">
+                                <label for="mdp2">Verification du mot de passe: </label>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <input maxlength="7" type="text" id="name" name="name" v-model="GET_CHANNEL_TARGET.name">
+                            </div>
+                            <div v-if="GET_ROOM">
+                                <input type="text" id="mdp" name="mdp" v-model="mdp">
+                            </div>
+                            <div v-if="GET_ROOM">
+                                <input type="text" id="mdp2" name="mdp2" v-model="mdp2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn_select">
+                        <div>
+                            <button @click="setPopup('')">Annuler</button>
+                        </div>
+                        <div>
+                            <button @click="create_room">Create</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div v-if="GET_POPUP == 'add'">
+        <div @click="setPopup('')" class="container_popup"></div>
+        <div class="block_popup">
+            <div v-if="GET_ROOM" class="content_popup">
+                <h1>AJOUT D'UN SALON</h1>
+                <div>
+                    <div class="list_chan_popup">
+                        <div v-for="item in GET_LIST_CHANNEL_PUBLIC">
+                            <div :class="[ (GET_CHANNEL_TARGET.name == item.name)? 'user_list_selected': '', 'btn_chan' ]">
+                                <div>
+                                    <p @click="Object.assign(GET_CHANNEL_TARGET, item)">{{ item.name }}</p>
+                                </div>
+                                <div v-if="item.mode == 5">
+                                    <img src="../../../assets/key.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form @submit="create_room">
+                        <div class="tab_mdp">
+                            <div>
+                                <div>
+                                    <label for="mdp">Mot de passe pour le salon: </label>
+                                </div>
+                                <div>
+                                    <label for="mdp2">Verification du mot de passe: </label>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <input type="text" id="mdp" name="mdp" v-model="mdp" v-if="GET_CHANNEL_TARGET.mode != 5"
+                                        disabled>
+                                    <input type="text" id="mdp" name="mdp" v-model="mdp"
+                                        v-if="GET_CHANNEL_TARGET.mode == 5">
+                                </div>
+                                <div>
+                                    <input type="text" id="mdp2" name="mdp2" v-model="mdp2"
+                                        v-if="GET_CHANNEL_TARGET.mode != 5" disabled>
+                                    <input type="text" id="mdp2" name="mdp2" v-model="mdp2"
+                                        v-if="GET_CHANNEL_TARGET.mode == 5">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn_select">
+                            <div>
+                                <button @click="setPopup('')">Annuler</button>
+                            </div>
+                            <div>
+                                <div v-if="GET_CHANNEL_TARGET.mode == 5 && (!mdp || mdp != mdp2)">
+                                    <input type="submit" value="Add room" disabled>
+                                </div>
+                                <div v-else>
+                                    <input type="submit" value="Add room">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div v-else class="block_popup, content_popup">
+
+                <h1>INVITATION D'UN USER</h1>
+
+                <div class="list_chan_popup">
+                    <div v-for="item in GET_LIST_USER_GENERAL">
+                        <div v-if="((item.username != GET_USERNAME) && (item.state == 'login' || item.state == 'in game'))"
+                            :class="[ (item.username == GET_USER_TARGET.username)? 'user_list_selected': '', 'logo_connection']">
+                            <div>
+                                <p class="link" @click="setUserTarget(item)" style="text-align: left;">{{
+                                    item.username }}</p>
+                            </div>
+                            <div>
+                                <div v-if="item.state == 'login'" class="mod">
+                                    <img src="../../../assets/circle_green.png" alt="login">
+                                </div>
+                                <div v-else-if="item.state == 'in game'" class="mod">
+                                    <img src="../../../assets/circle_orange.png" alt="in game">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form @submit="addUser">
+                    <div class="btn_select">
+                        <div>
+                            <button @click="setPopup('')">BACK</button>
+                        </div>
+                        <div>
+                            <input type="submit" value="Send invitation" :disabled="GET_USER_TARGET.username ? disabled : ''">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div v-if="GET_POPUP == 'inv'">
+        <div @click="setPopup('')" class="container_popup"></div>
+        <div class="block_popup">
+            <div class="content_popup">
+                <h1>INVITATION</h1>
+                <form @submit="response_inv(true)">
+                    <div class="btn_select">
+                        <div class="grid_popup_inv">
+                            <div>
+                                <p>{{GET_USER_TARGET.username}} invite you on {{GET_CHANNEL_TARGET.name}} private channel</p>
+                            </div>
+                            <div class="btn_select">
+                                <div>
+                                    <button @click="response_inv(false)">Declaimed</button>
+                                </div>
+                                <div>
+                                    <input type="submit" value="Accepted">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

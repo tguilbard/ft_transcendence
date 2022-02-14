@@ -1,0 +1,72 @@
+<template>
+  <div></div>
+</template>
+
+
+<script lang="ts">
+import { Options, Vue } from "vue-class-component";
+import shared from "../mixins/Mixins"
+import store from "../store/index"
+
+@Options({
+  data() {
+    return {
+    };
+  },
+  methods: {
+    async login(code: string) {
+
+    // if ((await isLogin()).log)
+    //     window.location.href = "http://localhost:8080";
+
+      var response = await fetch("http://localhost:3000/users/login", {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Max-Age": "600",
+        "Cache-Control": "no-cache",
+        },
+        body: JSON.stringify({
+          code: code,
+        }),
+    });
+    const data = await response.json();
+    //alert('src = ' + data.src + " && login = " + data.login + " && state = " + data.state);
+    // await sessionStorage.setItem("src", await JSON.stringify("https://www.icone-png.com/png/3/2625.png"));
+    await sessionStorage.setItem("login", await JSON.stringify(data.login));
+    await sessionStorage.setItem("src", await JSON.stringify(data.src));
+    store.dispatch("SET_USERNAME", await JSON.stringify(data.username));
+    
+  //   await localStorage.setItem("state", JSON.stringify(data.state));
+
+    if (data.state == 'ok') {
+      return this.$router.push("/");
+    }
+    else if (data.state == 'register'){
+      return this.$router.push("register");
+    }
+    else if (data.state == '2fa'){
+      return this.$router.push("authLogin");
+    }
+}
+  },
+  async created() {
+    const code = await shared.GetQueryStringVal("code");
+    if (!code) {
+      window.location.href = "";
+    }
+    this.login(code);
+    
+    // if (await this.isLogin())
+    //   this.log = true;
+
+  },
+})
+export default class Register extends Vue {}
+</script>
+
+<style scoped>
+</style>

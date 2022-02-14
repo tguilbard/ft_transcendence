@@ -1,0 +1,1 @@
+export type MemberModes = 'mute' | 'ban' | 'member' | 'admin' | 'owner' | 'free' | 'constrain'

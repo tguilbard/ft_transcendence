@@ -1,0 +1,3 @@
+srcs/database
+*.DS_Store
+.secret/database/*.secret

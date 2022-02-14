@@ -1,0 +1,89 @@
+version: '3'
+services:
+  database:
+    image: 'postgres'
+    #hostname: ${DATABASE_HOST}
+    ports:
+      - "${DATABASE_PORT}:5432"
+    container_name: postgres_container
+    environment:
+      #THAT MUST BE MOVE INSIDE SECRET
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      PGDATA: /var/lib/postgresql/data
+
+      #POSTGRES_PASSWORD_FILE: /run/secrets/database_password
+
+    volumes:
+      - ./srcs/database:/var/lib/postgresql/data
+    # secrets:
+    #   - database_password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d ${DATABASE_NAME} -U ${DATABASE_USER}"]
+
+  # pgadmin:
+  #   container_name: pgadmin_container
+  #   image: dpage/pgadmin4
+  #   restart: always
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
+  #     PGADMIN_DEFAULT_PASSWORD: root
+  #     PGADMIN_LISTEN_PORT: 5050
+  #   ports:
+  #     - "5050:5050"
+  # backend:
+  #   build: 
+  #     context: srcs/backend
+  #     dockerfile: Dockerfile
+  #   image: backend
+  #   #hostname: 127.0.0.1
+  #   ports:
+  #     - "${BACK_PORT}:${BACK_PORT}"
+  #   container_name: backend_container
+  #   environment:
+  #     PORT: ${BACK_PORT}
+  #     HOST: ${BACK_HOST}
+  #     ADDRESS: ${BACK_HOST}:${BACK_PORT}
+
+  #     FRONT_ADDRESS: ${FRONT_HOST}:${FRONT_PORT}
+
+  #     DATABASE_TYPE: ${DATABASE_TYPE}
+  #     DATABASE_HOST: ${DATABASE_HOST}
+  #     DATABASE_PORT: ${DATABASE_PORT}
+  #     DATABASE_ADDRESS: ${DATABASE_HOST}:${DATABASE_PORT}
+
+  #     NODE_ENV: ${NODE_ENV}
+
+  #     # #THAT MUST BE MOVE INSIDE SECRET
+  #     DATABASE_USER: ${DATABASE_USER}
+  #     DATABASE_NAME: ${DATABASE_NAME}
+  #     DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+
+  #   depends_on:
+  #     database:
+  #       condition: service_healthy
+
+  # frontend:
+  #   build: 
+  #     context: srcs/frontend
+  #     dockerfile: Dockerfile
+  #   #hostname: 127.0.0.1
+  #   image: frontend
+  #   ports:
+  #     - "${FRONT_PORT}:${FRONT_PORT}"
+  #   environment:
+  #     PORT: ${FRONT_PORT}
+  #     HOST: ${FRONT_HOST}
+  #     ADDRESS: ${FRONT_HOST}:${FRONT_PORT}
+
+        # NODE_ENV: ${NODE_ENV}
+
+  #     BACK_ADDRESS: ${BACK_HOST}:${BACK_PORT}
+  #   container_name: frontend_container
+  #   # depends_on:
+  #   #   - backend
+
+# secrets:
+#   database_password:
+#     file: ${DATABASE_PASSWORD_FILE}
