@@ -52,7 +52,6 @@ export class AchievementService {
 				imageUnlockName: achievementList[i][3],
 				imageLockName: achievementList[i][4]
 			}
-			console.log(achievement);
 		}
 		return achievement;
 	}

@@ -130,16 +130,15 @@ import store from "../store/index"
   },
   async created() {
     if (!(await shared.isAccess("register"))) return this.$router.push("login");
-
     let link = (await sessionStorage.getItem("login")) || "";
-
     if (link) this.user = await JSON.parse(link);
-
     if (!this.user) return this.$router.push("login");
-
     link = (await sessionStorage.getItem("src")) || "";
     link = await JSON.parse(link);
-    this.srcImg = require('../assets/' + link);
+    if (await shared.myGuest())
+      this.srcImg = require('../assets/' + link);
+    else
+      this.srcImg = link;
     this.activate = true;
   },
 })

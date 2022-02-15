@@ -91,16 +91,22 @@ export class UsersController {
 
 	@Get('isGuest/:username')
 	async isGuest(@Param("username") username: string) {
-		console.log("je suis dans isGuest");
 		const user = await this.usersService.FindUserByUsername(username);
+		console.log(user);
 		if (user && user.guest)
+			return true;
+		return false;
+	}
+
+	@Get('myGuest')
+	async myGuest(@Req() req: Request) {
+		if (req.User && req.User.guest)
 			return true;
 		return false;
 	}
 
 	@Post('login')
 	async login(@Res() response: Response, @Req() request: Request) {
-		console.log("je suis dans login");
 		this.usersService.login(response, request);
 	}
 
@@ -123,21 +129,18 @@ export class UsersController {
 	async UpdateUser(
 		@Body() updateUserDTO: UpdateUserDTO,
 		@Req() req: Request): Promise<UserEntity> {
-		console.log(updateUserDTO.username);
 		return await this.usersService.UpdateUser(req.User.id, updateUserDTO);
 	}
 
 	@Get("leaderboard")
 	async GetAllLeaderboard()
 	{
-		console.log("leaderboard")
 		return await this.usersService.GetLeaderboard();
 	}
 
 	@Get("leaderboard/:limit")
 	async GetLeaderboard(@Param("limit", ParseIntPipe) limit: number)
 	{
-		console.log("leaderboard/limit")
 		return await this.usersService.GetLeaderboard(limit);
 	}
 

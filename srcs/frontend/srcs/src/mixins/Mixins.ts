@@ -90,6 +90,21 @@ export interface UserElement {
             return await response.json();
         return false;
     },
+    async myGuest(): Promise<boolean> {
+        const response = await fetch("http://localhost:3000/users/myGuest", {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                Accept: "application/json",
+                "Access-Control-Max-Age": "600",
+                "Cache-Control": "no-cache",
+            },
+        });
+        if (response.ok)
+            return await response.json();
+        return false;
+    },
 
     async getQrCode(): Promise<string> {
         return await fetch("http://localhost:3000/2fa/generate", {

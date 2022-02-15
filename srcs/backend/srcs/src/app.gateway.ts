@@ -47,7 +47,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		catch {
 			this.logger.error(`Socket ${client.id} failed to connect to the gataway`)
 			return;
-			// return client.disconnect()
 		}
 		this.logger.log(`User ${user.username} is connected`)
 		//Changer le status en online si il est en offline
@@ -69,27 +68,26 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			}
 		}
 		global.socketUserList.push({ socket: client, user: user })
-		// console.log("all socket:\n", global.socketUserList);
-		console.log("emit to initClient and send username = ", user.username);
 		this.server.to(client.id).emit('initClient', (user.username));
 	}
 
 	async handleDisconnect(client: Socket) {
 		console.log("handleDisconnect");
 		let user = await this.userService.FindUserBySocket(client);
-		let index = global.socketUserList.findIndex(e => e.user.id == user.id);
-		global.socketUserList.splice(index, 1);
-
-		await this.userService.UpdateState(user, "logout");
-		this.logger.log(`Client ${user.username} disconnected`);
-
+		if (user)
+		{
+			let index = global.socketUserList.findIndex(e => e.user.id == user.id);
+			global.socketUserList.splice(index, 1);
+	
+			await this.userService.UpdateState(user, "logout");
+			this.logger.log(`Client ${user.username} disconnected`);
+		}
 		this.server.emit('del_user');
 	}
 
 	@SubscribeMessage('msgToServer')
 	async handleMessage(client: Socket, payload: any) {
 		console.log("msgToServer");
-		console.log(payload);
 		let chanTarget = await this.channelService.FindChannelByName(payload[1]);
 		if (!chanTarget) return;
 		let user = await this.userService.FindUserBySocket(client);
@@ -377,7 +375,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			this.server.to(client.id).emit('alertMessage', "User not found");
 			return;
 		}
-		// console.log("userName = ", userName);
 		let userGeneral = await this.userService.FindUserBySocket(client);
 		let chanName: string;
 		if (userGeneral.username < userTarget.username)
@@ -389,7 +386,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			this.server.to(client.id).emit('goMsg', chanName);
 			return;
 		}
-		console.log("channel found");
 		let targetChan = await this.channelService.CreateChannels(chanName, ChannelType.privateMessage, undefined);
 		await this.channelService.AddMember(userGeneral, targetChan.id, 0);
 		await this.channelService.AddMember(userTarget, targetChan.id, 0);
@@ -588,7 +584,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	async changeUsername(client: Socket, payload: any) {
 		console.log("je suis dans changeUsername");
 	
-		// console.log("payload:/n", payload);
 		if (payload && payload.length)
 		{
 			payload.forEach(element => {
@@ -627,7 +622,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			(this.modeService.modeIsSet(member.mode, MemberType.mute) ? " mute " : "") +
 			(this.modeService.modeIsSet(member.mode, MemberType.ban) ? " ban " : "") +
 			"]"
-		// console.log(msg);
 		this.server.to(client.id).emit('msgToClient', msg, { name: chan.name, mode: chan.mode} );
 	}
 

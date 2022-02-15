@@ -31,7 +31,6 @@ export class AvatarController {
     @Get(':username')
 	async getAvatarByUsername(@Param("username") username: string, @Res() res: Response, @Req() req: Request) {
 		const user = await this.usersService.FindUserByUsername(username);
-		console.log("username = ", username, " et avatarId = ", user.avatarId);
 		const avatar = await this.avatarService.getAvatar(user.avatarId);
 		res.writeHead(200, {
 			'Content-Type': 'image/*',

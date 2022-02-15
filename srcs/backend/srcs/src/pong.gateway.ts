@@ -258,22 +258,25 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         let playerRight = payload[3];
 
         this.logger.log(scoreLeft, scoreRight);
-
+ 
         if (scoreLeft === "13"){
-            var userW = await this.userService.FindUserById(playerLeft);
-            var userL = await this.userService.FindUserById(playerRight);
+            var userW = await this.userService.FindUserByUsername(playerLeft);
+            var userL = await this.userService.FindUserByUsername(playerRight);
         }
         else{
-            var userL = await this.userService.FindUserById(playerLeft);
-            var userW = await this.userService.FindUserById(playerRight);
+            var userL = await this.userService.FindUserByUsername(playerLeft);
+            var userW = await this.userService.FindUserByUsername(playerRight);
         }
-        var tmp = this.eloChange(userW.elo, userL.elo);
 
+        var tmp = this.eloChange(userW.elo, userL.elo);
+        
         userW.elo += tmp;
         userL.elo = (userL.elo - tmp < 0)? 0 : userL.elo - tmp;
-
+        
         let g = this.games.find(game => game.phaserServer.id === client.id);
+
         g.endGame();
+
     }
     
     private async matching() {

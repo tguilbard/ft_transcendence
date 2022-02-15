@@ -93,9 +93,6 @@ export class MemberService {
 
 	async AddMember(mode: number, user: UserEntity, channel: ChannelEntity)
 	{
-		console.log(user)
-		console.log(channel);
-	
 		const potentialSoftDeletedMember = await this.memberRepository.createQueryBuilder("member")
 													.withDeleted()
 													.leftJoinAndSelect("member.user", "user")
@@ -199,20 +196,16 @@ export class MemberService {
 
 	private IsBanModeSQL()
 	{
-		//console.log(`isBan : ${MemberType.ban}`);
-
 		return (`(member.mode & ${MemberType.ban}) = ${MemberType.ban}`)
 	}
 
 	private IsMuteModeSQL()
 	{
-		//console.log("isMute");
 		return (`(member.mode & ${MemberType.mute}) = ${MemberType.mute} AND (member.mode & ${MemberType.ban}) <> ${MemberType.ban}`)
 	}
 
 	private IsMemberModeSQL()
 	{
-		//console.log("isMember");
 		return (`(member.mode & ${MemberType.ban}) <> ${MemberType.ban}
 		AND (member.mode & ${MemberType.mute}) <> ${MemberType.mute}
 		AND (member.mode & ${MemberType.admin}) <> ${MemberType.admin}
@@ -221,7 +214,6 @@ export class MemberService {
 
 	IsAdminModeSQL(): string
 	{
-		//console.log("isAdmin");
 		return (`(member.mode & ${MemberType.admin}) = ${MemberType.admin}`)
 
 		return (`(member.mode & ${MemberType.owner}) = ${MemberType.owner}
@@ -231,19 +223,16 @@ export class MemberService {
 
 	private IsOwnerModeSQL()
 	{
-		//console.log("isOwner");
 		return (`(member.mode & ${MemberType.owner}) = ${MemberType.owner}`)
 	}
 
 	IsOwnerOrAdminOrMemberModeSQL()
 	{
-		//console.log("isFree");	
 		return "(" + this.IsMemberModeSQL() + " ) OR ( " + this.IsAdminModeSQL() + " ) OR ( " + this.IsOwnerModeSQL() + " )";
 	}
 
 	private IsMuteOrBanModeSQL()
 	{
-		//console.log("isConstrain");
 		return this.IsBanModeSQL() + " OR " + this.IsMuteModeSQL();
 	}
 
@@ -254,14 +243,7 @@ export class MemberService {
 
 	async SoftDeleteMember(memberId: number)
 	{
-		// let date = { deletedAt: new Date(), mode: 42 };
-		// console.log("in softDeleteMember");
-		// console.log(await this.memberRepository.findByIds([memberId]));
-		console.log(await this.memberRepository.softDelete({id: memberId}));
-		// await this.memberRepository.restore({id: 4});
-		// console.log(await this.GetMembers());
-		// console.log(await this.memberRepository.delete({id: memberId}));
-		// console.log(await this.GetMembers());
+		await this.memberRepository.softDelete({id: memberId});
 	}
 
 	async GetMemberInChannelByChannelId(channelId: number, memberModeSelection: MemberModes[] = ["member"])
@@ -336,13 +318,11 @@ export class MemberService {
 
 	
 	async getUserInChan(chan: ChannelEntity) {
-	  console.log("je suis dans getUsersInChan");
 	  let list = []
 	  if (!chan)
 		return list;
 	  let memberList = await this.GetMemberInChannelByChannelId(chan.id, ["free", "constrain"])
 	  for (let member of memberList) {
-		// if (!(member.user.state == "logout" && member.user.login == ""))
 			list.push({username: member.user.username, state: member.user.state, mode: member.mode});
 		}
 	  return list;

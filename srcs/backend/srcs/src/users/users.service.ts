@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, NotFoundException, Req } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException, Redirect, Req } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AddUserDTO } from './dto/Add-user.dto';
@@ -131,14 +131,19 @@ export class UsersService {
 				tfaActivated: body.tfaActivated,
 				guest: req.User.guest
 			}
-			console.log("new user:\n", newUser);
 			const user = await this.AddUser(newUser);
 			return user;
 	}
 
 	async isLogin(req: Request) {
 		if (req.User && req.User.state == 'ok')
-			return { log: true };
+		{
+			try {
+				if (await this.FindUserById(req.User.id))
+					return { log: true };
+			}
+			catch{}
+		}
 		return { log: false };
 	}
 
@@ -151,8 +156,6 @@ export class UsersService {
 	let user;
 	if (request.User)
 		user = await this.isRegister(request.User.login);
-	if (user)
-		console.log(user);
 	if ((user && !user.guest))
 		user = null;
 	if (!user || user.tfaActivated  || !((await this.isLogin(request)).log))
@@ -281,16 +284,22 @@ export class UsersService {
 
 	async FindUserBySocket(client: Socket): Promise<UserEntity> {
         const cookie = client.handshake.headers['cookie'];
-		// console.log(cookie);
         const { access_token : access_token, instance : instance} = parse(cookie)
 		if (instance)
 			return null;
+		if (!access_token)
+			null;
 		const decodedToken = jwt.verify(access_token, 'secret', {
             algorithms: ['HS256']
           });
         const id = decodedToken['id']
-		const user = await this.FindUserById(id);
-        // const user = await this.usersRepositories.findOne(login);
+		
+		let user = null;
+		try {
+			user = await this.FindUserById(id);
+		}
+		catch {
+		}
         return user;
     }
 
@@ -338,7 +347,6 @@ export class UsersService {
 		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
 		const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
 	
-		console.log(userWhoBlock.blockedUsers)
 		userWhoBlock.blockedUsers = [...userWhoBlock.BlockedUsers, userBlocked];
 		
 		//return await this.usersRepositories.update({id: userWhoBlock.id}, {blockedUsers: userWhoBlock.blockedUsers});

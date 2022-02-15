@@ -1,4 +1,4 @@
-# src2
+# pong42
 
 ## Project setup
 ```

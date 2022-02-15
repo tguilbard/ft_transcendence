@@ -21,17 +21,17 @@ export class GameHistoryService {
 		return await this.matchRepositories.find( {relations: ["user1", "user2"]} );
 	}
 
-	async GetAllMatchsForUser(userId: number) : Promise<MatchEntity[]>
+	async GetAllMatchsForUser(username: string) : Promise<MatchEntity[]>
 	{
+		const user = await this.usersService.FindUserByUsername(username);
 		return await this.matchRepositories
     		.createQueryBuilder("match")
     		.leftJoinAndSelect("match.user1", "user1")
 			.leftJoinAndSelect("match.user2", "user2")
-			.where('user1.id = :id OR user2.id = :id', {id: userId })
+			.where('user1.id = :id OR user2.id = :id', {id: user.id })
 			//.leftJoinAndSelect("users", "users")
 			//.createQueryBuilder()
 			.getMany();
-
 	}
 
 	async AddMatchInHistory(addMatchInHistoryDTO : AddMatchInHistoryDTO ) : Promise<MatchEntity>

@@ -126,6 +126,7 @@ export default class Chat extends Vue {
   private my_admin = 1 << 1;
   private my_mute = 1 << 2
   private my_ban = 1 << 3;
+  private log = false;
   
   setPopup(value: string): void {
     store.commit("SET_POPUP", value);
@@ -133,7 +134,7 @@ export default class Chat extends Vue {
 
   async created(): Promise<void | NavigationFailure> {
 
-    if (!(await shared.isAccess("profil"))) return this.$router.push("login");
+    if (!(await shared.isLogin())) return this.$router.push("login");
     if (!store.state.sock_init)
       store.commit("SET_SOCKET");
     this.initClient();
@@ -161,6 +162,12 @@ export default class Chat extends Vue {
     store.state.socket.off('setMod').on('setMod', (mod: number) => {
       store.dispatch("SET_MODE", mod);
     });
+
+    store.state.socket.off('go_login').on('go_login', () => {
+      this.$router.push('/login');
+    });
+
+    
     
     store.state.socket.off('setPassMode').on('setPassMode', ( passMode: { mode: number, chanName: string }) => {  
       const tmp= store.state.listChannel;
@@ -315,6 +322,7 @@ export default class Chat extends Vue {
       store.commit("SET_USERNAME", username);
       this.initClient();
     });
+    this.log = true;
   }
 
   private async initClient() {

@@ -14,20 +14,11 @@ export class AchievementController {
 	@Get()
 	async GetAchievementList()
 	{
-		console.log("coucou")
 		return await this.achievementService.GetAchievements();
 	}
 
-	// @Get("setup")
-	// async SetUpAchievementList()
-	// {
-	// 	await this.achievementService.SetUpAchievementList();
-	// 	return "ok"
-	// }
-
 	@Get(":directory/:imageName")
 	getFileUnlock(@Param("imageName") imageName : string, @Param("directory") directory: string, @Res() res: Response) {
-		console.log(process.cwd() + "/src/achievement/images/" + directory + "/" + imageName);
 		res.sendFile(process.cwd() + "/src/achievement/images/" + directory + "/" + imageName)
 	}
 }

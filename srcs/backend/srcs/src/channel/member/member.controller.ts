@@ -32,14 +32,12 @@ export class MemberController {
 
 	@Get("userInChan/:chanName")
 	async getUserInChan(@Param("chanName") chanName: string) {
-		console.log("je suis dans le getUserInChan in Member");
 		let chan = await this.channelService.GetChannelByName(chanName)
 		return await this.memberService.getUserInChan(chan);
 	}
 
 	@Get("getChanListByMode/:chanMode")
 	async getChanListByMode(@Param("chanMode") chanMode: ChannelMode, @Req() request: Request) {
-		console.log("je suis dans getChanListByMode");
 		let user = await this.usersService.FindUserById(request.User.id);
 		let list = [];
 		try {
@@ -50,7 +48,6 @@ export class MemberController {
 		}
 		catch
 		{
-			console.log("je suis dans catch");
 		}
 		return list;
 	  }

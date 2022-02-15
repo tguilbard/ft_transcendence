@@ -84,7 +84,6 @@ export class ChannelService {
 
 	async GetChannelsOfUser(userId: number, channelMode: ChannelMode = null)
 	{
-		// console.log("je suis dans GetChannelsOfUser");
 		const channelRepo = this.qbService.Create("channel", this.channelRepository)
 		.leftJoin("channel.members", "members")
 		.leftJoin("members.user", "user")
@@ -104,7 +103,6 @@ export class ChannelService {
 	}
 
 	async RenameUserInChannelPrivateMessage (userId: number, username: string, newName: string){
-		console.log("je suis dans rename");
 		const channelRepo = this.qbService.Create("channel", this.channelRepository)
 		.leftJoin("channel.members", "members")
 		.leftJoin("members.user", "user")
@@ -222,65 +220,4 @@ export class ChannelService {
 		else
 			memberChanged.mode = this.modeService.unsetMode(memberChanged.mode, modeToChange);
 	}
-
-	// async SetOwnerMember(memberToBan: MemberEntity, banUntil: Date = null)
-	// {
-	// 	this.ChangeMemberAuthorization(memberToBan, "set", MemberType.admin);
-
-	// 	return await this.channelRepository.update({id: memberToBan.id}, memberToBan);
-	// }
-
-	// async SetMemberMode(memberToChange: MemberEntity, mode: any)
-	// {
-	// 	const modeOfMember = {
-	// 		ban: this.modeService.modeIsSet(memberToChange.mode, MemberType.ban),
-	// 		banUntil: null,
-	// 		mute: this.modeService.modeIsSet(memberToChange.mode, MemberType.mute),
-	// 		muteUntil: null,
-	// 		admin: this.modeService.modeIsSet(memberToChange.mode, MemberType.admin),
-	// 		owner: this.modeService.modeIsSet(memberToChange.mode, MemberType.owner)
-	// 	}
-	// 	const newMode = {
-	// 		...modeOfMember,
-	// 		...mode
-	// 	}
-
-	// 	newMode.forEach(element => {
-	// 		if (element)
-	// 	});
-	// 	console.log(newMode);
-
-	// 	memberToChange.mode = mode;
-	// 	return await this.channelRepository.update({id: memberToChange.id}, memberToChange);
-	// }
-
-	// IsBanMode(member: MemberEntity) : boolean
-	// {
-	// 	return this.memberService.IsBanMode(member);
-	// }
-
-	// IsMuteMode(member: MemberEntity) : boolean
-	// {
-	// 	return this.memberService.IsBanMode(member);
-	// }
-
-	// IsBanOrMuteMode(member: MemberEntity)
-	// {
-	// 	return this.memberService.IsAdminMode(member);
-	// }
-
-	// IsAdminMode(member: MemberEntity) : boolean
-	// {
-	// 	return this.memberService.IsAdminMode(member);
-	// }
-
-	// IsOwnerMode(member: MemberEntity) : boolean
-	// {
-	// 	return this.memberService.IsOwnerMode(member);
-	// }
-
-	// IsAdminOrOwnerMode(member: MemberEntity) : boolean
-	// {
-	// 	return this.memberService.IsAdminOrOwnerMode(member);
-	// }
 }

@@ -1,4 +1,5 @@
 <template>
+<section v-if="log">
   <Menu page="profil" />
   <PopupProfil />
   <div class="grid_container">
@@ -9,7 +10,7 @@
               <h1>GAMES HISTORY</h1>
             </div>
             <div class="list_friends_popup">
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in getMatchs" :key="item">
                 <div
                   v-if="item.username != GET_USERNAME"
                   class="logo_connection"
@@ -165,6 +166,7 @@
       </div>
     </div>
   </div>
+</section>
 </template>
 
 <script lang="ts">
@@ -186,13 +188,18 @@ import { Achievements } from "@/components/chat/ts/Chat";
       activate: false,
       li: ["coucou"],
       listFriends: [],
-      elo: 0
+      listMatchs: [],
+      elo: 0,
+      log: false
     };
   },
   computed: {
     ...mapGetters(["GET_USERNAME", "GET_POPUP", "GET_USER_TARGET", "GET_IMG", "GET_LIST_ACHIEVEMENTS"]),
     getFriends() {
       return this.listFriends;
+    },
+     getMatchs() {
+      return this.listMatchs;
     },
   },
   methods: {
@@ -254,6 +261,20 @@ import { Achievements } from "@/components/chat/ts/Chat";
       return false;
     },
    
+    async getListMatchs(): Promise<string[]> {
+      const response = await fetch("http://localhost:3000/game-history/" + store.getters.GET_USERNAME, {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Access-Control-Max-Age": "600",
+          "Cache-Control": "no-cache",
+        },
+      });
+      if (response.ok) return await response.json();
+      return [];
+    },
     
     async active_pop_profil(user: {
       username: string;
@@ -269,9 +290,7 @@ import { Achievements } from "@/components/chat/ts/Chat";
     },
   },
   async created() {
-    // if (!(await shared.isAccess("profil"))) return this.$router.push("login");
-    if (!(await shared.isLogin())) return this.$router.push("login");
-
+    if (!(await shared.isLogin())) return this.$router.push("/login");
     if (!store.state.sock_init) store.commit("SET_SOCKET");
       this.user = await shared.getMyUser();
     this.elo = this.user.elo;
@@ -282,10 +301,12 @@ import { Achievements } from "@/components/chat/ts/Chat";
     this.activate = true;
     store.dispatch("SET_IMG", await shared.get_avatar(this.save_username));
       this.listFriends = await this.getListFriends();
+      this.listMatchs = await this.getListMatchs();
     store.dispatch(
       "SET_LIST_ACHIEVEMENTS",
       await shared.getAchievements(store.getters.GET_USERNAME)
     );
+    this.log = true;
   },
 })
 export default class Profil extends Vue {}

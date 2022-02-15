@@ -6,7 +6,6 @@ import { GlobalResponseError } from './GlobalResponseError';
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
     catch(exception: unknown, host: ArgumentsHost) {
-        // console.log("je suis dans global fiter");
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
         const request = ctx.getRequest<Request>();

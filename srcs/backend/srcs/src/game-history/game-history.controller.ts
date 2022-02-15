@@ -14,14 +14,15 @@ export class GameHistoryController {
 		return await this.gameHistoryService.GetAll();
 	}
 
-	@Get(':id')
-	async GetAllMatchsForUser(@Param('id', ParseIntPipe) userId: number) : Promise<MatchEntity[]> {
-		return await this.gameHistoryService.GetAllMatchsForUser(userId);
+	@Get(':username')
+	async GetAllMatchsForUser(@Param('username') username: string) : Promise<MatchEntity[]> {
+		const list = await this.gameHistoryService.GetAllMatchsForUser(username);
+		console.log("list matchs:\n", list);
+		return list;
 	}
 
 	@Post() //MUST disapear it's an internal function of match
 	async AddMatchInHistory(@Body() addMatchInHistoryDTO: AddMatchInHistoryDTO) : Promise<MatchEntity>{
-		console.log(Date.now());
 		return await this.gameHistoryService.AddMatchInHistory(addMatchInHistoryDTO)
 			// .catch(err => {
 			// 	throw new HttpException({

@@ -93,14 +93,11 @@ export class ChannelController {
 
 	@Get("ListChannelPublic")
 	async getListChannelPublic() {
-		console.log("getListChannelPublic");
-
 		let chanList = await this.channelService.GetChannelsByMode(ChannelType.public);
 		let list = [];
 		for (let chan of chanList) {
 			list.push({name: chan.name, mode: chan.mode});
 		}
-		// console.log("list:\n", list);
 		return list;
 	}
 
@@ -113,22 +110,6 @@ export class ChannelController {
 	async GetChannel(@Param("channelId", ParseIntPipe) channelId: number) {
 		return await this.channelService.GetChannel(channelId);
 	}
-
-	// @Get(":channelId/:numberOfMessage")
-	// async GetChannelWithLastMessages(@Param("channelId", ParseIntPipe) channelId: number,
-	// 								@Param("numberOfMessage", ParseIntPipe) numberOfMessage: number)
-	// {
-	// 	return await this.channelService.GetChannelWithLastMessages(channelId, numberOfMessage);
-	// }
-
-	// @Get(":channelId/:numberOfMessage/:messageId")
-	// async GetChannelWithRangeOfMessage(@Param("channelId", ParseIntPipe) channelId: number,
-	// 										@Param("numberOfMessage", ParseIntPipe) numberOfMessage: number,
-	// 										@Param("messageId", ParseIntPipe) messageId: number)
-	// {
-	// 	console.log(channelId, numberOfMessage, messageId);
-	// 	return await this.channelService.GetChannelWithRangeOfMessage(channelId, numberOfMessage, messageId);
-	// }
 
 	@Post()
 	async CreateChannel(@Body() createChannelDTO: CreateChannelDTO) {
