@@ -38,6 +38,17 @@ class Game {
         this.server = server;
     }
 
+    reconnect(user: Socket, id: number) {
+        if (this.users[0].user.id === id) {
+            this.users[0].socket = user;
+            user.join(this.socketRoomName);
+        }
+        else {
+            this.users[1].socket = user;
+            user.join(this.socketRoomName);
+        }
+    }
+
     sendMessage(msg: any[]) {
         this.server.to(this.socketRoomName).emit(msg[0], msg[1], msg[2]);
     }
@@ -49,6 +60,7 @@ class Game {
     }
 
     addToSpec(user: SocketUser) {
+        // Ajouter émit ? 
         this.spectators.push(user);
         user.socket.join(this.socketRoomName);
     }
@@ -121,10 +133,18 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             this.logger.error(`Socket ${client.id} failed to connect to the gataway`)
             return client.disconnect()
         }
+        if (user.state == "in a game") {
+            let g = this.games.find(g => g.users[0].user.id === user.id || g.users[1].user.id === user.id);
+            g.reconnect(client, user.id);
+        }
         this.logger.log(`User ${user.username} is connected`)
     }
 
-    handleDisconnect(client: Socket) {
+    async handleDisconnect(client: Socket) {
+        let user = await this.userService.FindUserBySocket(client);
+        if (!user) return ;
+        if (user.state == "login")
+            await this.userService.UpdateState(user, "logout");
         this.Q.forEach((element, index) => {
             if (element.id.id === client.id) this.Q.splice(index, 1);
         });
@@ -274,6 +294,16 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         userL.elo = (userL.elo - tmp < 0)? 0 : userL.elo - tmp;
         
         let g = this.games.find(game => game.phaserServer.id === client.id);
+
+        if (this.server.sockets.adapter.rooms.get(g.users[0].socket.id))
+            await this.userService.UpdateState(g.users[0].user, "login");
+        else
+            await this.userService.UpdateState(g.users[0].user, "logout");
+
+        if (this.server.sockets.adapter.rooms.get(g.users[1].socket.id))
+            await this.userService.UpdateState(g.users[1].user, "login");
+        else
+            await this.userService.UpdateState(g.users[1].user, "logout");
 
         g.endGame();
 

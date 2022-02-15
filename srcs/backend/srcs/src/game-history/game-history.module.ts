@@ -9,6 +9,7 @@ import { AchievementModule } from 'src/achievement/achievement.module';
 @Module({
   imports: [TypeOrmModule.forFeature([MatchEntity]), forwardRef(() => UsersModule), AchievementModule],
   providers: [GameHistoryService],
+  exports: [GameHistoryService],
   controllers: [GameHistoryController]
 })
 export class GameHistoryModule {}

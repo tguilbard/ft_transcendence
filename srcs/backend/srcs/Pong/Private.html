@@ -91,8 +91,8 @@
             ball.setBounce(1);
             player1.setImmovable(true);
             player2.setImmovable(true);
-            this.physics.add.collider(ball, player1, null, null, this);
-            this.physics.add.collider(ball, player2, null, null, this);
+            this.physics.add.collider(ball, player1, colide, null, this);
+            this.physics.add.collider(ball, player2, colide, null, this);
         }
 
         function update() {
@@ -205,6 +205,10 @@
             ball.x = Width / 2;
             ball.y = (Height / 2) + ((Height / 2) * rand);
             ball.setVelocity(VelocityX, VelocityY);
+        }
+
+        function colide(ball, player) {
+            ball.setVelocityY(ball.body.velocity.y + (player.body.velocity.y * 0.6));
         }
     </script>
 </body>

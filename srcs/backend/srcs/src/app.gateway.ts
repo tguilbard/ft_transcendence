@@ -79,7 +79,8 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			let index = global.socketUserList.findIndex(e => e.user.id == user.id);
 			global.socketUserList.splice(index, 1);
 	
-			await this.userService.UpdateState(user, "logout");
+			if (user.state === "login")
+				await this.userService.UpdateState(user, "logout");
 			this.logger.log(`Client ${user.username} disconnected`);
 		}
 		this.server.emit('del_user');
