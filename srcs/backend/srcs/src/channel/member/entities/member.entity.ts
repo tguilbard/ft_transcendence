@@ -25,7 +25,8 @@ export class MemberEntity extends TimeStampEntity {
 	MuteUntil: Date
 
 	@Column({
-		nullable: false
+		nullable: false,
+		default: 0
 	})
 	mode: number
 
@@ -43,8 +44,8 @@ export class MemberEntity extends TimeStampEntity {
 	// @JoinColumn()
 
 	@ManyToOne(type => ChannelEntity, (channel) => channel.members, {
-		cascade: false, 
-		nullable: false
+		nullable: false,
+		onDelete: "CASCADE"
 	})
 	channel: ChannelEntity
 }

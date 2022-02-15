@@ -101,6 +101,11 @@ export class ChannelController {
 		return list;
 	}
 
+	@Delete(":channelId")
+	async delete(@Param("channelId", ParseIntPipe) channelId: number) {
+		return await this.channelService.DeleteChannel(channelId);
+	}
+	
 	@Get(":channelId/full")
 	async GetChannelWithMessages(@Param("channelId", ParseIntPipe) channelId: number) {
 		return await this.channelService.GetChannel(channelId, { relation: ["messages", "members"] });

@@ -1,7 +1,6 @@
-
 import { ChannelEntity } from "src/channel/entities/channel.entity";
 import { MemberEntity } from "src/channel/member/entities/member.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('Messages')
 export class MessageEntity {
@@ -14,20 +13,20 @@ export class MessageEntity {
 	})
 	text: string;
 
-	@Column({
-		nullable: true
-	})
+	@CreateDateColumn()
 	createdAt: Date;
 
 	@ManyToOne(Type => MemberEntity, (member) => member.id, {
 		cascade: false,
-		nullable: false
+		nullable: false,
+		onDelete: "CASCADE"
 	})
-	member : MemberEntity;
+	member: MemberEntity;
 
 	@ManyToOne(Type => ChannelEntity, (channel) => channel, {
 		cascade: false,
-		nullable: false //must be false
+		nullable: false,
+		onDelete: "CASCADE"
 	})
-	channel : ChannelEntity;
+	channel: ChannelEntity;
 }

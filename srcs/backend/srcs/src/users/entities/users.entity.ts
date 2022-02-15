@@ -13,7 +13,7 @@ export class UserEntity extends TimeStampEntity {
 	@Column({
 		update: true,
 		nullable: true,
-		// unique: true
+		unique: true
 	})
 	login: string;
 
@@ -33,22 +33,28 @@ export class UserEntity extends TimeStampEntity {
 	state: string
 
 	@Column({
-		default: 0,
-		nullable: false
+		nullable: false,
+		default: 0
 	})
 	elo: number
 
 	@Column({
-		default: 0,
-		nullable: false
+		nullable: false,
+		default: 0
 	})
 	numberOfGame: number
 
 	@Column({
-		default: 0,
-		nullable: false
+		nullable: false,
+		default: 0
 	})
 	achievementUnlock: number
+
+	@Column({
+		nullable: false,
+		default: false
+	})
+	guest: boolean
 
 	@Column({
 		nullable: true,
@@ -64,12 +70,6 @@ export class UserEntity extends TimeStampEntity {
 
 	@Column({
 		nullable: false,
-		default: false
-	})
-	guest: boolean
-
-	@Column({
-		nullable: false,
 		default: 0
 	})
 	numberOfFriend: number
@@ -82,7 +82,7 @@ export class UserEntity extends TimeStampEntity {
 	@JoinTable({name: "blockedUsers"})
 	blockedUsers: UserEntity[]
 
-		@JoinColumn({ name: 'avatarId' })
+	@JoinColumn({ name: 'avatarId' })
 	@OneToOne(
 		() => DatabaseFile,
 		{

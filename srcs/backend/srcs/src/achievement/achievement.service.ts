@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/users/entities/users.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
-import { AchievementEntity } from './entities/achievement.entity';
 import { Achievement } from './enums/achievement.enum';
 import { numberOfFriend, NumberOfGame, PerfectGame } from './enums/achievement-value-to-success.ts';
 
@@ -13,8 +12,6 @@ export class AchievementService {
 	constructor(
 		@Inject(forwardRef(() => UsersService))
 		private usersService: UsersService,
-		@InjectRepository(AchievementEntity)
-		private readonly achievementRepository: Repository<AchievementEntity>,
 	){}
 
 	static achievementList = AchievementService.SetUpAchievementList()

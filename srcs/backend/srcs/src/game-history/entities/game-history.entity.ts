@@ -8,13 +8,13 @@ export class MatchEntity
 	id : number;
 
 	@Column({
-		nullable: true,
+		nullable: false,
 		default : 0
 	})
 	scoreUser1: number;
 
 	@Column({
-		nullable: true,
+		nullable: false,
 		default : 0
 	})
 	scoreUser2: number;
@@ -30,12 +30,12 @@ export class MatchEntity
 	endAt: Date;
 
 	@ManyToOne(type => UserEntity, (user) => user.history, {
-		nullable: true
+		nullable: false
 	})
 	user1: UserEntity
 
 	@ManyToOne(type => UserEntity, (user) => user.history, {
-		nullable: true
+		nullable: false
 	})
 	user2: UserEntity
 }

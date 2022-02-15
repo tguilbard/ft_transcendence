@@ -1,37 +1,41 @@
 version: '3'
 services:
   database:
-    image: 'postgres'
-    #hostname: ${DATABASE_HOST}
-    ports:
-      - "${DATABASE_PORT}:5432"
     container_name: postgres_container
-    environment:
-      #THAT MUST BE MOVE INSIDE SECRET
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_DB: ${DATABASE_NAME}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      PGDATA: /var/lib/postgresql/data
-
-      #POSTGRES_PASSWORD_FILE: /run/secrets/database_password
-
+    image: 'postgres'
+    restart: always
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
     volumes:
       - ./srcs/database:/var/lib/postgresql/data
-    # secrets:
-    #   - database_password
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d ${DATABASE_NAME} -U ${DATABASE_USER}"]
+     test: ["CMD", "pg_isready",  "-d",  "${DATABASE_NAME}", "-U", "${DATABASE_USER}"]
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - PGDATA=${DATABASE_DATA}
+      - NODE_ENV=${NODE_ENV}
 
-  # pgadmin:
-  #   container_name: pgadmin_container
-  #   image: dpage/pgadmin4
-  #   restart: always
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
-  #     PGADMIN_DEFAULT_PASSWORD: root
-  #     PGADMIN_LISTEN_PORT: 5050
-  #   ports:
-  #     - "5050:5050"
+  pgadmin:
+    container_name: pgadmin_container
+    build:
+      context: srcs/pgadmin4
+      dockerfile: Dockerfile
+      args:
+        - JSON_FILE=${PGADMIN_SERVER_JSON_FILE}
+    restart: always
+    ports:
+      - ${PGADMIN_LISTEN_PORT}:${PGADMIN_LISTEN_PORT}
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+      - PGADMIN_LISTEN_PORT=${PGADMIN_LISTEN_PORT}
+      - PGADMIN_SERVER_JSON_FILE=${PGADMIN_SERVER_JSON_FILE}
+
   # backend:
   #   build: 
   #     context: srcs/backend

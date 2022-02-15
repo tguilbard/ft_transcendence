@@ -1,0 +1,13 @@
+{
+    "Servers": {
+        "ft_transcendence": {
+            "Name": "ft_transcendence",
+            "Group": "Servers",
+            "Port": 5432,
+            "Username": "postgres",
+            "Host": "database",
+			"SSLMode": "prefer",
+			"MaintenanceDB": "postgres"
+        }
+    }
+}

@@ -162,6 +162,11 @@ export class ChannelService {
 		return channel;
 	}
 
+	async DeleteChannel(channelId: number)
+	{
+		return await this.channelRepository.delete({id: channelId});
+	}
+
 	//
 	async AddMember(user: UserEntity, channelId: number, mode: number, plainTextPassword: string = null)
 	{
