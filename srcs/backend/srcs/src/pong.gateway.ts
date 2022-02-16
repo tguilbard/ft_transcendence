@@ -11,6 +11,7 @@ import { emit, exit } from 'process';
 import { UsersService } from './users/users.service';
 import { UserEntity } from './users/entities/users.entity';
 import { ChatGateway, SocketUser } from './app.gateway';
+import { Index } from 'typeorm';
 const DataURIParser = require('datauri/parser');
 
 const datauri = new DataURIParser();
@@ -19,9 +20,9 @@ var gameId: number = 0
 
 class Game {
     id: number;
-    users: SocketUser[];
+    users: SocketUser[] = [];
     phaserServer: Socket;
-    spectators: SocketUser[];
+    spectators: SocketUser[] = [];
     socketRoomName: string;
     privateFlag: number;
     server: Server;
@@ -61,6 +62,9 @@ class Game {
 
     addToSpec(user: SocketUser) {
         // Ajouter émit ? 
+        user.socket.to(this.phaserServer.id).emit("initScore");
+        this.server.to(user.socket.id).emit("START");
+        this.server.to(user.socket.id).emit("openText", 0);
         this.spectators.push(user);
         user.socket.join(this.socketRoomName);
     }
@@ -133,14 +137,20 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             this.logger.error(`Socket ${client.id} failed to connect to the gataway`)
             return client.disconnect()
         }
-        if (user.state == "in a game") {
+        if (user.state == "in match") {
             let g = this.games.find(g => g.users[0].user.id === user.id || g.users[1].user.id === user.id);
-            g.reconnect(client, user.id);
+            if (g)
+                g.reconnect(client, user.id);
         }
         this.logger.log(`User ${user.username} is connected`)
     }
 
     async handleDisconnect(client: Socket) {
+        const index = this.games.findIndex(e => e.phaserServer.id == client.id);
+        console.log("INDEX = ", index);
+        console.log(this.games);
+        if (index >= 0)
+            this.games.splice(index, 1);
         let user = await this.userService.FindUserBySocket(client);
         if (!user) return ;
         if (user.state == "login")
@@ -152,6 +162,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             if (element === client.id) this.oldRoot.splice(index, 1);
         });
         this.logger.log(`Client disconnected: ${client.id}`);
+
     }
     
     async afterInit(server: Server) {
@@ -186,6 +197,32 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             if (element.id.id === client.id) this.list.splice(index, 1);
         });
     }
+    
+    @SubscribeMessage("invite_game")
+    async invite_game(client: Socket, payload: string){
+        if (!payload || !payload)
+            return;
+        const user = await this.userService.FindUserBySocket(client);
+        if (!user)
+        return;
+        const user_target = await this.userService.FindUserByUsername(payload);
+        const socket = this.findSocketInUserSocketObject(user_target.id);
+        if (!socket)
+        return;
+        this.server.to(socket.id).emit("rcv_inv_game", user.username);
+    }
+
+    @SubscribeMessage("duel")
+    async duel(client: Socket, payload: any[]){
+        if (!payload || !payload[1])
+        return;
+        const user1 = await this.userService.FindUserBySocket(client);
+        if (!user1)
+            return;
+        if (payload[0])
+            lunchServerPhaser(user1.username, payload[1], 1);
+    }
+
 
     @SubscribeMessage("startGame")
     async startGame(phaserServer: Socket, payload: any[])
@@ -195,6 +232,8 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
         let user1 = await this.userService.FindUserByUsername(payload[0]);
         let user2 = await this.userService.FindUserByUsername(payload[1]);
+        await this.userService.UpdateState(user1, 'in match');
+        await this.userService.UpdateState(user2, 'in match');
         let flag = payload[2];
 
         if (!user1 || !user2) return;
@@ -205,8 +244,9 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         let test1 : SocketUser = {socket: socket1, user: user1};
         let test2 : SocketUser = {socket: socket2, user: user2};
         let g = new Game(test1, test2, phaserServer, this.server, flag);
-
         this.games.push(g);
+        g.sendMessage(['start_game']);
+
     }
 
     @SubscribeMessage("phaser")
@@ -245,15 +285,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     async unspec(client: Socket) {
         let g = this.games.find(game => game.spectators.find(spe => spe.socket.id === client.id) != undefined);
         g.leaveSpec(client);
-    }
-
-    @SubscribeMessage("duel")
-    async StartDuel(client: Socket, payload: any) {
-        // rajouter la requête (accept / refuse)
-        if (typeof payload === 'undefined')
-            return ;
-        let user = await this.userService.FindUserBySocket(client);
-        lunchServerPhaser(user.username, payload, 1);
     }
 
     @SubscribeMessage("ROOT")
@@ -306,7 +337,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             await this.userService.UpdateState(g.users[1].user, "logout");
 
         g.endGame();
-
     }
     
     private async matching() {
@@ -415,4 +445,10 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         return (Math.round(final));
     }
 
+    private findSocketInUserSocketObject(id: number) {
+		const sockUser = global.socketUserList.find(elem => elem.user.id === id);
+		if (sockUser && sockUser.socket)
+			return sockUser.socket;
+		return null;
+	}
 }

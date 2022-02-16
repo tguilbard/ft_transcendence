@@ -111,8 +111,8 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			{
 				this.server.to(payload[1]).emit('msgToClient', payload[0], { name: chanTarget.name, mode: chanTarget.mode });
 				this.channelService.AddMessage(payload[0], member);
-				this.server.to(client.id).emit('setMod', member.mode);
-				this.server.to(payload[1]).emit('setMyMod', member.mode, chanTarget.name);
+				this.server.to(payload[1]).emit('setMod', member.mode);
+				this.server.to(client.id).emit('setMyMod', member.mode, chanTarget.name);
 				this.server.emit("new_mode", chanTarget.name);
 			}
 		}
@@ -144,6 +144,9 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			{
 				this.server.in(chanTarget.name).emit('msgToClientPrivate', payload[0], { name: chanTarget.name, mode: chanTarget.mode });
 				this.channelService.AddMessage(payload[0], member);
+				this.server.to(payload[1]).emit('setMod', member.mode);
+				this.server.to(client.id).emit('setMyMod', member.mode, chanTarget.name);
+				this.server.emit("new_mode", chanTarget.name);
 			}
 		}
 	}
@@ -330,7 +333,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			}
 			let newChannel = await this.channelService.CreateChannels(chanName, chanMode, password);
 			await this.channelService.AddMember(userGeneral, newChannel.id, userMode, password);
-			// let socket = this.findSocketInUserSocketObject(userGeneral.id);
 			let socket = ChatGateway.findSocketInUserSocketObject(userGeneral.id);
 			this.server.to(socket.id).emit('chanToClient', userMode, { name: newChannel.name, mode: newChannel.mode });
 			client.join(chanName);
@@ -342,7 +344,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 				this.server.to(client.id).emit('alertMessage', targetChan.name + ": You are already logged");
 			try {
 				await this.channelService.AddMember(userGeneral, targetChan.id, 0, password);
-				// let socket = await this.findSocketInUserSocketObject(userGeneral.id);
 				let socket = ChatGateway.findSocketInUserSocketObject(userGeneral.id);
 				this.server.to(socket.id).emit('chanToClient', 0, { name: targetChan.name, mode: targetChan.mode });
 				client.join(chanName);

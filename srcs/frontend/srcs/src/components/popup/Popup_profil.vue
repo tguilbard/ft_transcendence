@@ -6,7 +6,7 @@
         <h1>MODIFY PROFIL</h1>
         <div class="grid_modify">
           <div>
-              <h1>MODIDY YOUR AVATAR</h1>
+              <h1>MODIFY YOUR AVATAR</h1>
               <div class="block_avatar">
                 <div v-if="GET_IMG">
                   <img class="avatar" v-bind:src="GET_IMG" />
@@ -33,7 +33,7 @@
 
           <div class="right">
             <div class="container_right">
-                <h1>MODIDY YOUR USERNAME</h1>
+                <h1>MODIFY YOUR USERNAME</h1>
                 <div class="input_field">
                   <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
                   <input
@@ -123,11 +123,11 @@
                   <div v-if="GET_USER_TARGET.state == 'login'">
                     <img src="../../assets/circle_green.png" alt="login" />
                   </div>
-                  <div v-else-if="GET_USER_TARGET.state == 'in game'">
-                    <img src="../../assets/circle_orange.png" alt="in game" />
+                  <div v-else-if="GET_USER_TARGET.state == 'in match'">
+                    <img src="../../assets/circle_orange.png" alt="in match" />
                   </div>
                   <div v-else>
-                    <img src="../../assets/circle_grey.png" alt="in game" />
+                    <img src="../../assets/circle_grey.png" alt="in match" />
                   </div>
                 </div>
               </div>
@@ -148,11 +148,11 @@
           <div v-else>
             <button @click="add_friend">ADD FRIEND</button>
           </div>
-          <div v-if="GET_USER_TARGET.state == 'in game'">
-            <button @click="setPopup('')">WATCH</button>
+          <div v-if="GET_USER_TARGET.state == 'in match'">
+            <button @click="active_watch">WATCH</button>
           </div>
           <div v-if="GET_USER_TARGET.state == 'login'">
-            <button @click="setPopup('')">PLAY</button>
+            <button @click="active_game">PLAY</button>
           </div>
           <div>
             <button @click="send_message">SEND MESSAGE</button>
@@ -228,6 +228,18 @@ export default defineComponent({
     },
   },
   methods: {
+    active_game() {
+      // store.state.socket.emit("duel", 'aurelien');
+      store.state.socket.emit("invite_game", store.getters.GET_USER_TARGET.username);
+      this.setPopup('');
+      // this.$router.push('/');
+    },
+    active_watch() {
+      store.state.socket.emit("spec", store.getters.GET_USER_TARGET.username);
+      this.setPopup('');
+      store.dispatch("SET_DUEL", true);
+      this.$router.push('/');
+    },
     async envoi() {
       fetch("http://localhost:3000/users/update", {
         method: "PATCH",

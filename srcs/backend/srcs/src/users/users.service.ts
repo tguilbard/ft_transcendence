@@ -303,7 +303,7 @@ export class UsersService {
         return user;
     }
 
-	async UpdateState(user: UserEntity, state: "login" | "logout" | "in a game")
+	async UpdateState(user: UserEntity, state: "login" | "logout" | "in match")
 	{
 		user.state = state;
 		return await this.usersRepositories.update(user.id, user);

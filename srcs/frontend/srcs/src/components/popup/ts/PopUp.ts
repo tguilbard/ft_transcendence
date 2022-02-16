@@ -91,6 +91,10 @@ data: () => {
         store.state.socket.emit('valInvite', ret, store.getters.GET_CHANNEL_TARGET.name , store.getters.GET_USER_TARGET.username);
         store.commit("SET_POPUP", '');
       },
+      response_inv_game(ret: boolean) {
+        store.state.socket.emit('duel', ret, store.getters.GET_USER_TARGET.username);
+        store.commit("SET_POPUP", '');
+      },
       async set_ban()
       {   
         if (this.modeIsSet(store.getters.GET_MODE, MemberType.ban))

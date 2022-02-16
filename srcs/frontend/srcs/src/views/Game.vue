@@ -1,7 +1,7 @@
 <template>
   <section>
     <Menu page="game" />
-    <PopupProfil />
+    <Popup />
     <div id="grid">
       <div id="a" class="block_container">
         <div class="content_container" @click="active_game">
@@ -60,8 +60,8 @@
                   <div v-if="item.state == 'login'" class="mod">
                     <img src="../assets/circle_green.png" alt="login" />
                   </div>
-                  <div v-else-if="item.state == 'in game'" class="mod">
-                    <img src="../assets/circle_orange.png" alt="in game" />
+                  <div v-else-if="item.state == 'in match'" class="mod">
+                    <img src="../assets/circle_orange.png" alt="in match" />
                   </div>
                   <div v-else class="mod">
                     <img src="../assets/circle_grey.png" alt="logout" />
@@ -83,13 +83,13 @@ import store from "../store";
 import shared from "../mixins/Mixins";
 import Pong from "../components/game/Pong.vue";
 import { mapGetters } from "vuex";
-import PopupProfil from "../components/popup/Popup_profil.vue";
+import Popup from "../components/PopUp.vue";
 
 @Options({
   components: {
     Menu,
     Pong,
-    PopupProfil,
+    Popup,
   },
   async created() {
     if (!(await shared.isLogin())) return this.$router.push("login");
@@ -105,6 +105,15 @@ import PopupProfil from "../components/popup/Popup_profil.vue";
       "SET_LIST_ACHIEVEMENTS",
       await shared.getAchievements(store.getters.GET_USERNAME)
     );
+    if (store.getters.GET_DUEL)
+      this.active_game();
+     store.state.socket.off('start_game').on('start_game', () => {
+        this.active_game();
+    });
+     store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: string) => {
+      store.dispatch("SET_USER_TARGET", {username: user_target, state: 'login'});
+      this.setPopup('inv_game')
+    });
   },
   updated() {
     let height =
