@@ -369,9 +369,9 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 
 	@SubscribeMessage("joinPrivateMessage")
-	async joinPrivateMessage(client: Socket, userName: string) {
+	async joinPrivateMessage(client: Socket, username: string) {
 		console.log("je suis dans joinPrivateMessage");
-		let userTarget = await this.userService.FindUserByUsername(userName);
+		let userTarget = await this.userService.FindUserByUsername(username);
 		if (!userTarget) {
 			this.server.to(client.id).emit('alertMessage', "User not found");
 			return;
@@ -393,7 +393,9 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		this.server.to(client.id).emit('chanToClientPrivate', 0, { name: targetChan.name, mode: targetChan.mode });
 		client.join(chanName);
 		let socket = ChatGateway.findSocketInUserSocketObject(userTarget.id);
-		socket.join(chanName);
+		if (socket)
+			socket.join(chanName);
+		this.server.to(client.id).emit('goMsg', chanName);
 	}
 
 	@SubscribeMessage("invite")
@@ -627,7 +629,10 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 
 	static findSocketInUserSocketObject(id: number) {
-		return global.socketUserList.find(elem => elem.user.id === id).socket;
+		const sockUser = global.socketUserList.find(elem => elem.user.id === id);
+		if (sockUser && sockUser.socket)
+			return sockUser.socket;
+		return null;
 	}
 
 }

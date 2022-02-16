@@ -61,14 +61,14 @@ const router = createRouter({
 })
 
 router.afterEach((to, from) => {
-  if (to.name === "Game")
-  {
-    const check = document.getElementById("PongBorder");
+  // if (to.name === "Game")
+  // {
+  //   const check = document.getElementById("PongBorder");
 
-    if (check !== null)
-      check.style.removeProperty( 'display' );
-  }
-  else if (from.name === "Game")
+  //   if (check !== null)
+  //     check.style.removeProperty( 'display' );
+  // }
+  if (from.name === "Game")
   {
     const check = document.getElementById("PongBorder");
 

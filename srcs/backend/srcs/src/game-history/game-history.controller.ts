@@ -17,7 +17,6 @@ export class GameHistoryController {
 	@Get(':username')
 	async GetAllMatchsForUser(@Param('username') username: string) : Promise<MatchEntity[]> {
 		const list = await this.gameHistoryService.GetAllMatchsForUser(username);
-		console.log("list matchs:\n", list);
 		return list;
 	}
 

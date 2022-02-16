@@ -286,7 +286,9 @@ import { Achievements } from "@/components/chat/ts/Chat";
       }
       store.dispatch("SET_USER_TARGET", user);
       await store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
+      await store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
       store.commit("SET_POPUP", "profil");
+      await store.dispatch("SET_IMG_TARGET", await shared.get_avatar(user.username));
     },
   },
   async created() {
@@ -636,5 +638,14 @@ p, span, h1 {
   border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
   background-color: rgb(57, 57, 73);
 } 
+
+.link:hover
+{
+    color: #fff12c;
+    cursor: grabbing;
+    -webkit-text-stroke: 1px;
+    -webkit-text-stroke-color: rgb(0, 0, 0);
+    font-family: futura;
+}
 
 </style>

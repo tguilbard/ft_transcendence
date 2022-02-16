@@ -163,12 +163,6 @@ export default class Chat extends Vue {
       store.dispatch("SET_MODE", mod);
     });
 
-    store.state.socket.off('go_login').on('go_login', () => {
-      this.$router.push('/login');
-    });
-
-    
-    
     store.state.socket.off('setPassMode').on('setPassMode', ( passMode: { mode: number, chanName: string }) => {  
       const tmp= store.state.listChannel;
       
@@ -532,6 +526,7 @@ export default class Chat extends Vue {
     store.commit("SET_POPUP", 'profil_mode');
     store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
     store.dispatch("SET_LIST_ACHIEVEMENTS", await shared.getAchievements(store.getters.GET_USER_TARGET.username));
+    await store.dispatch("SET_IMG_TARGET", await shared.get_avatar(user.username));
   }
 
   private async changeChannel(chan: { name: string, mode: number | string }): Promise<void> {

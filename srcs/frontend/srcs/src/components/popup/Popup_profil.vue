@@ -112,8 +112,8 @@
           </div>
           <div class="content_popup_profil">
             <div class="block_profil">
-              <div v-if="GET_IMG">
-                <img v-bind:src="GET_IMG" />
+              <div v-if="GET_IMG_TARGET">
+                <img v-bind:src="GET_IMG_TARGET" />
               </div>
               <div class="btn_chan_profil">
                 <div>
@@ -138,7 +138,7 @@
           <Achievement />
         </div>
 
-        <div class="btn_select">
+        <div v-if="GET_USER_TARGET.username != GET_USERNAME" class="btn_select">
           <div>
             <button @click="setPopup('')">BACK</button>
           </div>
@@ -156,6 +156,11 @@
           </div>
           <div>
             <button @click="send_message">SEND MESSAGE</button>
+          </div>
+        </div>
+        <div v-else class="btn_select">
+          <div>
+            <button @click="setPopup('')">BACK</button>
           </div>
         </div>
       </div>
@@ -213,6 +218,7 @@ export default defineComponent({
       "GET_LIST_ACHIEVEMENTS",
       "GET_ACHIEVEMENT",
       "GET_IMG",
+      "GET_IMG_TARGET",
     ]),
     isCheck: function () {
       return this.check;
