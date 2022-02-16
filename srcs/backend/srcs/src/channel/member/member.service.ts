@@ -46,7 +46,7 @@ export class MemberService {
 	async SetBanMember(memberToBan: MemberEntity, banUntil: Date = null)
 	{
 		this.ChangeMemberAuthorization(memberToBan, "set", MemberType.ban);
-		memberToBan.MuteUntil = banUntil;
+		memberToBan.BanUntil = banUntil;
 		return await this.memberRepository.update({id: memberToBan.id}, memberToBan);
 	}
 

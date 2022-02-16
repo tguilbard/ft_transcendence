@@ -141,6 +141,9 @@ export default class Chat extends Vue {
     // store.state.socket.off('connect').on("connect", () => {
     // });
 
+    
+ 
+
     store.state.socket.off('changeUsername').on("changeUsername",
       (payload: [{ oldname: string, newname: string, oldchan: string, newchan: string }]) => {
         payload.forEach(e => {
@@ -312,10 +315,21 @@ export default class Chat extends Vue {
       this.conf(channel_target.name);
     });
 
+    store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: string) => {
+      store.dispatch("SET_USER_TARGET", {username: user_target, state: 'login'});
+      this.setPopup('inv_game')
+    });
+
     store.state.socket.off('initClient').on('initClient', (username: string) => {
       store.commit("SET_USERNAME", username);
       this.initClient();
     });
+
+    store.state.socket.off('start_game').on('start_game', () => {
+      store.dispatch("SET_DUEL", true);
+      this.$router.push('/');
+    });
+
     this.log = true;
   }
 

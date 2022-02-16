@@ -281,6 +281,11 @@ async function End() {
     TimerText.setText('0:00');
 
     gameStarted = false;
+    store.dispatch("SET_DUEL", false);
+    let check = document.getElementById("grid");
+    if (check !== null) check.style.removeProperty("display");
+    check = document.getElementById("PongBorder");
+    if (check !== null) check.style.setProperty("display", "none");
 }
 
 function delay(ms: number) {

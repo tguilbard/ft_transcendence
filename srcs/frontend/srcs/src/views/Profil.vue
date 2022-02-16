@@ -1,7 +1,7 @@
 <template>
 <section v-if="log">
   <Menu page="profil" />
-  <PopupProfil />
+  <Popup />
   <div class="grid_container">
     <div id="a" class="block_container">
       <div class="content_container">
@@ -28,11 +28,11 @@
                     <div v-if="item.state == 'login'" class="mod">
                       <img src="../assets/circle_green.png" alt="login" />
                     </div>
-                    <div v-else-if="item.state == 'in game'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in game" />
+                    <div v-else-if="item.state == 'in match'" class="mod">
+                      <img src="../assets/circle_orange.png" alt="in match" />
                     </div>
                     <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in game" />
+                      <img src="../assets/circle_grey.png" alt="in match" />
                     </div>
                   </div>
                 </div>
@@ -66,11 +66,11 @@
                     <div v-if="item.state == 'login'" class="mod">
                       <img src="../assets/circle_green.png" alt="login" />
                     </div>
-                    <div v-else-if="item.state == 'in game'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in game" />
+                    <div v-else-if="item.state == 'in match'" class="mod">
+                      <img src="../assets/circle_orange.png" alt="in match" />
                     </div>
                     <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in game" />
+                      <img src="../assets/circle_grey.png" alt="in match" />
                     </div>
                   </div>
                 </div>
@@ -140,11 +140,11 @@
             <div v-if="this.user.state == 'login'" class="mod">
               <img src="../assets/circle_green.png" alt="login" />
             </div>
-            <div v-else-if="this.user.state == 'in game'" class="mod">
-              <img src="../assets/circle_orange.png" alt="in game" />
+            <div v-else-if="this.user.state == 'in match'" class="mod">
+              <img src="../assets/circle_orange.png" alt="in match" />
             </div>
             <div v-else class="mod">
-              <img src="../assets/circle_grey.png" alt="in game" />
+              <img src="../assets/circle_grey.png" alt="in match" />
             </div>
           </div>
         </div>
@@ -161,7 +161,7 @@
     <div id="h" class="block_container">
       <div class="content_container">
         <div class="container_logout">
-          <p class="btn_logout" @click="setPopup('modify_profil')">MODIDY PROFIL</p>
+          <p class="btn_logout" @click="setPopup('modify_profil')">MODIFY PROFIL</p>
         </div>
       </div>
     </div>
@@ -172,7 +172,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import Menu from "@/components/Menu.vue"; // @ is an alias to /src
-import PopupProfil from "../components/popup/Popup_profil.vue";
+import Popup from "../components/PopUp.vue";
 import store from "../store/index";
 import shared from "../mixins/Mixins";
 import { mapGetters } from "vuex";
@@ -181,7 +181,7 @@ import { Achievements } from "@/components/chat/ts/Chat";
 @Options({
   components: {
     Menu,
-    PopupProfil,
+    Popup,
   },
   data() {
     return {
@@ -309,6 +309,14 @@ import { Achievements } from "@/components/chat/ts/Chat";
       await shared.getAchievements(store.getters.GET_USERNAME)
     );
     this.log = true;
+     store.state.socket.off('start_game').on('start_game', () => {
+      store.dispatch("SET_DUEL", true);
+      this.$router.push('/');
+    });
+     store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: string) => {
+      store.dispatch("SET_USER_TARGET", {username: user_target, state: 'login'});
+      this.setPopup('inv_game')
+    });
   },
 })
 export default class Profil extends Vue {}

@@ -113,6 +113,11 @@
                 }
             })
 
+            socket.on('initScore', () => {
+                socket.emit("phaser", "1Score", player1Score);
+                socket.emit("phaser", "2Score", player2Score);
+            })
+
             if (isPlayer1Point()) {
                 VelocityX = 400;
                 player1Score++;
@@ -130,11 +135,13 @@
             }
 
             if (player1Score >= 13) {
-                socket.emit("phaser", "1Victory").emit("ROOT", player1Score, player2Score, window.left, window.right);
+                socket.emit("phaser", "1Victory", 0);
+                socket.emit("ROOT", player1Score, player2Score, window.left, window.right);
                 End();
             }
             if (player2Score >= 13) {
-                socket.emit("phaser", "2Victory").emit("ROOT", player1Score, player2Score, window.left, window.right);
+                socket.emit("phaser", "2Victory", 0);
+                socket.emit("ROOT", player1Score, player2Score, window.left, window.right);
                 End();
             }
             player1.body.setVelocityY(0);
