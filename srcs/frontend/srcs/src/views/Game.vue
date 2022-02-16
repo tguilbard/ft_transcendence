@@ -1,14 +1,14 @@
 <template>
 <section>
   <Menu page="game" />
-  <!-- <div class="grid">
+  <div class="grid">
     <div id="a">
       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae aliquid iste a distinctio aspernatur. Dolorum repudiandae beatae adipisci, repellat tempore doloribus harum, cum, debitis obcaecati sint est quos similique explicabo?</p>
     </div>
     <div id="b">
     </div>
     <div id="c"></div>
-  </div> -->
+  </div>
   <!-- <Pong class="pong_visible"/> -->
   <!-- <Pong id="PongBorder"/> -->
 </section>
