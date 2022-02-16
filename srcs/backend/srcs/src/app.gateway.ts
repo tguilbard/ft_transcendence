@@ -111,6 +111,9 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			{
 				this.server.to(payload[1]).emit('msgToClient', payload[0], { name: chanTarget.name, mode: chanTarget.mode });
 				this.channelService.AddMessage(payload[0], member);
+				this.server.to(client.id).emit('setMod', member.mode);
+				this.server.to(payload[1]).emit('setMyMod', member.mode, chanTarget.name);
+				this.server.emit("new_mode", chanTarget.name);
 			}
 		}
 	}
@@ -173,6 +176,11 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage("muteUserServer")
 	async muteUserInChat(sender: Socket, payload: string[]) {
+		let muteUntil = null;
+		if (payload.length == 3) {
+			let time = payload[2];
+			muteUntil = new Date(Date.now() + +time*60000);
+		}
 		console.log("je suis dans muteUserServer");
 		let chanTarget = await this.channelService.FindChannelByName(payload[1]);
 		if (!chanTarget) return;
@@ -190,7 +198,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			|| this.modeService.modeIsSet(senderMember.mode, MemberType.admin))
             || senderMember.id == memberTarget.id) return;
 		try {
-			this.memberService.SetMuteMember(memberTarget);
+			this.memberService.SetMuteMember(memberTarget, muteUntil);
 			this.server.to(sender.id).emit('setMod', memberTarget.mode);
 			// let socket = this.findSocketInUserSocketObject(userTarget.id);
 			let socket = ChatGateway.findSocketInUserSocketObject(userTarget.id);
@@ -237,6 +245,11 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage("banUserServer")
 	async banUserInChat(sender: Socket, payload: string[]) {
+		let banUntil = null;
+		if (payload.length == 3) {
+			let time = payload[2];
+			banUntil = new Date(Date.now() + +time*60000);
+		}
 		console.log("je suis dans banUserServer");
 		let chanTarget = await this.channelService.FindChannelByName(payload[1]);
 		if (!chanTarget) return;
@@ -254,7 +267,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			|| this.modeService.modeIsSet(senderMember.mode, MemberType.admin))
             || senderMember.id == memberTarget.id) return;
 		try {
-			this.memberService.SetBanMember(memberTarget);
+			this.memberService.SetBanMember(memberTarget, banUntil);
 			let socket = ChatGateway.findSocketInUserSocketObject(userTarget.id);
 			socket.leave(chanTarget.name);
 			this.server.to(sender.id).emit('setMod', memberTarget.mode);

@@ -123,7 +123,7 @@ export class MemberService {
 		{
 			if (member.MuteUntil == null || member.MuteUntil > new Date())
 				return true;
-			//maybe do change
+			this.SetUnmuteMember(member);
 		}
 		return false;
 	}
@@ -134,7 +134,9 @@ export class MemberService {
 		{
 			if (member.BanUntil == null || member.BanUntil > new Date())
 				return true;
-			//maybe do change
+			this.SetUnbanMember(member);
+			let socket = global.socketUserList.find(elem => elem.user.id === member.user.id).socket;
+			socket.join(member.channel.name);
 		}
 		return false;
 	}

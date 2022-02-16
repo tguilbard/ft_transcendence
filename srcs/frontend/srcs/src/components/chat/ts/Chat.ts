@@ -450,16 +450,16 @@ export default class Chat extends Vue {
         this.blocked.splice(index, 1);
     }
     else if (msg.substring(0, 6) === "/mute ") {
-      const name: string = msg.substring(6);
-      store.state.socket.emit('muteUserServer', name, store.getters.GET_CHAN_CURRENT.realname);
+      const data = msg.split(" ", 3);
+      store.state.socket.emit('muteUserServer', data[1], store.getters.GET_CHAN_CURRENT.realname, data[2]);
     }
     else if (msg.substring(0, 8) === "/unmute ") {
       const name: string = msg.substring(8);
       store.state.socket.emit('unmuteUserServer', name, store.getters.GET_CHAN_CURRENT.realname);
     }
     else if (msg.substring(0, 5) === "/ban ") {
-      const name: string = msg.substring(5);
-      store.state.socket.emit('banUserServer', name, store.getters.GET_CHAN_CURRENT.realname);
+      const data = msg.split(" ", 3);
+      store.state.socket.emit('banUserServer', data[1], store.getters.GET_CHAN_CURRENT.realname, data[2]);
     }
     else if (msg.substring(0, 7) === "/unban ") {
       const name: string = msg.substring(7);
