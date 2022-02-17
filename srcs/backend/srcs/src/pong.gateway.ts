@@ -12,6 +12,7 @@ import { UsersService } from './users/users.service';
 import { UserEntity } from './users/entities/users.entity';
 import { ChatGateway, SocketUser } from './app.gateway';
 import { Index } from 'typeorm';
+import { GameHistoryService } from './game-history/game-history.service';
 const DataURIParser = require('datauri/parser');
 
 const datauri = new DataURIParser();
@@ -114,7 +115,7 @@ function lunchServerPhaser(left: string, right: string, flag: number) {
 @WebSocketGateway()
 export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
 
-    constructor(private readonly userService: UsersService)
+    constructor(private readonly userService: UsersService, private readonly gameHistoryService : GameHistoryService )
     {}
 
     Q: Array<user> = [];
@@ -309,18 +310,21 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         let playerRight = payload[3];
 
         this.logger.log(scoreLeft, scoreRight);
- 
+        let history;
         if (scoreLeft === "13"){
             var userW = await this.userService.FindUserByUsername(playerLeft);
             var userL = await this.userService.FindUserByUsername(playerRight);
+            history = {scoreUser1: scoreLeft , scoreUser2: scoreRight, usersId: [userW.id, userL.id]};
         }
         else{
             var userL = await this.userService.FindUserByUsername(playerLeft);
             var userW = await this.userService.FindUserByUsername(playerRight);
+            history = {scoreUser1: scoreLeft , scoreUser2: scoreRight, usersId: [userL.id, userW.id]};
         }
+        this.gameHistoryService.AddMatchInHistory(history);
 
         var tmp = this.eloChange(userW.elo, userL.elo);
-        
+        //sauvegarder dans la base de donner
         userW.elo += tmp;
         userL.elo = (userL.elo - tmp < 0)? 0 : userL.elo - tmp;
         
@@ -335,7 +339,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             await this.userService.UpdateState(g.users[1].user, "login");
         else
             await this.userService.UpdateState(g.users[1].user, "logout");
-
+        
         g.endGame();
     }
     

@@ -105,12 +105,13 @@ import Popup from "../components/PopUp.vue";
       "SET_LIST_ACHIEVEMENTS",
       await shared.getAchievements(store.getters.GET_USERNAME)
     );
-    if (store.getters.GET_DUEL)
+    if (store.getters.GET_DUEL) this.active_game();
+
+    store.state.socket.off("start_game").on("start_game", () => {
       this.active_game();
-     store.state.socket.off('start_game').on('start_game', () => {
-        this.active_game();
     });
-     store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: string) => {
+
+    store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: string) => {
       store.dispatch("SET_USER_TARGET", {username: user_target, state: 'login'});
       this.setPopup('inv_game')
     });
@@ -119,7 +120,7 @@ import Popup from "../components/PopUp.vue";
     let height =
       document.getElementById("a").offsetHeight +
       document.getElementById("b").offsetHeight;
-    document.getElementById("c").style.height =  height + "px";
+    document.getElementById("c").style.height = height + "px";
   },
   computed: {
     ...mapGetters(["GET_LIST_USER_GENERAL"]),
@@ -128,6 +129,9 @@ import Popup from "../components/PopUp.vue";
     },
   },
   methods: {
+    setPopup(value: string): void {
+      store.dispatch("SET_POPUP", value);
+    },
     async active_pop_profil(user: {
       username: string;
       state: string;
@@ -227,7 +231,7 @@ span {
 
 #grid {
   display: grid;
-  grid-template-rows: minmax(min-content, 0) minmax(min-content, auto) ;
+  grid-template-rows: minmax(min-content, 0) minmax(min-content, auto);
   grid-template-columns: 2fr 1fr;
   grid-template-areas:
     "a c"
@@ -309,5 +313,4 @@ span {
   overflow: auto;
   background-color: #f6ecd2;
 }
-
 </style>

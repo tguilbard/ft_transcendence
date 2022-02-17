@@ -1,7 +1,7 @@
 <template>
 <section v-if="log">
   <Menu page="profil" />
-  <Popup />
+  <Popup/>
   <div class="grid_container">
     <div id="a" class="block_container">
       <div class="content_container">
@@ -9,34 +9,490 @@
             <div>
               <h1>GAMES HISTORY</h1>
             </div>
-            <div class="list_friends_popup">
-              <div v-for="item in getMatchs" :key="item">
-                <div
-                  v-if="item.username != GET_USERNAME"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
+            <div class="list_history">
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
                     >
-                      {{ item.username }}
-                    </p>
+                      {{ item.user1.username }}
+                    </span>
                   </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
                   </div>
-                </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
               </div>
+
+
+
+<div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
+              <div v-for="item in getMatchs" :key="item" class="grid_history">
+                <!-- <div class="grid_history"> -->
+                  <div class="block_user1">
+                    <span
+                      :class="[ (item.user1.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user1)"
+                    >
+                      {{ item.user1.username }}
+                    </span>
+                  </div>
+                  <div class="block_score">
+                    <span>&nbsp;{{item.scoreUser1}} - {{item.scoreUser2}}&nbsp;</span>
+                  </div>
+                  <div class="block_user2">
+                    <span
+                      :class="[ (item.user2.username == GET_USERNAME)? 'color1': 'color2', 'link'] "
+                      @click="active_pop_profil(item.user2)"
+                    >
+                      {{ item.user2.username }}
+                    </span>
+                  </div>
+                <!-- </div> -->
+              </div>
+
             </div>
           </div>
       </div>
@@ -81,10 +537,8 @@
     </div>
     <div id="c" class="block_container">
       <div class="content_container">
-        <div class="block_avatar">
-          <div v-if="GET_IMG">
+        <div v-if="GET_IMG" class="block_avatar">
             <img class="avatar" v-bind:src="GET_IMG" />
-          </div>
         </div>
       </div>
     </div>
@@ -126,7 +580,7 @@
     <div id="e" class="block_container">
       <div class="content_container">
         <div class="my_elo">
-          <p>{{elo}}42</p>
+          <p>{{elo}}</p>
         </div>
       </div>
     </div>
@@ -299,8 +753,7 @@ import { Achievements } from "@/components/chat/ts/Chat";
     this.username = this.user.username;
     store.dispatch("SET_USERNAME", this.username);
     this.save_username = this.username;
-    this.check = this.user.tfaActivated;
-    this.activate = true;
+    store.dispatch("SET_CHECK", this.user.tfaActivated);
     store.dispatch("SET_IMG", await shared.get_avatar(this.save_username));
       this.listFriends = await this.getListFriends();
       this.listMatchs = await this.getListMatchs();
@@ -317,6 +770,7 @@ import { Achievements } from "@/components/chat/ts/Chat";
       store.dispatch("SET_USER_TARGET", {username: user_target, state: 'login'});
       this.setPopup('inv_game')
     });
+    this.activate = true;
   },
 })
 export default class Profil extends Vue {}
@@ -331,7 +785,7 @@ p, span, h1 {
 .grid_container {
   display: grid;
   grid-template-rows: minmax(min-content, max-content) minmax(min-content, max-content) minmax(min-content, max-content) minmax(min-content, max-content);
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: auto 1fr 1fr 1fr;
   grid-template-areas:
     "a c e b"
     "a c f b"
@@ -573,15 +1027,15 @@ p, span, h1 {
 .avatar {
   display: block;
   position: relative;
-  width: 95%;
-  height: 100%;
-  border: 1px solid black;
+  box-sizing: border-box;
+  max-width: 100%;
+  max-height: 100%;
   margin: auto;
 }
 
 .block_avatar{
   height: 21vmax;
-  overflow: auto;
+  background: rgb(61, 61, 61);
 }
 
 .block_avatar_inf label {
@@ -654,6 +1108,52 @@ p, span, h1 {
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
     font-family: futura;
+}
+
+.list_history {
+  
+  color: darkblue;
+  background-color: #f6ecd2;
+  overflow: auto;
+  /* text-align: center; */
+}
+
+.grid_history {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.block_user1 {
+  background-color: rgb(237, 223, 244);
+  text-align: center;
+}
+.block_user2 {
+  text-align: center;
+  background-color: rgb(197, 253, 253);
+}
+
+.block_score {
+  background-color: #f5d5b1;
+  text-align: center;
+}
+
+.grid_history span{
+  /* display: block; */
+  padding: 0.2vmax;
+  font-family: futura;
+  font-weight: 900;
+  font-size: 1.5vmax;
+  top: 0.5vmax;
+  margin: auto;
+  /* left: 50%; */
+}
+
+.color1 {
+  color: brown;
+}
+
+.color2 {
+  color: rgb(11, 133, 32);
 }
 
 </style>

@@ -6,92 +6,95 @@
         <h1>MODIFY PROFIL</h1>
         <div class="grid_modify">
           <div>
-              <h1>MODIFY YOUR AVATAR</h1>
-              <div class="block_avatar">
-                <div v-if="GET_IMG">
-                  <img class="avatar" v-bind:src="GET_IMG" />
-                </div>
+            <h1>MODIFY YOUR AVATAR</h1>
+            <div v-if="GET_IMG" class="block_avatar">
+              <img class="avatar" v-bind:src="GET_IMG" />
+            </div>
+            <div class="block_avatar_inf">
+              <label for="avatar" class="btn"
+                ><h2 style="ground: #f5ba1a">Choisis un avatar</h2></label
+              >
+              <input
+                type="file"
+                id="avatar"
+                name="avatar"
+                accept="image/*"
+                @change="getImg"
+                style="visibility: hidden"
+                placeholder="Choississez un avatar"
+              />
+              <div>
+                <button v-on:click="sendAvatar">ENREGISTRE AVATAR</button>
               </div>
-              <div class="block_avatar_inf">
-                <label for="avatar" class="btn"
-                  ><h2 style="ground: #f5ba1a">Choisis un avatar</h2></label
-                >
-                <input
-                  type="file"
-                  id="avatar"
-                  name="avatar"
-                  accept="image/*"
-                  @change="getImg"
-                  style="visibility: hidden"
-                  placeholder="Choississez un avatar"
-                />
-                <div>
-                  <button v-on:click="sendAvatar">ENREGISTRE AVATAR</button>
-                </div>
-              </div>
+            </div>
           </div>
 
           <div class="right">
             <div class="container_right">
-                <h1>MODIFY YOUR USERNAME</h1>
-                <div class="input_field">
-                  <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
-                  <input
-                    type="pseudo"
-                    name="pseudo"
-                    placeholder="Entre ton pseudo"
-                    v-model="username"
-                    required
-                    :disabled="desable ? '' : disabled"
-                  />
-                  <div v-if="myerror">
-                    <div v-for="msg in myerror.message" :key="msg">
-                      <p style="color: red" v-if="msg.username">
-                        {{ msg.username }}
-                      </p>
-                    </div>
+              <h1>MODIFY YOUR USERNAME</h1>
+              <div class="block_user">
+                <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
+                <input
+                  type="pseudo"
+                  name="pseudo"
+                  placeholder="Entre ton pseudo"
+                  v-model="username"
+                  required
+                  :disabled="desable ? '' : disabled"
+                />
+                <div v-if="myerror">
+                  <div v-for="msg in myerror.message" :key="msg">
+                    <p style="color: red" v-if="msg.username">
+                      {{ msg.username }}
+                    </p>
                   </div>
                 </div>
                 <button v-if="desable" @click="toggle">MODIFIER</button>
                 <button v-else @click="envoi">ENREGISTRER</button>
-
-                <div v-if="isCheck" class="input_field checkbox_option">
-                  <input
-                    type="checkbox"
-                    id="cb1"
-                    name="auth2"
-                    v-model="check"
-                    @click="switchCheck"
-                  />
-                  <label for="cb1">Desactiver la double authentification</label>
-                </div>
-                <div v-else class="input_field checkbox_option">
-                  <input
-                    type="checkbox"
-                    id="cb2"
-                    name="auth2"
-                    v-model="check"
-                    @click="switchCheck"
-                  />
-                  <label for="cb2">Activer la double authentification</label>
-                </div>
-
-                <div v-if="isQrCode">
-                  <img :src="qrCode" alt="qrcode" />
-                  <input
-                    type="text"
-                    name="code"
-                    placeholder="Entre le code recus"
-                    v-model="code"
-                  />
-                  <div v-if="myerror">
-                    <div v-for="msg in myerror.message" :key="msg">
-                      <p style="color: red" v-if="msg.code">{{ msg.code }}</p>
-                    </div>
-                  </div>
-                  <button @click="submit_code">VALIDEZ CODE</button>
-                </div>
               </div>
+              <h1>MODIFY YOUR DOUBLE AUTHENTIFICATION</h1>
+              <div class="block_user">
+
+              <div v-if="isCheck">
+                <button @click="switchCheck" >DESACTIVATE TFA</button>
+                <!-- <input
+                  type="checkbox"
+                  id="cb1"
+                  name="auth2"
+                  v-model="check"
+                  @click="switchCheck"
+                /> -->
+                <!-- <label for="cb1">Desactiver la double authentification</label> -->
+              </div>
+              <div v-else>
+                <button @click="switchCheck" >ACTIVATE TFA</button>
+                <!-- <input
+                  type="checkbox"
+                  id="cb2"
+                  name="auth2"
+                  v-model="check"
+                  @click="switchCheck"
+                />
+                <label for="cb2">Activer la double authentification</label> -->
+              </div>
+
+              <div v-if="isQrCode">
+                <img :src="qrCode" alt="qrcode" />
+                <input
+                  type="text"
+                  name="code"
+                  placeholder="Entre le code recus"
+                  v-model="code"
+                />
+                <div v-if="myerror">
+                  <div v-for="msg in myerror.message" :key="msg">
+                    <p style="color: red" v-if="msg.code">{{ msg.code }}</p>
+                  </div>
+                </div>
+                <button @click="submit_code">VALIDEZ CODE</button>
+              </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -230,15 +233,18 @@ export default defineComponent({
   methods: {
     active_game() {
       // store.state.socket.emit("duel", 'aurelien');
-      store.state.socket.emit("invite_game", store.getters.GET_USER_TARGET.username);
-      this.setPopup('');
+      store.state.socket.emit(
+        "invite_game",
+        store.getters.GET_USER_TARGET.username
+      );
+      this.setPopup("");
       // this.$router.push('/');
     },
     active_watch() {
       store.state.socket.emit("spec", store.getters.GET_USER_TARGET.username);
-      this.setPopup('');
+      this.setPopup("");
       store.dispatch("SET_DUEL", true);
-      this.$router.push('/');
+      this.$router.push("/");
     },
     async envoi() {
       fetch("http://localhost:3000/users/update", {
@@ -335,10 +341,12 @@ export default defineComponent({
     async switchCheck() {
       if (this.check) {
         await this.desactivedQrCode();
+        this.check = false;
       } else {
         this.qrCode = await shared.getQrCode();
         const tmp = this.qrCode;
         this.qrCode = tmp;
+        this.check = true;
       }
     },
     toggle() {
@@ -465,6 +473,7 @@ export default defineComponent({
   },
   async created() {
     this.username = store.getters.GET_USERNAME;
+    this.check = (await shared.getMyUser()).tfaActivated;
   },
 });
 </script>
@@ -672,23 +681,58 @@ label {
 .avatar {
   display: block;
   position: relative;
-  width: 100%;
-  height: 100%;
-  border: 1px solid black;
+  border: none;
+  box-sizing: border-box;
+  max-width: 100%;
+  max-height: 100%;
   margin: auto;
 }
 
 .block_avatar {
-  height: 21vmax;
-  overflow: auto;
+  height: 20vmax;
+  background-color: rgb(61, 61, 61);
+  border-radius: 0px 0px 7px 7px;
+
+}
+
+.block_user {
+  background-color: rgb(61, 61, 61);
+  padding: 1vmax;
+  margin-bottom: 1vmax;
+  border-radius: 0px 0px 7px 7px;
+}
+
+
+
+.grid_modify input,
+.grid_modify button{
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  width: 75%;
+  left: 50%;
+  transform: translateX(-50%);
+  /* top: 1vmax; */
+}
+
+.block_user img{
+  /* margin: auto; */
+  width: 10vmax;
+  height: 10vmax;
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .block_avatar_inf label {
+  top: 1vmax;
   font-size: 1vmax;
   text-align: center;
 }
 
-.block_avatar_inf button {
+/* .block_avatar_inf button {
   display: block;
   text-align: center;
   margin: auto;
@@ -696,7 +740,7 @@ label {
   width: 90%;
   height: 100%;
   padding: 0.2vh;
-}
+} */
 
 .right {
   border-left: solid 0.5vmax rgb(0, 0, 0);
@@ -704,5 +748,6 @@ label {
 
 .container_right {
   margin-left: 1vmax;
+  margin-bottom: 1vmax;
 }
 </style> >
