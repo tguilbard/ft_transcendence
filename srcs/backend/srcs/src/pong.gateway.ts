@@ -173,17 +173,11 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     @SubscribeMessage('matching')
     async handleMatchMessage(client: Socket) {
         var lock: boolean = false;
-        this.Q.forEach((element, index) => {
-            if (element.id.id === client.id) {
-                lock = true;
-                return;
-            }
-        });
-        if (lock === false)
+        if (this.Q.find(element => element.id.id === client.id) === undefined)
         {
             var user = await this.userService.FindUserBySocket(client);
 
-            this.Q.push({elo: user.elo, name: user.username, id: client});//a mettre avec base de donner
+            this.Q.push({elo: user.elo, name: user.username, id: client});
             this.list.push({elo: user.elo, name: user.username, id: client});
         }
     }
@@ -245,7 +239,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         let test2 : SocketUser = {socket: socket2, user: user2};
         let g = new Game(test1, test2, phaserServer, this.server, flag);
         this.games.push(g);
-        g.sendMessage(['start_game']);
+        g.sendMessage(['start_game', payload[0], payload[1]]);
 
     }
 
@@ -310,7 +304,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
         this.logger.log(scoreLeft, scoreRight);
  
-        if (scoreLeft === "13"){
+        if (scoreLeft === "11"){
             var userW = await this.userService.FindUserByUsername(playerLeft);
             var userL = await this.userService.FindUserByUsername(playerRight);
         }
@@ -319,11 +313,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             var userW = await this.userService.FindUserByUsername(playerRight);
         }
 
-        var tmp = this.eloChange(userW.elo, userL.elo);
-        
-        userW.elo += tmp;
-        userL.elo = (userL.elo - tmp < 0)? 0 : userL.elo - tmp;
-        
         let g = this.games.find(game => game.phaserServer.id === client.id);
 
         if (this.server.sockets.adapter.rooms.get(g.users[0].socket.id))
@@ -335,6 +324,14 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             await this.userService.UpdateState(g.users[1].user, "login");
         else
             await this.userService.UpdateState(g.users[1].user, "logout");
+        
+        if (g.privateFlag == 0)
+        {
+            var tmp = this.eloChange(userW.elo, userL.elo);
+        
+            userW.elo += tmp;
+            userL.elo = (userL.elo - tmp < 0)? 0 : userL.elo - tmp;
+        }
 
         g.endGame();
     }
