@@ -166,7 +166,7 @@
             </div>
           </div>
           <div id='b' class="elo">
-            <p>42</p>
+            <p>420</p>
           </div>
           <div id='c' class="content_popup_profil">
             <div class="block_profil">
