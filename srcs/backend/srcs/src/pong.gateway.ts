@@ -148,8 +148,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     async handleDisconnect(client: Socket) {
         const index = this.games.findIndex(e => e.phaserServer.id == client.id);
-        console.log("INDEX = ", index);
-        console.log(this.games);
         if (index >= 0)
             this.games.splice(index, 1);
         let user = await this.userService.FindUserBySocket(client);
@@ -184,6 +182,8 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         {
             var user = await this.userService.FindUserBySocket(client);
 
+            if (this.Q.find(e => e.name === user.username))
+                return ;
             this.Q.push({elo: user.elo, name: user.username, id: client});//a mettre avec base de donner
             this.list.push({elo: user.elo, name: user.username, id: client});
         }
@@ -303,6 +303,8 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         if (lock === true)
             {return;}
 
+        let g = this.games.find(game => game.phaserServer.id === client.id);
+
         this.oldRoot.push(client.id);
         let scoreLeft = payload[0];
         let scoreRight = payload[1];
@@ -321,25 +323,26 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             var userW = await this.userService.FindUserByUsername(playerRight);
             history = {scoreUser1: scoreLeft , scoreUser2: scoreRight, usersId: [userL.id, userW.id]};
         }
+        
+        if (g.privateFlag == 0) {
+
+            var tmp = this.eloChange(userW.elo, userL.elo);
+
+            g.users[0].user.elo = userW.elo + tmp;
+            g.users[1].user.elo = (userL.elo - tmp < 0)? 0 : userL.elo - tmp;
+        }
+
         this.gameHistoryService.AddMatchInHistory(history);
 
-        var tmp = this.eloChange(userW.elo, userL.elo);
-        //sauvegarder dans la base de donner
-        userW.elo += tmp;
-        userL.elo = (userL.elo - tmp < 0)? 0 : userL.elo - tmp;
-        
-        let g = this.games.find(game => game.phaserServer.id === client.id);
-
-        if (this.server.sockets.adapter.rooms.get(g.users[0].socket.id))
-            await this.userService.UpdateState(g.users[0].user, "login");
-        else
+        await this.userService.UpdateState(g.users[0].user, "login");
+        if (!this.server.sockets.adapter.rooms.get(g.users[0].socket.id))
             await this.userService.UpdateState(g.users[0].user, "logout");
 
-        if (this.server.sockets.adapter.rooms.get(g.users[1].socket.id))
-            await this.userService.UpdateState(g.users[1].user, "login");
-        else
+        await this.userService.UpdateState(g.users[1].user, "login");
+        if (!this.server.sockets.adapter.rooms.get(g.users[1].socket.id))
             await this.userService.UpdateState(g.users[1].user, "logout");
-        
+
+
         g.endGame();
     }
     
