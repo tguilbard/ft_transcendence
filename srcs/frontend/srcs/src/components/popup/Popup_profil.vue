@@ -6,74 +6,75 @@
         <h1>MODIFY PROFIL</h1>
         <div class="grid_modify">
           <div>
-              <h1>MODIFY YOUR AVATAR</h1>
-              <div class="block_avatar">
-                <div v-if="GET_IMG">
-                  <img class="avatar" v-bind:src="GET_IMG" />
-                </div>
+            <h1>MODIFY YOUR AVATAR</h1>
+            <div v-if="GET_IMG" class="block_avatar">
+              <img class="avatar" v-bind:src="GET_IMG" />
+            </div>
+            <div class="block_avatar_inf">
+              <label for="avatar" class="btn"
+                ><h2 style="ground: #f5ba1a">Choisis un avatar</h2></label
+              >
+              <input
+                type="file"
+                id="avatar"
+                name="avatar"
+                accept="image/*"
+                @change="getImg"
+                style="visibility: hidden"
+                placeholder="Choississez un avatar"
+              />
+              <div>
+                <button v-on:click="sendAvatar">ENREGISTRE AVATAR</button>
               </div>
-              <div class="block_avatar_inf">
-                <label for="avatar" class="btn"
-                  ><h2 style="ground: #f5ba1a">Choisis un avatar</h2></label
-                >
-                <input
-                  type="file"
-                  id="avatar"
-                  name="avatar"
-                  accept="image/*"
-                  @change="getImg"
-                  style="visibility: hidden"
-                  placeholder="Choississez un avatar"
-                />
-                <div>
-                  <button v-on:click="sendAvatar">ENREGISTRE AVATAR</button>
-                </div>
-              </div>
+            </div>
           </div>
 
           <div class="right">
             <div class="container_right">
-                <h1>MODIFY YOUR USERNAME</h1>
-                <div class="input_field">
-                  <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
-                  <input
-                    type="pseudo"
-                    name="pseudo"
-                    placeholder="Entre ton pseudo"
-                    v-model="username"
-                    required
-                    :disabled="desable ? '' : disabled"
-                  />
-                  <div v-if="myerror">
-                    <div v-for="msg in myerror.message" :key="msg">
-                      <p style="color: red" v-if="msg.username">
-                        {{ msg.username }}
-                      </p>
-                    </div>
+              <h1>MODIFY YOUR USERNAME</h1>
+              <div class="block_user">
+                <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
+                <input
+                  type="pseudo"
+                  name="pseudo"
+                  placeholder="Entre ton pseudo"
+                  v-model="username"
+                  required
+                  :disabled="desable ? '' : disabled"
+                />
+                <div v-if="myerror">
+                  <div v-for="msg in myerror.message" :key="msg">
+                    <p style="color: red" v-if="msg.username">
+                      {{ msg.username }}
+                    </p>
                   </div>
                 </div>
                 <button v-if="desable" @click="toggle">MODIFIER</button>
                 <button v-else @click="envoi">ENREGISTRER</button>
-
-                <div v-if="isCheck" class="input_field checkbox_option">
-                  <input
-                    type="checkbox"
-                    id="cb1"
-                    name="auth2"
-                    v-model="check"
-                    @click="switchCheck"
-                  />
-                  <label for="cb1">Desactiver la double authentification</label>
+              </div>
+              <h1>MODIFY YOUR DOUBLE AUTHENTIFICATION</h1>
+              <div class="block_user" style="height: 25vmax">
+                <div v-if="isCheck">
+                  <button @click="switchCheck">DESACTIVATE TFA</button>
+                  <!-- <input
+                  type="checkbox"
+                  id="cb1"
+                  name="auth2"
+                  v-model="check"
+                  @click="switchCheck"
+                /> -->
+                  <!-- <label for="cb1">Desactiver la double authentification</label> -->
                 </div>
-                <div v-else class="input_field checkbox_option">
-                  <input
-                    type="checkbox"
-                    id="cb2"
-                    name="auth2"
-                    v-model="check"
-                    @click="switchCheck"
-                  />
-                  <label for="cb2">Activer la double authentification</label>
+                <div v-else>
+                  <button @click="switchCheck">ACTIVATE TFA</button>
+                  <!-- <input
+                  type="checkbox"
+                  id="cb2"
+                  name="auth2"
+                  v-model="check"
+                  @click="switchCheck"
+                />
+                <label for="cb2">Activer la double authentification</label> -->
                 </div>
 
                 <div v-if="isQrCode">
@@ -92,8 +93,12 @@
                   <button @click="submit_code">VALIDEZ CODE</button>
                 </div>
               </div>
+            </div>
           </div>
         </div>
+          <div>
+            <button class="btn" @click="setPopup('')">BACK</button>
+          </div>
       </div>
     </div>
   </div>
@@ -107,10 +112,63 @@
       <div class="content_popup">
         <h1>PROFIL</h1>
         <div class="grid_popup_profil">
-          <div class="elo">
+          <div id='a'>
+            <div class="grid_container">
+              <div class="block_container">
+                <div class="content_container">
+                  <div class="friends_content">
+                    <div>
+                      <h1>GAMES HISTORY</h1>
+                    </div>
+                    <div class="list_history">
+                      <div
+                        v-for="item in getMatchs"
+                        :key="item"
+                        class="grid_history"
+                      >
+                        <div class="block_user1">
+                          <span
+                            :class="[
+                              item.user1.username == GET_USERNAME
+                                ? 'color1'
+                                : 'color2',
+                              'link',
+                            ]"
+                            @click="active_pop_profil(item.user1)"
+                          >
+                            {{ item.user1.username }}
+                          </span>
+                        </div>
+                        <div class="block_score">
+                          <span
+                            >&nbsp;{{ item.scoreUser1 }} -
+                            {{ item.scoreUser2 }}&nbsp;</span
+                          >
+                        </div>
+                        <div class="block_user2">
+                          <span
+                            :class="[
+                              item.user2.username == GET_USERNAME
+                                ? 'color1'
+                                : 'color2',
+                              'link',
+                            ]"
+                            @click="active_pop_profil(item.user2)"
+                          >
+                            {{ item.user2.username }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id='b' class="elo">
             <p>42</p>
           </div>
-          <div class="content_popup_profil">
+          <div id='c' class="content_popup_profil">
             <div class="block_profil">
               <div v-if="GET_IMG_TARGET">
                 <img v-bind:src="GET_IMG_TARGET" />
@@ -133,9 +191,9 @@
               </div>
             </div>
           </div>
-        </div>
-        <div>
+        <div id="d">
           <Achievement />
+        </div>
         </div>
 
         <div v-if="GET_USER_TARGET.username != GET_USERNAME" class="btn_select">
@@ -207,6 +265,7 @@ export default defineComponent({
       check: "",
       qrCode: "",
       code: 0,
+      listMatchs: [],
     };
   },
   computed: {
@@ -226,19 +285,42 @@ export default defineComponent({
     isQrCode: function () {
       return this.qrCode;
     },
+    getMatchs() {
+      return this.listMatchs;
+    },
   },
   methods: {
+    async getListMatchs(): Promise<string[]> {
+      const response = await fetch(
+        "http://localhost:3000/game-history/" + store.getters.GET_USERNAME,
+        {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Access-Control-Max-Age": "600",
+            "Cache-Control": "no-cache",
+          },
+        }
+      );
+      if (response.ok) return await response.json();
+      return [];
+    },
     active_game() {
       // store.state.socket.emit("duel", 'aurelien');
-      store.state.socket.emit("invite_game", store.getters.GET_USER_TARGET.username);
-      this.setPopup('');
+      store.state.socket.emit(
+        "invite_game",
+        store.getters.GET_USER_TARGET.username
+      );
+      this.setPopup("");
       // this.$router.push('/');
     },
     active_watch() {
       store.state.socket.emit("spec", store.getters.GET_USER_TARGET.username);
-      this.setPopup('');
+      this.setPopup("");
       store.dispatch("SET_DUEL", true);
-      this.$router.push('/');
+      this.$router.push("/");
     },
     async envoi() {
       fetch("http://localhost:3000/users/update", {
@@ -335,10 +417,12 @@ export default defineComponent({
     async switchCheck() {
       if (this.check) {
         await this.desactivedQrCode();
+        this.check = false;
       } else {
         this.qrCode = await shared.getQrCode();
         const tmp = this.qrCode;
         this.qrCode = tmp;
+        this.check = true;
       }
     },
     toggle() {
@@ -465,6 +549,8 @@ export default defineComponent({
   },
   async created() {
     this.username = store.getters.GET_USERNAME;
+    this.check = (await shared.getMyUser()).tfaActivated;
+    this.listMatchs = await this.getListMatchs();
   },
 });
 </script>
@@ -499,6 +585,7 @@ export default defineComponent({
   font-size: 1.5vmax;
   border: 1px solid black;
   display: block;
+  white-space: nowrap;
 }
 
 .container_popup {
@@ -556,8 +643,8 @@ label {
 
 .content_popup_profil img {
   text-align: center;
-  width: 10vmax;
-  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   border: 2px solid #8f8f8f;
   display: block;
   margin-left: auto;
@@ -567,7 +654,7 @@ label {
 
 .content_popup_profil input {
   position: relative;
-  width: 20vh;
+  /* width: 20vh; */
 }
 
 .content_popup_profil p {
@@ -578,10 +665,40 @@ label {
 
 .grid_popup_profil {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: auto 1fr 1fr;
   gap: 0.2vmax;
   align-items: center;
   justify-content: center;
+
+
+  display: grid;
+  grid-template-rows: minmax(min-content, max-content) minmax(min-content, max-content);
+  grid-template-columns: auto 1fr 1fr;
+  grid-template-areas:
+    "a b c"
+    "a d d";
+  /* width: 90vw;
+  min-height: 75vh; */
+  margin: auto;
+  margin-top: 1vh;
+  gap: 0.2vmax;
+  justify-items: stretch;
+}
+
+#a {
+  grid-area: a;
+}
+
+#b {
+  grid-area: b;
+}
+
+#c {
+  grid-area: c;
+}
+
+#d {
+  grid-area: d;
 }
 
 .elo {
@@ -672,23 +789,78 @@ label {
 .avatar {
   display: block;
   position: relative;
-  width: 100%;
-  height: 100%;
-  border: 1px solid black;
+  border: none;
+  box-sizing: border-box;
+  max-width: 100%;
+  max-height: 100%;
   margin: auto;
 }
 
 .block_avatar {
-  height: 21vmax;
-  overflow: auto;
+  height: 20vmax;
+  background-color: rgb(61, 61, 61);
+  border-radius: 0px 0px 7px 7px;
+}
+
+.block_user {
+  background-color: rgb(61, 61, 61);
+  padding: 1vmax;
+  margin-bottom: 1vmax;
+  border-radius: 0px 0px 7px 7px;
+}
+
+.grid_modify input,
+.grid_modify button,
+.btn {
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  width: 75%;
+  left: 50%;
+  transform: translateX(-50%);
+  /* top: 1vmax; */
+}
+
+.grid_modify button,
+.btn {
+  padding: 0.5vmax;
+  text-align: center;
+  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
+  font-family: futura;
+  font-size: 1vmax;
+  font-weight: bold;
+  margin-top: 0.5vmax;
+  margin-bottom: 0.5vmax;
+}
+
+.grid_modify button:hover,
+.btn:hover {
+  color: #fff12c;
+  cursor: grabbing;
+  -webkit-text-stroke: 1px;
+  -webkit-text-stroke-color: rgb(0, 0, 0);
+  font-size: 1.05vmax;
+}
+
+.block_user img {
+  /* margin: auto; */
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  margin: 1vmax;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .block_avatar_inf label {
+  top: 1vmax;
   font-size: 1vmax;
   text-align: center;
 }
 
-.block_avatar_inf button {
+/* .block_avatar_inf button {
   display: block;
   text-align: center;
   margin: auto;
@@ -696,7 +868,7 @@ label {
   width: 90%;
   height: 100%;
   padding: 0.2vh;
-}
+} */
 
 .right {
   border-left: solid 0.5vmax rgb(0, 0, 0);
@@ -704,5 +876,105 @@ label {
 
 .container_right {
   margin-left: 1vmax;
+  margin-bottom: 1vmax;
 }
+
+
+.link:hover
+{
+    color: #fff12c;
+    cursor: grabbing;
+    -webkit-text-stroke: 1px;
+    -webkit-text-stroke-color: rgb(0, 0, 0);
+    font-family: futura;
+}
+
+.list_history {
+  
+  color: darkblue;
+  background-color: #f6ecd2;
+  overflow: auto;
+  /* text-align: center; */
+}
+
+.grid_history {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.block_user1 {
+  background-color: rgb(237, 223, 244);
+  text-align: center;
+}
+.block_user2 {
+  text-align: center;
+  background-color: rgb(197, 253, 253);
+}
+
+.block_score {
+  background-color: #f5d5b1;
+  text-align: center;
+}
+
+.grid_history span{
+  /* display: block; */
+  padding: 0.2vmax;
+  font-family: futura;
+  font-weight: 900;
+  font-size: 1.5vmax;
+  top: 0.5vmax;
+  margin: auto;
+  /* left: 50%; */
+}
+
+.color1 {
+  color: brown;
+}
+
+.color2 {
+  color: rgb(11, 133, 32);
+}
+
+.block_container {
+  display: block;
+  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
+  background-color: #fff12c;
+  border: 2px solid #8f8f8f;
+  padding: 1px;
+  text-align: center;
+  color: rgb(255, 255, 255);
+}
+
+.block_container h1 {
+  border-radius: 0.5vmax 0.5vmax 0px 0px;
+  text-align: center;
+  background-color: grey;
+  color: #fff12c;
+  padding: 4px;
+  -webkit-text-stroke: 1px;
+  -webkit-text-stroke-color: rgb(0, 0, 0);
+  font-family: futura;
+  font-weight: 900;
+  font-size: 1.5vmax;
+  border: 1px solid black;
+  display: block;
+}
+
+.content_container {
+  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
+  background-color: #b8b8b8;
+  border: 2px solid #a8a8a8;
+  box-sizing: border-box;
+  height: 100%;
+  text-align: left;
+  font-weight: 900;
+  font-size: 1.2vmax;
+}
+
+.friends_content {
+  display: grid;
+  grid-template-rows: minmax(min-content, max-content) auto;
+  height: 100%;
+}
+
 </style> >

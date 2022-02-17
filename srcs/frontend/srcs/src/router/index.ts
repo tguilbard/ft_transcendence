@@ -1,4 +1,7 @@
+import { Game } from 'phaser';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { storeKey } from 'vuex';
+import store from '../store/index'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -60,15 +63,21 @@ const router = createRouter({
   linkExactActiveClass: "exact-active",
 })
 
-router.afterEach((to, from) => {
-  // if (to.name === "Game")
-  // {
-  //   const check = document.getElementById("PongBorder");
+router.beforeEach((to, from, next) => {
 
-  //   if (check !== null)
-  //     check.style.removeProperty( 'display' );
+  // if (!to.name || (from.name == undefined && to.name != 'ok'))
+  // {
+  //   from.name = '/';
+  //   next({name: 'Login'});
   // }
-  if (from.name === "Game")
+  // else
+    next();
+})
+
+
+router.afterEach((to, from) => {
+    
+  if (from.name === "Game" && !store.getters.GET_DUEL)
   {
     const check = document.getElementById("PongBorder");
 
