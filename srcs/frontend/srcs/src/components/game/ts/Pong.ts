@@ -349,7 +349,13 @@ class Pong extends Phaser.Scene {
             }
         })
     
-        store.state.socket.on("START", () => {
+        store.state.socket.on("START", (message) => {
+            if (message === 1)
+            {
+                background.setVisible(false);
+                backgroundC.setVisible(true);
+                star.setVisible(true);
+            }
             Start();
         });
         

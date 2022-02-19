@@ -181,7 +181,7 @@
 
         function Start() {
             gameStarted = true;
-            socket.emit("phaser", "START", 0);
+            socket.emit("phaser", "START", window.flag);
             rand = Phaser.Math.Between(1, 2);
             rand = (rand == 2) ? -1 : 1;
             VelocityX = (Width / 2) * rand;

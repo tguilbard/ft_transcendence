@@ -63,7 +63,7 @@ class Game {
     addToSpec(user: SocketUser) {
         // Ajouter émit ? 
         user.socket.to(this.phaserServer.id).emit("initScore");
-        this.server.to(user.socket.id).emit("START");
+        this.server.to(user.socket.id).emit("START", this.privateFlag);
         this.server.to(user.socket.id).emit("openText", 0);
         this.spectators.push(user);
         user.socket.join(this.socketRoomName);
