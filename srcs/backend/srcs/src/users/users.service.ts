@@ -9,7 +9,6 @@ import { lastValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as jwt from 'jsonwebtoken'
 import { Request, Response } from 'express';
-import { MessageService } from 'src/channel/message/message.service';
 import { parse } from 'cookie';
 import { Socket } from 'socket.io';
 import { QueryBuilderService } from 'src/generics/class/query-builder.service';
@@ -17,7 +16,7 @@ import { Achievement } from 'src/achievement/enums/achievement.enum';
 import { UserEntity } from './entities/users.entity';
 import { AchievementService } from 'src/achievement/achievement.service';
 import { GetUserAchievementListDTO } from './dto/get-user-achievement-list.dto';
-import { ChannelService } from 'src/channel/channel.service';
+import { ChatService } from 'src/chat/chat.service';
 
 @Injectable()
 export class UsersService {
@@ -25,8 +24,7 @@ export class UsersService {
 		@InjectRepository(UserEntity)
 		private usersRepositories: Repository<UserEntity>,
 		private readonly httpService: HttpService, private readonly jwt: JwtService,
-		private messageService: MessageService,
-		private channelService: ChannelService,
+		private readonly chatService : ChatService,
 		private qbService : QueryBuilderService,
 		@Inject(forwardRef(() => AchievementService))
 		private achievementService: AchievementService,
@@ -69,7 +67,7 @@ export class UsersService {
 		});
 		let newUser = await this.usersRepositories.save(userChanged);
 		if (newUser)
-			return await this.channelService.RenameUserInChannelPrivateMessage(id, saveUser, userMofidication.username);
+			return await this.chatService.RenameUserInChannelPrivateMessage(id, saveUser, userMofidication.username);
 		return null;
 	}
 

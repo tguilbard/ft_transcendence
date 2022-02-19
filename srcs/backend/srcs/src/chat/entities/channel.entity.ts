@@ -1,8 +1,8 @@
 import { TimeStampEntity } from "src/generics/entities/timestamp.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ChannelType } from "../enum/channel-type.enum";
-import { MemberEntity } from "../member/entities/member.entity";
-import { MessageEntity } from "../message/entitites/message.entity";
+import { MemberEntity } from "./member.entity";
+import { MessageEntity } from "./message.entity";
 
 
 @Entity('Channels')

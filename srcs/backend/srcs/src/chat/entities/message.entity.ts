@@ -1,5 +1,5 @@
-import { ChannelEntity } from "src/channel/entities/channel.entity";
-import { MemberEntity } from "src/channel/member/entities/member.entity";
+import { ChannelEntity } from "src/chat/entities/channel.entity";
+import { MemberEntity } from "src/chat/entities/member.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('Messages')

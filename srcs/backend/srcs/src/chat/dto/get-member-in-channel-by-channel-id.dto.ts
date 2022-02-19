@@ -1,4 +1,3 @@
-import { Type } from "class-transformer";
 import { IsArray, isArray, IsEnum, IsIn, IsOptional } from "class-validator";
 import { MemberModes } from "../interfaces/user-selection-right.interface";
 
