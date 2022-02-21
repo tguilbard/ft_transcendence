@@ -5,6 +5,16 @@ export interface ChanPrivate {
   name: string, realname: string
 }
 
+export interface UserEntity {
+	id?: number,
+	login?: string,
+	username?: string,
+	state?: string,
+	elo?: number,
+	tfaSecret?: string,
+	tfaActivated?: boolean
+  }
+
 export interface UserElement {
   name: string,
   state: string,
@@ -59,16 +69,16 @@ export default createStore({
   state: {
     socket: io(),
     sock_init: false,
-    listUsersCurrent:[ { name: '', state: '', mode: 0 } as UserElement ],
-    username: '',
+    listUsersCurrent:[ {} as UserEntity ],
+    user: {} as UserEntity,
     channel: "General",
     channelPrivate: { name: '', realname: '' } as ChanPrivate,
     channelCurrent: { name: '', realname: 'General' } as ChanPrivate,
     channelList: { "General": [] },
     room: true,
     popup: '',
-    user_target: {username: '', state: ''},
-    listUsersGeneral: [{ username: '', state: '', mode: 0}],
+    user_target: {} as UserEntity,
+    listUsersGeneral: [{} as UserEntity],
     listChannelPublic: [{ name: '', mode: 0 }],
     channel_target: { name: '', mode: 0 },
     listChannel: [{ name: '', mode: 0 } as Chan],
@@ -82,9 +92,14 @@ export default createStore({
     srcImg: '',
     srcImgTarget: '',
     achievement: { id: 0, name: '', description: '', imageUnlockName: '',  imageLockName: '', lock: true} as Achievements,
-    duel: false
+    duel: false,
+    leaderBoard: [{} as UserEntity]
   },
   mutations: {
+    SET_LEADER_BOARD(state, value: [])
+    {
+      state.leaderBoard = value;
+    },
     SET_DUEL(state, value: boolean) {
       state.duel = value;
     },
@@ -124,7 +139,7 @@ export default createStore({
     SET_CHANNEL_TARGET(state, value: {name: string, mode: number}) {
       state.channel_target = value;
     },
-    SET_LIST_USER_GENERAL(state, value: [{ username: string, state: string, mode: number}]) {
+    SET_LIST_USER_GENERAL(state, value: UserEntity[]) {
       state.listUsersGeneral = value;
     },
     SET_LIST_CHANNEL_PUBLIC(state, value: [{ name: string, mode: number}]) {
@@ -137,11 +152,11 @@ export default createStore({
       state.sock_init = true;
       state.socket = io('http://localhost:3000', { transports: ['websocket', 'polling', 'flashsocket'] });
     },
-    SET_LIST_USER_CURRENT(state, list: UserElement[]) {
+    SET_LIST_USER_CURRENT(state, list: UserEntity[]) {
       state.listUsersCurrent = list;
     },
-    SET_USERNAME(state, username: string) {
-      state.username = username;
+    SET_USER(state, user: UserEntity) {
+      state.user = user;
     },
     SET_ROOM(state, room: boolean) {
       state.room = room;
@@ -161,9 +176,8 @@ export default createStore({
     SET_CHAN(state, chan) {
       state.channel = chan;
     },
-    SET_USER_TARGET(state, value: {username: string, state: string}): void {
-      state.user_target.username = value.username;
-      state.user_target.state = value.state;
+    SET_USER_TARGET(state, value: UserEntity): void {
+      state.user_target = value;
     },
   },
   getters: {
@@ -182,8 +196,8 @@ export default createStore({
     GET_CHAN(state) {
       return state.channel;
     },
-    GET_USERNAME(state) {
-      return state.username;
+    GET_USER(state) {
+      return state.user;
     },
     GET_POPUP(state) {
       return state.popup;
@@ -238,13 +252,17 @@ export default createStore({
     },
     GET_DUEL(state) {
       return state.duel;
-    }
+    },
+    GET_LEADER_BOARD(state)
+    {
+      return state.leaderBoard;
+    },
   },
   actions: {
     SET_POPUP(context, value: string) {
       context.commit("SET_POPUP", value)
     },
-    SET_USER_TARGET(context, value: {username: string, state: string}): void {
+    SET_USER_TARGET(context, value: UserEntity): void {
       context.commit("SET_USER_TARGET", value);
     },
     SET_ROOM(context, value: string): void {
@@ -259,7 +277,7 @@ export default createStore({
     SET_CHAN_CURRENT(context, value: {type: string, value: string}): void {
       context.commit('SET_CHAN_CURRENT', value);
     },
-    SET_LIST_USER_GENERAL(context, value: [{ username: string, state: string, mode: number}]) {
+    SET_LIST_USER_GENERAL(context, value: UserEntity[]) {
       context.commit("SET_LIST_USER_GENERAL", value);
     },
     SET_LIST_CHANNEL_PUBLIC(context, value: [{ name: string, mode: number}]) {
@@ -274,7 +292,7 @@ export default createStore({
     SET_LIST_CHAN_PRIVATE(context, value: Chan[]) { 
       context.commit("SET_LIST_CHAN_PRIVATE", value);
     },
-    SET_LIST_USER_CURRENT(context, list: UserElement[]) {
+    SET_LIST_USER_CURRENT(context, list: UserEntity[]) {
       context.commit("SET_LIST_USER_CURRENT", list);
     },
     SET_LIST_MESSAGES(context, value: Message[]) { 
@@ -298,8 +316,8 @@ export default createStore({
     SET_ACHIEVEMENT(context, value: Achievements) {
       context.commit("SET_ACHIEVEMENT", value);
     },
-    SET_USERNAME(context, username: string) {
-      context.commit("SET_USERNAME", username);
+    SET_USER(context, user: UserEntity) {
+      context.commit("SET_USER", user);
     },
     SET_IMG(context, value: string) {
       context.commit("SET_IMG", value);
@@ -309,6 +327,10 @@ export default createStore({
     },
     SET_DUEL(context, value: boolean) {
       context.commit("SET_DUEL", value);
+    },
+    SET_LEADER_BOARD(context, value: [])
+    {
+      context.commit("SET_LEADER_BOARD", value);
     },
   },
   modules: {

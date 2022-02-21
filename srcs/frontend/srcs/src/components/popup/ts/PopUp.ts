@@ -1,6 +1,6 @@
 import { defineComponent } from "@vue/runtime-core";
 import { mapGetters } from "vuex";
-import store from '../../../store';
+import store, { UserEntity } from '../../../store';
 import shared from "../../../mixins/Mixins";
 import PopupProfil from "../Popup_profil.vue";
 
@@ -48,7 +48,7 @@ data: () => {
   },
   computed: {
       ...mapGetters([
-        'GET_USERNAME',
+        'GET_USER',
         'GET_POPUP',
         'GET_USER_TARGET',
         'GET_ROOM',
@@ -71,7 +71,7 @@ data: () => {
     setPopup(value: string): void {
       store.commit("SET_POPUP", value);
     },
-    setUserTarget(value: {username: string, state: string}): void {
+    setUserTarget(value: UserEntity): void {
       store.commit("SET_USER_TARGET", value);
     },
       create_room() {

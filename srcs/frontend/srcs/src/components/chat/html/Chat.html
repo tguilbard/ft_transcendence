@@ -26,7 +26,7 @@
                     <div v-for="item in GET_LIST_USER_CURRENT">
                         <div class="logo_connection">
                             <div>
-                                <div v-if="(item.username == GET_USERNAME)">
+                                <div v-if="(item.username == GET_USER.username)">
                                     <p class="link" @click="active_pop_profil_mode(item)"
                                         style="color: rgb(160, 28, 28); text-align: left;">{{
                                         item.username }}</p>

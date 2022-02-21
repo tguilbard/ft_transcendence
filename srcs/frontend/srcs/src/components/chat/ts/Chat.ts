@@ -96,7 +96,7 @@ export class Message {
   },
   computed: {
     ...mapGetters([
-      'GET_USERNAME',
+      'GET_USER',
       'GET_POPUP',
       'GET_USER_TARGET',
       'GET_ROOM',
@@ -150,12 +150,12 @@ export default class Chat extends Vue {
           if (store.getters.GET_CHAN_CURRENT.realname == e.oldchan)
           {
             store.dispatch("SET_CHAN_CURRENT", { type: "realname", value: e.newchan });
-            if (store.state.username != e.newname)
+            if (store.getters.GET_USER.username != e.newname)
               store.dispatch("SET_CHAN_CURRENT", { type: "name", value: e.newname });
           }
           if (store.getters.GET_CHAN_PRIVATE.realname == e.oldchan) {
             store.commit("SET_CHAN_PRIVATE", { type: "realname", value: e.newchan });
-            if (store.state.username != e.newname)
+            if (store.getters.GET_USER.username != e.newname)
               store.commit("SET_CHAN_PRIVATE", { type: "name", value: e.newname });
           }
         })
@@ -205,7 +205,7 @@ export default class Chat extends Vue {
             let chanName = '';
             if (channel.mode == 8) {
               chanName = channel.name.substring(channel.name.indexOf('-') + 2);
-              if (chanName == store.state.username)
+              if (chanName == store.getters.GET_USER.username)
                 chanName = channel.name.substring(0, channel.name.indexOf('-') - 1);
               store.commit("SET_CHAN_PRIVATE", { type: "name", value: chanName });
               store.dispatch("SET_CHAN_CURRENT", { type: "name", value: chanName });
@@ -252,7 +252,7 @@ export default class Chat extends Vue {
       store.dispatch("SET_ROOM", false);
       let name = '';
       name = chanName.substring(chanName.indexOf('-') + 2);
-      if (name == store.state.username)
+      if (name == store.getters.GET_USER.username)
         name = chanName.substring(0, chanName.indexOf('-') - 1);
       store.commit("SET_CHAN_PRIVATE", { type: "name", value: name });
       store.dispatch("SET_CHAN_CURRENT", { type: "name", value: name });
@@ -271,7 +271,7 @@ export default class Chat extends Vue {
           let chanName = '';
           if (channel.mode == 8) {
             chanName = channel.name.substring(channel.name.indexOf('-') + 2);
-            if (chanName == store.state.username)
+            if (chanName == store.getters.GET_USER.username)
               chanName = channel.name.substring(0, channel.name.indexOf('-') - 1);
             store.commit("SET_CHAN_PRIVATE", { type: "name", value: chanName });
             store.dispatch("SET_CHAN_CURRENT", { type: "name", value: chanName });
@@ -309,19 +309,19 @@ export default class Chat extends Vue {
 
     });
 
-    store.state.socket.off('rcvInvite').on('rcvInvite', (channel_target: {name: string, mode: number}, user_target: {username: string, state: string}) => {
+    store.state.socket.off('rcvInvite').on('rcvInvite', (channel_target: {name: string, mode: number}, user_target: UserEntity) => {
       store.dispatch("SET_CHANNEL_TARGET", channel_target);
       store.dispatch("SET_USER_TARGET", user_target);
       this.conf(channel_target.name);
     });
 
-    store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: string) => {
-      store.dispatch("SET_USER_TARGET", {username: user_target, state: 'login'});
+    store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity) => {
+      store.dispatch("SET_USER_TARGET", user_target);
       this.setPopup('inv_game')
     });
 
-    store.state.socket.off('initClient').on('initClient', (username: string) => {
-      store.commit("SET_USERNAME", username);
+    store.state.socket.off('initClient').on('initClient', (user: UserEntity) => {
+      store.commit("SET_USER", user);
       this.initClient();
     });
 
@@ -342,7 +342,7 @@ export default class Chat extends Vue {
     tmp.forEach(e => {
       if (e.mode == 8) {
         e.mode = e.name.substring(e.name.indexOf('-') + 2);
-        if (e.mode == store.state.username)
+        if (e.mode == store.getters.GET_USER.username)
           e.mode = e.name.substring(0, e.name.indexOf('-') - 1);
       }
       else
@@ -376,7 +376,7 @@ export default class Chat extends Vue {
   }
 
   private async getMyMode() {
-    const response = await fetch("http://localhost:3000/channel/mode/" + store.getters.GET_CHAN_CURRENT.realname + "/" + store.state.username, {
+    const response = await fetch("http://localhost:3000/channel/mode/" + store.getters.GET_CHAN_CURRENT.realname + "/" + store.getters.GET_USER.username, {
       method: "GET",
       mode: "cors",
       credentials: "include",
@@ -506,7 +506,7 @@ export default class Chat extends Vue {
       store.state.socket.emit('passChan', pass, store.getters.GET_CHAN_CURRENT.realname);
     }
     else {
-      const newMsg = new Message(store.state.username, msg);
+      const newMsg = new Message(store.getters.GET_USER.username, msg);
       if (store.getters.GET_ROOM) {
         store.state.socket.emit('msgToServer', newMsg, store.getters.GET_CHAN);
       }
@@ -523,24 +523,24 @@ export default class Chat extends Vue {
     store.commit("SET_POPUP", 'add');
   }
 
-  private async active_pop_profil_mode(user: {username: string, state: string}): Promise<void> {
-    if (user.state == '')
-    {
-      const myUser = await shared.getUserByUsername(user.username);
-      if (myUser.state)
-        user.state = myUser.state;
-    }
-    store.dispatch("SET_USER_TARGET", user);
-    const index: number = this.blocked.indexOf(user.username);
+  private async active_pop_profil_mode(user_target: UserEntity): Promise<void> {
+    // if (user.state == '')
+    // {
+    //   const myUser = await shared.getUserByUsername(user.username);
+    //   if (myUser.state)
+    //     user.state = myUser.state;
+    // }
+    store.dispatch("SET_USER_TARGET", user_target);
+    const index: number = this.blocked.indexOf(user_target.username);
     if (index != -1)
       this.block = true;
     else
       this.block = false;
-    await store.dispatch("SET_MODE", await this.getMode(user.username));
+    await store.dispatch("SET_MODE", await this.getMode(user_target.username));
     store.commit("SET_POPUP", 'profil_mode');
     store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
     store.dispatch("SET_LIST_ACHIEVEMENTS", await shared.getAchievements(store.getters.GET_USER_TARGET.username));
-    await store.dispatch("SET_IMG_TARGET", await shared.get_avatar(user.username));
+    await store.dispatch("SET_IMG_TARGET", await shared.get_avatar(user_target.username));
   }
 
   private async changeChannel(chan: { name: string, mode: number | string }): Promise<void> {
@@ -635,7 +635,7 @@ export default class Chat extends Vue {
           tmp.forEach(e => {
           if (e.mode == 8) {
             e.mode = e.name.substring(e.name.indexOf('-') + 2);
-            if (e.mode == store.state.username)
+            if (e.mode == store.getters.GET_USER.username)
               e.mode = e.name.substring(0, e.name.indexOf('-') - 1);
           }
           else

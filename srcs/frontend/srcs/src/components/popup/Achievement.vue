@@ -1,8 +1,8 @@
 <template>
-  <div class="block_container">
-    <div class="content_container">
-      <div class="list_acheivements">
+  <!-- <div class="block_container"> -->
+    <!-- <div class="content_container"> -->
         <h1>ACHIEVEMENTS</h1>
+      <div class="list_acheivements">
         <div class="container_block_acheivements">
           <div
             class="block_acheivements"
@@ -28,8 +28,8 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    <!-- </div> -->
+  <!-- </div> -->
 </template>
 
 <script lang="ts">
@@ -54,7 +54,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.block_container {
+/* .block_container {
   display: block;
   border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
   background-color: #fff12c;
@@ -62,14 +62,14 @@ export default defineComponent({
   padding: 1px;
   text-align: center;
   color: rgb(255, 255, 255);
-}
+} */
 
-.block_container h1 {
+h1 {
   border-radius: 0.5vmax 0.5vmax 0px 0px;
   text-align: center;
   background-color: grey;
   color: #fff12c;
-  padding: 4px;
+  padding: 0.2vmax;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
   font-family: futura;
@@ -79,22 +79,23 @@ export default defineComponent({
   display: block;
 }
 
-.content_container {
+/* .content_container {
   border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
   background-color: #b8b8b8;
-  border: 2px solid #a8a8a8;
+  border: 2px solid darkblue;
   box-sizing: border-box;
   height: auto;
   text-align: left;
   font-weight: 900;
   font-size: 1.2vmax;
-}
+} */
 
 .container_block_acheivements {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 0.2vmax;
-  margin: 0.5vmax;
+  margin: 0.3vmax;
+  overflow: auto;
 }
 
 .block_acheivements {
@@ -131,8 +132,8 @@ export default defineComponent({
   margin-top: 0vmax;
   box-sizing: border-box;
   color: darkblue;
-  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
-  border: 2px solid #8f8f8f;
+  border-radius: 0vmax 0vmax 0.5vmax 0.5vmax;
+  border: 2px solid darkblue;
   background-color: rgb(170, 240, 149);
   height: 100%;
   width: 100%;
