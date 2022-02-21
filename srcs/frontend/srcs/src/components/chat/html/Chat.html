@@ -1,6 +1,8 @@
 <section v-if="log">
     <Menu class="menu" page="chat"/>
-    <PopUp :blocked="blocked" :block="block" />
+    <div v-if="GET_POPUP">
+        <PopUp :blocked="blocked" :block="block" />
+    </div>
     <div class=global>
         <div class="left">
             <div class="logo">
@@ -127,7 +129,6 @@
                             autocomplete="off" class="input">
                     </form>
                 </div>
-
             </div>
         </div>
     </div>

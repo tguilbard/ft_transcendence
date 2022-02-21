@@ -1,4 +1,5 @@
 <section>
+    <div v-if="GET_POPUP == 'profil'"></div>
     <PopupProfil/>
     <div v-if="GET_POPUP == 'pass' && GET_ROOM">
         <div @click="setPopup('')" class="container_popup"></div>
