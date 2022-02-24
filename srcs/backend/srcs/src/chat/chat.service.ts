@@ -194,16 +194,29 @@ export class ChatService {
 		return { mode: channel.mode, chanName: channel.name};
 	}
 
+	async ReadMessage(senderId: number)
+	{
+		return await this.memberRepository.update({id: senderId}, {unreadMessage: 0});
+	}
+
 	async AddMessage(text: any, senderId: number)
 	{
-		const sender = await this.GetMember(senderId, {relation: ["channel"]});
+		const sender = await this.memberRepository.createQueryBuilder("member")
+								.leftJoinAndSelect("member.channel", "channel")
+								.leftJoinAndSelect("channel.members", "members")
+								.getOne();
 		const newMessage = {
 			createdAt: text.time,
 			text: text.message,
 			member: sender,
 			channel: sender.channel
 		}
-		return await this.messageRepository.save(newMessage);
+
+		const message = await this.messageRepository.save(newMessage);
+		sender.channel.members.forEach(async element => {
+			await this.memberRepository.update({id: element.id}, {unreadMessage: element.unreadMessage + 1});
+		});
+		return message;
 	}
 
 	private async ChangeMemberAuthorization(memberChanged: MemberEntity, setOrUnset: "set"|"unset",  modeToChange: number)
@@ -278,7 +291,7 @@ export class ChatService {
 		return await this.memberRepository.find({relations: ["user", "channel"]}); 
 	}
 
-	async GetMember(id : number | string, columnToAdd)
+	async GetMember(id : number | string, columnToAdd?)
 	{
 		const qbs = this.qbService.Create("member", this.memberRepository, columnToAdd)
 		return await this.qbService.AutoWhere(qbs, "member", id)
@@ -364,7 +377,12 @@ export class ChatService {
 
 	async SoftDeleteMember(memberId: number)
 	{
-		await this.memberRepository.softDelete({id: memberId});
+		let memberReadyToDelete = await this.GetMember(memberId);
+		this.UnsetAdminMember(memberReadyToDelete);
+		this.UnsetOwnerMember(memberReadyToDelete);
+
+		await this.memberRepository.update({id: memberId}, {mode: memberReadyToDelete.mode});
+		return await this.memberRepository.softDelete({id: memberId});
 	}
 
 	async GetMemberInChannelByChannelId(channelId: number, memberModeSelection: MemberModes[] = ["member"])
@@ -420,8 +438,8 @@ export class ChatService {
 		return await this.messageRepository.createQueryBuilder("message")
 											.withDeleted()
 											.orderBy("message.id", "DESC")
-											.leftJoin("message.channel", "channel")
 											.leftJoinAndSelect("message.member", "member", undefined, undefined)
+											.leftJoin("member.channel", "channel")
 											.leftJoinAndSelect("member.user", "user")
 											.where("channel.id = :channelId", { channelId: channelId })
 											.limit(limit)
@@ -435,8 +453,8 @@ export class ChatService {
 											.withDeleted()
 											.orderBy("message.id", "DESC")
 											.where(":messageId > message.id", { messageId: messageId })
-											.leftJoin("message.channel", "channel")
 											.leftJoinAndSelect("message.member", "member")
+											.leftJoin("member.channel", "channel")
 											.leftJoinAndSelect("member.user", "user")
 											.andWhere("channel.id = :channelId", { channelId: channelId })
 											.limit(limit)

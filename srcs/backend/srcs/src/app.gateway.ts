@@ -109,6 +109,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			{
 				this.server.to(payload[1]).emit('msgToClient', payload[0], { name: chanTarget.name, mode: chanTarget.mode });
 				this.chatService.AddMessage(payload[0], member.id);
+				//this.server.to(payload[1]).emit('msgUnreadPublic', payload[0], {id: chanTarget.id})
 			}
 		}
 	}
@@ -139,6 +140,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			{
 				this.server.in(chanTarget.name).emit('msgToClientPrivate', payload[0], { name: chanTarget.name, mode: chanTarget.mode });
 				this.chatService.AddMessage(payload[0], member.id);
+				//this.server.to(payload[1]).emit('msgUnreadPrivate', payload[0], {id: chanTarget.id}) //add one by one ?
 			}
 		}
 	}

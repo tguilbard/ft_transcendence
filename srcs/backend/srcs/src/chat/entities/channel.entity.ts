@@ -29,7 +29,7 @@ export class ChannelEntity extends TimeStampEntity {
 	})
 	password: string;
 
-	@OneToMany(type => MessageEntity, (message) => message.channel, {
+	@OneToMany(type => MessageEntity, (message) => message.member.channel, {
 		nullable: true,
 	})
 	messages: MessageEntity[];

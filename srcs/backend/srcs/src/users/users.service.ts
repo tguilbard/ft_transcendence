@@ -99,8 +99,8 @@ export class UsersService {
 	}
 
 	async ActivateTfa(userId: number) {
-		this.UnlockAchievement(await this.usersRepositories.findOne(userId), Achievement.locker);
 		await this.usersRepositories.update(userId, { tfaActivated: true })
+		this.achievementService.UnlockLocker(await this.GetUser(userId));
 	}
 
 	async FindUserByLogin(login: string): Promise<UserEntity> {
@@ -313,9 +313,14 @@ export class UsersService {
 			return;
 		const user1 = await this.GetUser(user1Id, {relation: ["friends"]});
 		const user2 = await this.GetUser(user2Id, {relation: ["friends"]});
-		user1.friends = [...user1.friends, user2];
-		user1.numberOfFriend += 1;
-		return await this.usersRepositories.save(user1);
+		const user1Update = {
+			id: user1.id,
+			friends: user1.friends + user2,
+			numberOfFriend: user1.numberOfFriend + 1
+		}
+		const newUser = await this.usersRepositories.save(user1Update);
+		this.achievementService.CheckNumberOfFriend(newUser);
+		return newUser;
 	}
 
 	async getFriends(id: number)
@@ -336,7 +341,11 @@ export class UsersService {
 		const user1 = await this.GetUser(user1Id, {relation: ["friends"]});
 		const user2 = await this.GetUser(user2Id, {relation: ["friends"]});
 		const index = user1.friends.findIndex(element => element.id == user2Id);
-		user1.friends.splice(index, 1);
+		const user1Update = {
+			id: user1.id,
+			friends: user1.friends.splice(index, 1),
+			numberOfFriend: user1.numberOfFriend - 1
+		}
 		await this.usersRepositories.save(user1);
 	}
 

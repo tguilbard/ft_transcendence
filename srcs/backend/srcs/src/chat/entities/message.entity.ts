@@ -23,10 +23,10 @@ export class MessageEntity {
 	})
 	member: MemberEntity;
 
-	@ManyToOne(Type => ChannelEntity, (channel) => channel, {
-		cascade: false,
-		nullable: false,
-		onDelete: "CASCADE"
-	})
-	channel: ChannelEntity;
+	// @ManyToOne(Type => ChannelEntity, (channel) => channel, {
+	// 	cascade: false,
+	// 	nullable: false,
+	// 	onDelete: "CASCADE"
+	// })
+	// channel: ChannelEntity;
 }

@@ -20,14 +20,11 @@ export class MatchEntity
 	scoreUser2: number;
 
 	@Column({
-		nullable: true
+		nullable: false,
+		enum: ["classic", "bonus"],
+		default : "classic"
 	})
-	startAt: Date;
-
-	@Column({
-		nullable: true
-	})
-	endAt: Date;
+	type: string;
 
 	@ManyToOne(type => UserEntity, (user) => user.history, {
 		nullable: false

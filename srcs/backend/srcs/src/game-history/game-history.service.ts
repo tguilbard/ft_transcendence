@@ -43,8 +43,8 @@ export class GameHistoryService {
 			...addMatchInHistoryDTO
 		}
 
-		this.achievementService.CheckGame(matchToAdd.user1, addMatchInHistoryDTO.scoreUser1, addMatchInHistoryDTO.scoreUser2);
-		this.achievementService.CheckGame(matchToAdd.user2, addMatchInHistoryDTO.scoreUser2, addMatchInHistoryDTO.scoreUser1);
+		this.achievementService.UnlockGameAchievementIfPossible(matchToAdd.user1, addMatchInHistoryDTO.scoreUser1, addMatchInHistoryDTO.scoreUser2);
+		this.achievementService.UnlockGameAchievementIfPossible(matchToAdd.user2, addMatchInHistoryDTO.scoreUser2, addMatchInHistoryDTO.scoreUser1);
 		return await this.matchRepositories.save(matchToAdd);
 	}
 }

@@ -28,7 +28,7 @@ export class AchievementService {
 			[Achievement.locker, "Locker", "Activer la double authentification", "locker-unlock.png", "locker-lock.png"],
 			[Achievement.fashion, "Fashion", "Avoir un avatar personnalisé", "fashion-unlock.png",  "fashion-lock.png"],
 			[Achievement.galaxie, "Galaxie", "Star le projet Github", "galaxy-unlock.png", "galaxy-lock.png"],
-			[Achievement.follower, "Follower", "Suivre tayschee, mapapin, kane53 et tguilbard sur Github et syngia_ sur Instagram",
+			[Achievement.follower, "Follower", "Suivre tayschee, mapapin, kane53 et tguilbard sur Github",
 			"follower-unlock.png", "follower-lock.png"],
 
 			[Achievement.notAlone, "Not Alone", `Avoir ${numberOfFriend.notAlone} ami`, "not-alone-unlock.png", "not-alone-lock.png"],
@@ -90,7 +90,7 @@ export class AchievementService {
 		}
 	}
 
-	async CheckGame(user: UserEntity, userScore: number, oppponentScore: number)
+	async UnlockGameAchievementIfPossible(user: UserEntity, userScore: number, oppponentScore: number)
 	{
 		await this.CheckNumberOfGame(user);
 		await this.CheckScore(user, userScore, oppponentScore);
@@ -106,5 +106,15 @@ export class AchievementService {
 		{
 			await this.usersService.UnlockAchievement(user, Achievement.socialist);
 		}
+	}
+
+	async UnlockFashion(user: UserEntity)
+	{
+		await this.usersService.UnlockAchievement(user, Achievement.fashion);
+	}
+
+	async UnlockLocker(user: UserEntity)
+	{
+		await this.usersService.UnlockAchievement(user, Achievement.locker);
 	}
 }
