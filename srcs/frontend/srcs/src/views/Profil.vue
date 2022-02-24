@@ -12,7 +12,7 @@
               <h1>GAMES HISTORY</h1>
             </div>
             <div class="list_history">
-              <div v-for="item in getMatchs" :key="item" class="grid_history">
+              <div v-for="item in GET_LIST_MATCH" :key="item" class="grid_history">
                 <div class="block_user1">
                   <span
                     :class="[
@@ -53,7 +53,7 @@
               <h1>FRIENDS</h1>
             </div>
             <div class="list_friends_popup">
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -81,7 +81,7 @@
                 </div>
               </div>
 
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -109,7 +109,7 @@
                 </div>
               </div>    
 
-<div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -136,7 +136,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -163,7 +163,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -190,7 +190,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -217,7 +217,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -244,7 +244,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -271,7 +271,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -298,7 +298,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -325,7 +325,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -352,7 +352,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -379,7 +379,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -406,7 +406,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -433,7 +433,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -460,7 +460,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -487,7 +487,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -514,7 +514,7 @@
                   </div>
                 </div>
               </div>
-              <div v-for="item in getFriends" :key="item">
+              <div v-for="item in GET_FRIENDS" :key="item">
                 <div
                   v-if="item.username != GET_USER.username"
                   class="logo_connection"
@@ -599,7 +599,7 @@
         <div class="content_container">
           <div class="logo_user">
             <div>
-              <p>{{ this.user.username }}</p>
+              <p>{{ GET_USER.username }}</p>
             </div>
             <div>
               <div v-if="this.user.state == 'login'" class="mod">
@@ -639,10 +639,10 @@
 import { Options, Vue } from "vue-class-component";
 import Menu from "@/components/Menu.vue"; // @ is an alias to /src
 import Popup from "../components/PopUp.vue";
-import store from "../store/index";
+import store, { ChannelEntity } from "../store/index";
 import shared, { UserEntity } from "../mixins/Mixins";
 import { mapGetters } from "vuex";
-import { Achievements } from "@/components/chat/ts/Chat";
+import { Achievements, Message } from "@/components/chat/ts/Chat";
 
 @Options({
   components: {
@@ -651,10 +651,7 @@ import { Achievements } from "@/components/chat/ts/Chat";
   },
   data() {
     return {
-      activate: false,
       li: ["coucou"],
-      listFriends: [],
-      listMatchs: [],
       log: false,
     };
   },
@@ -665,13 +662,9 @@ import { Achievements } from "@/components/chat/ts/Chat";
       "GET_USER_TARGET",
       "GET_IMG",
       "GET_LIST_ACHIEVEMENTS",
+      "GET_LIST_MATCH",
+      "GET_FRIENDS"
     ]),
-    getFriends() {
-      return this.listFriends;
-    },
-    getMatchs() {
-      return this.listMatchs;
-    },
   },
   methods: {
     setAchievement(value: Achievements): void {
@@ -715,9 +708,7 @@ import { Achievements } from "@/components/chat/ts/Chat";
       this.file = event.target.files[0];
       store.dispatch("SET_IMG", URL.createObjectURL(this.file));
     },
-    async getListFriends(): Promise<
-      [{ username: string; state: string }] | boolean
-    > {
+    async getListFriends(): Promise<UserEntity[]> {
       const response = await fetch("http://localhost:3000/users/friends", {
         method: "GET",
         mode: "cors",
@@ -729,60 +720,65 @@ import { Achievements } from "@/components/chat/ts/Chat";
         },
       });
       if (response.ok) return await response.json();
-      return false;
-    },
-
-    async getListMatchs(): Promise<string[]> {
-      const response = await fetch(
-        "http://localhost:3000/game-history/" + store.getters.GET_USER.username,
-        {
-          method: "GET",
-          mode: "cors",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Access-Control-Max-Age": "600",
-            "Cache-Control": "no-cache",
-          },
-        }
-      );
-      if (response.ok) return await response.json();
       return [];
     },
 
-    async active_pop_profil(user: {
-      username: string;
-      state: string;
-    }): Promise<void> {
+    async active_pop_profil(user: UserEntity): Promise<void> {
       if (user.state == "") {
         const myUser = await shared.getUserByUsername(user.username);
         if (myUser.state) user.state = myUser.state;
       }
       store.dispatch("SET_USER_TARGET", user);
       await store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
-      await store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
       store.commit("SET_POPUP", "profil");
+      store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(user.username));
       await store.dispatch(
         "SET_IMG_TARGET",
         await shared.get_avatar(user.username)
       );
     },
+    async refresh() {
+      await store.dispatch("SET_MY_MODE", await this.getMyMode());
+      await this.getMessagesInChannel(store.getters.GET_CHAN_CURRENT.realname);
+      await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
+
+      if (store.getters.GET_ROOM)
+      {
+        const tmp = await this.getChanListByMode('public');
+            tmp.forEach(e => {
+              e.realname = e.name;
+              e.name = '';
+          })
+          await store.dispatch("SET_LIST_CHAN_PUBLIC", tmp);
+        }
+        else {
+          const tmp = await this.getChanListByMode('private');
+            tmp.forEach(e => {
+              e.realname = e.name;
+              e.name = '';
+            if (e.mode == 8) {
+              e.name = e.realname.substring(e.realname.indexOf('-') + 2);
+              if (e.name == store.getters.GET_USER.username)
+                e.name = e.realname.substring(0, e.realname.indexOf('-') - 1);
+            }
+          })
+          store.dispatch("SET_LIST_CHAN_PRIVATE", tmp);
+        }
+    }
   },
   async created() {
     if (!(await shared.isLogin())) return this.$router.push("/login");
     if (!store.state.sock_init) store.commit("SET_SOCKET");
     this.user = await shared.getMyUser();
     store.dispatch("SET_USER", this.user);
-    // this.save_username = this.user.username;
     store.dispatch("SET_CHECK", this.user.tfaActivated);
     store.dispatch("SET_IMG", await shared.get_avatar(this.user.username));
-    this.listFriends = await this.getListFriends();
-    this.listMatchs = await this.getListMatchs();
+    store.dispatch("SET_FRIENDS", await this.getListFriends());
+    store.dispatch("SET_LIST_MATCH", await shared.getListMatchs(this.user.username));
     store.dispatch(
       "SET_LIST_ACHIEVEMENTS",
       await shared.getAchievements(store.getters.GET_USER.username)
     );
-    this.log = true;
     store.state.socket.off("start_game").on("start_game", () => {
       store.dispatch("SET_DUEL", true);
       this.$router.push("/");
@@ -796,7 +792,85 @@ import { Achievements } from "@/components/chat/ts/Chat";
         });
         this.setPopup("inv_game");
       });
-    this.activate = true;
+
+    store.state.socket.off('refresh_user').on('refresh_user', async (chanName: string) => {
+      if (chanName == "all" || store.getters.GET_CHAN_CURRENT.realname == chanName)
+    {
+      store.dispatch("SET_USER_TARGET", await shared.getUserByUsername(store.getters.GET_USER_TARGET.username));
+      store.dispatch("SET_FRIENDS", await this.getListFriends());
+      if (store.getters.GET_POPUP)
+        store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(store.getters.GET_USER_TARGET.username));
+      else
+        store.dispatch("SET_LIST_MATCH", await shared.getListMatchs(store.getters.GET_USER.username));
+    }
+  });
+
+  store.state.socket.off('alertMessage').on('alertMessage', async (msg: string) => {
+    store.dispatch("SET_MSG_ALERT", msg);
+    store.dispatch("SET_POPUP", 'alert');
+  });
+
+ store.state.socket.off('refresh_friends').on('refresh_friends', async () => {
+    store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
+      store.dispatch("SET_FRIENDS", await this.getListFriends());
+  }); 
+
+    store.state.socket.off('refreshAvatar').on('refreshAvatar', async (username: string) => {
+    if (store.getters.GET_USER_TARGET.username == username)
+      store.dispatch("SET_IMG_TARGET", await shared.get_avatar(username));
+    if (store.getters.GET_USER.username == username)
+      store.dispatch("SET_IMG", await shared.get_avatar(username));
+    });
+
+     store.state.socket.off('changeUsername').on("changeUsername",
+    async (payload: [{ oldname: string, newname: string, oldchan: string, newchan: string }]) => {
+      payload.forEach(e => {
+        let chan_tmp = store.getters.GET_CHAN_CURRENT;
+        if (chan_tmp.realname == e.oldchan)
+        {
+          chan_tmp.realname = e.newchan;
+          if (store.getters.GET_USER.username != e.newname)
+            chan_tmp.name = e.newname;
+            store.dispatch("SET_CHAN_CURRENT", chan_tmp);
+        }
+        chan_tmp = store.getters.GET_CHAN_PRIVATE;
+        if (chan_tmp.realname == e.oldchan) {
+          chan_tmp.realname = e.newchan;
+          if (store.getters.GET_USER.username != e.newname)
+            chan_tmp.name = e.newname;
+        }
+      })
+        const user = await shared.getMyUser();
+       store.dispatch("SET_USER", user);
+      store.dispatch("SET_CHECK", user.tfaActivated);
+      store.dispatch("SET_IMG", await shared.get_avatar(user.username));
+      store.dispatch("SET_FRIENDS", await this.getListFriends());
+      store.dispatch("SET_LIST_MATCH", await shared.getListMatchs(user.username));
+      store.dispatch(
+        "SET_LIST_ACHIEVEMENTS",
+        await shared.getAchievements(store.getters.GET_USER.username)
+      );
+     
+      let user_target = store.getters.GET_USER_TARGET;
+      if (user_target && user_target.username == payload[0].oldname)
+      {
+        user_target = await shared.getUserByUsername(payload[0].newname)
+        store.dispatch("SET_USER_TARGET", user_target);
+        await store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
+        store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(user_target.username));
+        await store.dispatch(
+          "SET_IMG_TARGET",
+          await shared.get_avatar(user_target.username)
+        );
+      }
+    });
+
+     store.state.socket.off('msgToClientPrivate').on('msgToClientPrivate', (newMsg: Message, channel: ChannelEntity) => {
+          store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
+           store.dispatch("SET_POPUP", 'alert');
+  });
+      
+    this.log = true;
   },
 })
 export default class Profil extends Vue {}
@@ -902,7 +976,6 @@ h1 {
   grid-template-rows: minmax(min-content, max-content) auto;
   background-color: #f6ecd2;
   height: 100%;
-  /* height: 42vmax; */
 }
 
 .list_friends_popup {

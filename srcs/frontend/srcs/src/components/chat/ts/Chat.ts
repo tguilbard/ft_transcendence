@@ -2,7 +2,7 @@ import { Options, Vue } from 'vue-class-component';
 import ChanBut from '../ChanBut.vue';
 import Menu from "../../Menu.vue"; // @ is an alias to /src
 import PopUp from '../../PopUp.vue'
-import store from '../../../store';
+import store, { ChannelEntity } from '../../../store';
 import { NavigationFailure } from 'vue-router';
 import shared from "../../../mixins/Mixins";
 import { mapGetters } from 'vuex'
@@ -116,7 +116,6 @@ export default class Chat extends Vue {
 
   private blocked: string[] = [];
   private inputMsg = '';
-  private listMessage: { [key: string]: Message[] } = { "General": store.getters.GET_LIST_MESSAGES };
   private colored = false;
   private block = false;
   private mod = "";
@@ -129,234 +128,335 @@ export default class Chat extends Vue {
   private log = false;
   
   setPopup(value: string): void {
-    store.commit("SET_POPUP", value);
+    store.dispatch("SET_POPUP", value);
   }
 
   async created(): Promise<void | NavigationFailure> {
 
     if (!(await shared.isLogin())) return this.$router.push("login");
-    if (!store.state.sock_init)
-      store.commit("SET_SOCKET");
-    this.initClient();
-    // store.state.socket.off('connect').on("connect", () => {
-    // });
+    if (!store.state.sock_init) store.dispatch("SET_SOCKET");
 
-    
- 
+    const user = await shared.getMyUser();
 
+    store.dispatch("SET_USER", user);
     store.state.socket.off('changeUsername').on("changeUsername",
-      (payload: [{ oldname: string, newname: string, oldchan: string, newchan: string }]) => {
-        payload.forEach(e => {
-          if (store.getters.GET_CHAN_CURRENT.realname == e.oldchan)
-          {
-            store.dispatch("SET_CHAN_CURRENT", { type: "realname", value: e.newchan });
-            if (store.getters.GET_USER.username != e.newname)
-              store.dispatch("SET_CHAN_CURRENT", { type: "name", value: e.newname });
-          }
-          if (store.getters.GET_CHAN_PRIVATE.realname == e.oldchan) {
-            store.commit("SET_CHAN_PRIVATE", { type: "realname", value: e.newchan });
-            if (store.getters.GET_USER.username != e.newname)
-              store.commit("SET_CHAN_PRIVATE", { type: "name", value: e.newname });
-          }
-        })
-        this.refresh();
-      });
-
-    store.state.socket.off('setMod').on('setMod', (mod: number) => {
-      store.dispatch("SET_MODE", mod);
-    });
-
-    store.state.socket.off('setPassMode').on('setPassMode', ( passMode: { mode: number, chanName: string }) => {  
-      const tmp= store.state.listChannel;
-      
-      tmp.forEach(e => {
-          if (e.name == passMode.chanName && e.mode != passMode.mode)
-            e.mode = passMode.mode;
-        })
-        store.dispatch("SET_LIST_CHAN_PUBLIC", tmp);
-    });
-
-    store.state.socket.off('setMyMod').on('setMyMod', (mod: number, chanName: string) => {
-      if (store.getters.GET_CHAN_CURRENT.realname == chanName)
-        store.dispatch("SET_MY_MODE", mod);
-    });
-
-    store.state.socket.off('msgToClient').on('msgToClient', (newMsg: Message, channel: { name: string, mode: number | string }) => {
-      if (typeof newMsg !== 'undefined' && typeof channel !== 'undefined') {
-        if (this.blocked.indexOf(newMsg.username) === -1) {
-          const tmp= store.state.listChannel;
-          if (!tmp.find(e => e.name == channel.name)) {
-            tmp.push(channel);
-            this.listMessage[channel.name] = [];
-            store.dispatch("SET_CHAN_CURRENT", { type: "name", value: '' });
-            store.dispatch("SET_CHAN_CURRENT", { type: "realname", value: channel.name });
-            store.dispatch("SET_LIST_CHAN_PUBLIC", tmp);
-          }
-          this.outputMessage(newMsg, channel.name);
+    async (payload: [{ oldname: string, newname: string, oldchan: string, newchan: string }]) => {
+      payload.forEach(e => {
+        let chan_tmp = store.getters.GET_CHAN_CURRENT;
+        if (chan_tmp.realname == e.oldchan)
+        {
+          chan_tmp.realname = e.newchan;
+          if (store.getters.GET_USER.username != e.newname)
+            chan_tmp.name = e.newname;
+            store.dispatch("SET_CHAN_CURRENT", chan_tmp);
         }
-      }
-    });
-
-    store.state.socket.off('msgToClientPrivate').on('msgToClientPrivate', (newMsg: Message, channel: { name: string, mode: number | string }) => {
-      if (typeof newMsg !== 'undefined' && typeof channel !== 'undefined') {
-        if (this.blocked.indexOf(newMsg.username) === -1) {
-          const tmp = store.state.chanPrivate;
-          if (!tmp.find(e => e.name == channel.name)) {
-            let chanName = '';
-            if (channel.mode == 8) {
-              chanName = channel.name.substring(channel.name.indexOf('-') + 2);
-              if (chanName == store.getters.GET_USER.username)
-                chanName = channel.name.substring(0, channel.name.indexOf('-') - 1);
-              store.commit("SET_CHAN_PRIVATE", { type: "name", value: chanName });
-              store.dispatch("SET_CHAN_CURRENT", { type: "name", value: chanName });
-            }
-            channel.mode = chanName;
-            this.listMessage[channel.name] = [];
-            store.dispatch("SET_CHAN_CURRENT", { type: "realname", value: channel.name });
-            store.commit("SET_CHAN_PRIVATE", { type: "realname", value: channel.name });
-            
-            tmp.push(channel);
-            store.commit("SET_ROOM", false);
-            store.dispatch("SET_MSG_ALERT", "New user send to you a message");
-            store.commit("SET_POPUP", 'alert');
-            store.dispatch("SET_LIST_CHAN_PRIVATE", tmp)
-          }
-
-          this.outputMessage(newMsg, channel.name);
+        chan_tmp = store.getters.GET_CHAN_PRIVATE;
+        if (chan_tmp.realname == e.oldchan) {
+          chan_tmp.realname = e.newchan;
+          if (store.getters.GET_USER.username != e.newname)
+            chan_tmp.name = e.newname;
         }
-      }
-    });
+      })
 
-    store.state.socket.off('chanToClient').on('chanToClient', async (userMode: number, channel: { name: string, mode: number | string }) => {
-      if (typeof channel !== 'undefined') {
-        const tmp= store.state.listChannel;
-        if (!tmp.find(e => e.name == channel.name)) {
-          tmp.push(channel);
-        }
-        store.dispatch("SET_MY_MODE", userMode);
-        await this.getMessagesInChannel(channel.name);
-        await store.commit("SET_LIST_USER_CURRENT", await shared.getUserInChan(channel.name));
-        store.commit("SET_CHAN", channel.name);
-        store.dispatch("SET_CHAN_CURRENT", { type: "name", value: '' });
-        store.dispatch("SET_CHAN_CURRENT", { type: "realname", value: channel.name });
-        store.dispatch("SET_LIST_CHAN_PUBLIC", tmp);
-      }
-    });
-
-    store.state.socket.off('alertMessage').on('alertMessage', async (msg: string) => {
-      store.dispatch("SET_MSG_ALERT", msg);
-      store.commit("SET_POPUP", 'alert');
-    });
-
-    store.state.socket.off('goMsg').on('goMsg', async (chanName: string) => {
-      store.dispatch("SET_ROOM", false);
-      let name = '';
-      name = chanName.substring(chanName.indexOf('-') + 2);
-      if (name == store.getters.GET_USER.username)
-        name = chanName.substring(0, chanName.indexOf('-') - 1);
-      store.commit("SET_CHAN_PRIVATE", { type: "name", value: name });
-      store.dispatch("SET_CHAN_CURRENT", { type: "name", value: name });
-      store.commit("SET_CHAN_PRIVATE", { type: "realname", value: chanName });
-      store.dispatch("SET_CHAN_CURRENT", { type: "realname", value: chanName });
-      store.commit("SET_POPUP", '');
-      await this.refresh();
-      return this.$router.push("/chat");
-    });
-
-    store.state.socket.off('chanToClientPrivate').on('chanToClientPrivate', async (userMode: number, channel: { name: string, mode: number | string }) => {
-      if (typeof channel !== 'undefined') {
-        const tmp = store.state.chanPrivate;
-        if (!tmp.find(e => e.name == channel.name)) {
-          this.listMessage[channel.name] = [];
-          let chanName = '';
-          if (channel.mode == 8) {
-            chanName = channel.name.substring(channel.name.indexOf('-') + 2);
-            if (chanName == store.getters.GET_USER.username)
-              chanName = channel.name.substring(0, channel.name.indexOf('-') - 1);
-            store.commit("SET_CHAN_PRIVATE", { type: "name", value: chanName });
-            store.dispatch("SET_CHAN_CURRENT", { type: "name", value: chanName });
-
-          }
-          channel.mode = chanName;
-          store.commit("SET_CHAN_PRIVATE", { type: "realname", value: channel.name });
-          store.dispatch("SET_CHAN_CURRENT", { type: "realname", value: channel.name });
-          tmp.push(channel);
-          store.dispatch("SET_LIST_CHAN_PRIVATE", tmp);
-        }
-        store.dispatch("SET_MY_MODE", userMode);
-        store.commit("SET_ROOM", false);
-        await this.getMessagesInChannel(channel.name);
-        await store.commit("SET_LIST_USER_CURRENT", await shared.getUserInChan(channel.name));
-      }
-    });
-
-    store.state.socket.off('refresh_user').on('refresh_user', async (chanName: string) => {
-      if (chanName == "all" || store.getters.GET_CHAN_CURRENT.realname == chanName)
+      this.refresh();
+      let user_target = store.getters.GET_USER_TARGET;
+      if (user_target && user_target.username == payload[0].oldname)
       {
-        await store.commit("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
-        await this.getMessagesInChannel(store.getters.GET_CHAN_CURRENT.realname);
+        user_target = await shared.getUserByUsername(payload[0].newname);
+        store.dispatch("SET_USER_TARGET", user_target);
+        await store.dispatch(
+          "SET_IMG_TARGET",
+          await shared.get_avatar(user_target.username)
+        );
+        if (store.getters.GET_POPUP)
+          store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(store.getters.GET_USER_TARGET.username));
+        else
+          store.dispatch("SET_LIST_MATCH", await shared.getListMatchs(store.getters.GET_USER.username));
+        
+        await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
+
       }
     });
 
-    store.state.socket.off('del_user').on('del_user', async () => {
-        await store.commit("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
-        await this.getMessagesInChannel(store.getters.GET_CHAN_CURRENT.realname);
-    });
+  store.state.socket.off('setMod').on('setMod', (mod: number) => {
+    store.dispatch("SET_MODE", mod);
+  });
 
-    store.state.socket.off('new_mode').on('new_mode', async (chanName: string) => {
-      if (store.getters.GET_CHAN_CURRENT.realname == chanName)
-        await store.commit("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
+  store.state.socket.off('setPassMode').on('setPassMode', ( passMode: { mode: number, chanName: string }) => {  
+    const tmp= store.state.listChannel;
+    
+    tmp.forEach(e => {
+        if (e.realname == passMode.chanName && e.mode != passMode.mode)
+          e.mode = passMode.mode;
+      })
+      store.dispatch("SET_LIST_CHAN_PUBLIC", tmp);
+  });
 
-    });
+  store.state.socket.off('setMyMod').on('setMyMod', (mod: number, chanName: string) => {
+    if (store.getters.GET_CHAN_CURRENT.realname == chanName)
+      store.dispatch("SET_MY_MODE", mod);
+  });
 
-    store.state.socket.off('rcvInvite').on('rcvInvite', (channel_target: {name: string, mode: number}, user_target: UserEntity) => {
-      store.dispatch("SET_CHANNEL_TARGET", channel_target);
-      store.dispatch("SET_USER_TARGET", user_target);
-      this.conf(channel_target.name);
-    });
+  store.state.socket.off('msgToClient').on('msgToClient', (newMsg: Message, channel: ChannelEntity) => {
+    channel.realname = channel.name;
+    channel.name = '';
+    if (typeof newMsg !== 'undefined' && typeof channel !== 'undefined') {
+      if (this.blocked.indexOf(newMsg.username) === -1) {
+        const tmp= store.state.listChannel;
+        if (!tmp.find(e => e.realname == channel.realname)) {
+          tmp.push(channel);
+          const listMessage = store.getters.GET_LIST_MESSAGES_BY_CHAN;
+          listMessage[channel.realname] = [];
+          store.dispatch("SET_LIST_MESSAGES_BY_CHAN", listMessage)
+          store.dispatch("SET_CHAN_CURRENT", channel);
+          store.dispatch("SET_LIST_CHAN_PUBLIC", tmp);
+        }
+        this.outputMessage(newMsg, channel);
+      }
+    }
+  });
 
-    store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity) => {
-      store.dispatch("SET_USER_TARGET", user_target);
-      this.setPopup('inv_game')
-    });
+  store.state.socket.off('msgToClientPrivate').on('msgToClientPrivate', (newMsg: Message, channel: ChannelEntity) => {
+    channel.realname = channel.name;
+    channel.name = '';
+    if (typeof newMsg !== 'undefined' && typeof channel !== 'undefined') {
+      if (this.blocked.indexOf(newMsg.username) === -1) {
+        const tmp = store.state.chanPrivate;
+        if (!tmp.find(e => e.realname == channel.realname)) {
+          if (channel.mode == 8) {
+            channel.name = channel.realname.substring(channel.realname.indexOf('-') + 2);
+            if (channel.name == store.getters.GET_USER.username)
+              channel.name = channel.realname.substring(0, channel.realname.indexOf('-') - 1);
+          }
+          const listMessage = store.getters.GET_LIST_MESSAGES_BY_CHAN;
+          listMessage[channel.realname] = [];
+          store.dispatch("SET_LIST_MESSAGES_BY_CHAN", listMessage)
 
-    store.state.socket.off('initClient').on('initClient', (user: UserEntity) => {
-      store.commit("SET_USER", user);
-      this.initClient();
-    });
 
-    store.state.socket.off('start_game').on('start_game', () => {
-      store.dispatch("SET_DUEL", true);
-      this.$router.push('/');
-    });
+          store.dispatch("SET_CHAN_CURRENT", channel);
+          store.dispatch("SET_CHAN_PRIVATE", channel);
+          
+          tmp.push(channel);
+          store.dispatch("SET_ROOM", false);
+          store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
+          store.dispatch("SET_POPUP", 'alert');
+          store.dispatch("SET_LIST_CHAN_PRIVATE", tmp)
+        }
 
-    this.log = true;
+        this.outputMessage(newMsg, channel);
+      }
+    }
+  });
+
+  store.state.socket.off('chanToClient').on('chanToClient', async (userMode: number, channel: ChannelEntity) => {
+    channel.realname = channel.name;
+    channel.name = '';
+    if (typeof channel !== 'undefined') {
+      const tmp= store.state.listChannel;
+      if (!tmp.find(e => e.realname == channel.realname)) {
+        tmp.push(channel);
+      }
+      store.dispatch("SET_MY_MODE", userMode);
+      await this.getMessagesInChannel(channel.realname);
+      await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(channel.realname));
+      store.dispatch("SET_CHAN", channel);
+      store.dispatch("SET_CHAN_CURRENT", channel);
+      store.dispatch("SET_LIST_CHAN_PUBLIC", tmp);
+    }
+  });
+
+  store.state.socket.off('alertMessage').on('alertMessage', async (msg: string) => {
+    store.dispatch("SET_MSG_ALERT", msg);
+    store.dispatch("SET_POPUP", 'alert');
+  });
+
+  store.state.socket.off('goMsg').on('goMsg', async (channel: ChannelEntity) => {
+    channel.realname = channel.name;
+    channel.name = '';
+    store.dispatch("SET_ROOM", false);
+    channel.name = channel.realname.substring(channel.realname.indexOf('-') + 2);
+    if (channel.name == store.getters.GET_USER.username)
+      channel.name = channel.realname.substring(0, channel.realname.indexOf('-') - 1);
+    store.dispatch("SET_CHAN_PRIVATE", channel);
+    store.dispatch("SET_CHAN_CURRENT", channel);
+    store.dispatch("SET_POPUP", '');
+
+    await this.refresh();
+    return this.$router.push("/chat");
+  });
+
+  store.state.socket.off('chanToClientPrivate').on('chanToClientPrivate', async (userMode: number, channel: ChannelEntity) => {
+    channel.realname = channel.name;
+    channel.name = '';
+    if (typeof channel !== 'undefined') {
+      const tmp = store.state.chanPrivate;
+      if (!tmp.find(e => e.realname == channel.realname)) {
+        const listMessage = store.getters.GET_LIST_MESSAGES_BY_CHAN;
+        listMessage[channel.realname] = [];
+        store.dispatch("SET_LIST_MESSAGES_BY_CHAN", listMessage)
+
+        if (channel.mode == 8) {
+          channel.name = channel.realname.substring(channel.realname.indexOf('-') + 2);
+          if (channel.realname == store.getters.GET_USER.username)
+            channel.name = channel.realname.substring(0, channel.realname.indexOf('-') - 1);
+            store.dispatch("SET_CHAN_PRIVATE", channel);
+            store.dispatch("SET_CHAN_CURRENT", channel);
+            
+          }
+        store.dispatch("SET_CHAN_PRIVATE", channel);
+        store.dispatch("SET_CHAN_CURRENT", channel);
+        tmp.push(channel);
+        store.dispatch("SET_LIST_CHAN_PRIVATE", tmp);
+      }
+      store.dispatch("SET_MY_MODE", userMode);
+      store.dispatch("SET_ROOM", false);
+      await this.getMessagesInChannel(channel.realname);
+      await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(channel.realname));
+    }
+  });
+
+
+  store.state.socket.off('refresh_user').on('refresh_user', async (chanName: string) => {
+  if (chanName == "all" || store.getters.GET_CHAN_CURRENT.realname == chanName)
+  {
+    await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
+    store.dispatch("SET_USER_TARGET", await shared.getUserByUsername(store.getters.GET_USER_TARGET.username));
+    if (store.getters.GET_POPUP)
+      store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(store.getters.GET_USER_TARGET.username));
+    else
+      store.dispatch("SET_LIST_MATCH", await shared.getListMatchs(store.getters.GET_USER.username));
+  }
+});
+
+store.state.socket.off('leave_channel').on('leave_channel', async (chanName: string) => {
+  if (store.getters.GET_ROOM)
+  {
+    await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan('General'));
+    await this.getMessagesInChannel('General');
+    const general = store.getters.GET_LIST_CHAN_PUBLIC.find(e => e.realname == 'General');
+    store.dispatch("SET_CHAN_CURRENT", general);
+    store.dispatch("SET_CHAN", general);
+    const tmp = await this.getChanListByMode('public');
+        tmp.forEach(e => {
+          e.realname = e.name;
+          e.name = '';
+      })
+      await store.dispatch("SET_LIST_CHAN_PUBLIC", tmp);
+    }
+    else {
+      let chan;
+      if (store.getters.GET_LIST_CHAN_PRIVATE[0].realname == chanName && store.getters.GET_LIST_CHAN_PRIVATE > 1)
+          chan = store.getters.GET_LIST_CHAN_PRIVATE[1];
+      else
+        chan = store.getters.GET_LIST_CHAN_PRIVATE[0];
+
+      store.dispatch("SET_CHAN_CURRENT", chan);
+      store.dispatch("SET_CHAN", chan);
+      if (chan)
+      {
+        await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(chan.realname));
+        await this.getMessagesInChannel(chan.realname);
+      }
+      else
+      {
+        await store.dispatch("SET_LIST_USER_CURRENT", []);
+        store.dispatch("SET_LIST_MESSAGES_BY_CHAN", [])
+        store.dispatch("SET_LIST_MESSAGES", []);
+      }
+      const tmp = await this.getChanListByMode('private');
+        tmp.forEach(e => {
+          e.realname = e.name;
+          e.name = '';
+        if (e.mode == 8) {
+          e.name = e.realname.substring(e.realname.indexOf('-') + 2);
+          if (e.name == store.getters.GET_USER.username)
+            e.name = e.realname.substring(0, e.realname.indexOf('-') - 1);
+        }
+      })
+      store.dispatch("SET_LIST_CHAN_PRIVATE", tmp);
+    }
+});
+
+
+  
+  store.state.socket.off('refreshAvatar').on('refreshAvatar', async (username: string) => {
+    if (store.getters.GET_USER_TARGET.username == username)
+      store.dispatch("SET_IMG_TARGET", await shared.get_avatar(username));
+    if (store.getters.GET_USER.username == username)
+      store.dispatch("SET_IMG", await shared.get_avatar(username));
+      // alert("src" + store.getters.GET_IMG_TARGET);
+    
+  });
+
+  // store.state.socket.off('del_user').on('del_user', async () => {
+  //     await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
+  // });
+
+  store.state.socket.off('new_mode').on('new_mode', async (chanName: string) => {
+    if (store.getters.GET_CHAN_CURRENT.realname == chanName)
+      await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(chanName));
+
+  });
+
+  store.state.socket.off('rcvInvite').on('rcvInvite', (channel_target: ChannelEntity, user_target: UserEntity) => {
+    store.dispatch("SET_CHANNEL_TARGET", channel_target);
+    store.dispatch("SET_USER_TARGET", user_target);
+    this.conf(channel_target);
+  });
+
+  store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity) => {
+    store.dispatch("SET_USER_TARGET", user_target);
+    this.setPopup('inv_game')
+  });
+
+  // store.state.socket.off('initClient').on('initClient', (user: UserEntity) => {
+  //   store.dispatch("SET_USER", user);
+  //   this.initClient();
+  // });
+
+  store.state.socket.off('start_game').on('start_game', () => {
+    store.dispatch("SET_DUEL", true);
+    this.$router.push('/');
+  });
+
+  this.initClient();
+  this.log = true;
+
   }
 
   private async initClient() {
-
     await store.dispatch("SET_MY_MODE", await this.getMyMode());
     await this.getMessagesInChannel(store.getters.GET_CHAN_CURRENT.realname);
-    await store.commit("SET_LIST_CHAN_PUBLIC", await this.getChanListByMode('public'));
-    const tmp = await this.getChanListByMode('private');
+    await store.dispatch("SET_LIST_CHAN_PUBLIC", await this.getChanListByMode('public'));
+
+    let tmp = store.getters.GET_LIST_CHAN_PUBLIC;
     tmp.forEach(e => {
+      e.realname = e.name;
+      e.name = '';
+    })
+    if (!store.getters.GET_CHAN.realname && tmp.length)
+      store.dispatch("SET_CHAN", tmp[0]);
+    tmp = await this.getChanListByMode('private');
+    tmp.forEach(e => {
+      e.realname = e.name;
+      e.name = '';
       if (e.mode == 8) {
-        e.mode = e.name.substring(e.name.indexOf('-') + 2);
-        if (e.mode == store.getters.GET_USER.username)
-          e.mode = e.name.substring(0, e.name.indexOf('-') - 1);
+        e.name = e.realname.substring(e.realname.indexOf('-') + 2);
+        if (e.name == store.getters.GET_USER.username)
+          e.name = e.realname.substring(0, e.realname.indexOf('-') - 1);
       }
-      else
-        e.mode = '';
     })
   
     if (!store.getters.GET_CHAN_PRIVATE.realname && tmp.length) {
-      store.commit("SET_CHAN_PRIVATE", { type: "realname", value: tmp[0].name });
-
-      if ((typeof tmp[0].mode) == "string")
-        store.commit("SET_CHAN_PRIVATE", { type: "name", value: tmp[0].mode });
+      store.dispatch("SET_CHAN_PRIVATE", tmp[0]);
     }
+    if (store.getters.GET_ROOM)
+      store.dispatch("SET_CHAN_CURRENT", store.getters.GET_CHAN);
+    else
+      store.dispatch("SET_CHAN_CURRENT", store.getters.GET_CHAN_PRIVATE);
+   
 
-    await store.commit("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
+    await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
     store.dispatch("SET_LIST_CHAN_PRIVATE", tmp);
   }
   private async getMode(user_target: string) {
@@ -408,24 +508,26 @@ export default class Chat extends Vue {
   }
 
   private async getMessagesInChannel(chanName: string) {
-    const response = await fetch("http://localhost:3000/channel/MessagesInChannel/" + chanName, {
-      method: "GET",
-      mode: "cors",
-      credentials: "include",
-      headers: {
-        Accept: "application/json",
-        "Access-Control-Max-Age": "600",
-        "Cache-Control": "no-cache",
-      },
-    });
+        const response = await fetch("http://localhost:3000/channel/MessagesInChannel/" + chanName, {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Access-Control-Max-Age": "600",
+          "Cache-Control": "no-cache",
+        },
+      });
     if (response.ok) {
       const resp = await response.json();
-      this.listMessage[chanName] = resp;
+      const listMessage = store.getters.GET_LIST_MESSAGES_BY_CHAN;
+      listMessage[chanName] = resp;
+      store.dispatch("SET_LIST_MESSAGES_BY_CHAN", listMessage)
       store.dispatch("SET_LIST_MESSAGES", resp);
     }
   }
 
-  private async getChanListByMode(chanMode: string): Promise<[{name: string, mode: string | number}]> {
+  private async getChanListByMode(chanMode: string): Promise<ChannelEntity[]> {
     const response = await fetch("http://localhost:3000/getChanListByMode/" + chanMode, {
       method: "GET",
       mode: "cors",
@@ -438,7 +540,7 @@ export default class Chat extends Vue {
     });
     if (response.ok)
       return await response.json();
-    return [{name: '', mode: ''}];
+    return [];
   }
 
   public postMSG(e: { preventDefault: () => void; target: { value: string; }; }): false | undefined {
@@ -452,7 +554,6 @@ export default class Chat extends Vue {
       return false;
     }
 
-    //upgrade parser
     if (msg.substring(0, 7) === "/block ") {
       if (this.blocked.indexOf(msg.substring(7)) === -1) {
         this.blocked.push(msg.substring(7));
@@ -508,7 +609,7 @@ export default class Chat extends Vue {
     else {
       const newMsg = new Message(store.getters.GET_USER.username, msg);
       if (store.getters.GET_ROOM) {
-        store.state.socket.emit('msgToServer', newMsg, store.getters.GET_CHAN);
+        store.state.socket.emit('msgToServer', newMsg, store.getters.GET_CHAN.realname);
       }
       else {
         store.state.socket.emit('msgToServerPrivate', newMsg, store.getters.GET_CHAN_PRIVATE.realname);
@@ -520,16 +621,12 @@ export default class Chat extends Vue {
   private async active_pop_add(): Promise<void> {
     await store.dispatch("SET_LIST_USER_GENERAL", await shared.getUserInChan("General"));
     await store.dispatch("SET_LIST_CHANNEL_PUBLIC", await this.getListChannelPublic());
-    store.commit("SET_POPUP", 'add');
+    store.dispatch("SET_POPUP", 'add');
   }
 
   private async active_pop_profil_mode(user_target: UserEntity): Promise<void> {
-    // if (user.state == '')
-    // {
-    //   const myUser = await shared.getUserByUsername(user.username);
-    //   if (myUser.state)
-    //     user.state = myUser.state;
-    // }
+    if (user_target.state == '')
+      user_target = await shared.getUserByUsername(user_target.username);
     store.dispatch("SET_USER_TARGET", user_target);
     const index: number = this.blocked.indexOf(user_target.username);
     if (index != -1)
@@ -537,37 +634,33 @@ export default class Chat extends Vue {
     else
       this.block = false;
     await store.dispatch("SET_MODE", await this.getMode(user_target.username));
-    store.commit("SET_POPUP", 'profil_mode');
+    store.dispatch("SET_POPUP", 'profil_mode');
     store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
     store.dispatch("SET_LIST_ACHIEVEMENTS", await shared.getAchievements(store.getters.GET_USER_TARGET.username));
     await store.dispatch("SET_IMG_TARGET", await shared.get_avatar(user_target.username));
+    store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(user_target.username));
+
   }
 
-  private async changeChannel(chan: { name: string, mode: number | string }): Promise<void> {
-    store.dispatch("SET_CHAN_CURRENT", { type: "realname", value: chan.name });
-    if (typeof chan.mode == "string")
-    store.dispatch("SET_CHAN_CURRENT", { type: "name", value: chan.mode });
-    
+  private async changeChannel(channel: ChannelEntity): Promise<void> {
+    store.dispatch("SET_CHAN_CURRENT", channel);
     if (store.getters.GET_ROOM)
-    store.commit("SET_CHAN", store.getters.GET_CHAN_CURRENT.realname);
+      store.dispatch("SET_CHAN", channel);
     else {
-      store.commit("SET_CHAN_PRIVATE", { type: "name", value: store.getters.GET_CHAN_CURRENT.name });
-      store.commit("SET_CHAN_PRIVATE", { type: "realname", value: store.getters.GET_CHAN_CURRENT.realname });
+      store.dispatch("SET_CHAN_PRIVATE", channel);
     }
-    await this.getMessagesInChannel(store.getters.GET_CHAN_CURRENT.realname);
-    await store.commit("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
+    await this.getMessagesInChannel(channel.realname);
+    await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(channel.realname));
     await store.dispatch("SET_MY_MODE", await this.getMyMode());
   }
 
   private async changeRoom(room: boolean): Promise<void> {
-    store.commit("SET_ROOM", room);
+    store.dispatch("SET_ROOM", room);
     if (store.getters.GET_ROOM) {
-      store.dispatch("SET_CHAN_CURRENT", { type: "realname", value: store.getters.GET_CHAN});
-      store.dispatch("SET_CHAN_CURRENT", { type: "name", value: '' });
+      store.dispatch("SET_CHAN_CURRENT", store.getters.GET_CHAN);
     }
     else {
-      store.dispatch("SET_CHAN_CURRENT", { type: "name", value: store.getters.GET_CHAN_PRIVATE.name });
-      store.dispatch("SET_CHAN_CURRENT", { type: "realname", value: store.getters.GET_CHAN_PRIVATE.realname });
+      store.dispatch("SET_CHAN_CURRENT", store.getters.GET_CHAN_PRIVATE);
     }
     await this.refresh();
   }
@@ -577,16 +670,15 @@ export default class Chat extends Vue {
     container.scrollTop = container.scrollHeight;
   }
 
-  private async conf(channel: string): Promise<void> {
+  private async conf(channel: ChannelEntity): Promise<void> {
     if (typeof channel !== 'undefined') {
-      store.dispatch("SET_CHAN_CURRENT", { type: "realname", value: channel });
-      store.dispatch("SET_CHAN_CURRENT", { type: "name", value: '' });
-      store.commit("SET_POPUP", 'inv');
+      store.dispatch("SET_CHAN_CURRENT", channel);
+      store.dispatch("SET_POPUP", 'inv');
     }
   }
 
-  private outputMessage(message: Message, channel: string): void {
-    const tab_message = this.listMessage[channel];
+  private outputMessage(message: Message, channel: ChannelEntity): void {
+    const tab_message = store.getters.GET_LIST_MESSAGES_BY_CHAN[channel.realname];
     if (tab_message && tab_message.length)
       this.colored = tab_message[tab_message.length - 1].colored;
     if (tab_message.length && tab_message[tab_message.length - 1].username != message.username) {
@@ -595,11 +687,12 @@ export default class Chat extends Vue {
       else
         this.colored = true;
     }
-
     message.colored = this.colored;
     tab_message.push(message);
-    this.listMessage[channel] = tab_message;
-    store.dispatch("SET_LIST_MESSAGES", this.listMessage[store.getters.GET_CHAN_CURRENT.realname]);
+    const listMessage = store.getters.GET_LIST_MESSAGES_BY_CHAN;
+    listMessage[channel.realname] = tab_message;
+    store.dispatch("SET_LIST_MESSAGES_BY_CHAN", listMessage)
+    store.dispatch("SET_LIST_MESSAGES", tab_message);
   }
 
   private joinPrivateMessage(target: string): void {
@@ -624,22 +717,27 @@ export default class Chat extends Vue {
 
   private async refresh() {
     await store.dispatch("SET_MY_MODE", await this.getMyMode());
-      await this.getMessagesInChannel(store.getters.GET_CHAN_CURRENT.realname);
-      await store.commit("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
-      if (store.getters.GET_ROOM)
-      {
-        await store.dispatch("SET_LIST_CHAN_PUBLIC", await this.getChanListByMode('public'));
+    await this.getMessagesInChannel(store.getters.GET_CHAN_CURRENT.realname);
+    await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
+    if (store.getters.GET_ROOM)
+    {
+      const tmp = await this.getChanListByMode('public');
+          tmp.forEach(e => {
+            e.realname = e.name;
+            e.name = '';
+        })
+        await store.dispatch("SET_LIST_CHAN_PUBLIC", tmp);
       }
       else {
         const tmp = await this.getChanListByMode('private');
           tmp.forEach(e => {
+            e.realname = e.name;
+            e.name = '';
           if (e.mode == 8) {
-            e.mode = e.name.substring(e.name.indexOf('-') + 2);
-            if (e.mode == store.getters.GET_USER.username)
-              e.mode = e.name.substring(0, e.name.indexOf('-') - 1);
+            e.name = e.realname.substring(e.realname.indexOf('-') + 2);
+            if (e.name == store.getters.GET_USER.username)
+              e.name = e.realname.substring(0, e.realname.indexOf('-') - 1);
           }
-          else
-            e.mode = '';
         })
         store.dispatch("SET_LIST_CHAN_PRIVATE", tmp);
       }

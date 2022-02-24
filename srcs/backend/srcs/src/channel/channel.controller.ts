@@ -34,13 +34,6 @@ export class ChannelController {
 		let user = await this.usersService.FindUserByUsername(userTarget);
 		let chan =  await this.channelService.FindChannelByName(chanName);
 		let member = await this.memberService.FindMemberByUserIdAndChannelId(user.id, chan.id);
-
-		// const mode = {
-		// 	owner: this.modeService.modeIsSet(member.mode, MemberType.owner) ? true : false,
-		// 	admin: this.modeService.modeIsSet(member.mode, MemberType.admin) ? true : false,
-		// 	mute: this.modeService.modeIsSet(member.mode, MemberType.mute) ? true : false,
-		// 	ban: this.modeService.modeIsSet(member.mode, MemberType.ban) ? true : false
-		// }
 		return member.mode;
 	}
 
@@ -94,11 +87,7 @@ export class ChannelController {
 	@Get("ListChannelPublic")
 	async getListChannelPublic() {
 		let chanList = await this.channelService.GetChannelsByMode(ChannelType.public);
-		let list = [];
-		for (let chan of chanList) {
-			list.push({name: chan.name, mode: chan.mode});
-		}
-		return list;
+		return chanList;
 	}
 
 	@Delete(":channelId")

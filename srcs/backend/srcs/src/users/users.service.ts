@@ -92,7 +92,6 @@ export class UsersService {
 	}
 
 	async RestoreUser(id: number) {
-		// const userToRecover = await this.FindUserById(id);
 		return await this.usersRepositories.restore(id);
 	}
 
@@ -306,7 +305,6 @@ export class UsersService {
 	async UpdateState(user: UserEntity, state: "login" | "logout" | "in match")
 	{
 		user.state = state;
-		console.log("new user state with elo:\n", user);
 		return await this.usersRepositories.update(user.id, user);
 	}
 
@@ -324,12 +322,7 @@ export class UsersService {
 	async getFriends(id: number)
 	{
 		const user_list = (await (await this.GetUser(id, {relation: ['friends']})).friends);
-	
-		let list = [];
-		user_list.forEach(e => {
-			list.push({username: e.username , state: e.state});
-		});
-		return list;
+		return user_list;
 	}
 
 	async DeleteFriend(user1Id: number, user2Id: number)
@@ -340,7 +333,7 @@ export class UsersService {
 		const user2 = await this.GetUser(user2Id, {relation: ["friends"]});
 		const index = user1.friends.findIndex(element => element.id == user2Id);
 		user1.friends.splice(index, 1);
-		await this.usersRepositories.save(user1);
+		return await this.usersRepositories.save(user1);
 	}
 
 	async BlockUser(userWhoBlockId: number, userBlockedId: number)
@@ -349,8 +342,6 @@ export class UsersService {
 		const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
 	
 		userWhoBlock.blockedUsers = [...userWhoBlock.BlockedUsers, userBlocked];
-		
-		//return await this.usersRepositories.update({id: userWhoBlock.id}, {blockedUsers: userWhoBlock.blockedUsers});
 	}
 
 	async UnblockUser(userWhoBlockId: number, userBlockedId: number)
@@ -382,8 +373,6 @@ export class UsersService {
 
 	async UnlockAchievement(user: UserEntity, achievement: number)
 	{
-		//const user = await this.usersRepositories.findOne({id : userId});
-
 		achievement = user.achievementUnlock |= achievement;
 		if ((achievement &= Achievement.mask) == Achievement.mask)
 			achievement = user.achievementUnlock |= Achievement.perfectionnist;
@@ -393,8 +382,6 @@ export class UsersService {
 
 	AchievementIsSet(user: UserEntity, achievement: number)
 	{
-		//const user = await this.usersRepositories.findOne({id: userId});
-
 		if ((user.achievementUnlock & achievement) == achievement)
 			return true;
 		return false;

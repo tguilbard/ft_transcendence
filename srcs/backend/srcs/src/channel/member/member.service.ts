@@ -325,6 +325,7 @@ export class MemberService {
 		return list;
 	  let memberList = await this.GetMemberInChannelByChannelId(chan.id, ["free", "constrain"])
 	  for (let member of memberList) {
+		  	member.user.mode = member.mode;
 			list.push(member.user);
 		}
 	  return list;

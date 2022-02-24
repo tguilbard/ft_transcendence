@@ -49,12 +49,6 @@ export class UsersController {
 		return user;
 	}
 
-	// @Get(":id/channel")
-	// async GetChannelOfUser(@Param(id, ParseIntPipe), id: number)
-	// {
-	// 	return await this.usersService.GetUserChannelByUserId()
-	// }
-
 	@Post()
 	async AddUser(@Body() addUserDTO: AddUserDTO): Promise<UserEntity> {
 		return await this.usersService.AddUser(addUserDTO);
@@ -85,7 +79,6 @@ export class UsersController {
 
 	@Post('logout')
 	async logout(@Res() res: Response, @Req() req: Request) {
-		// res.clearCookie("access_token");
 		res.send('ok');
 	}
 

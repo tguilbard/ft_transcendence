@@ -87,13 +87,7 @@ export default class Menu extends Vue {
   position: relative;
   width: 100%;
   height: 8vmax;
-  /* border-bottom: 4px solid #000000; */
   border-bottom: 2px solid #8f8f8f;
-
-  /* box-shadow: 0px 1px 2px 2px white; */
-  /* box-shadow: 0px 1px 1px 1px #fff12c; */
-
-  /* border-inline: thick solid #9b9b9b; */
 }
 
 .pong {
@@ -106,7 +100,6 @@ export default class Menu extends Vue {
 }
 
 #nav, #nav_hover{
-  /* padding: 30px; */
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -119,7 +112,6 @@ export default class Menu extends Vue {
   align-content: center;
   border-bottom-left-radius: 10vh;
   border-bottom-right-radius: 10vh;
-  /* box-shadow: 0px 3px 3px 2px rgb(93, 93, 93); */
   text-align: center;
   gap: 1px;
 }
@@ -134,10 +126,7 @@ export default class Menu extends Vue {
   text-decoration: none;
   font-family: futura;
   border-bottom: 3px solid #8f8f8f;
-
-  /* box-shadow: 0px 2px 5px 4px white; */
   box-shadow: 0px 1px 1px 0px #fff12c;
-
   border-inline: 5px solid #9b9b9b;
    -webkit-text-stroke: 2px;
     -webkit-text-stroke-color: black;

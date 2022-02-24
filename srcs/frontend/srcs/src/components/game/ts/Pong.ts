@@ -258,7 +258,6 @@ class Pong extends Phaser.Scene {
     }
 }
 
-
 function Start() {
     ball.setVisible(true);
     openingText.setVisible(false);

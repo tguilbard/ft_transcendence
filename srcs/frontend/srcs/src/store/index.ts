@@ -12,8 +12,17 @@ export interface UserEntity {
 	state?: string,
 	elo?: number,
 	tfaSecret?: string,
-	tfaActivated?: boolean
+	tfaActivated?: boolean,
+  mode?: number
   }
+
+  export interface ChannelEntity {
+    id: number,
+    name: string,
+    mode: number,
+    realname: string
+  }
+
 
 export interface UserElement {
   name: string,
@@ -33,6 +42,17 @@ export interface Achievements {
   imageUnlockName: string,
   imageLockName: string,
   lock: boolean
+}
+
+export interface MessagesList {
+  [key: string]: Message[]
+}
+
+export interface Match {
+  user1: UserEntity,
+  user2: UserEntity,
+  scoreUser1: number,
+  scoreUser2: number
 }
 
 export class Message {
@@ -71,31 +91,50 @@ export default createStore({
     sock_init: false,
     listUsersCurrent:[ {} as UserEntity ],
     user: {} as UserEntity,
-    channel: "General",
-    channelPrivate: { name: '', realname: '' } as ChanPrivate,
-    channelCurrent: { name: '', realname: 'General' } as ChanPrivate,
+    channel: {} as ChannelEntity,
+    channelPrivate: {} as ChannelEntity,
+    channelCurrent: { name: '', realname: 'General' } as ChannelEntity,
     channelList: { "General": [] },
     room: true,
     popup: '',
     user_target: {} as UserEntity,
     listUsersGeneral: [{} as UserEntity],
-    listChannelPublic: [{ name: '', mode: 0 }],
-    channel_target: { name: '', mode: 0 },
-    listChannel: [{ name: '', mode: 0 } as Chan],
-    chanPrivate: [{ name: '', mode: '' } as Chan],
-    messages: [{ username: '', message: '', time: '', colored: '' } as unknown as Message],
+    listChannelPublic: [{} as ChannelEntity],
+    channel_target: {} as ChannelEntity,
+    listChannel: [{} as ChannelEntity],
+    chanPrivate: [{} as ChannelEntity],
+    messages: [{} as unknown as Message],
     msg_alert: '',
     mode: 0,
     my_mode: 0,
     isFriend: false,
-    list_achievements: [{ id: 0, name: '', description: '', imageUnlockName: '',  imageLockName: '', lock: true} as Achievements],
+    list_achievements: [{} as Achievements],
     srcImg: '',
     srcImgTarget: '',
-    achievement: { id: 0, name: '', description: '', imageUnlockName: '',  imageLockName: '', lock: true} as Achievements,
+    achievement: {} as Achievements,
     duel: false,
-    leaderBoard: [{} as UserEntity]
+    leaderBoard: [{} as UserEntity],
+    listMessages: {} as MessagesList,
+    listMatchs: {} as Match[],
+    listMatchsTarget: {} as Match[],
+    friends: {} as UserEntity[]
   },
   mutations: {
+    SET_FRIENDS(state, value: UserEntity[]) {
+      state.friends = value;
+    },
+    SET_LIST_MATCH(state, value: Match[] )
+    {
+      state.listMatchs = value;
+    },
+    SET_LIST_MATCH_TARGET(state, value: Match[] )
+    {
+      state.listMatchsTarget = value;
+    },
+    SET_LIST_MESSAGES_BY_CHAN(state, value: MessagesList )
+    {
+      state.listMessages = value;
+    },
     SET_LEADER_BOARD(state, value: [])
     {
       state.leaderBoard = value;
@@ -130,19 +169,19 @@ export default createStore({
     SET_LIST_MESSAGES(state, value: Message[]) { 
       state.messages = value;
     },
-    SET_LIST_CHAN_PRIVATE(state, value: Chan[]) { 
+    SET_LIST_CHAN_PRIVATE(state, value: ChannelEntity[]) { 
       state.chanPrivate = value;
     },
-    SET_LIST_CHAN_PUBLIC(state, value: Chan[]) { 
+    SET_LIST_CHAN_PUBLIC(state, value: ChannelEntity[]) { 
       state.listChannel = value;
     },
-    SET_CHANNEL_TARGET(state, value: {name: string, mode: number}) {
+    SET_CHANNEL_TARGET(state, value: ChannelEntity) {
       state.channel_target = value;
     },
     SET_LIST_USER_GENERAL(state, value: UserEntity[]) {
       state.listUsersGeneral = value;
     },
-    SET_LIST_CHANNEL_PUBLIC(state, value: [{ name: string, mode: number}]) {
+    SET_LIST_CHANNEL_PUBLIC(state, value: ChannelEntity[]) {
       state.listChannelPublic = value;
     },
     SET_POPUP(state, value: string) {
@@ -161,19 +200,13 @@ export default createStore({
     SET_ROOM(state, room: boolean) {
       state.room = room;
     },
-    SET_CHAN_PRIVATE(state, para: {type: string, value: string}): void {
-      if (para.type == "name")
-        state.channelPrivate.name = para.value;
-      else if (para.type == "realname")
-        state.channelPrivate.realname = para.value;
+    SET_CHAN_PRIVATE(state, chan: ChannelEntity): void {
+      state.channelPrivate = chan;
     },
-    SET_CHAN_CURRENT(state, para: {type: string, value: string}): void {
-      if (para.type == "name")
-        state.channelCurrent.name = para.value;
-      else if (para.type == "realname")
-        state.channelCurrent.realname = para.value;
+    SET_CHAN_CURRENT(state, channel: ChannelEntity): void {
+     state.channelCurrent = channel
     },
-    SET_CHAN(state, chan) {
+    SET_CHAN(state, chan: ChannelEntity) {
       state.channel = chan;
     },
     SET_USER_TARGET(state, value: UserEntity): void {
@@ -257,8 +290,23 @@ export default createStore({
     {
       return state.leaderBoard;
     },
+    GET_LIST_MESSAGES_BY_CHAN(state) {
+      return state.listMessages
+    },
+    GET_LIST_MATCH(state) {
+      return state.listMatchs;
+    },
+    GET_LIST_MATCH_TARGET(state) {
+      return state.listMatchsTarget;
+    },
+    GET_FRIENDS(state) {
+      return state.friends;
+    }
   },
   actions: {
+    SET_SOCKET(context) {
+      context.commit("SET_SOCKET");
+    },
     SET_POPUP(context, value: string) {
       context.commit("SET_POPUP", value)
     },
@@ -268,28 +316,28 @@ export default createStore({
     SET_ROOM(context, value: string): void {
       context.commit("SET_ROOM", value);
     },
-    SET_CHAN(context, value: string): void {
+    SET_CHAN(context, value: ChannelEntity): void {
       context.commit("SET_CHAN", value);
     },
-    SET_CHAN_PRIVATE(context, value: {type: string, value: string}): void {
+    SET_CHAN_PRIVATE(context, value: ChannelEntity): void {
       context.commit("SET_CHAN_PRIVATE", value);
     },
-    SET_CHAN_CURRENT(context, value: {type: string, value: string}): void {
+    SET_CHAN_CURRENT(context, value: ChannelEntity): void {
       context.commit('SET_CHAN_CURRENT', value);
     },
     SET_LIST_USER_GENERAL(context, value: UserEntity[]) {
       context.commit("SET_LIST_USER_GENERAL", value);
     },
-    SET_LIST_CHANNEL_PUBLIC(context, value: [{ name: string, mode: number}]) {
+    SET_LIST_CHANNEL_PUBLIC(context, value: ChannelEntity[]) {
       context.commit("SET_LIST_CHANNEL_PUBLIC", value);
     },
-    SET_CHANNEL_TARGET(context, value: { name: string, mode: number}) {
+    SET_CHANNEL_TARGET(context, value: ChannelEntity) {
       context.commit("SET_CHANNEL_TARGET", value);
     },
-    SET_LIST_CHAN_PUBLIC(context, value: Chan[]) {
-      context.dispatch("SET_LIST_CHAN_PUBLIC", value);
+    SET_LIST_CHAN_PUBLIC(context, value: ChannelEntity[]) {
+      context.commit("SET_LIST_CHAN_PUBLIC", value);
     },
-    SET_LIST_CHAN_PRIVATE(context, value: Chan[]) { 
+    SET_LIST_CHAN_PRIVATE(context, value: ChannelEntity[]) { 
       context.commit("SET_LIST_CHAN_PRIVATE", value);
     },
     SET_LIST_USER_CURRENT(context, list: UserEntity[]) {
@@ -331,6 +379,21 @@ export default createStore({
     SET_LEADER_BOARD(context, value: [])
     {
       context.commit("SET_LEADER_BOARD", value);
+    },
+    SET_LIST_MESSAGES_BY_CHAN(context, value: MessagesList )
+    {
+      context.commit("SET_LIST_MESSAGES_BY_CHAN", value);
+    },
+    SET_LIST_MATCH(context, value: Match[] )
+    {
+      context.commit("SET_LIST_MATCH", value);
+    },
+    SET_LIST_MATCH_TARGET(context, value: Match[] )
+    {
+      context.commit("SET_LIST_MATCH_TARGET", value);
+    },
+    SET_FRIENDS(context, value: UserEntity[]) {
+      context.commit("SET_FRIENDS", value);
     },
   },
   modules: {

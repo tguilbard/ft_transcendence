@@ -13,19 +13,25 @@ export class AvatarController {
     @Patch()
 	@UseInterceptors(FileInterceptor('img'))
 	async UpdateAvatar(@UploadedFile() file: Express.Multer.File, @Req() req: Request) {
-		await this.avatarService.addAvatar(file.buffer, file.originalname, req);
-		return({ "resultat": 'ok' });
+		try {
+			await this.avatarService.addAvatar(file.buffer, file.originalname, req);
+			return({ "resultat": 'ok' });
+		}
+		catch (e){}
 	}
 
 	@Get()
 	async getAvatar(@Res() res: Response, @Req() req: Request) {
-		const user = await this.usersService.FindUserById(req.User.id);
-		const avatar = await this.avatarService.getAvatar(user.avatarId);
-		res.writeHead(200, {
-			'Content-Type': 'image/*',
-			'Content-Length': avatar.data.length
-		});
-		res.end(avatar.data);
+		try {
+			const user = await this.usersService.FindUserById(req.User.id);
+			const avatar = await this.avatarService.getAvatar(user.avatarId);
+			res.writeHead(200, {
+				'Content-Type': 'image/*',
+				'Content-Length': avatar.data.length
+			});
+			res.end(avatar.data);
+		}
+		catch (e) {}
 	}
 
     @Get(':username')
