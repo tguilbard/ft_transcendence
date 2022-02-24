@@ -34,8 +34,6 @@ import store from "../store/index"
         }),
     });
     const data = await response.json();
-    //alert('src = ' + data.src + " && login = " + data.login + " && state = " + data.state);
-    // await sessionStorage.setItem("src", await JSON.stringify("https://www.icone-png.com/png/3/2625.png"));
     await sessionStorage.setItem("login", await JSON.stringify(data.login));
     await sessionStorage.setItem("src", await JSON.stringify(data.src));
     store.dispatch("SET_USERNAME", await JSON.stringify(data.username));

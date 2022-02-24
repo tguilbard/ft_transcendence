@@ -141,7 +141,6 @@ import Popup from "../components/PopUp.vue";
       store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
     }); 
 
-
   store.state.socket.off('goMsg').on('goMsg', async (channel: ChannelEntity) => {
     channel.realname = channel.name;
     channel.name = '';
@@ -216,11 +215,12 @@ store.state.socket.off('changeUsername').on("changeUsername",
       store.dispatch("SET_USER_TARGET", user);
       store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(user.username));
       await store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
-      store.commit("SET_POPUP", "profil");
       await store.dispatch(
         "SET_IMG_TARGET",
         await shared.get_avatar(user.username)
       );
+      store.dispatch("SET_LIST_ACHIEVEMENTS_TARGET", await shared.getAchievements(user.username));
+      store.commit("SET_POPUP", "profil");
     },
     active_game() {
       let check = document.getElementById("grid");

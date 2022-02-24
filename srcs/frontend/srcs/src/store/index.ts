@@ -109,6 +109,7 @@ export default createStore({
     my_mode: 0,
     isFriend: false,
     list_achievements: [{} as Achievements],
+    list_achievementsTarget: [{} as Achievements],
     srcImg: '',
     srcImgTarget: '',
     achievement: {} as Achievements,
@@ -153,6 +154,9 @@ export default createStore({
     },
     SET_LIST_ACHIEVEMENTS(state, value: Achievements[]) {
       state.list_achievements = value;
+    },
+    SET_LIST_ACHIEVEMENTS_TARGET(state, value: Achievements[]) {
+      state.list_achievementsTarget = value;
     },
     SET_IS_FRIEND(state, value: boolean) {
       state.isFriend = value;
@@ -274,6 +278,9 @@ export default createStore({
     GET_LIST_ACHIEVEMENTS(state) {
       return state.list_achievements;
     },
+    GET_LIST_ACHIEVEMENTS_TARGET(state) {
+      return state.list_achievementsTarget;
+    },
     GET_ACHIEVEMENT(state) {
       return state.achievement;
     },
@@ -360,6 +367,9 @@ export default createStore({
     },
     SET_LIST_ACHIEVEMENTS(context, value: Achievements[]) {
       context.commit("SET_LIST_ACHIEVEMENTS", value);
+    },
+    SET_LIST_ACHIEVEMENTS_TARGET(context, value: Achievements[]) {
+      context.commit("SET_LIST_ACHIEVEMENTS_TARGET", value);
     },
     SET_ACHIEVEMENT(context, value: Achievements) {
       context.commit("SET_ACHIEVEMENT", value);

@@ -367,20 +367,20 @@ export class UsersService {
 		const achievements = AchievementService.achievementList;
 		let userAchievements: GetUserAchievementListDTO[] = [];
 		let mask = 1;
-
+		
 		achievements.forEach((element, index) => {
+			mask = mask << 1;
 			userAchievements[index] = 
 			{
 				...element,
 				lock: (user.achievementUnlock & mask) == mask ? false : true
 			}
-			mask = mask << 1;
-		});
 
+		});
 		return userAchievements;
 	}
 
-	async UnlockAchievement(user: UserEntity, achievement: number)
+	async (user: UserEntity, achievement: number)
 	{
 		//const user = await this.usersRepositories.findOne({id : userId});
 		achievement = user.achievementUnlock |= achievement;

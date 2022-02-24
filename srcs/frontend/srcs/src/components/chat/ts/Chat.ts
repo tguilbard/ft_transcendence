@@ -139,6 +139,9 @@ export default class Chat extends Vue {
     const user = await shared.getMyUser();
 
     store.dispatch("SET_USER", user);
+    
+    this.refresh();
+
     store.state.socket.off('changeUsername').on("changeUsername",
     async (payload: [{ oldname: string, newname: string, oldchan: string, newchan: string }]) => {
       payload.forEach(e => {
@@ -157,8 +160,6 @@ export default class Chat extends Vue {
             chan_tmp.name = e.newname;
         }
       })
-
-      this.refresh();
       let user_target = store.getters.GET_USER_TARGET;
       if (user_target && user_target.username == payload[0].oldname)
       {
@@ -328,6 +329,10 @@ export default class Chat extends Vue {
   }
 });
 
+store.state.socket.off('refresh_friends').on('refresh_friends', async () => {
+  store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
+}); 
+
 store.state.socket.off('leave_channel').on('leave_channel', async (chanName: string) => {
   if (store.getters.GET_ROOM)
   {
@@ -384,7 +389,6 @@ store.state.socket.off('leave_channel').on('leave_channel', async (chanName: str
       store.dispatch("SET_IMG_TARGET", await shared.get_avatar(username));
     if (store.getters.GET_USER.username == username)
       store.dispatch("SET_IMG", await shared.get_avatar(username));
-      // alert("src" + store.getters.GET_IMG_TARGET);
     
   });
 
@@ -636,7 +640,7 @@ store.state.socket.off('leave_channel').on('leave_channel', async (chanName: str
     await store.dispatch("SET_MODE", await this.getMode(user_target.username));
     store.dispatch("SET_POPUP", 'profil_mode');
     store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
-    store.dispatch("SET_LIST_ACHIEVEMENTS", await shared.getAchievements(store.getters.GET_USER_TARGET.username));
+    store.dispatch("SET_LIST_ACHIEVEMENTS_TARGET", await shared.getAchievements(store.getters.GET_USER_TARGET.username));
     await store.dispatch("SET_IMG_TARGET", await shared.get_avatar(user_target.username));
     store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(user_target.username));
 
