@@ -19,22 +19,22 @@ export class AchievementService {
 	{
 		const achievementList =
 		[
-			[Achievement.novice, "Novice", `Jouer ${NumberOfGame.novice} partie`, "novice-unlock.png", "novice-lock.png"],
-			[Achievement.apprentice, "Apprentice", `Jouer ${NumberOfGame.apprentice} partie`, "apprentice-unlock.png", "apprentice-lock.png"],
-			[Achievement.expert, "Expert", `Jouer ${NumberOfGame.expert} partie`, "expert-unlock.png", "expert-lock.png"],
-			[Achievement.master, "Master", `Jouer ${NumberOfGame.master} partie`, "master-unlock.png", "master-lock.png"],
-			[Achievement.conqueror, "Conqueror", `Gagner ${PerfectGame.winnerScore}-${PerfectGame.loserScore}`, "conqueror-unlock.png", "conqueror-lock.png"],
-			[Achievement.loser, "Loser", `Perdre ${PerfectGame.winnerScore}-${PerfectGame.loserScore}`, "loser-unlock.png", "loser-lock.png"],
-			[Achievement.locker, "Locker", "Activer la double authentification", "locker-unlock.png", "locker-lock.png"],
-			[Achievement.fashion, "Fashion", "Avoir un avatar personnalisé", "fashion-unlock.png",  "fashion-lock.png"],
-			[Achievement.galaxie, "Galaxie", "Star le projet Github", "galaxy-unlock.png", "galaxy-lock.png"],
-			[Achievement.follower, "Follower", "Suivre tayschee, mapapin, kane53 et tguilbard sur Github",
+			[Achievement.novice, "Novice", `Play ${NumberOfGame.novice} game`, "novice-unlock.png", "novice-lock.png"],
+			[Achievement.apprentice, "Apprentice", `Play ${NumberOfGame.apprentice} game`, "apprentice-unlock.png", "apprentice-lock.png"],
+			[Achievement.expert, "Expert", `Play ${NumberOfGame.expert} game`, "expert-unlock.png", "expert-lock.png"],
+			[Achievement.master, "Master", `Play ${NumberOfGame.master} game`, "master-unlock.png", "master-lock.png"],
+			[Achievement.conqueror, "Conqueror", `Win ${PerfectGame.winnerScore}-${PerfectGame.loserScore}`, "conqueror-unlock.png", "conqueror-lock.png"],
+			[Achievement.loser, "Loser", `Lose ${PerfectGame.winnerScore}-${PerfectGame.loserScore}`, "loser-unlock.png", "loser-lock.png"],
+			[Achievement.locker, "Locker", "Enable two-factor authentication", "locker-unlock.png", "locker-lock.png"],
+			[Achievement.fashion, "Fashion", "Have a custom avatar", "fashion-unlock.png",  "fashion-lock.png"],
+			[Achievement.galaxie, "Galaxie", "Star the Github projet", "galaxy-unlock.png", "galaxy-lock.png"],
+			[Achievement.follower, "Follower", "Follow tayschee, mapapin, kane53 et tguilbard on Github",
 			"follower-unlock.png", "follower-lock.png"],
 
-			[Achievement.notAlone, "Not Alone", `Avoir ${numberOfFriend.notAlone} ami`, "not-alone-unlock.png", "not-alone-lock.png"],
-			[Achievement.socialist, "Socialist", `Avoir ${numberOfFriend.socialist} amis`, "socialist-unlock.png", "socialist-lock.png"],
+			[Achievement.notAlone, "Not Alone", `Have ${numberOfFriend.notAlone} friend`, "not-alone-unlock.png", "not-alone-lock.png"],
+			[Achievement.socialist, "Socialist", `Have ${numberOfFriend.socialist} friends`, "socialist-unlock.png", "socialist-lock.png"],
 
-			[Achievement.perfectionnist, "Perfectionnist", "Avoir tout les achievements sauf Hacker",
+			[Achievement.perfectionnist, "Perfectionnist", "Have all other achievements except hacker",
 			"perfectionnist-unlock.png", "perfectionnist-lock.png"],
 
 			[Achievement.hacker, "Hacker", "...", "hacker-unlock.png", "hacker-lock.png"]
