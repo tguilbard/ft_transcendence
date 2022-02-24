@@ -319,7 +319,7 @@ export class UsersService {
 			numberOfFriend: user1.numberOfFriend + 1
 		}
 		const newUser = await this.usersRepositories.save(user1Update);
-		this.achievementService.CheckNumberOfFriend(newUser);
+		this.achievementService.CheckNumberOfFriend(await this.GetUser(newUser.id));
 		return newUser;
 	}
 
@@ -383,17 +383,19 @@ export class UsersService {
 			}
 			mask = mask << 1;
 		});
+
 		return userAchievements;
 	}
 
 	async UnlockAchievement(user: UserEntity, achievement: number)
 	{
 		//const user = await this.usersRepositories.findOne({id : userId});
-
 		achievement = user.achievementUnlock |= achievement;
+		console.log(achievement);
 		if ((achievement &= Achievement.mask) == Achievement.mask)
+		{
 			achievement = user.achievementUnlock |= Achievement.perfectionnist;
-
+		}
 		return await this.usersRepositories.update({id : user.id}, {achievementUnlock: achievement});
 	}
 
