@@ -5,7 +5,7 @@ services:
     image: 'postgres'
     restart: always
     ports:
-      - "${DATABASE_PORT}:${DATABASE_PORT}"
+      - "${DATABASE_HOST}:${DATABASE_PORT}:${DATABASE_PORT}"
     volumes:
       - ./srcs/database:/var/lib/postgresql/data
     healthcheck:
@@ -26,7 +26,9 @@ services:
         - JSON_FILE=${PGADMIN_SERVER_JSON_FILE}
     restart: always
     ports:
-      - ${PGADMIN_LISTEN_PORT}:${PGADMIN_LISTEN_PORT}
+      - ${PGADMIN_HOST}:${PGADMIN_LISTEN_PORT}:${PGADMIN_LISTEN_PORT}
+    links: 
+      - "database:${DATABASE_LINK}"
     depends_on:
       database:
         condition: service_healthy

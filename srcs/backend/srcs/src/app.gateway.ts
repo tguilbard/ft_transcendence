@@ -108,7 +108,10 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			else
 			{
 				this.server.to(payload[1]).emit('msgToClient', payload[0], { name: chanTarget.name, mode: chanTarget.mode });
-				this.chatService.AddMessage(payload[0], member.id);
+				this.chatService.AddMessage(payload[0], member);
+				this.server.to(payload[1]).emit('setMod', member.mode);
+				this.server.to(client.id).emit('setMyMod', member.mode, chanTarget.name);
+				this.server.emit("new_mode", chanTarget.name);
 				//this.server.to(payload[1]).emit('msgUnreadPublic', payload[0], {id: chanTarget.id})
 			}
 		}
@@ -139,8 +142,11 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			else
 			{
 				this.server.in(chanTarget.name).emit('msgToClientPrivate', payload[0], { name: chanTarget.name, mode: chanTarget.mode });
-				this.chatService.AddMessage(payload[0], member.id);
 				//this.server.to(payload[1]).emit('msgUnreadPrivate', payload[0], {id: chanTarget.id}) //add one by one ?
+				this.chatService.AddMessage(payload[0], member);
+				this.server.to(payload[1]).emit('setMod', member.mode);
+				this.server.to(client.id).emit('setMyMod', member.mode, chanTarget.name);
+				this.server.emit("new_mode", chanTarget.name);
 			}
 		}
 	}
@@ -173,6 +179,11 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage("muteUserServer")
 	async muteUserInChat(sender: Socket, payload: string[]) {
+		let muteUntil = null;
+		if (payload.length == 3) {
+			let time = payload[2];
+			muteUntil = new Date(Date.now() + +time*60000);
+		}
 		console.log("je suis dans muteUserServer");
 		let chanTarget = await this.chatService.GetChannel(payload[1]);
 		if (!chanTarget) return;
@@ -190,7 +201,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			|| this.modeService.modeIsSet(senderMember.mode, MemberType.admin))
             || senderMember.id == memberTarget.id) return;
 		try {
-			this.chatService.SetMuteMember(memberTarget);
+			this.chatService.SetMuteMember(memberTarget, muteUntil);
 			this.server.to(sender.id).emit('setMod', memberTarget.mode);
 			// let socket = this.findSocketInUserSocketObject(userTarget.id);
 			let socket = ChatGateway.findSocketInUserSocketObject(userTarget.id);
@@ -237,6 +248,11 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage("banUserServer")
 	async banUserInChat(sender: Socket, payload: string[]) {
+		let banUntil = null;
+		if (payload.length == 3) {
+			let time = payload[2];
+			banUntil = new Date(Date.now() + +time*60000);
+		}
 		console.log("je suis dans banUserServer");
 		let chanTarget = await this.chatService.GetChannel(payload[1]);
 		if (!chanTarget) return;
@@ -254,7 +270,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			|| this.modeService.modeIsSet(senderMember.mode, MemberType.admin))
             || senderMember.id == memberTarget.id) return;
 		try {
-			this.chatService.SetBanMember(memberTarget);
+			this.chatService.SetBanMember(memberTarget, banUntil);
 			let socket = ChatGateway.findSocketInUserSocketObject(userTarget.id);
 			socket.leave(chanTarget.name);
 			this.server.to(sender.id).emit('setMod', memberTarget.mode);
@@ -369,9 +385,9 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 
 	@SubscribeMessage("joinPrivateMessage")
-	async joinPrivateMessage(client: Socket, userName: string) {
+	async joinPrivateMessage(client: Socket, username: string) {
 		console.log("je suis dans joinPrivateMessage");
-		let userTarget = await this.userService.FindUserByUsername(userName);
+		let userTarget = await this.userService.FindUserByUsername(username);
 		if (!userTarget) {
 			this.server.to(client.id).emit('alertMessage', "User not found");
 			return;
@@ -393,7 +409,9 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		this.server.to(client.id).emit('chanToClientPrivate', 0, { name: targetChan.name, mode: targetChan.mode });
 		client.join(chanName);
 		let socket = ChatGateway.findSocketInUserSocketObject(userTarget.id);
-		socket.join(chanName);
+		if (socket)
+			socket.join(chanName);
+		this.server.to(client.id).emit('goMsg', chanName);
 	}
 
 	@SubscribeMessage("invite")
@@ -627,7 +645,10 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 
 	static findSocketInUserSocketObject(id: number) {
-		return global.socketUserList.find(elem => elem.user.id === id).socket;
+		const sockUser = global.socketUserList.find(elem => elem.user.id === id);
+		if (sockUser && sockUser.socket)
+			return sockUser.socket;
+		return null;
 	}
 
 }

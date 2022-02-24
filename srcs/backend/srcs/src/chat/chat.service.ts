@@ -246,14 +246,14 @@ export class ChatService {
 	async SetBanMember(memberToBan: MemberEntity, banUntil: Date = null)
 	{
 		this.ChangeMemberAuthorization(memberToBan, "set", MemberType.ban);
-		memberToBan.MuteUntil = banUntil;
+		memberToBan.BanUntil = banUntil;
 		return await this.memberRepository.update({id: memberToBan.id}, memberToBan);
 	}
 
 	async SetUnbanMember(memberToUnban: MemberEntity)
 	{
 		this.ChangeMemberAuthorization(memberToUnban, "unset", MemberType.ban);
-		memberToUnban.MuteUntil = null;
+		memberToUnban.BanUntil = null;
 
 		return await this.memberRepository.update({id: memberToUnban.id}, memberToUnban);
 	}

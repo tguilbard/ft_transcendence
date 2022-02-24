@@ -80,11 +80,19 @@ export default createStore({
     isFriend: false,
     list_achievements: [{ id: 0, name: '', description: '', imageUnlockName: '',  imageLockName: '', lock: true} as Achievements],
     srcImg: '',
-    achievement: { id: 0, name: '', description: '', imageUnlockName: '',  imageLockName: '', lock: true} as Achievements
+    srcImgTarget: '',
+    achievement: { id: 0, name: '', description: '', imageUnlockName: '',  imageLockName: '', lock: true} as Achievements,
+    duel: false
   },
   mutations: {
+    SET_DUEL(state, value: boolean) {
+      state.duel = value;
+    },
     SET_IMG(state, value: string) {
       state.srcImg = value;
+    },
+    SET_IMG_TARGET(state, value: string) {
+      state.srcImgTarget = value;
     },
     SET_ACHIEVEMENT(state, value: Achievements) {
       state.achievement = value;
@@ -225,6 +233,12 @@ export default createStore({
     GET_IMG(state) {
       return state.srcImg;
     },
+    GET_IMG_TARGET(state) {
+      return state.srcImgTarget;
+    },
+    GET_DUEL(state) {
+      return state.duel;
+    }
   },
   actions: {
     SET_POPUP(context, value: string) {
@@ -289,6 +303,12 @@ export default createStore({
     },
     SET_IMG(context, value: string) {
       context.commit("SET_IMG", value);
+    },
+    SET_IMG_TARGET(context, value: string) {
+      context.commit("SET_IMG_TARGET", value);
+    },
+    SET_DUEL(context, value: boolean) {
+      context.commit("SET_DUEL", value);
     },
   },
   modules: {

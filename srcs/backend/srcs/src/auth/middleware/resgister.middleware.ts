@@ -8,7 +8,7 @@ export class AuthMiddleware implements NestMiddleware {
   
   use(req: Request, res: Response, next: () => void) {
     const path = req.path;
-    console.log("path = ", path);
+    // console.log("path = ", path);
     if (path != '/users/login') {
       try {
         const { cookies } = req;
@@ -73,7 +73,7 @@ export class AuthMiddleware implements NestMiddleware {
         return res.status(500).json({ message: 'Internal error' });
       }
     }
-    console.log('middleware passed');
+    // console.log('middleware passed');
     return next();
   }
 }

@@ -301,7 +301,7 @@ export class UsersService {
         return user;
     }
 
-	async UpdateState(user: UserEntity, state: "login" | "logout" | "in a game")
+	async UpdateState(user: UserEntity, state: "login" | "logout" | "in match")
 	{
 		user.state = state;
 		return await this.usersRepositories.update(user.id, user);
@@ -411,8 +411,7 @@ export class UsersService {
 		return await this.qbService.Create("users", this.usersRepositories)
 					.limit(limit)
 					.orderBy("users.elo", "DESC")
-					.getMany()
-
+					// .getMany()
 	}
 
 	async GetUserPublicProfile(id: number)
@@ -429,6 +428,6 @@ export class UsersService {
 		let user = {
 			state: 'logout'
 		}
-		return await this.usersRepositories.update({state: "login"}, user);
+		return await this.usersRepositories.update({}, user);
 	}
 }

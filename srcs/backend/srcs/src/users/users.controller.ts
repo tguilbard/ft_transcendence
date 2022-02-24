@@ -92,7 +92,6 @@ export class UsersController {
 	@Get('isGuest/:username')
 	async isGuest(@Param("username") username: string) {
 		const user = await this.usersService.FindUserByUsername(username);
-		console.log(user);
 		if (user && user.guest)
 			return true;
 		return false;

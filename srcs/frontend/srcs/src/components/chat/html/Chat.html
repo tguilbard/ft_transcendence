@@ -1,6 +1,8 @@
 <section v-if="log">
     <Menu class="menu" page="chat"/>
-    <PopUp :blocked="blocked" :block="block" />
+    <div v-if="GET_POPUP">
+        <PopUp :blocked="blocked" :block="block" />
+    </div>
     <div class=global>
         <div class="left">
             <div class="logo">
@@ -50,8 +52,8 @@
                                 <div v-if="item.state == 'login'" class="mod">
                                     <img src="../../../assets/circle_green.png" alt="login">
                                 </div>
-                                <div v-else-if="item.state == 'in game'" class="mod">
-                                    <img src="../../../assets/circle_orange.png" alt="in game">
+                                <div v-else-if="item.state == 'in match'" class="mod">
+                                    <img src="../../../assets/circle_orange.png" alt="in match">
                                 </div>
                                 <div v-else class="mod">
                                     <img src="../../../assets/circle_grey.png" alt="logout">
@@ -127,7 +129,6 @@
                             autocomplete="off" class="input">
                     </form>
                 </div>
-
             </div>
         </div>
     </div>

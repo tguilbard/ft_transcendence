@@ -141,6 +141,9 @@ export default class Chat extends Vue {
     // store.state.socket.off('connect').on("connect", () => {
     // });
 
+    
+ 
+
     store.state.socket.off('changeUsername').on("changeUsername",
       (payload: [{ oldname: string, newname: string, oldchan: string, newchan: string }]) => {
         payload.forEach(e => {
@@ -163,12 +166,6 @@ export default class Chat extends Vue {
       store.dispatch("SET_MODE", mod);
     });
 
-    store.state.socket.off('go_login').on('go_login', () => {
-      this.$router.push('/login');
-    });
-
-    
-    
     store.state.socket.off('setPassMode').on('setPassMode', ( passMode: { mode: number, chanName: string }) => {  
       const tmp= store.state.listChannel;
       
@@ -318,10 +315,21 @@ export default class Chat extends Vue {
       this.conf(channel_target.name);
     });
 
+    store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: string) => {
+      store.dispatch("SET_USER_TARGET", {username: user_target, state: 'login'});
+      this.setPopup('inv_game')
+    });
+
     store.state.socket.off('initClient').on('initClient', (username: string) => {
       store.commit("SET_USERNAME", username);
       this.initClient();
     });
+
+    store.state.socket.off('start_game').on('start_game', () => {
+      store.dispatch("SET_DUEL", true);
+      this.$router.push('/');
+    });
+
     this.log = true;
   }
 
@@ -456,16 +464,16 @@ export default class Chat extends Vue {
         this.blocked.splice(index, 1);
     }
     else if (msg.substring(0, 6) === "/mute ") {
-      const name: string = msg.substring(6);
-      store.state.socket.emit('muteUserServer', name, store.getters.GET_CHAN_CURRENT.realname);
+      const data = msg.split(" ", 3);
+      store.state.socket.emit('muteUserServer', data[1], store.getters.GET_CHAN_CURRENT.realname, data[2]);
     }
     else if (msg.substring(0, 8) === "/unmute ") {
       const name: string = msg.substring(8);
       store.state.socket.emit('unmuteUserServer', name, store.getters.GET_CHAN_CURRENT.realname);
     }
     else if (msg.substring(0, 5) === "/ban ") {
-      const name: string = msg.substring(5);
-      store.state.socket.emit('banUserServer', name, store.getters.GET_CHAN_CURRENT.realname);
+      const data = msg.split(" ", 3);
+      store.state.socket.emit('banUserServer', data[1], store.getters.GET_CHAN_CURRENT.realname, data[2]);
     }
     else if (msg.substring(0, 7) === "/unban ") {
       const name: string = msg.substring(7);
@@ -532,6 +540,7 @@ export default class Chat extends Vue {
     store.commit("SET_POPUP", 'profil_mode');
     store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
     store.dispatch("SET_LIST_ACHIEVEMENTS", await shared.getAchievements(store.getters.GET_USER_TARGET.username));
+    await store.dispatch("SET_IMG_TARGET", await shared.get_avatar(user.username));
   }
 
   private async changeChannel(chan: { name: string, mode: number | string }): Promise<void> {

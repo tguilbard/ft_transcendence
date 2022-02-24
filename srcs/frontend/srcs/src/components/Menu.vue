@@ -86,7 +86,7 @@ export default class Menu extends Vue {
   background-color: #fff12c;
   position: relative;
   width: 100%;
-  height: 15vh;
+  height: 8vmax;
   /* border-bottom: 4px solid #000000; */
   border-bottom: 2px solid #8f8f8f;
 

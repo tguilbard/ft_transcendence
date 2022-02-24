@@ -57,6 +57,7 @@
         var player1Score = 0, player2Score = 0, VelocityX, VelocityY;
         var Timer = 6;
         var timedEvent;
+        var speed = 0;
 
         function preload() {
         }
@@ -76,15 +77,30 @@
                 Height / 2, // y position
                 'paddle', // key of image for the sprite
             );
-            player1.setSize(14, 175);
+            player1.setSize(14, 100);
 
             player2 = this.physics.add.sprite(
                 (ball.body.width / 2 + 1), // x position
                 Height / 2, // y position
                 'paddle', // key of image for the sprite
             );
-            player2.setSize(14, 175);
+            player2.setSize(14, 100);
 
+            if (window.flag === 1)
+            {
+                star = this.physics.add.sprite(
+                    Width / 2, // x position
+                    Height / 2, // y position
+                    'ball', // key of image for the sprite
+                );
+                star.setSize(100, 100);
+
+                star.setCollideWorldBounds(true);
+                star.setBounce(1);
+                this.physics.add.collider(ball, star, null, null, this);
+                this.physics.add.collider(player1, star, null, null, this);
+                this.physics.add.collider(player2, star, null, null, this);
+            }
             player1.setCollideWorldBounds(true);
             player2.setCollideWorldBounds(true);
             ball.setCollideWorldBounds(true);
@@ -95,25 +111,32 @@
             this.physics.add.collider(ball, player2, colide, null, this);
         }
 
+        socket.off('left').on('left', (message) => {
+            if (message == "UP") {
+                player1.body.setVelocityY(-600);
+            }
+            else if (message == "DOWN") {
+                player1.body.setVelocityY(600);
+            }
+        })
+        socket.off('right').on('right', (message) => {
+             if (message == "UP") {
+                player2.body.setVelocityY(-600);
+            }
+            else if (message == "DOWN") {
+                player2.body.setVelocityY(600);
+            }
+        })
+
+        socket.off('initScore').on('initScore', () => {
+            socket.emit("phaser", "1Score", player1Score);
+            socket.emit("phaser", "2Score", player2Score);
+        })
+        
         function update() {
-            socket.on('left', (message) => {
-                if (message == "UP") {
-                    player1.body.setVelocityY(-350);
-                }
-                else if (message == "DOWN") {
-                    player1.body.setVelocityY(350);
-                }
-            })
-            socket.on('right', (message) => {
-                if (message == "UP") {
-                    player2.body.setVelocityY(-350);
-                }
-                else if (message == "DOWN") {
-                    player2.body.setVelocityY(350);
-                }
-            })
 
             if (isPlayer1Point()) {
+                speed = 0;
                 VelocityX = 400;
                 player1Score++;
                 socket.emit("phaser", "1Score", player1Score);
@@ -122,6 +145,7 @@
             }
 
             if (isPlayer2Point()) {
+                speed = 0;
                 VelocityX = -400;
                 player2Score++;
                 socket.emit("phaser", "2Score", player2Score);
@@ -129,12 +153,14 @@
                 return;
             }
 
-            if (player1Score >= 13) {
-                socket.emit("phaser", "1Victory").emit("ROOT", player1Score, player2Score, window.left, window.right);
+            if (player1Score >= 11) {
+                socket.emit("phaser", "1Victory", 0);
+                socket.emit("ROOT", player1Score, player2Score, window.left, window.right);
                 End();
             }
-            if (player2Score >= 13) {
-                socket.emit("phaser", "2Victory").emit("ROOT", player1Score, player2Score, window.left, window.right);
+            if (player2Score >= 11) {
+                socket.emit("phaser", "2Victory", 0);
+                socket.emit("ROOT", player1Score, player2Score, window.left, window.right);
                 End();
             }
             player1.body.setVelocityY(0);
@@ -147,16 +173,22 @@
             socket.emit("phaser", "ball", ball.x, ball.y);
             socket.emit("phaser", "player1", player1.y);
             socket.emit("phaser", "player2", player2.y);
+            if (window.flag === 1)
+            {
+                socket.emit("phaser", "star", star.x, star.y)
+            }
         }
 
         function Start() {
             gameStarted = true;
-            socket.emit("phaser", "START", 0);
+            socket.emit("phaser", "START", window.flag);
             rand = Phaser.Math.Between(1, 2);
             rand = (rand == 2) ? -1 : 1;
             VelocityX = (Width / 2) * rand;
             VelocityY = Height / 2;
             ball.setVelocity(VelocityX, VelocityY);
+            if (window.flag === 1)
+                star.setVelocityY(600);
         }
 
         async function End() {
@@ -181,6 +213,7 @@
             if (!gameStarted && Timer > 0) {
                 Timer -= 1;
                 socket.emit("phaser", 'openText', Timer);
+                socket.emit("phaser", 'setName', window.left, window.right, 0);
                 if (Timer == 0){
                     Start();
                 }
@@ -208,7 +241,12 @@
         }
 
         function colide(ball, player) {
-            ball.setVelocityY(ball.body.velocity.y + (player.body.velocity.y * 0.6));
+            speed++;
+            let retY = (Math.abs(player.y - ball.y) / 50) * 338;
+            let retX = (Math.abs(Math.abs(player.y - ball.y) / 50 - 1) * 337) + 169;
+            retX = (ball.body.velocity.x < 0) ? -retX : retX;
+            retY = (ball.body.velocity.y < 0) ? -retY : retY;
+            ball.setVelocity(retX * (1 + (speed / 10)), retY * (1 + (speed / 10)));
         }
     </script>
 </body>
