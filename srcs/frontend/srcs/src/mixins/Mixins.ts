@@ -59,6 +59,23 @@ export interface UserElement {
         return [];
     },
 
+    async getLeaderBoard(): Promise<[UserEntity]> {
+        const response = await fetch("http://localhost:3000/users/leaderboard", {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                Accept: "application/json",
+                "Access-Control-Max-Age": "600",
+                "Cache-Control": "no-cache",
+            },
+        });
+        if (response.ok)
+            return await response.json()
+        return [{}];
+    },
+
+
     async isAccess(p_path: string): Promise<boolean> {
         const response = await fetch("http://localhost:3000/access/" + p_path, {
             method: "GET",
@@ -149,6 +166,24 @@ export interface UserElement {
         return lSignet;
     },
 
+    async getListMatchs(username: string): Promise<string[]> {
+        const response = await fetch(
+          "http://localhost:3000/game-history/" + username,
+          {
+            method: "GET",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+              Accept: "application/json",
+              "Access-Control-Max-Age": "600",
+              "Cache-Control": "no-cache",
+            },
+          }
+        );
+        if (response.ok) return await response.json();
+        return [];
+      },
+
     async get_avatar(username: string): Promise<string> {
         const response = await fetch("http://localhost:3000/avatar/" + username , {
           method: "GET",
@@ -167,7 +202,7 @@ export interface UserElement {
         return await URL.createObjectURL(myBlob);
       },
 
-      async getUserInChan(chanName: string): Promise<UserElement[]> {
+      async getUserInChan(chanName: string): Promise<UserEntity[]> {
         const response = await fetch("http://localhost:3000/userInChan/" + chanName, {
         method: "GET",
         mode: "cors",
@@ -180,7 +215,7 @@ export interface UserElement {
         });
         if (response.ok)
         return await response.json();
-        return [];
+        return [{}];
     },
 
     modeIsSet(num: number, bit_to_check: number): boolean {

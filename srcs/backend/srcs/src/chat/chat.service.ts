@@ -204,6 +204,7 @@ export class ChatService {
 		const sender = await this.memberRepository.createQueryBuilder("member")
 								.leftJoinAndSelect("member.channel", "channel")
 								.leftJoinAndSelect("channel.members", "members")
+								.where("member.id = :id", {id: senderId})
 								.getOne();
 		const newMessage = {
 			createdAt: text.time,
@@ -211,7 +212,6 @@ export class ChatService {
 			member: sender,
 			channel: sender.channel
 		}
-
 		const message = await this.messageRepository.save(newMessage);
 		sender.channel.members.forEach(async element => {
 			await this.memberRepository.update({id: element.id}, {unreadMessage: element.unreadMessage + 1});
@@ -428,7 +428,7 @@ export class ChatService {
 		return list;
 	  let memberList = await this.GetMemberInChannelByChannelId(chan.id, ["free", "constrain"])
 	  for (let member of memberList) {
-			list.push({username: member.user.username, state: member.user.state, mode: member.mode});
+			list.push(member.user);
 		}
 	  return list;
 	}

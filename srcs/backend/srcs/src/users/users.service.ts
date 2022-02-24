@@ -90,7 +90,6 @@ export class UsersService {
 	}
 
 	async RestoreUser(id: number) {
-		// const userToRecover = await this.FindUserById(id);
 		return await this.usersRepositories.restore(id);
 	}
 
@@ -313,9 +312,10 @@ export class UsersService {
 			return;
 		const user1 = await this.GetUser(user1Id, {relation: ["friends"]});
 		const user2 = await this.GetUser(user2Id, {relation: ["friends"]});
+
 		const user1Update = {
 			id: user1.id,
-			friends: user1.friends + user2,
+			friends: [...user1.friends, user2],
 			numberOfFriend: user1.numberOfFriend + 1
 		}
 		const newUser = await this.usersRepositories.save(user1Update);
@@ -326,12 +326,7 @@ export class UsersService {
 	async getFriends(id: number)
 	{
 		const user_list = (await (await this.GetUser(id, {relation: ['friends']})).friends);
-	
-		let list = [];
-		user_list.forEach(e => {
-			list.push({username: e.username , state: e.state});
-		});
-		return list;
+		return user_list;
 	}
 
 	async DeleteFriend(user1Id: number, user2Id: number)
@@ -346,7 +341,7 @@ export class UsersService {
 			friends: user1.friends.splice(index, 1),
 			numberOfFriend: user1.numberOfFriend - 1
 		}
-		await this.usersRepositories.save(user1);
+		return await this.usersRepositories.save(user1);
 	}
 
 	async BlockUser(userWhoBlockId: number, userBlockedId: number)
@@ -355,8 +350,6 @@ export class UsersService {
 		const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
 	
 		userWhoBlock.blockedUsers = [...userWhoBlock.BlockedUsers, userBlocked];
-		
-		//return await this.usersRepositories.update({id: userWhoBlock.id}, {blockedUsers: userWhoBlock.blockedUsers});
 	}
 
 	async UnblockUser(userWhoBlockId: number, userBlockedId: number)
@@ -388,8 +381,6 @@ export class UsersService {
 
 	async UnlockAchievement(user: UserEntity, achievement: number)
 	{
-		//const user = await this.usersRepositories.findOne({id : userId});
-
 		achievement = user.achievementUnlock |= achievement;
 		if ((achievement &= Achievement.mask) == Achievement.mask)
 			achievement = user.achievementUnlock |= Achievement.perfectionnist;
@@ -399,8 +390,6 @@ export class UsersService {
 
 	AchievementIsSet(user: UserEntity, achievement: number)
 	{
-		//const user = await this.usersRepositories.findOne({id: userId});
-
 		if ((user.achievementUnlock & achievement) == achievement)
 			return true;
 		return false;
@@ -411,7 +400,7 @@ export class UsersService {
 		return await this.qbService.Create("users", this.usersRepositories)
 					.limit(limit)
 					.orderBy("users.elo", "DESC")
-					// .getMany()
+					.getMany()
 	}
 
 	async GetUserPublicProfile(id: number)

@@ -214,8 +214,9 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         const user_target = await this.userService.FindUserByUsername(payload);
         const socket = this.findSocketInUserSocketObject(user_target.id);
         if (!socket)
-        return;
-        this.server.to(socket.id).emit("rcv_inv_game", user.username);
+            return;
+        console.log("user rcv_game", user);
+        this.server.to(socket.id).emit("rcv_inv_game", user);
     }
 
     @SubscribeMessage("duel")
@@ -251,8 +252,10 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         let test2 : SocketUser = {socket: socket2, user: user2};
         let g = new Game(test1, test2, phaserServer, this.server, flag);
         this.games.push(g);
-        g.sendMessage(['start_game', payload[0], payload[1]]);
-
+        socket1.emit('start_game');
+        socket2.emit('start_game');
+        this.server.emit('refresh_user', 'all');
+        // g.sendMessage(['start_game']);
     }
 
     @SubscribeMessage("phaser")

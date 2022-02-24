@@ -16,9 +16,7 @@ export class GameHistoryController {
 
 	@Get(':username')
 	async GetAllMatchsForUser(@Param('username') username: string) : Promise<MatchEntity[]> {
-		const list = await this.gameHistoryService.GetAllMatchsForUser(username);
-		console.log("list:\n", list);
-		return list;
+		return await this.gameHistoryService.GetAllMatchsForUser(username);
 	}
 
 	@Post() //MUST disapear it's an internal function of match

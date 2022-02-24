@@ -98,4 +98,10 @@ export class UserEntity extends TimeStampEntity {
 		nullable: true
 	})
 	history: MatchEntity[]
+
+	@Column({
+		nullable: false,
+		default: 0
+	})
+	mode: number
 }

@@ -34,16 +34,12 @@ export class MemberController {
 	@Get("getChanListByMode/:chanMode")
 	async getChanListByMode(@Param("chanMode") chanMode: ChannelMode, @Req() request: Request) {
 		let user = await this.usersService.FindUserById(request.User.id);
-		let list = [];
 		try {
 		  var chanList = await this.chatService.GetChannelsOfUser(user.id, chanMode);
-		  chanList.forEach(e => {
-			list.push({name: e.name, mode: e.mode});
-		  })
 		}
 		catch
 		{
 		}
-		return list;
+		return chanList;
 	}
 }

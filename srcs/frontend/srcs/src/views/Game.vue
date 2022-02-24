@@ -1,7 +1,9 @@
 <template>
   <section>
     <Menu page="game" />
-    <Popup />
+    <div v-if="GET_POPUP">
+      <Popup/>
+    </div>
     <div id="grid">
       <div id="a" class="block_container">
         <div class="content_container" @click="active_game">
@@ -11,7 +13,7 @@
       <div id="b" class="block_container">
         <div class="content_container">
           <div class="block_text">
-            <h1>RULES OF GAME</h1>
+            <h2>RULES OF GAME</h2>
             <br />
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam
@@ -33,38 +35,50 @@
       </div>
       <div id="c" class="block_container">
         <div class="content_container">
-          <div class="list_user_general">
-            <div v-for="item in GET_LIST_USER_GENERAL" :key="item">
-              <div class="logo_connection">
-                <div>
-                  <div v-if="item.username == GET_USERNAME">
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="color: rgb(160, 28, 28); text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
+          <div class="block_leaderboard">
+            <div>
+              <h1>LEADERBOARD</h1>
+            </div>
+            <div class="content_leaderboard">
+              <div v-for="item in GET_LEADER_BOARD" :key="item">
+                <div class="grid_leaderboard">
+                  <div class="left">
+                    <p>{{ item.elo }}</p>
                   </div>
-                  <div v-else>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                </div>
-                <div>
-                  <div v-if="item.state == 'login'" class="mod">
-                    <img src="../assets/circle_green.png" alt="login" />
-                  </div>
-                  <div v-else-if="item.state == 'in match'" class="mod">
-                    <img src="../assets/circle_orange.png" alt="in match" />
-                  </div>
-                  <div v-else class="mod">
-                    <img src="../assets/circle_grey.png" alt="logout" />
+
+                  <!-- <div id="friends_content" class="friends_content"> -->
+                  <div class="logo_connection right">
+                    <div>
+                      <div v-if="item.username == GET_USER.username">
+                        <p
+                          class="link"
+                          @click="active_pop_profil(item)"
+                          style="color: rgb(160, 28, 28); text-align: left"
+                        >
+                          {{ item.username }}
+                        </p>
+                      </div>
+                      <div v-else>
+                        <p
+                          class="link"
+                          @click="active_pop_profil(item)"
+                          style="text-align: left"
+                        >
+                          {{ item.username }}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <div v-if="item.state == 'login'" class="mod">
+                        <img src="../assets/circle_green.png" alt="login" />
+                      </div>
+                      <div v-else-if="item.state == 'in match'" class="mod">
+                        <img src="../assets/circle_orange.png" alt="in match" />
+                      </div>
+                      <div v-else class="mod">
+                        <img src="../assets/circle_grey.png" alt="logout" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -79,7 +93,7 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import Menu from "@/components/Menu.vue"; // @ is an alias to /src
-import store from "../store";
+import store, { ChannelEntity, Message, UserEntity } from "../store";
 import shared from "../mixins/Mixins";
 import Pong from "../components/game/Pong.vue";
 import { mapGetters } from "vuex";
@@ -96,34 +110,96 @@ import Popup from "../components/PopUp.vue";
     if (!store.state.sock_init) store.commit("SET_SOCKET");
 
     const user = await shared.getMyUser();
-    store.commit("SET_USERNAME", user.username);
+
+    store.dispatch("SET_USER", user);
     await store.dispatch(
       "SET_LIST_USER_GENERAL",
       await shared.getUserInChan("General")
     );
     store.dispatch(
       "SET_LIST_ACHIEVEMENTS",
-      await shared.getAchievements(store.getters.GET_USERNAME)
+      await shared.getAchievements(store.getters.GET_USER.username)
     );
+    store.dispatch("SET_LEADER_BOARD", await shared.getLeaderBoard());
     if (store.getters.GET_DUEL) this.active_game();
 
     store.state.socket.off("start_game").on("start_game", () => {
       this.active_game();
     });
 
-    store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: string) => {
-      store.dispatch("SET_USER_TARGET", {username: user_target, state: 'login'});
-      this.setPopup('inv_game')
+    store.state.socket
+      .off("rcv_inv_game")
+      .on("rcv_inv_game", (user_target: UserEntity) => {
+        store.dispatch("SET_USER_TARGET", {
+          username: user_target.username,
+          state: user_target.state,
+        });
+        this.setPopup("inv_game");
+      });
+
+     store.state.socket.off('refresh_friends').on('refresh_friends', async () => {
+      store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
+    }); 
+
+
+  store.state.socket.off('goMsg').on('goMsg', async (channel: ChannelEntity) => {
+    channel.realname = channel.name;
+    channel.name = '';
+    store.dispatch("SET_ROOM", false);
+    channel.name = channel.realname.substring(channel.realname.indexOf('-') + 2);
+    if (channel.name == store.getters.GET_USER.username)
+      channel.name = channel.realname.substring(0, channel.realname.indexOf('-') - 1);
+    store.dispatch("SET_CHAN_PRIVATE", channel);
+    store.dispatch("SET_CHAN_CURRENT", channel);
+    store.dispatch("SET_POPUP", '');
+
+    // await this.refresh();
+    return this.$router.push("/chat");
+  });
+
+  store.state.socket.off('alertMessage').on('alertMessage', async (msg: string) => {
+    store.dispatch("SET_MSG_ALERT", msg);
+    store.dispatch("SET_POPUP", 'alert');
+  });
+
+    store.state.socket.off('refresh_user').on('refresh_user', async (chanName: string) => {
+    if (chanName == "all" || store.getters.GET_CHAN_CURRENT.realname == chanName)
+    {
+      await store.dispatch("SET_LEADER_BOARD", await shared.getLeaderBoard());
+      store.dispatch("SET_USER_TARGET", await shared.getUserByUsername(store.getters.GET_USER_TARGET.username));
+      if (store.getters.GET_POPUP)
+        store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(store.getters.GET_USER_TARGET.username));
+    }
+  });
+
+  store.state.socket.off('msgToClientPrivate').on('msgToClientPrivate', (newMsg: Message, channel: ChannelEntity) => {
+      if (!store.getters.GET_DUEL)
+      {
+        store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
+         store.dispatch("SET_POPUP", 'alert');
+      }
+  });
+
+store.state.socket.off('changeUsername').on("changeUsername",
+    async (payload: [{ oldname: string, newname: string, oldchan: string, newchan: string }]) => {
+      store.dispatch("SET_USER", await shared.getMyUser());
+      let user_target = store.getters.GET_USER_TARGET;
+      if (user_target && user_target.username == payload[0].oldname)
+      {
+        user_target = await shared.getUserByUsername(payload[0].newname)
+        store.dispatch("SET_USER_TARGET", user_target);
+        store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(user_target.username));
+        await store.dispatch(
+          "SET_IMG_TARGET",
+          await shared.get_avatar(user_target.username)
+        );
+      }
+      await store.dispatch("SET_LEADER_BOARD", await shared.getLeaderBoard());
     });
-  },
-  updated() {
-    let height =
-      document.getElementById("a").offsetHeight +
-      document.getElementById("b").offsetHeight;
-    document.getElementById("c").style.height = height + "px";
+
   },
   computed: {
-    ...mapGetters(["GET_LIST_USER_GENERAL"]),
+    ...mapGetters(["GET_LIST_USER_GENERAL", "GET_LEADER_BOARD", "GET_USER", "GET_POPUP"]),
     getRoute() {
       return this.$route.name;
     },
@@ -132,15 +208,13 @@ import Popup from "../components/PopUp.vue";
     setPopup(value: string): void {
       store.dispatch("SET_POPUP", value);
     },
-    async active_pop_profil(user: {
-      username: string;
-      state: string;
-    }): Promise<void> {
-      if (user.state == "") {
-        const myUser = await shared.getUserByUsername(user.username);
-        if (myUser.state) user.state = myUser.state;
-      }
+    async active_pop_profil(user: UserEntity): Promise<void> {
+      // if (user.state == "") {
+      //   const myUser = await shared.getUserByUsername(user.username);
+      //   if (myUser.state) user.state = myUser.state;
+      // }
       store.dispatch("SET_USER_TARGET", user);
+      store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(user.username));
       await store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
       store.commit("SET_POPUP", "profil");
       await store.dispatch(
@@ -160,6 +234,35 @@ export default class Home extends Vue {}
 </script>
 
 <style scoped>
+p,
+span,
+h1 {
+  cursor: default;
+}
+
+.block_container h1 {
+  border-radius: 0.5vmax 0.5vmax 0px 0px;
+  text-align: center;
+  background-color: grey;
+  color: #fff12c;
+  padding: 4px;
+  -webkit-text-stroke: 1px;
+  -webkit-text-stroke-color: rgb(0, 0, 0);
+  font-family: futura;
+  font-weight: 900;
+  font-size: 1.5vmax;
+  border: 1px solid black;
+  display: block;
+}
+
+.left {
+  background-color: rgb(237, 223, 244);
+}
+
+.right {
+  text-align: center;
+}
+
 #PongBorder {
   height: 70%;
   margin-left: 3vw;
@@ -185,7 +288,7 @@ p {
   padding: 1vmax;
 }
 
-h1 {
+h2 {
   text-align: center;
   font-family: futura;
   font-weight: 900;
@@ -206,12 +309,17 @@ span {
 
 #a p {
   text-align: center;
+}
+
+#a p,
+#c p {
   color: darkblue;
 }
 
 #b .content_container {
   grid-area: b;
   background-color: rgb(0, 0, 0);
+  color: yellow;
 }
 
 .block_text {
@@ -226,7 +334,6 @@ span {
 
 #c {
   grid-area: c;
-  height: 1px;
 }
 
 #grid {
@@ -237,7 +344,8 @@ span {
     "a c"
     "b c";
   width: 90vw;
-  height: 75vh;
+  height: 40vmax;
+  min-height: 75vh;
   margin: auto;
   margin-top: 1vh;
   gap: 0.2vmax;
@@ -264,7 +372,28 @@ span {
   font-size: 1.2vmax;
 }
 
+.block_leaderboard {
+  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  background-color: #f6ecd2;
+}
+
+.logo_connection {
+  display: grid;
+  position: relative;
+  grid-template-columns:
+    minmax(min-content, max-content) minmax(min-content, max-content)
+    minmax(min-content, max-content);
+  justify-content: end;
+  width: 100%;
+}
+
 .logo_connection img {
+  width: 1.5vmax;
+  height: 1.5vmax;
+  transform: translateY(0.25vmax);
   margin: 0.2vmax;
   padding: 0.4vmax;
   width: auto;
@@ -272,24 +401,10 @@ span {
   border-radius: 0px 0px 0.5vmax 0.5vmax;
 }
 
-.logo_connection {
-  display: grid;
-  grid-template-columns: minmax(min-content, auto) minmax(
-      min-content,
-      max-content
-    );
-}
-
-.logo_connection img {
-  width: 1.5vmax;
-  height: 1.5vmax;
-  transform: translateY(0.25vmax);
-}
-
 #a .content_container:hover,
 #a .content_container p:hover {
   cursor: pointer;
-  background: darkblue;
+  background-color: darkblue;
   color: #fff12c;
   border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
 }
@@ -306,11 +421,17 @@ span {
   font-family: futura;
 }
 
-.list_user_general {
-  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
-  box-sizing: border-box;
-  height: 100%;
+.grid_leaderboard {
+  display: grid;
+  grid-template-columns: 4fr 10fr;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.content_leaderboard {
   overflow: auto;
-  background-color: #f6ecd2;
+  min-height: 69vh;
+  height: 38vmax;
+  border-radius: 0vmax 0vmax 0.5vmax 0.5vmax;
 }
 </style>

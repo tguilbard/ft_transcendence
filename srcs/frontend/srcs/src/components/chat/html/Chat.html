@@ -13,11 +13,11 @@
             <div class="block_channel">
                 <div>
                     <div class="channel" id="channel">
-                        <ChanBut v-if="GET_ROOM" v-for="button in GET_LIST_CHAN_PUBLIC" :mod="button.mode == 5" :name="button.name"
-                            :state="button.name === GET_CHAN" @click="changeChannel(button)">
+                        <ChanBut v-if="GET_ROOM" v-for="button in GET_LIST_CHAN_PUBLIC" :mod="button.mode == 5" :name="button.realname"
+                            :state="button.realname == GET_CHAN.realname" @click="changeChannel(button)">
                         </ChanBut>
-                        <ChanBut v-else v-for="button in GET_LIST_CHAN_PRIVATE" :name="(button.mode? button.mode: button.name)"
-                            :state="(button.mode? button.mode: button.name) === ((GET_CHAN_CURRENT).name? (GET_CHAN_CURRENT).name: (GET_CHAN_CURRENT).realname)"
+                        <ChanBut v-else v-for="button in GET_LIST_CHAN_PRIVATE" :name="(button.name? button.name: button.realname)"
+                            :state="button.realname == GET_CHAN_CURRENT.realname"
                             @click="changeChannel(button)">
                         </ChanBut>
                     </div>
@@ -26,7 +26,7 @@
                     <div v-for="item in GET_LIST_USER_CURRENT">
                         <div class="logo_connection">
                             <div>
-                                <div v-if="(item.username == GET_USERNAME)">
+                                <div v-if="(item.username == GET_USER.username)">
                                     <p class="link" @click="active_pop_profil_mode(item)"
                                         style="color: rgb(160, 28, 28); text-align: left;">{{
                                         item.username }}</p>
