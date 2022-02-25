@@ -15,6 +15,7 @@ import { MemberType } from './chat/enum/member-type.enum';
 import { ChannelType } from './chat/enum/channel-type.enum';
 import { ChatService } from './chat/chat.service';
 import { ModeService } from './chat/generics/mode.class';
+import { Achievement } from './achievement/enums/achievement.enum';
 
 export interface SocketUser {
 	socket: Socket;
@@ -651,6 +652,12 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	@SubscribeMessage("refreshAvatar")
 	async refreshAvatar(client: Socket, username: string) {
 		this.server.emit("refreshAvatar", username);
+	}
+
+	@SubscribeMessage("unclock_acheivements")
+	async unlockAcheivements(client: Socket, payload: any) {
+		this.userService.UnlockAchievement(payload[0], payload[1]);
+		this.server.emit("refreshAcheivements", payload[0].username);
 	}
 
 	static findSocketInUserSocketObject(id: number) {

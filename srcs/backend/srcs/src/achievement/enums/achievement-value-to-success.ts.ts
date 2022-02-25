@@ -6,7 +6,7 @@ export enum NumberOfGame {
 }
 
 export enum PerfectGame {
-	winnerScore = 12,
+	winnerScore = 11,
 	loserScore = 0
 }
 

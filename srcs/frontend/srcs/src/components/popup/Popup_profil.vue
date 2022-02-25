@@ -223,10 +223,11 @@
 <script scoped lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { mapGetters } from "vuex";
-import store, { Achievements } from "../../store";
+import store, { Achievements, UserEntity } from "../../store";
 import Achievement from "../popup/Achievement.vue";
 import Description from "../popup/Description.vue";
 import shared from "../../mixins/Mixins";
+import {AchievementType} from "../../enums/enums"
 
 export interface UserElement {
   name: string;
@@ -341,6 +342,7 @@ export default defineComponent({
         .then((response) => {
           if (response.ok) {
             this.qrCode = "";
+            store.state.socket.emit("unclock_acheivements", store.getters.GET_USER, AchievementType.locker);
             //window.location.href = "http://localhost:8080";
           } else {
             return response.json();
@@ -410,7 +412,7 @@ export default defineComponent({
         .then((response) => {
           if (response.ok) {
             store.state.socket.emit("refreshAvatar", store.getters.GET_USER.username);
-            //window.location.href = "http://localhost:8080/auth";
+            store.state.socket.emit("unclock_acheivements", store.getters.GET_USER, AchievementType.fashion);
           } else {
             return response.json();
           }
@@ -510,7 +512,7 @@ export default defineComponent({
   async created() {
     window.addEventListener("resize", this.myEventHandler);
     this.username = store.getters.GET_USER.username;
-    this.check = (await shared.getMyUser()).tfaActivated;
+    this.check = (await shared.getMyUser()).tfaActivated;  
   },
   updated() {
     if (store.getters.GET_POPUP)

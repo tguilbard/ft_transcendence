@@ -380,19 +380,18 @@ export class UsersService {
 		return userAchievements;
 	}
 
-	async (user: UserEntity, achievement: number)
+	async UnlockAchievement(user: UserEntity, achievement: Achievement)
 	{
 		//const user = await this.usersRepositories.findOne({id : userId});
+
 		achievement = user.achievementUnlock |= achievement;
-		console.log(achievement);
 		if ((achievement &= Achievement.mask) == Achievement.mask)
-		{
 			achievement = user.achievementUnlock |= Achievement.perfectionnist;
-		}
+
 		return await this.usersRepositories.update({id : user.id}, {achievementUnlock: achievement});
 	}
 
-	AchievementIsSet(user: UserEntity, achievement: number)
+	AchievementIsSet(user: UserEntity, achievement: Achievement)
 	{
 		if ((user.achievementUnlock & achievement) == achievement)
 			return true;

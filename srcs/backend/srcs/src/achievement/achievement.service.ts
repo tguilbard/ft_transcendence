@@ -60,8 +60,10 @@ export class AchievementService {
 
 	async CheckNumberOfGame(user: UserEntity)
 	{
+		console.log ("nb partie = " + user.numberOfGame + " et unlock novice a " + NumberOfGame.novice);
 		if (this.usersService.AchievementIsSet(user, Achievement.novice) == false && user.numberOfGame >= NumberOfGame.novice)
 		{
+			console.log("ublock novice")
 			await this.usersService.UnlockAchievement(user, Achievement.novice);
 		}
 		else if (this.usersService.AchievementIsSet(user, Achievement.adept) == false && user.numberOfGame >= NumberOfGame.apprentice)

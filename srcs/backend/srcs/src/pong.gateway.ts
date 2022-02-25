@@ -59,6 +59,7 @@ class Game {
         this.users[0].socket.leave(this.socketRoomName);
         this.users[1].socket.leave(this.socketRoomName);
         this.phaserServer.leave(this.socketRoomName);
+        console.log("je suis dans endGame")
     }
 
     addToSpec(user: SocketUser) {
@@ -322,17 +323,26 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.logger.log(scoreLeft, scoreRight);
         let history;
  
+        
         if (scoreLeft === "11"){
             var userW = await this.userService.FindUserByUsername(playerLeft);
             var userL = await this.userService.FindUserByUsername(playerRight);
+            g.users[0].user.numberOfGame++;
+            g.users[1].user.numberOfGame++;
+            userL.numberOfGame++;
+            userW.numberOfGame++;
             history = {scoreUser1: scoreLeft , scoreUser2: scoreRight, usersId: [userW.id, userL.id]};
         }
         else{
+           
             var userL = await this.userService.FindUserByUsername(playerLeft);
             var userW = await this.userService.FindUserByUsername(playerRight);
+            g.users[0].user.numberOfGame++;
+            g.users[1].user.numberOfGame++;
+            userL.numberOfGame++;
+            userW.numberOfGame++;
             history = {scoreUser1: scoreLeft , scoreUser2: scoreRight, usersId: [userL.id, userW.id]};
         }
-
         this.gameHistoryService.AddMatchInHistory(history);
 
         await this.userService.UpdateState(g.users[0].user, "login");

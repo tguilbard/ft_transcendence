@@ -405,6 +405,23 @@ import { Achievements, Message } from "@/components/chat/ts/Chat";
           store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
            store.dispatch("SET_POPUP", 'alert');
   });
+
+   store.state.socket.off("refreshAcheivements").on("refreshAcheivements", async(username: string) => {
+      if (store.getters.GET_USER_TARGET.username == username)
+      {
+        store.dispatch(
+        "SET_LIST_ACHIEVEMENTS_TARGET",
+        await shared.getAchievements(username)
+        );
+      }
+      if (store.getters.GET_USER.username == username)
+      {
+        store.dispatch(
+        "SET_LIST_ACHIEVEMENTS",
+        await shared.getAchievements(username)
+        );
+      }
+    });
       
     this.log = true;
   },
