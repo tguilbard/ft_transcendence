@@ -27,12 +27,14 @@ export class MatchEntity
 	type: string;
 
 	@ManyToOne(type => UserEntity, (user) => user.history, {
-		nullable: false
+		nullable: false,
+		onDelete: "CASCADE"
 	})
 	user1: UserEntity
 
 	@ManyToOne(type => UserEntity, (user) => user.history, {
-		nullable: false
+		nullable: false,
+		onDelete: "CASCADE"
 	})
 	user2: UserEntity
 }

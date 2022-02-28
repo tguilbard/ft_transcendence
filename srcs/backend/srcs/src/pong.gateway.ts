@@ -323,27 +323,23 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.logger.log(scoreLeft, scoreRight);
         let history;
  
-        
+        var userW;
+		var userL;
         if (scoreLeft === "11"){
-            var userW = await this.userService.FindUserByUsername(playerLeft);
-            var userL = await this.userService.FindUserByUsername(playerRight);
-            g.users[0].user.numberOfGame++;
-            g.users[1].user.numberOfGame++;
-            userL.numberOfGame++;
-            userW.numberOfGame++;
-            history = {scoreUser1: scoreLeft , scoreUser2: scoreRight, usersId: [userW.id, userL.id]};
-        }
-        else{
-           
-            var userL = await this.userService.FindUserByUsername(playerLeft);
-            var userW = await this.userService.FindUserByUsername(playerRight);
-            g.users[0].user.numberOfGame++;
-            g.users[1].user.numberOfGame++;
-            userL.numberOfGame++;
-            userW.numberOfGame++;
-            history = {scoreUser1: scoreLeft , scoreUser2: scoreRight, usersId: [userL.id, userW.id]};
-        }
-        this.gameHistoryService.AddMatchInHistory(history);
+            userW = await this.userService.FindUserByUsername(playerLeft);
+            userL = await this.userService.FindUserByUsername(playerRight);
+		}
+		else
+		{
+			userW = await this.userService.FindUserByUsername(playerLeft);
+			userL = await this.userService.FindUserByUsername(playerRight);
+		}
+		// g.users[0].user.numberOfGame++;
+		// g.users[1].user.numberOfGame++;
+		history = {scoreUser1: scoreLeft , scoreUser2: scoreRight, usersId: [userW.id, userL.id]};
+        await this.gameHistoryService.AddMatchInHistory(history);
+		console.log("playerLeft: ", (await this.userService.FindUserByUsername(playerLeft)).achievementUnlock);
+		console.log("playerRight: ", (await this.userService.FindUserByUsername(playerRight)).achievementUnlock);
 
         await this.userService.UpdateState(g.users[0].user, "login");
         if (!this.server.sockets.adapter.rooms.get(g.users[0].socket.id))
@@ -357,8 +353,10 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         {
             var tmp = this.eloChange(userW.elo, userL.elo);
         
-            userW.elo += tmp;
-            userL.elo = (userL.elo - tmp < 0)? 0 : userL.elo - tmp;
+			this.userService.UpdateUser1(userL.id, {elo: (userL.elo - tmp < 0)? 0 : userL.elo - tmp});
+			this.userService.UpdateUser1(userW.id, {elo: userW.elo + tmp});
+            // userW.elo += tmp;
+            // userL.elo = (userL.elo - tmp < 0)? 0 : userL.elo - tmp;
         }
 
         g.endGame();

@@ -59,7 +59,12 @@ export class UsersService {
 		}
 	}
 
-	async UpdateUser(id: number, userMofidication: UpdateUserDTO): Promise<any> {
+	async UpdateUser1(id: number, userModification: Partial<UserEntity>)
+	{
+		return await this.usersRepositories.update({id: id}, {...userModification});
+	}
+
+	async UpdateUser(id: number, userMofidication): Promise<any> {
 		const saveUser = (await this.FindUserById(id)).username;
 		const userChanged = await this.usersRepositories.preload({
 			id: id,
@@ -303,7 +308,7 @@ export class UsersService {
 	async UpdateState(user: UserEntity, state: "login" | "logout" | "in match")
 	{
 		user.state = state;
-		return await this.usersRepositories.update(user.id, user);
+		return await this.usersRepositories.update({id: user.id}, {state: state});
 	}
 
 	async AddFriend(user1Id: number, user2Id: number)
@@ -369,26 +374,33 @@ export class UsersService {
 		let mask = 1;
 		
 		achievements.forEach((element, index) => {
-			mask = mask << 1;
 			userAchievements[index] = 
 			{
 				...element,
 				lock: (user.achievementUnlock & mask) == mask ? false : true
 			}
-
+			// console.log({
+			// 	...userAchievements[index],
+			// 	mask: mask
+			// });
+			mask = mask << 1;
 		});
 		return userAchievements;
 	}
 
-	async UnlockAchievement(user: UserEntity, achievement: Achievement)
+	async UnlockAchievement(userId: number, achievement: Achievement)
 	{
-		//const user = await this.usersRepositories.findOne({id : userId});
+		const user = await this.GetUser(userId);
+		//console.log("achievement: ", achievement);
+		achievement = user.achievementUnlock | achievement;
+		if (Achievement.mask == (achievement & Achievement.mask))
+			achievement = user.achievementUnlock | Achievement.perfectionnist;
+		
+		//console.log("achievement: ", achievement);
 
-		achievement = user.achievementUnlock |= achievement;
-		if ((achievement &= Achievement.mask) == Achievement.mask)
-			achievement = user.achievementUnlock |= Achievement.perfectionnist;
-
-		return await this.usersRepositories.update({id : user.id}, {achievementUnlock: achievement});
+		const value = await this.usersRepositories.update({id: user.id}, {achievementUnlock: achievement});
+		console.log(await this.usersRepositories.find({id: user.id}));
+		return value;
 	}
 
 	AchievementIsSet(user: UserEntity, achievement: Achievement)
