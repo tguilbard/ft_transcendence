@@ -48,13 +48,9 @@ export class GameHistoryService {
 			...addMatchInHistoryDTO
 		}
 
-		//console.log("number of game 1: ", await this.usersService.GetUser(matchToAdd.user1.id));
-		//console.log("number of game 2: ", await this.usersService.GetUser(matchToAdd.user2.id));
 		await this.achievementService.UnlockGameAchievementIfPossible(matchToAdd.user1, addMatchInHistoryDTO.scoreUser1, addMatchInHistoryDTO.scoreUser2);
 		await this.achievementService.UnlockGameAchievementIfPossible(matchToAdd.user2, addMatchInHistoryDTO.scoreUser2, addMatchInHistoryDTO.scoreUser1);
 
-		await this.usersService.UpdateUser1(matchToAdd.user1.id, {numberOfGame: matchToAdd.user1.numberOfGame + 1});
-		await this.usersService.UpdateUser1(matchToAdd.user2.id, {numberOfGame: matchToAdd.user2.numberOfGame + 1});
 		return await this.matchRepositories.save(matchToAdd);
 	}
 }

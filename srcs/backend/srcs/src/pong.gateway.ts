@@ -331,33 +331,46 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		}
 		else
 		{
-			userW = await this.userService.FindUserByUsername(playerLeft);
-			userL = await this.userService.FindUserByUsername(playerRight);
+			userL = await this.userService.FindUserByUsername(playerLeft);
+			userW = await this.userService.FindUserByUsername(playerRight);
 		}
-		// g.users[0].user.numberOfGame++;
-		// g.users[1].user.numberOfGame++;
 		history = {scoreUser1: scoreLeft , scoreUser2: scoreRight, usersId: [userW.id, userL.id]};
-        await this.gameHistoryService.AddMatchInHistory(history);
 		console.log("playerLeft: ", (await this.userService.FindUserByUsername(playerLeft)).achievementUnlock);
 		console.log("playerRight: ", (await this.userService.FindUserByUsername(playerRight)).achievementUnlock);
 
-        await this.userService.UpdateState(g.users[0].user, "login");
-        if (!this.server.sockets.adapter.rooms.get(g.users[0].socket.id))
-            await this.userService.UpdateState(g.users[0].user, "logout");
+		//cannot know if g.user[0] or g.user[1] have win;
+		let userWUpdate = {
+			numberOfGame: userW.numberOfGame + 1,
+			elo: userW.elo,
+			state: "login"
+		}
 
-        await this.userService.UpdateState(g.users[1].user, "login");
-        if (!this.server.sockets.adapter.rooms.get(g.users[1].socket.id))
-            await this.userService.UpdateState(g.users[1].user, "logout");
-        
-        if (g.privateFlag !== -1)
+		let userLUpdate = {
+			numberOfGame: userL.numberOfGame + 1,
+			elo: userL.elo,
+			state: "login"
+		}
+
+		if (g.privateFlag !== -1)
         {
             var tmp = this.eloChange(userW.elo, userL.elo);
-        
-			this.userService.UpdateUser1(userL.id, {elo: (userL.elo - tmp < 0)? 0 : userL.elo - tmp});
-			this.userService.UpdateUser1(userW.id, {elo: userW.elo + tmp});
-            // userW.elo += tmp;
-            // userL.elo = (userL.elo - tmp < 0)? 0 : userL.elo - tmp;
+			
+			userWUpdate.elo += tmp
+            userLUpdate.elo = (userL.elo - tmp < 0)? 0 : userL.elo - tmp;
         }
+		console.log("userW.elo: ", userW.elo);
+		console.log("userL.elo: ", userL.elo);
+
+        if (!this.server.sockets.adapter.rooms.get(g.users[0].socket.id))
+           userWUpdate.state = "logout";
+
+        if (!this.server.sockets.adapter.rooms.get(g.users[1].socket.id))
+			userWUpdate.state = "logout";
+		
+		await this.userService.UpdateUser1(userW.id, {...userWUpdate});
+		await this.userService.UpdateUser1(userL.id, {...userLUpdate})
+        
+		await this.gameHistoryService.AddMatchInHistory(history);
 
         g.endGame();
     }

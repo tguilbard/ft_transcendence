@@ -308,7 +308,7 @@ export class UsersService {
 	async UpdateState(user: UserEntity, state: "login" | "logout" | "in match")
 	{
 		user.state = state;
-		return await this.usersRepositories.update({id: user.id}, {state: state});
+		return await this.usersRepositories.update(user.id, user);
 	}
 
 	async AddFriend(user1Id: number, user2Id: number)
