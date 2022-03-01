@@ -67,36 +67,59 @@
                         </div>
                     </div>
                     <div>
-                        <div class="mod" v-if="block">
-                            <img class="link" @click="set_block" src="../../../assets/block3.png" alt="BAN">
+                        <div :class="[((selected_mode == 'block' || selected_mode == 'unblock') && !modeIsSet(GET_MODE, owner) && !modeIsSet(GET_MODE, admin))? 'selected': '', 'mod']">
+                            <div v-if="block">
+                                <img class="link" @click="set_date('unblock')" src="../../../assets/block3.png" alt="block">
+                            </div>
+                            <div class="mod" v-else>
+                                <img class="link" @click="set_date(block)" src="../../../assets/unblock3.png" alt="unblock">
+                            </div>
                         </div>
-                        <div class="mod" v-else>
-                            <img class="link" @click="set_block" src="../../../assets/unblock3.png" alt="BAN">
+                        <div :class="[((selected_mode == 'mute' || selected_mode == 'unmute') && !modeIsSet(GET_MODE, owner) && (!modeIsSet(GET_MODE, admin) || modeIsSet(GET_MY_MODE, owner)))? 'selected': '', 'mod']">
+                            <div v-if="modeIsSet(GET_MODE, mute)">
+                                <img class="link" @click="set_date('unmute')" src="../../../assets/mute3.png" alt="MUTE">
+                            </div>
+                            <div v-else>
+                                <img class="link" @click="set_date('mute')" src="../../../assets/unmute3.png" alt="UNMUTE">
+                            </div>
                         </div>
-                        <div class="mod" v-if="modeIsSet(GET_MODE, mute)">
-                            <img class="link" @click="set_mute" src="../../../assets/mute3.png" alt="BAN">
-                        </div>
-                        <div class="mod" v-else>
-                            <img class="link" @click="set_mute" src="../../../assets/unmute3.png" alt="BAN">
-                        </div>
-                        <div class="mod" v-if="modeIsSet(GET_MODE, ban)">
-                            <img class="link" @click="set_ban" src="../../../assets/ban3.png" alt="BAN">
-                        </div>
-                        <div class="mod" v-else>
-                            <img class="link" @click="set_ban" src="../../../assets/unban3.png" alt="BAN">
+                        <div :class="[((selected_mode == 'ban' || selected_mode == 'unban') && !modeIsSet(GET_MODE, owner) && (!modeIsSet(GET_MODE, admin) || modeIsSet(GET_MY_MODE, owner)))? 'selected': '', 'mod']">
+                            <div v-if="modeIsSet(GET_MODE, ban)">
+                                <img class="link" @click="set_date('unban')" src="../../../assets/ban3.png" alt="BAN">
+                            </div>
+                            <div v-else>
+                                <img class="link" @click="set_date('ban')" src="../../../assets/unban3.png" alt="UNBAN">
+                            </div>
                         </div>
                         <div class="mod" v-if="modeIsSet(GET_MODE, owner)">
-                            <img class="link" @click="set_admin" src="../../../assets/owner.png" alt="BAN">
+                            <img class="link" src="../../../assets/owner.png" alt="OWNER">
                         </div>
                         <div v-else class="mod">
-                            <div class="mod" v-if="modeIsSet(GET_MODE, admin)">
-                                <img class="link" @click="set_admin" src="../../../assets/admin3.png" alt="BAN">
-                            </div>
-                            <div v-else class="mod">
-                                <img class="link" @click="set_admin" src="../../../assets/unadmin3.png" alt="BAN">
+                            <div :class="[((selected_mode == 'admin' || selected_mode == 'unadmin') && !modeIsSet(GET_MODE, owner) && modeIsSet(GET_MY_MODE, owner))? 'selected': '', 'mod']">
+                                <div class="mod" v-if="modeIsSet(GET_MODE, admin)">
+                                    <img class="link" @click="set_date('unadmin')" src="../../../assets/admin3.png" alt="ADMIN">
+                                </div>
+                                <div v-else class="mod">
+                                    <img class="link" @click="set_date('admin')" src="../../../assets/unadmin3.png" alt="UNADMIN">
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div>
+                        <div v-if="selected_mode">
+                            <Datepicker :style="{ visibility: [(selected_mode != 'mute' && selected_mode != 'ban')? 'hidden': ''] }" v-model="date"></Datepicker>
+                            <div class="btn_select">
+                                <button @click="set_mode">set {{selected_mode}}</button>
+                            </div>
+                        </div>
+                        <div v-else style="visibility:hidden;">
+                            <Datepicker v-model="date"></Datepicker>
+                            <div class="btn_select">
+                                <button>selected_mode</button>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="btn_select">
                         <button @click="setPopup('')">BACK</button>
                     </div>

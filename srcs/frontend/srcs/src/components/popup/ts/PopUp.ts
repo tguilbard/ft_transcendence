@@ -3,6 +3,8 @@ import { mapGetters } from "vuex";
 import store, { UserEntity } from '../../../store';
 import shared from "../../../mixins/Mixins";
 import PopupProfil from "../Popup_profil.vue";
+import Datepicker from 'vue3-date-time-picker';
+import 'vue3-date-time-picker/dist/main.css'
 
 export interface UserElement {
   username: string,
@@ -23,10 +25,11 @@ export enum MemberType {
 }
 
 export type Avatar = File | null;
-
+          
 export default defineComponent({
 components: {
-  PopupProfil
+  PopupProfil,
+  Datepicker
 },
 props: {
     set_block: { type: Function } || null,
@@ -43,7 +46,9 @@ data: () => {
         owner: 1,
         admin: 1 << 1,
         mute: 1 << 2,
-        ban: 1 << 3
+        ban: 1 << 3,
+        date: null,
+        selected_mode: ''
     };
   },
   computed: {
@@ -58,7 +63,8 @@ data: () => {
         'GET_LIST_CHANNEL_PUBLIC',
         'GET_CHANNEL_TARGET',
         'GET_MSG_ALERT',
-        'GET_MODE'
+        'GET_MODE',
+        'GET_MY_MODE'
       ]),
   },
   methods: {
@@ -99,14 +105,16 @@ data: () => {
         if (this.modeIsSet(store.getters.GET_MODE, MemberType.ban))
           store.state.socket.emit('unbanUserServer', store.getters.GET_USER_TARGET.username, store.getters.GET_CHAN_CURRENT.realname);
         else
-          store.state.socket.emit('banUserServer', store.getters.GET_USER_TARGET.username, store.getters.GET_CHAN_CURRENT.realname);
+          store.state.socket.emit('banUserServer', store.getters.GET_USER_TARGET.username, store.getters.GET_CHAN_CURRENT.realname, this.date);
+          this.date = null;
       },
       async set_mute()
       {
         if (this.modeIsSet(store.getters.GET_MODE, MemberType.mute))
           store.state.socket.emit('unmuteUserServer', store.getters.GET_USER_TARGET.username, store.getters.GET_CHAN_CURRENT.realname);
         else
-          store.state.socket.emit('muteUserServer', store.getters.GET_USER_TARGET.username, store.getters.GET_CHAN_CURRENT.realname);
+          store.state.socket.emit('muteUserServer', store.getters.GET_USER_TARGET.username, store.getters.GET_CHAN_CURRENT.realname, this.date);
+          this.date = null;
       },
       async set_admin()
       {   
@@ -114,6 +122,28 @@ data: () => {
           store.state.socket.emit('unsetAdmin', store.getters.GET_USER_TARGET.username, store.getters.GET_CHAN_CURRENT.realname);
         else
           store.state.socket.emit('setAdmin', store.getters.GET_USER_TARGET.username, store.getters.GET_CHAN_CURRENT.realname);
+          this.date = null;
+      },
+      async set_date(mode: string)
+      {
+        // alert("je suis dans date")
+        if (store.getters.GET_USER_TARGET.username == store.getters.GET_USER.username || 
+          this.modeIsSet(store.getters.GET_MODE, MemberType.owner) ||
+          ((this.modeIsSet(store.getters.GET_MODE, MemberType.admin) || mode == 'admin' || mode == 'unadmin') && !this.modeIsSet(store.getters.GET_MY_MODE, MemberType.owner)))
+            return;
+        // alert("not return")
+        if ((this.modeIsSet(store.getters.GET_MY_MODE, MemberType.owner) || this.modeIsSet(store.getters.GET_MY_MODE, MemberType.admin))) 
+          this.selected_mode = mode;
+      },
+      async set_mode()
+      {
+        if (this.selected_mode == 'mute' || this.selected_mode == 'unmute')
+          this.set_mute();
+        else if (this.selected_mode == 'ban' || this.selected_mode == 'unban')
+          this.set_ban();
+        else if (this.selected_mode == 'admin' || this.selected_mode == 'unadmin')
+          this.set_admin();
+        this.selected_mode = '';
       },
       set_pass(): void {
         if (this.mdp == this.mdp2)

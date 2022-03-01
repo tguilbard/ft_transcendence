@@ -229,6 +229,8 @@ export class ChatService {
 
 	async SetMuteMember(memberToMute: MemberEntity, muteUntil: Date = null)
 	{
+		this.UnsetAdminMember(memberToMute);
+		this.SetUnbanMember(memberToMute);
 		this.ChangeMemberAuthorization(memberToMute, "set", MemberType.mute);
 		memberToMute.MuteUntil = muteUntil;
 
@@ -237,7 +239,7 @@ export class ChatService {
 
 	async SetUnmuteMember(memberToUnmute: MemberEntity)
 	{
-		this.ChangeMemberAuthorization(memberToUnmute, "unset", MemberType.mute);
+		await this.ChangeMemberAuthorization(memberToUnmute, "unset", MemberType.mute);
 		memberToUnmute.MuteUntil = null;
 
 		return await this.memberRepository.update({id: memberToUnmute.id}, memberToUnmute);
@@ -245,6 +247,8 @@ export class ChatService {
 
 	async SetBanMember(memberToBan: MemberEntity, banUntil: Date = null)
 	{
+		await this.UnsetAdminMember(memberToBan);
+		await this.SetUnmuteMember(memberToBan);
 		this.ChangeMemberAuthorization(memberToBan, "set", MemberType.ban);
 		memberToBan.BanUntil = banUntil;
 		return await this.memberRepository.update({id: memberToBan.id}, memberToBan);
@@ -260,6 +264,8 @@ export class ChatService {
 
 	async SetAdminMember(memberToPromoteAdmin: MemberEntity)
 	{
+		this.SetUnmuteMember(memberToPromoteAdmin);
+		this.SetUnbanMember(memberToPromoteAdmin);
 		this.ChangeMemberAuthorization(memberToPromoteAdmin, "set", MemberType.admin);
 
 		return await this.memberRepository.update({id: memberToPromoteAdmin.id}, memberToPromoteAdmin);
@@ -411,6 +417,33 @@ export class ChatService {
 			.getMany()
 	}
 
+	async checkModeInMembers(server: any)
+	{
+		const list = await this.GetMembers();
+		let date = new Date();
+		list.forEach(e => {
+			if (e.MuteUntil && e.MuteUntil <= date)
+			{
+				this.SetUnmuteMember(e);
+				// server.to(payload[1]).emit('setMod', member.mode);
+				// server.to(client.id).emit('setMyMod', member.mode, chanTarget.name);
+				// return await this.GetMember(member.id);
+				if (server)
+					server.emit("new_mode", e.channel.name, e.user.username, e.mode);
+			}
+			if (e.BanUntil && e.BanUntil <= date)
+			{
+				this.SetUnbanMember(e);
+				if (server)
+					server.emit("new_mode", e.channel.name, e.user.username, e.mode);
+
+				// server.to(payload[1]).emit('setMod', e.mode);
+				// server.to(client.id).emit('setMyMod', member.mode, chanTarget.name);
+			}
+
+		} )
+	}
+
 	async GetMemberByUserIdAndChannelId(userId: number, channelId: number, columnToAdd?)
 	{
 		const qb = this.qbService.Create("member", this.memberRepository)
@@ -428,6 +461,7 @@ export class ChatService {
 		return list;
 	  let memberList = await this.GetMemberInChannelByChannelId(chan.id, ["free", "constrain"])
 	  for (let member of memberList) {
+		  	member.user.mode = member.mode;
 			list.push(member.user);
 		}
 	  return list;

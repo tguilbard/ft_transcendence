@@ -2,10 +2,13 @@ import { Injectable, NestMiddleware } from '@nestjs/common'
 import { UsersService } from 'src/users/users.service'
 import { Request, Response } from 'express'
 import * as jwt from 'jsonwebtoken'
+import { ChatService } from 'src/chat/chat.service';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
-  
+  constructor(
+		private readonly chatService: ChatService
+	){}
   use(req: Request, res: Response, next: () => void) {
     const path = req.path;
     // console.log("path = ", path);

@@ -13,6 +13,7 @@ import { UserEntity } from './users/entities/users.entity';
 import { ChatGateway, SocketUser } from './app.gateway';
 import { Index } from 'typeorm';
 import { GameHistoryService } from './game-history/game-history.service';
+import { ChatService } from './chat/chat.service';
 const DataURIParser = require('datauri/parser');
 
 const datauri = new DataURIParser();
@@ -116,7 +117,7 @@ function lunchServerPhaser(left: string, right: string, flag: number) {
 @WebSocketGateway()
 export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit {
 
-    constructor(private readonly userService: UsersService, private readonly gameHistoryService : GameHistoryService )
+    constructor(private readonly userService: UsersService, private readonly chatService: ChatService, private readonly gameHistoryService : GameHistoryService )
     {}
 
     init1: user[] = [];
@@ -216,7 +217,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         const socket = this.findSocketInUserSocketObject(user_target.id);
         if (!socket)
             return;
-        console.log("user rcv_game", user);
         this.server.to(socket.id).emit("rcv_inv_game", user);
     }
 
@@ -374,6 +374,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         var j: number = 0;
         var type: number = 0;
         while (1) {
+            this.chatService.checkModeInMembers(this.server);
             if (this.Q[type].length >= 2) {
                 save[type] = [...this.Q[type]];
                 save[type].sort((a, b) => a.elo - b.elo);
@@ -407,7 +408,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
                         i--;
                     }
                 }
-                console.log(matchingQ[type]);
     
                 i = 0;
                 j = 0;
@@ -417,7 +417,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
                     while (j < matchingQ[type].length) {
                         if (matchingQ[type][i].max > matchingQ[type][j].min)
                         {
-                            console.log("matching", save[type][i].name, save[type][j].name);
                             lunchServerPhaser(save[type][i].name, save[type][j].name, type);
     
                             this.Q[type].splice(this.Q[type].indexOf(save[type][i]), 1);
