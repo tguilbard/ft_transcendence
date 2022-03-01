@@ -176,6 +176,11 @@ export class UsersController {
 		return await this.usersService.DeleteFriend(id1, id2);
 	}
 
+	@Get('blocked')
+	async getBlocked(@Req() req: Request){
+		return await this.usersService.getBlocked(req.User.id);
+	}
+
 	@Post("block/:id1/:id2")
 	async BlockUser(@Param("id1") id1: number, @Param("id2") id2: number)
 	{

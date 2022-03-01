@@ -68,11 +68,11 @@
                     </div>
                     <div>
                         <div :class="[((selected_mode == 'block' || selected_mode == 'unblock') && !modeIsSet(GET_MODE, owner) && !modeIsSet(GET_MODE, admin))? 'selected': '', 'mod']">
-                            <div v-if="block">
+                            <div v-if="isBlock">
                                 <img class="link" @click="set_date('unblock')" src="../../../assets/block3.png" alt="block">
                             </div>
                             <div class="mod" v-else>
-                                <img class="link" @click="set_date(block)" src="../../../assets/unblock3.png" alt="unblock">
+                                <img class="link" @click="set_date('block')" src="../../../assets/unblock3.png" alt="unblock">
                             </div>
                         </div>
                         <div :class="[((selected_mode == 'mute' || selected_mode == 'unmute') && !modeIsSet(GET_MODE, owner) && (!modeIsSet(GET_MODE, admin) || modeIsSet(GET_MY_MODE, owner)))? 'selected': '', 'mod']">

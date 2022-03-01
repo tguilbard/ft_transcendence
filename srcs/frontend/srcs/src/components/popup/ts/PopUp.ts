@@ -31,12 +31,6 @@ components: {
   PopupProfil,
   Datepicker
 },
-props: {
-    set_block: { type: Function } || null,
-    resp_inv: { type: Boolean },
-    blocked: { type: Array },
-    block: {type: Boolean},
-},
 data: () => {
     return {
         mdp: '',
@@ -66,6 +60,9 @@ data: () => {
         'GET_MODE',
         'GET_MY_MODE'
       ]),
+      isBlock() {
+        return store.getters.GET_LIST_BLOCKED.find(e => e == store.getters.GET_USER_TARGET.username);
+      }
   },
   methods: {
     async active_popup_profil()
@@ -126,14 +123,22 @@ data: () => {
       },
       async set_date(mode: string)
       {
-        // alert("je suis dans date")
         if (store.getters.GET_USER_TARGET.username == store.getters.GET_USER.username || 
           this.modeIsSet(store.getters.GET_MODE, MemberType.owner) ||
           ((this.modeIsSet(store.getters.GET_MODE, MemberType.admin) || mode == 'admin' || mode == 'unadmin') && !this.modeIsSet(store.getters.GET_MY_MODE, MemberType.owner)))
             return;
-        // alert("not return")
         if ((this.modeIsSet(store.getters.GET_MY_MODE, MemberType.owner) || this.modeIsSet(store.getters.GET_MY_MODE, MemberType.admin))) 
           this.selected_mode = mode;
+        if (mode == 'block')
+        {
+          await this.blockUser(store.getters.GET_USER.id, store.getters.GET_USER_TARGET.id);
+          store.dispatch("SET_LIST_BLOCKED", await this.getListBlocked());
+        }
+        else if (mode == 'unblock')
+        {
+          await this.unBlockUser(store.getters.GET_USER.id, store.getters.GET_USER_TARGET.id);
+          store.dispatch("SET_LIST_BLOCKED", await this.getListBlocked());
+        }
       },
       async set_mode()
       {
@@ -159,6 +164,38 @@ data: () => {
         if (num & bit_to_check)
             return true;
         return false;
+      },
+
+      async blockUser(id1: number, id2: number) {
+        const response = await fetch("http://localhost:3000/users/block/" + id1 + "/" + id2, {
+          method: "Post",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Access-Control-Max-Age": "600",
+            "Cache-Control": "no-cache",
+          },
+        });
+        if (response.ok)
+          return await response.json();
+        return [];
+      },
+    
+      async unBlockUser(id1: number, id2: number) {
+        const response = await fetch("http://localhost:3000/users/unblock/" + id1 + "/" + id2, {
+          method: "Delete",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Access-Control-Max-Age": "600",
+            "Cache-Control": "no-cache",
+          },
+        });
+        if (response.ok)
+          return await response.json();
+        return [];
       }
   },
 })

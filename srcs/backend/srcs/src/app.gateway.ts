@@ -188,16 +188,18 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		let memberTarget = await this.chatService.GetMemberByUserIdAndChannelId(userTarget.id, chanTarget.id);
 
 		if (!senderMember || !userTarget
-            || (this.modeService.modeIsSet(senderMember.mode, MemberType.admin)
-            && this.modeService.modeIsSet(memberTarget.mode, MemberType.admin))
-			|| !(this.modeService.modeIsSet(senderMember.mode, MemberType.owner)
-			|| this.modeService.modeIsSet(senderMember.mode, MemberType.admin))
-            || senderMember.id == memberTarget.id) return;
+			|| (!this.modeService.modeIsSet(senderMember.mode, MemberType.owner)
+			&& this.modeService.modeIsSet(memberTarget.mode, MemberType.admin))
+			|| (!this.modeService.modeIsSet(senderMember.mode, MemberType.owner)
+			&& !this.modeService.modeIsSet(senderMember.mode, MemberType.admin))
+			|| senderMember.id == memberTarget.id)
+				return;
 		try {
 			if (this.modeService.modeIsSet(memberTarget.mode, MemberType.ban))
 			{
 				const socket = ChatGateway.findSocketInUserSocketObject(userTarget.id);
-				socket.join(chanTarget.name);
+				if (socket)
+					socket.join(chanTarget.name);
 			}
 			await this.chatService.SetMuteMember(memberTarget, muteUntil);
 			this.server.emit("new_mode", chanTarget.name, userTarget.username, MemberType.mute);
@@ -222,11 +224,12 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		let memberTarget = await this.chatService.GetMemberByUserIdAndChannelId(userTarget.id, chanTarget.id);
 
 		if (!senderMember || !userTarget
-            || (this.modeService.modeIsSet(senderMember.mode, MemberType.admin)
-            && this.modeService.modeIsSet(memberTarget.mode, MemberType.admin))
-			|| !(this.modeService.modeIsSet(senderMember.mode, MemberType.owner)
-			|| this.modeService.modeIsSet(senderMember.mode, MemberType.admin)))
-			return;
+			|| (!this.modeService.modeIsSet(senderMember.mode, MemberType.owner)
+			&& this.modeService.modeIsSet(memberTarget.mode, MemberType.admin))
+			|| (!this.modeService.modeIsSet(senderMember.mode, MemberType.owner)
+			&& !this.modeService.modeIsSet(senderMember.mode, MemberType.admin))
+			|| senderMember.id == memberTarget.id)
+				return;
 		try {
 			await this.chatService.SetUnmuteMember(memberTarget);
 			let socket = ChatGateway.findSocketInUserSocketObject(userTarget.id);
@@ -255,11 +258,12 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		let memberTarget = await this.chatService.GetMemberByUserIdAndChannelId(userTarget.id, chanTarget.id);
 
 		if (!senderMember || !userTarget
-            || (this.modeService.modeIsSet(senderMember.mode, MemberType.admin)
-            && this.modeService.modeIsSet(memberTarget.mode, MemberType.admin))
-			|| !(this.modeService.modeIsSet(senderMember.mode, MemberType.owner)
-			|| this.modeService.modeIsSet(senderMember.mode, MemberType.admin))
-            || senderMember.id == memberTarget.id) return;
+			|| (!this.modeService.modeIsSet(senderMember.mode, MemberType.owner)
+			&& this.modeService.modeIsSet(memberTarget.mode, MemberType.admin))
+			|| (!this.modeService.modeIsSet(senderMember.mode, MemberType.owner)
+			&& !this.modeService.modeIsSet(senderMember.mode, MemberType.admin))
+			|| senderMember.id == memberTarget.id)
+				return;	
 		try {
 			await this.chatService.SetBanMember(memberTarget, banUntil);
 			let socket = ChatGateway.findSocketInUserSocketObject(userTarget.id);
@@ -286,11 +290,12 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		let memberTarget = await this.chatService.GetMemberByUserIdAndChannelId(userTarget.id, chanTarget.id);
 
 		if (!senderMember || !userTarget
-            || (this.modeService.modeIsSet(senderMember.mode, MemberType.admin)
-            && this.modeService.modeIsSet(memberTarget.mode, MemberType.admin))
-            || !(this.modeService.modeIsSet(senderMember.mode, MemberType.owner)
-			|| this.modeService.modeIsSet(senderMember.mode, MemberType.admin)))
-			return;
+			|| (!this.modeService.modeIsSet(senderMember.mode, MemberType.owner)
+			&& this.modeService.modeIsSet(memberTarget.mode, MemberType.admin))
+			|| (!this.modeService.modeIsSet(senderMember.mode, MemberType.owner)
+			&& !this.modeService.modeIsSet(senderMember.mode, MemberType.admin))
+			|| senderMember.id == memberTarget.id)
+				return;
 		try {
 			await this.chatService.SetUnbanMember(memberTarget);
 			let socket = ChatGateway.findSocketInUserSocketObject(userTarget.id);
@@ -501,7 +506,8 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			if (this.modeService.modeIsSet(memberTarget.mode, MemberType.ban))
 			{
 				const socket = ChatGateway.findSocketInUserSocketObject(userTarget.id);
-				socket.join(chanName);
+				if (socket)
+					socket.join(chanName);
 			}
 			await this.chatService.SetAdminMember(memberTarget);
 			this.server.emit("new_mode", chanName, userTarget.username, MemberType.admin);

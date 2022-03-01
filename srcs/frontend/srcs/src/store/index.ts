@@ -118,9 +118,14 @@ export default createStore({
     listMessages: {} as MessagesList,
     listMatchs: {} as Match[],
     listMatchsTarget: {} as Match[],
-    friends: {} as UserEntity[]
+    friends: {} as UserEntity[],
+    listBlocked: [],
+    blocked: String
   },
   mutations: {
+    SET_LIST_BLOCKED(state, value: string[]) {
+      state.listBlocked = value;
+    },
     SET_FRIENDS(state, value: UserEntity[]) {
       state.friends = value;
     },
@@ -308,6 +313,9 @@ export default createStore({
     },
     GET_FRIENDS(state) {
       return state.friends;
+    },
+    GET_LIST_BLOCKED(state) {
+      return state.listBlocked;
     }
   },
   actions: {
@@ -404,6 +412,9 @@ export default createStore({
     },
     SET_FRIENDS(context, value: UserEntity[]) {
       context.commit("SET_FRIENDS", value);
+    },
+    SET_LIST_BLOCKED(context, value: string[]) {
+      context.commit("SET_LIST_BLOCKED", value)
     },
   },
   modules: {

@@ -325,8 +325,8 @@ export class UsersService {
 
 	async getFriends(id: number)
 	{
-		const user_list = (await (await this.GetUser(id, {relation: ['friends']})).friends);
-		return user_list;
+		const friends_list = (await (await this.GetUser(id, {relation: ['friends']})).friends);
+		return friends_list;
 	}
 
 	async DeleteFriend(user1Id: number, user2Id: number)
@@ -346,6 +346,9 @@ export class UsersService {
 
 	async BlockUser(userWhoBlockId: number, userBlockedId: number)
 	{
+		console.log('je suis dans blockuser')
+		// console.log(await this.FindUserById(userWhoBlockId));
+		// console.log(await this.FindUserById(userBlockedId));
 		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
 		const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
 	
@@ -354,12 +357,23 @@ export class UsersService {
 
 	async UnblockUser(userWhoBlockId: number, userBlockedId: number)
 	{
+		console.log('je suis dans unblockuser')
 		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: "blockedUsers"});
 		const userBlocked = await this.GetUser(userBlockedId, {relation: "blockedUsers"});
 	
 		userWhoBlock.blockedUsers = [...userWhoBlock.BlockedUsers, userBlocked];
 		
 		return await this.usersRepositories.update({id: userWhoBlock.id}, {blockedUsers: userWhoBlock.blockedUsers});
+	}
+
+	async getBlocked(id: number)
+	{
+		const list = (await (await this.GetUser(id, {relation: ['blockedUsers']})).blockedUsers);
+		let blocked_list = [];
+		list.forEach(e => {
+			blocked_list.push(e.username);
+		})
+		return blocked_list;
 	}
 
 	async GetUserAchievementList(user: UserEntity)

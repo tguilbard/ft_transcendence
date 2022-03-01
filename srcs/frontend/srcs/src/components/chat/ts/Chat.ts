@@ -114,12 +114,9 @@ export class Message {
 })
 export default class Chat extends Vue {
 
-  private blocked: string[] = [];
+  // private blocked: string[] = [];
   private inputMsg = '';
   private colored = false;
-  private block = false;
-  private mod = "";
-  private my_block = false;
 
   private my_owner = 1;
   private my_admin = 1 << 1;
@@ -139,6 +136,7 @@ export default class Chat extends Vue {
     const user = await shared.getMyUser();
 
     store.dispatch("SET_USER", user);
+    store.dispatch("SET_LIST_BLOCKED", await this.getListBlocked());
     
     this.refresh();
 
@@ -207,7 +205,7 @@ export default class Chat extends Vue {
  
     // alert(userMode);
     if (typeof newMsg !== 'undefined' && typeof channel !== 'undefined') {
-      if (this.blocked.indexOf(newMsg.username) === -1) {
+      if (store.getters.GET_LIST_BLOCKED.indexOf(newMsg.username) === -1) {
         const tmp= store.state.listChannel;
         if (!tmp.find(e => e.realname == channel.realname)) {
           tmp.push(channel);
@@ -226,7 +224,7 @@ export default class Chat extends Vue {
     channel.realname = channel.name;
     channel.name = '';
     if (typeof newMsg !== 'undefined' && typeof channel !== 'undefined') {
-      if (this.blocked.indexOf(newMsg.username) === -1) {
+      if (store.getters.GET_LIST_BLOCKED.indexOf(newMsg.username) === -1) {
         const tmp = store.state.chanPrivate;
         if (!tmp.find(e => e.realname == channel.realname)) {
           if (channel.mode == 8) {
@@ -572,14 +570,14 @@ store.state.socket.off('leave_channel').on('leave_channel', async (chanName: str
     }
 
     if (msg.substring(0, 7) === "/block ") {
-      if (this.blocked.indexOf(msg.substring(7)) === -1) {
-        this.blocked.push(msg.substring(7));
+      if (store.getters.GET_LIST_BLOCKED.indexOf(msg.substring(7)) === -1) {
+        store.getters.GET_LIST_BLOCKED.push(msg.substring(7));
       }
     }
     else if (msg.substring(0, 9) === "/unblock ") {
-      const index: number = this.blocked.indexOf(msg.substring(9));
+      const index: number = store.getters.GET_LIST_BLOCKED.indexOf(msg.substring(9));
       if (index != -1)
-        this.blocked.splice(index, 1);
+        store.getters.GET_LIST_BLOCKED.splice(index, 1);
     }
     else if (msg.substring(0, 6) === "/mute ") {
       const data = msg.split(" ", 3);
@@ -645,11 +643,11 @@ store.state.socket.off('leave_channel').on('leave_channel', async (chanName: str
     if (user_target.state == '')
       user_target = await shared.getUserByUsername(user_target.username);
     store.dispatch("SET_USER_TARGET", user_target);
-    const index: number = this.blocked.indexOf(user_target.username);
-    if (index != -1)
-      this.block = true;
-    else
-      this.block = false;
+    const index: number = store.getters.GET_LIST_BLOCKED.indexOf(user_target.username);
+    // if (index != -1)
+    //   this.block = true;
+    // else
+    //   this.block = false;
     await store.dispatch("SET_MODE", await this.getMode(user_target.username));
     store.dispatch("SET_POPUP", 'profil_mode');
     store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
@@ -723,17 +721,17 @@ store.state.socket.off('leave_channel').on('leave_channel', async (chanName: str
     store.state.socket.emit('leaveChanServer', store.getters.GET_CHAN_CURRENT.realname);
   }
 
-  private set_block(): void {
-    const index: number = this.blocked.indexOf(store.getters.GET_USER_TARGET.username);
-    if (index != -1) {
-      this.blocked.splice(index, 1);
-      this.block = false;
-    }
-    else {
-      this.blocked?.push(store.getters.GET_USER_TARGET.username);
-      this.block = true;
-    }
-  }
+  // private set_block(): void {
+  //   const index: number = this.blocked.indexOf(store.getters.GET_USER_TARGET.username);
+  //   if (index != -1) {
+  //     this.blocked.splice(index, 1);
+  //     this.block = false;
+  //   }
+  //   else {
+  //     this.blocked?.push(store.getters.GET_USER_TARGET.username);
+  //     this.block = true;
+  //   }
+  // }
 
   private async refresh() {
     await store.dispatch("SET_MY_MODE", await this.getMyMode());
@@ -761,6 +759,21 @@ store.state.socket.off('leave_channel').on('leave_channel', async (chanName: str
         })
         store.dispatch("SET_LIST_CHAN_PRIVATE", tmp);
       }
+  }
+
+  private async getListBlocked(): Promise<string[]> {
+    const response = await fetch("http://localhost:3000/users/blocked", {
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Access-Control-Max-Age": "600",
+        "Cache-Control": "no-cache",
+      },
+    });
+    if (response.ok) return await response.json();
+    return [];
   }
 
   setMode(num: number, bit_to_set: number): number {
