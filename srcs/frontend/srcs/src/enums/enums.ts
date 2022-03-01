@@ -1,4 +1,4 @@
-export enum Achievement {
+export enum AchievementType {
 	novice = 1,
 	apprentice = 1 << 1,
 	adept = 1 << 2,

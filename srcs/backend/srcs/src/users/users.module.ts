@@ -9,14 +9,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { AvatarModule } from './avatar/avatar.module';
 import DatabaseFilesService from './avatar/avatar.service';
 import DatabaseFile from './avatar/entities/avatar.entity'
-import { MessageModule } from 'src/channel/message/message.module';
 import { QueryBuilderService } from 'src/generics/class/query-builder.service';
-import { ChannelModule } from 'src/channel/channel.module';
 import { AchievementModule } from 'src/achievement/achievement.module';
+import { ChatModule } from 'src/chat/chat.module';
 
 
 @Module({
-  imports:[TypeOrmModule.forFeature([UserEntity]), forwardRef(() => TfaModule), forwardRef(() => ChannelModule),
+  imports:[TypeOrmModule.forFeature([UserEntity]), forwardRef(() => TfaModule), forwardRef(() => ChatModule),
   TypeOrmModule.forFeature([DatabaseFile]),
   HttpModule,
   AchievementModule,
@@ -24,7 +23,6 @@ import { AchievementModule } from 'src/achievement/achievement.module';
     secret: 'secret',
     signOptions: { expiresIn: '60s' },
   }),
-  forwardRef(() => MessageModule),
   AvatarModule],
   controllers: [UsersController],
   providers: [UsersService, DatabaseFilesService,  QueryBuilderService],

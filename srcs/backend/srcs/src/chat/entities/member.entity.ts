@@ -1,5 +1,5 @@
-import { ChannelEntity } from "src/channel/entities/channel.entity";
-import { ModeService } from "src/channel/generics/mode.class";
+import { ChannelEntity } from "src/chat/entities/channel.entity";
+import { ModeService } from "src/chat/generics/mode.class";
 import { TimeStampEntity } from "src/generics/entities/timestamp.entity";
 import { UserEntity } from "src/users/entities/users.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from "typeorm";

@@ -9,7 +9,6 @@ import { lastValueFrom } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as jwt from 'jsonwebtoken'
 import { Request, Response } from 'express';
-import { MessageService } from 'src/channel/message/message.service';
 import { parse } from 'cookie';
 import { Socket } from 'socket.io';
 import { QueryBuilderService } from 'src/generics/class/query-builder.service';
@@ -17,7 +16,7 @@ import { Achievement } from 'src/achievement/enums/achievement.enum';
 import { UserEntity } from './entities/users.entity';
 import { AchievementService } from 'src/achievement/achievement.service';
 import { GetUserAchievementListDTO } from './dto/get-user-achievement-list.dto';
-import { ChannelService } from 'src/channel/channel.service';
+import { ChatService } from 'src/chat/chat.service';
 
 @Injectable()
 export class UsersService {
@@ -25,8 +24,7 @@ export class UsersService {
 		@InjectRepository(UserEntity)
 		private usersRepositories: Repository<UserEntity>,
 		private readonly httpService: HttpService, private readonly jwt: JwtService,
-		private messageService: MessageService,
-		private channelService: ChannelService,
+		private readonly chatService : ChatService,
 		private qbService : QueryBuilderService,
 		@Inject(forwardRef(() => AchievementService))
 		private achievementService: AchievementService,
@@ -69,7 +67,7 @@ export class UsersService {
 		});
 		let newUser = await this.usersRepositories.save(userChanged);
 		if (newUser)
-			return await this.channelService.RenameUserInChannelPrivateMessage(id, saveUser, userMofidication.username);
+			return await this.chatService.RenameUserInChannelPrivateMessage(id, saveUser, userMofidication.username);
 		return null;
 	}
 
@@ -100,8 +98,8 @@ export class UsersService {
 	}
 
 	async ActivateTfa(userId: number) {
-		this.UnlockAchievement(await this.usersRepositories.findOne(userId), Achievement.locker);
 		await this.usersRepositories.update(userId, { tfaActivated: true })
+		this.achievementService.UnlockLocker(await this.GetUser(userId));
 	}
 
 	async FindUserByLogin(login: string): Promise<UserEntity> {
@@ -314,9 +312,15 @@ export class UsersService {
 			return;
 		const user1 = await this.GetUser(user1Id, {relation: ["friends"]});
 		const user2 = await this.GetUser(user2Id, {relation: ["friends"]});
-		user1.friends = [...user1.friends, user2];
-		user1.numberOfFriend += 1;
-		return await this.usersRepositories.save(user1);
+
+		const user1Update = {
+			id: user1.id,
+			friends: [...user1.friends, user2],
+			numberOfFriend: user1.numberOfFriend + 1
+		}
+		const newUser = await this.usersRepositories.save(user1Update);
+		this.achievementService.CheckNumberOfFriend(await this.GetUser(newUser.id));
+		return newUser;
 	}
 
 	async getFriends(id: number)
@@ -332,7 +336,11 @@ export class UsersService {
 		const user1 = await this.GetUser(user1Id, {relation: ["friends"]});
 		const user2 = await this.GetUser(user2Id, {relation: ["friends"]});
 		const index = user1.friends.findIndex(element => element.id == user2Id);
-		user1.friends.splice(index, 1);
+		const user1Update = {
+			id: user1.id,
+			friends: user1.friends.splice(index, 1),
+			numberOfFriend: user1.numberOfFriend - 1
+		}
 		return await this.usersRepositories.save(user1);
 	}
 
@@ -359,20 +367,23 @@ export class UsersService {
 		const achievements = AchievementService.achievementList;
 		let userAchievements: GetUserAchievementListDTO[] = [];
 		let mask = 1;
-
+		
 		achievements.forEach((element, index) => {
+			mask = mask << 1;
 			userAchievements[index] = 
 			{
 				...element,
 				lock: (user.achievementUnlock & mask) == mask ? false : true
 			}
-			mask = mask << 1;
+
 		});
 		return userAchievements;
 	}
 
-	async UnlockAchievement(user: UserEntity, achievement: number)
+	async UnlockAchievement(user: UserEntity, achievement: Achievement)
 	{
+		//const user = await this.usersRepositories.findOne({id : userId});
+
 		achievement = user.achievementUnlock |= achievement;
 		if ((achievement &= Achievement.mask) == Achievement.mask)
 			achievement = user.achievementUnlock |= Achievement.perfectionnist;
@@ -380,7 +391,7 @@ export class UsersService {
 		return await this.usersRepositories.update({id : user.id}, {achievementUnlock: achievement});
 	}
 
-	AchievementIsSet(user: UserEntity, achievement: number)
+	AchievementIsSet(user: UserEntity, achievement: Achievement)
 	{
 		if ((user.achievementUnlock & achievement) == achievement)
 			return true;

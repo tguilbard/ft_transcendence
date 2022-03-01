@@ -10,6 +10,7 @@ export class AvatarController {
 		private readonly usersService: UsersService,
 		private readonly avatarService: AvatarService,
 	) { }
+
     @Patch()
 	@UseInterceptors(FileInterceptor('img'))
 	async UpdateAvatar(@UploadedFile() file: Express.Multer.File, @Req() req: Request) {

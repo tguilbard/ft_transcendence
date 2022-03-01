@@ -80,470 +80,6 @@
                   </div>
                 </div>
               </div>
-
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>    
-
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-for="item in GET_FRIENDS" :key="item">
-                <div
-                  v-if="item.username != GET_USER.username"
-                  class="logo_connection"
-                >
-                  <div>
-                    <p
-                      class="link"
-                      @click="active_pop_profil(item)"
-                      style="text-align: left"
-                    >
-                      {{ item.username }}
-                    </p>
-                  </div>
-                  <div>
-                    <div v-if="item.state == 'login'" class="mod">
-                      <img src="../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="item.state == 'in match'" class="mod">
-                      <img src="../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else class="mod">
-                      <img src="../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
-
             </div>
           </div>
         </div>
@@ -562,12 +98,12 @@
             <div class="container_block_acheivements">
               <div
                 class="block_acheivements"
-                v-for="(item, index) in GET_LIST_ACHIEVEMENTS"
-                :key="index"
+                v-for="item in GET_LIST_ACHIEVEMENTS"
+                :key="item"
               >
                 <div @click="setAchievement(item)" class="color1">
                   <div>
-                    <div v-if="index % 2">
+                    <div v-if="item.lock">
                       <img
                         v-bind:src="
                           require('../assets/lock/' + item.imageLockName)
@@ -722,7 +258,6 @@ import { Achievements, Message } from "@/components/chat/ts/Chat";
       if (response.ok) return await response.json();
       return [];
     },
-
     async active_pop_profil(user: UserEntity): Promise<void> {
       if (user.state == "") {
         const myUser = await shared.getUserByUsername(user.username);
@@ -730,12 +265,13 @@ import { Achievements, Message } from "@/components/chat/ts/Chat";
       }
       store.dispatch("SET_USER_TARGET", user);
       await store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
-      store.commit("SET_POPUP", "profil");
       store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(user.username));
       await store.dispatch(
         "SET_IMG_TARGET",
         await shared.get_avatar(user.username)
       );
+      store.dispatch("SET_LIST_ACHIEVEMENTS_TARGET", await shared.getAchievements(user.username));
+      store.commit("SET_POPUP", "profil");
     },
     async refresh() {
       await store.dispatch("SET_MY_MODE", await this.getMyMode());
@@ -869,6 +405,23 @@ import { Achievements, Message } from "@/components/chat/ts/Chat";
           store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
            store.dispatch("SET_POPUP", 'alert');
   });
+
+   store.state.socket.off("refreshAcheivements").on("refreshAcheivements", async(username: string) => {
+      if (store.getters.GET_USER_TARGET.username == username)
+      {
+        store.dispatch(
+        "SET_LIST_ACHIEVEMENTS_TARGET",
+        await shared.getAchievements(username)
+        );
+      }
+      if (store.getters.GET_USER.username == username)
+      {
+        store.dispatch(
+        "SET_LIST_ACHIEVEMENTS",
+        await shared.getAchievements(username)
+        );
+      }
+    });
       
     this.log = true;
   },

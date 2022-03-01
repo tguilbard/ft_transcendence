@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AchievementService } from './achievement.service';
 import { AchievementController } from './achievement.controller';
 import { UsersModule } from 'src/users/users.module';
-import { MemberModule } from 'src/channel/member/member.module';
 
 @Module({
   imports: [forwardRef(() => UsersModule)],

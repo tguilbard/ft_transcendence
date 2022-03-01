@@ -131,7 +131,7 @@
     height: auto;
 }
 
-.mod {
+.mod, .mod div {
     display: inline;
     margin: 1px;
 }
@@ -176,6 +176,11 @@
     -webkit-text-stroke-color: rgb(0, 0, 0);
     font-size: 1.5vmax;
     border-color: #fff12c;
+}
+
+.selected img {
+    border-radius: 7px 7px 7px 7px;
+    border: 2px solid #fff12c;
 }
 
 .logo_connection {

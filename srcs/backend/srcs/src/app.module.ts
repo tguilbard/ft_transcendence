@@ -7,14 +7,12 @@ import { TfaModule } from './auth/tfa/tfa.module';
 import { NestModule, MiddlewareConsumer, Module } from '@nestjs/common';
 import { NODE_ENV_DEV, NODE_ENV_PROD } from './constant';
 import { AuthMiddleware } from './auth/middleware/resgister.middleware';
-import { MessageModule } from './channel/message/message.module';
-import { ChannelModule } from './channel/channel.module';
-import { MemberModule } from './channel/member/member.module';
 import { QueryBuilderService } from './generics/class/query-builder.service';
 import { ChatGateway } from './app.gateway';
 import { AchievementModule } from './achievement/achievement.module';
 import { GameHistoryModule } from './game-history/game-history.module';
 import { PongGateway } from './pong.gateway';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -42,11 +40,12 @@ import { PongGateway } from './pong.gateway';
   }),
     UsersModule,
     TfaModule,
-	MessageModule,
-	ChannelModule,
-	MemberModule,
+	// MessageModule,
+	// ChannelModule,
+	// MemberModule,
 	AchievementModule,
     GameHistoryModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService, QueryBuilderService, ChatGateway, PongGateway],

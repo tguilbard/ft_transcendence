@@ -1,8 +1,8 @@
 import { TimeStampEntity } from "src/generics/entities/timestamp.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ChannelType } from "../enum/channel-type.enum";
-import { MemberEntity } from "../member/entities/member.entity";
-import { MessageEntity } from "../message/entitites/message.entity";
+import { MemberEntity } from "./member.entity";
+import { MessageEntity } from "./message.entity";
 
 
 @Entity('Channels')
@@ -29,7 +29,7 @@ export class ChannelEntity extends TimeStampEntity {
 	})
 	password: string;
 
-	@OneToMany(type => MessageEntity, (message) => message.channel, {
+	@OneToMany(type => MessageEntity, (message) => message.member.channel, {
 		nullable: true,
 	})
 	messages: MessageEntity[];

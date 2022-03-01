@@ -6,12 +6,12 @@
         <div class="container_block_acheivements">
           <div
             class="block_acheivements"
-            v-for="(item, index) in GET_LIST_ACHIEVEMENTS"
-            :key="index"
+            v-for="item in GET_LIST_ACHIEVEMENTS_TARGET"
+            :key="item"
           >
             <div @click="setAchievement(item)" class="color1">
               <div>
-                <div v-if="index % 2">
+                <div v-if="item.lock">
                   <img
                     v-bind:src="require('../../assets/lock/' + item.imageLockName)"
                   />
@@ -39,7 +39,7 @@ import store, { Achievements } from "../../store";
 
 export default defineComponent({
   computed: {
-    ...mapGetters(["GET_POPUP", "GET_LIST_ACHIEVEMENTS", "GET_ACHIEVEMENT"]),
+    ...mapGetters(["GET_POPUP", "GET_LIST_ACHIEVEMENTS", "GET_LIST_ACHIEVEMENTS_TARGET", "GET_ACHIEVEMENT"]),
   },
   methods: {
     setPopup(value: string): void {

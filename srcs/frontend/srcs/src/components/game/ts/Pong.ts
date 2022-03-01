@@ -8,20 +8,28 @@ const Width = 800;
 const Height = 620;
 
 let background: Phaser.GameObjects.Image;
+let backgroundC: Phaser.GameObjects.Image;
 let ball: Phaser.GameObjects.Sprite;
 let player1: Phaser.GameObjects.Sprite;
 let player2: Phaser.GameObjects.Sprite;
+let star: Phaser.GameObjects.Sprite;
 
 let keysUP: Phaser.Input.Keyboard.Key;
 let keysDOWN: Phaser.Input.Keyboard.Key;
 
 let gameStarted = false;
 
-let button: Button;
+let buttonPong: Button;
+let buttonCustom: Button;
+let buttonReturn: Button;
+let returnText: Phaser.GameObjects.Text;
+let customText: Phaser.GameObjects.Text;
 let openingText: Phaser.GameObjects.Text;
 let TimerText: Phaser.GameObjects.Text;
 let player1ScoreText: Phaser.GameObjects.Text;
 let player2ScoreText: Phaser.GameObjects.Text;
+let player1Name: Phaser.GameObjects.Text;
+let player2Name: Phaser.GameObjects.Text;
 
 let oldMsg1Score: string;
 let oldMsg2Score: string;
@@ -48,6 +56,8 @@ store.state.socket.off("connect").on("connect", () => {
 class Pong extends Phaser.Scene {
 
     lock = false;
+    flag = 0;
+
 
 
     constructor () {
@@ -59,11 +69,14 @@ class Pong extends Phaser.Scene {
         this.load.image('paddle', './assets/paddle.png');
         this.load.image('ground', './assets/ground.png');
         this.load.image('button', './assets/button.png');
+        this.load.image('star', './assets/astre.png');
+        this.load.image('groundC', './assets/groundCustom.png');
     }
    
     create() {
 
         background = this.add.image(Width / 2, Height / 2, 'ground');
+        backgroundC = this.add.image(Width / 2, Height / 2, 'groundC');
 
         ball = this.add.sprite(Width / 2,
             Height / 2,
@@ -76,23 +89,63 @@ class Pong extends Phaser.Scene {
             Height / 2, // y position
             'paddle', // key of image for the sprite
         );
-        player1.setDisplaySize(14, 175);
+        player1.setDisplaySize(14, 100);
     
         player2 = this.add.sprite(
             (ball.width / 2 + 1), // x position
             Height / 2, // y position
             'paddle', // key of image for the sprite
         );
-        player2.setDisplaySize(14, 175);
+        player2.setDisplaySize(14, 100);
     
-    
+        star = this.add.sprite(
+            (ball.width / 2 + 1), // x position
+            Height / 2, // y position
+            'star', // key of image for the sprite
+        );
+        star.setDisplaySize(100, 100);
+
         keysUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         keysDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
     
-        button = new Button(this, Width / 2, Height / 2, 'button', lGrey).setDownTexture('button').setOverTint(Grey);
-        button.setDisplaySize(500, 100);
+        buttonCustom = new Button(this, Width / 2, Height * 0.25, 'button', lGrey).setDownTexture('button').setOverTint(Grey);
+        buttonCustom.setDisplaySize(500, 100);
 
-        button = this.add.existing(button);
+        buttonPong = new Button(this, Width / 2, Height * 0.5, 'button', lGrey).setDownTexture('button').setOverTint(Grey);
+        buttonPong.setDisplaySize(500, 100);
+
+        buttonReturn = new Button(this, Width / 2, Height * 0.75, 'button', lGrey).setDownTexture('button').setOverTint(Grey);
+        buttonReturn.setDisplaySize(500, 100);
+
+        buttonPong = this.add.existing(buttonPong);
+        buttonCustom = this.add.existing(buttonCustom);
+        buttonReturn = this.add.existing(buttonReturn);
+
+        returnText = this.add.text(
+            Width / 2,
+            Height * 0.75,
+            'Return',
+            {
+                fontFamily: 'Monaco, Courier, monospace',
+                fontSize: '50px',
+                // fill: '#fff'
+            }
+        );
+        returnText.setStroke('#000', 5);
+        returnText.setOrigin(0.5);
+
+        customText = this.add.text(
+            Width / 2,
+            Height * 0.25,
+            'Pong',
+            {
+                fontFamily: 'Monaco, Courier, monospace',
+                fontSize: '50px',
+                // fill: '#fff'
+            }
+        );
+        customText.setStroke('#000', 5);
+        customText.setOrigin(0.5);
 
         openingText = this.add.text(
             Width / 2,
@@ -104,8 +157,7 @@ class Pong extends Phaser.Scene {
                 // fill: '#fff'
             }
         );
-        openingText.setStroke('#000', 5);
-    
+        openingText.setStroke('#000', 5);    
         openingText.setOrigin(0.5);
     
         TimerText = this.add.text(
@@ -148,47 +200,99 @@ class Pong extends Phaser.Scene {
     
         player2ScoreText.setOrigin(0.5);
 
-        button.onClick().subscribe(() => {
+        player1Name = this.add.text(
+            0,
+            50,
+            'player1',
+            {
+                fontFamily: 'Monaco, Courier, monospace',
+                fontSize: '20px',
+                // fill: '#fff'
+            }
+        );
+    
+        player1Name.setOrigin(0, 0.5);
+
+        player2Name = this.add.text(
+            Width,
+            50,
+            'player2',
+            {
+                fontFamily: 'Monaco, Courier, monospace',
+                fontSize: '20px',
+                // fill: '#fff'
+            }
+        );
+    
+        player2Name.setOrigin(1, 0.5);
+
+        buttonPong.onClick().subscribe(() => {
             if (this.lock === false)
             {
-                store.state.socket.emit('matching', "");
+                store.state.socket.emit('matching', this.flag);
                 openingText.setText("Matching...");
                 this.lock = true;
             }
             else
             {
-                store.state.socket.emit('unmatching', "");
+                store.state.socket.emit('unmatching', this.flag);
                 openingText.setText("Press to Search");
                 this.lock = false;
             }
         })
 
+        buttonCustom.onClick().subscribe(() => {
+            if (this.flag === 0 && this.lock === false)
+            {
+                customText.setText("Astro Pong");
+                this.flag++;
+            }
+            else if (this.flag === 1 && this.lock === false)
+            {
+                customText.setText("Pong");
+                this.flag = 0;
+            }
+        })
+
+        buttonReturn.onClick().subscribe(() => {
+            gameStarted = false;
+            store.dispatch("SET_DUEL", false);
+            let check = document.getElementById("grid");
+            if (check !== null) check.style.removeProperty("display");
+            check = document.getElementById("PongBorder");
+            if (check !== null) check.style.setProperty("display", "none");
+        })
+
         background.setVisible(false);
+        backgroundC.setVisible(false);
         player1.setVisible(false);
         player2.setVisible(false);
+        star.setVisible(false);
         TimerText.setVisible(false);
         player1ScoreText.setVisible(false);
         player2ScoreText.setVisible(false);
+        player1Name.setVisible(false);
+        player2Name.setVisible(false);
 
         store.state.socket.off("ball").on("ball", (x, y) => {
-            console.log('BALL');
             ball.x = x;
             ball.y = y;
         })
     
         store.state.socket.off("player1").on("player1", (y) => {
-            console.log('PLAYER1');
             player1.y = y;
         })
     
         store.state.socket.off("player2").on("player2", (y) => {
-            console.log('PLAYER2');
             player2.y = y;
         })
 
-        
+        store.state.socket.off("star").on("star", (x, y) => {
+            star.x = x;
+            star.y = y;
+        })
+
         store.state.socket.off("1Score").on("1Score", (message) => {
-            console.log('1SCORE');
             if (oldMsg1Score != message && gameStarted === true) {
                 player1ScoreText.setText(message);
                 oldMsg1Score = message;
@@ -196,24 +300,42 @@ class Pong extends Phaser.Scene {
         })
 
         store.state.socket.off("2Score").on("2Score", (message) => {
-            console.log('2SCORE');
             if (oldMsg2Score != message && gameStarted === true) {
                 player2ScoreText.setText(message);
                 oldMsg2Score = message;
             }
         })
     
+        store.state.socket.off("setName").on("setName", (p1, p2) => {
+            console.log("TEST");
+            player1Name.setText(p1);
+            player2Name.setText(p2);
+        })
+
         store.state.socket.off("openText").on("openText", (message) => {
-            console.log('OPENTEXT : ', message);
             if (gameStarted === false)
             {
-                background.setVisible(true);
+                if (this.flag === 0)
+                {
+                    background.setVisible(true);
+                }
+                else if (this.flag === 1)
+                {
+                    backgroundC.setVisible(true);
+                    star.setVisible(true);
+                }
                 player1.setVisible(true);
                 player2.setVisible(true);
                 TimerText.setVisible(true);
                 player1ScoreText.setVisible(true);
                 player2ScoreText.setVisible(true);
-                button.setVisible(false);
+                player1Name.setVisible(true);
+                player2Name.setVisible(true);
+                buttonPong.setVisible(false);
+                buttonCustom.setVisible(false);
+                buttonReturn.setVisible(false);
+                returnText.setVisible(false);
+                customText.setVisible(false);
 
                 gameStarted = true;
             }
@@ -221,15 +343,19 @@ class Pong extends Phaser.Scene {
         })
 
         store.state.socket.off("tText").on("tText", (message) => {
-            console.log('TTEXT');
             if (oldMsgtTime != message && gameStarted === true) {
                 TimerText.setText(message);
                 oldMsgtTime == message;
             }
         })
     
-        store.state.socket.on("START", () => {
-            console.log('STARING');
+        store.state.socket.on("START", (message) => {
+            if (message === 1)
+            {
+                background.setVisible(false);
+                backgroundC.setVisible(true);
+                star.setVisible(true);
+            }
             Start();
         });
         
@@ -249,10 +375,8 @@ class Pong extends Phaser.Scene {
    
     public update() {
         if (keysUP.isDown) {
-            console.log("W");
             store.state.socket.emit("players", "UP");
         } else if (keysDOWN.isDown) {
-            console.log("S");
             store.state.socket.emit("players", "DOWN");
         }
     }
@@ -267,12 +391,20 @@ async function End() {
     ball.setVisible(false);
     await delay(3000);
     background.setVisible(false);
+    backgroundC.setVisible(false);
     player1.setVisible(false);
     player2.setVisible(false);
+    star.setVisible(false);
     TimerText.setVisible(false);
     player1ScoreText.setVisible(false);
     player2ScoreText.setVisible(false);
-    button.setVisible(true);
+    player1Name.setVisible(false);
+    player2Name.setVisible(false);
+    returnText.setVisible(true);
+    buttonPong.setVisible(true);
+    buttonCustom.setVisible(true);
+    buttonReturn.setVisible(true);
+    customText.setVisible(true);
 
     openingText.setText('Press to Search');
     player1ScoreText.setText('0');

@@ -139,6 +139,9 @@ export default class Chat extends Vue {
     const user = await shared.getMyUser();
 
     store.dispatch("SET_USER", user);
+    
+    this.refresh();
+
     store.state.socket.off('changeUsername').on("changeUsername",
     async (payload: [{ oldname: string, newname: string, oldchan: string, newchan: string }]) => {
       payload.forEach(e => {
@@ -157,8 +160,6 @@ export default class Chat extends Vue {
             chan_tmp.name = e.newname;
         }
       })
-
-      this.refresh();
       let user_target = store.getters.GET_USER_TARGET;
       if (user_target && user_target.username == payload[0].oldname)
       {
@@ -198,8 +199,13 @@ export default class Chat extends Vue {
   });
 
   store.state.socket.off('msgToClient').on('msgToClient', (newMsg: Message, channel: ChannelEntity) => {
+   
+    // alert(" je suis dans msgToClient")
+
     channel.realname = channel.name;
     channel.name = '';
+ 
+    // alert(userMode);
     if (typeof newMsg !== 'undefined' && typeof channel !== 'undefined') {
       if (this.blocked.indexOf(newMsg.username) === -1) {
         const tmp= store.state.listChannel;
@@ -328,6 +334,10 @@ export default class Chat extends Vue {
   }
 });
 
+store.state.socket.off('refresh_friends').on('refresh_friends', async () => {
+  store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
+}); 
+
 store.state.socket.off('leave_channel').on('leave_channel', async (chanName: string) => {
   if (store.getters.GET_ROOM)
   {
@@ -384,7 +394,6 @@ store.state.socket.off('leave_channel').on('leave_channel', async (chanName: str
       store.dispatch("SET_IMG_TARGET", await shared.get_avatar(username));
     if (store.getters.GET_USER.username == username)
       store.dispatch("SET_IMG", await shared.get_avatar(username));
-      // alert("src" + store.getters.GET_IMG_TARGET);
     
   });
 
@@ -392,9 +401,17 @@ store.state.socket.off('leave_channel').on('leave_channel', async (chanName: str
   //     await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
   // });
 
-  store.state.socket.off('new_mode').on('new_mode', async (chanName: string) => {
+  store.state.socket.off('new_mode').on('new_mode', async (chanName: string, username: string, mode: number) => {
+    // alert("je suis dans new mode")
     if (store.getters.GET_CHAN_CURRENT.realname == chanName)
+    {
       await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(chanName));
+      if (username == store.getters.GET_USER.username)
+        store.dispatch("SET_MY_MODE", mode);
+
+    }
+    if (store.getters.GET_USER_TARGET.username == username)
+      store.dispatch("SET_MODE", mode);
 
   });
 
@@ -636,7 +653,7 @@ store.state.socket.off('leave_channel').on('leave_channel', async (chanName: str
     await store.dispatch("SET_MODE", await this.getMode(user_target.username));
     store.dispatch("SET_POPUP", 'profil_mode');
     store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
-    store.dispatch("SET_LIST_ACHIEVEMENTS", await shared.getAchievements(store.getters.GET_USER_TARGET.username));
+    store.dispatch("SET_LIST_ACHIEVEMENTS_TARGET", await shared.getAchievements(store.getters.GET_USER_TARGET.username));
     await store.dispatch("SET_IMG_TARGET", await shared.get_avatar(user_target.username));
     store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(user_target.username));
 
@@ -678,7 +695,9 @@ store.state.socket.off('leave_channel').on('leave_channel', async (chanName: str
   }
 
   private outputMessage(message: Message, channel: ChannelEntity): void {
+
     const tab_message = store.getters.GET_LIST_MESSAGES_BY_CHAN[channel.realname];
+
     if (tab_message && tab_message.length)
       this.colored = tab_message[tab_message.length - 1].colored;
     if (tab_message.length && tab_message[tab_message.length - 1].username != message.username) {
@@ -692,7 +711,8 @@ store.state.socket.off('leave_channel').on('leave_channel', async (chanName: str
     const listMessage = store.getters.GET_LIST_MESSAGES_BY_CHAN;
     listMessage[channel.realname] = tab_message;
     store.dispatch("SET_LIST_MESSAGES_BY_CHAN", listMessage)
-    store.dispatch("SET_LIST_MESSAGES", tab_message);
+    if (store.getters.GET_CHAN_CURRENT.realname == channel.realname)
+      store.dispatch("SET_LIST_MESSAGES", tab_message);
   }
 
   private joinPrivateMessage(target: string): void {
