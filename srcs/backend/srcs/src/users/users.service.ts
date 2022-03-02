@@ -351,24 +351,29 @@ export class UsersService {
 
 	async BlockUser(userWhoBlockId: number, userBlockedId: number)
 	{
-		console.log('je suis dans blockuser')
-		// console.log(await this.FindUserById(userWhoBlockId));
-		// console.log(await this.FindUserById(userBlockedId));
+		console.log("is_block")
 		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
 		const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
-	
-		userWhoBlock.blockedUsers = [...userWhoBlock.BlockedUsers, userBlocked];
+		
+		const userWhoBlockUpdate = {
+			id: userWhoBlock.id,
+			blockedUsers: [...userWhoBlock.blockedUsers, userBlocked]
+		}
+		return await this.usersRepositories.save(userWhoBlockUpdate);
 	}
 
 	async UnblockUser(userWhoBlockId: number, userBlockedId: number)
 	{
-		console.log('je suis dans unblockuser')
+		console.log("is_unblock")
 		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: "blockedUsers"});
 		const userBlocked = await this.GetUser(userBlockedId, {relation: "blockedUsers"});
+		const index = userWhoBlock.blockedUsers.findIndex(element => element.id == userBlockedId);
 	
-		userWhoBlock.blockedUsers = [...userWhoBlock.BlockedUsers, userBlocked];
-		
-		return await this.usersRepositories.update({id: userWhoBlock.id}, {blockedUsers: userWhoBlock.blockedUsers});
+		const userWhoBlockUpdate = {
+			id: userWhoBlock.id,
+			blockedUsers: userWhoBlock.BlockedUsers.splice(index, 1)
+		}
+		return await this.usersRepositories.save(userWhoBlockUpdate);
 	}
 
 	async getBlocked(id: number)

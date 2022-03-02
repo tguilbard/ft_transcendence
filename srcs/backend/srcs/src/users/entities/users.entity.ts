@@ -80,7 +80,7 @@ export class UserEntity extends TimeStampEntity {
 	@JoinTable({name: "Friends"})
 	friends: UserEntity[]
 
-	@ManyToMany(() => UserEntity, (user) => user.friends,
+	@ManyToMany(() => UserEntity, (user) => user.blockedUsers,
 	{
 		onDelete: "CASCADE"
 	})
