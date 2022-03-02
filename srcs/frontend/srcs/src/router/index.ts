@@ -51,6 +51,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "Chat" */ '../views/Chat.vue')
   },
   {
+    path: '/github',
+    name: 'github',
+    component: () => import(/* webpackChunkName: "github" */ '../views/github.vue')
+  },
+  {
     path: '/',
     name: 'Game',
     component: () => import(/* webpackChunkName: "Game" */ '../views/Game.vue')

@@ -1,10 +1,13 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, HttpServer, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/users/entities/users.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { Achievement } from './enums/achievement.enum';
 import { numberOfFriend, NumberOfGame, PerfectGame } from './enums/achievement-value-to-success.ts';
+import { Octokit } from 'octokit';
+import { HttpService } from '@nestjs/axios';
+import { lastValueFrom, map } from 'rxjs';
 
 @Injectable()
 export class AchievementService {
@@ -12,6 +15,7 @@ export class AchievementService {
 	constructor(
 		@Inject(forwardRef(() => UsersService))
 		private usersService: UsersService,
+		private httpService: HttpService
 	){}
 
 	static achievementList = AchievementService.SetUpAchievementList()
@@ -128,4 +132,48 @@ export class AchievementService {
 	{
 		await this.usersService.UnlockAchievement(user.id, Achievement.locker);
 	}
+
+	async GetGithubAccess(param)
+	{
+
+		const headerRequest = {
+			'Accept': 'application/json',
+		};
+	
+
+		const githubReturn = await lastValueFrom(this.httpService.post('https://github.com/login/oauth/access_token', {
+										client_id: "658433bca8c14c8f8d2a",
+										client_secret: "cdb0e5b3551336a2d0c0fd1a9615402802d0015a",
+										code: param,
+										},
+										{headers: headerRequest}
+									)
+									.pipe(map(response => response.data)))
+		console.log(githubReturn);
+
+		return githubReturn;
+  	}
+
+  async FollowGithubUser(githubAccess, githubUsername: string)
+  {
+	console.log(githubAccess)
+	const octokit = new Octokit({ auth: githubAccess.token_type + " " + githubAccess.access_token });
+	const resultFollowing = await octokit.request('PUT /user/following/{username}', {
+		username: githubUsername
+		})
+	console.log("verify2")
+	return resultFollowing;
+  }
+
+  async StarGithubProject(githubAccess, githubUsername: string, githubProject: string)
+  {
+	const octokit = new Octokit({ auth: githubAccess.token_type + " " + githubAccess.access_token });
+
+	const resultFollowing = await octokit.request('PUT https://api.github.com/user/starred/{owner}/{repo}', {
+		owner: githubUsername,
+		repo: githubProject
+	  })
+
+	return resultFollowing;
+  }
 }
