@@ -655,9 +655,9 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		this.server.emit("refreshAvatar", username);
 	}
 
-	@SubscribeMessage("unclock_acheivements")
+	@SubscribeMessage("unlock_achievements")
 	async unlockAcheivements(client: Socket, payload: any) {
-		this.userService.UnlockAchievement(payload[0], payload[1]);
+		this.userService.UnlockAchievement(payload[0].id, payload[1]);
 		this.server.emit("refreshAcheivements", payload[0].username);
 	}
 

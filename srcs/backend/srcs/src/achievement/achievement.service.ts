@@ -120,6 +120,7 @@ export class AchievementService {
 
 	async UnlockFashion(user: UserEntity)
 	{
+		console.log("je suis dans unlock fashion")
 		await this.usersService.UnlockAchievement(user.id, Achievement.fashion);
 	}
 

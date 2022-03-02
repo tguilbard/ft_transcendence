@@ -412,7 +412,7 @@ export default defineComponent({
         .then((response) => {
           if (response.ok) {
             store.state.socket.emit("refreshAvatar", store.getters.GET_USER.username);
-            store.state.socket.emit("unclock_acheivements", store.getters.GET_USER, AchievementType.fashion);
+            store.state.socket.emit("unlock_achievements", store.getters.GET_USER, AchievementType.fashion);
           } else {
             return response.json();
           }
