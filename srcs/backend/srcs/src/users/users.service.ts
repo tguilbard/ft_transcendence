@@ -357,7 +357,8 @@ export class UsersService {
 		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
 		const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
 	
-		userWhoBlock.blockedUsers = [...userWhoBlock.BlockedUsers, userBlocked];
+		userWhoBlock.blockedUsers = [...userWhoBlock.blockedUsers, userBlocked];
+		return await this.usersRepositories.update({id: userWhoBlock.id}, {blockedUsers: userWhoBlock.blockedUsers});
 	}
 
 	async UnblockUser(userWhoBlockId: number, userBlockedId: number)
@@ -366,7 +367,9 @@ export class UsersService {
 		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: "blockedUsers"});
 		const userBlocked = await this.GetUser(userBlockedId, {relation: "blockedUsers"});
 	
-		userWhoBlock.blockedUsers = [...userWhoBlock.BlockedUsers, userBlocked];
+		// const userWhoBlockUpdate = {BlockedUsers: }
+
+		userWhoBlock.blockedUsers = [...userWhoBlock.blockedUsers, userBlocked];
 		
 		return await this.usersRepositories.update({id: userWhoBlock.id}, {blockedUsers: userWhoBlock.blockedUsers});
 	}
