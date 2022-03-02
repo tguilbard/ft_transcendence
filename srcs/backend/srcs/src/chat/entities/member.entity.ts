@@ -38,7 +38,8 @@ export class MemberEntity extends TimeStampEntity {
 
 	@ManyToOne(type => UserEntity, {
 		cascade: false, 
-		nullable: false
+		nullable: false,
+		onDelete: "CASCADE"
 	})
 	user: UserEntity
 	// @JoinColumn()

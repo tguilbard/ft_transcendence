@@ -1,4 +1,3 @@
-//import { MatchEntity } from 'src/match-history/entity/match-history.entity';
 import { TimeStampEntity } from '../../generics/entities/timestamp.entity';
 import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, ManyToMany, OneToMany, JoinTable } from 'typeorm'
 import DatabaseFile from "../avatar/entities/avatar.entity"
@@ -74,11 +73,17 @@ export class UserEntity extends TimeStampEntity {
 	})
 	numberOfFriend: number
 
-	@ManyToMany(() => UserEntity, (user) => user.friends)
+	@ManyToMany(() => UserEntity, (user) => user.friends,
+	{
+		onDelete: "CASCADE"
+	})
 	@JoinTable({name: "Friends"})
 	friends: UserEntity[]
 
-	@ManyToMany(() => UserEntity, (user) => user.friends)
+	@ManyToMany(() => UserEntity, (user) => user.friends,
+	{
+		onDelete: "CASCADE"
+	})
 	@JoinTable({name: "blockedUsers"})
 	blockedUsers: UserEntity[]
 

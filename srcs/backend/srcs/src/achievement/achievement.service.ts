@@ -61,62 +61,70 @@ export class AchievementService {
 	async CheckNumberOfGame(user: UserEntity)
 	{
 		console.log ("nb partie = " + user.numberOfGame + " et unlock novice a " + NumberOfGame.novice);
-		if (this.usersService.AchievementIsSet(user, Achievement.novice) == false && user.numberOfGame >= NumberOfGame.novice)
+		if (this.usersService.AchievementIsSet(user, Achievement.novice) == false && user.numberOfGame + 1 >= NumberOfGame.novice)
 		{
-			console.log("ublock novice")
-			await this.usersService.UnlockAchievement(user, Achievement.novice);
+			console.log("UNLOCK NOVICE")
+			await this.usersService.UnlockAchievement(user.id, Achievement.novice);
 		}
-		else if (this.usersService.AchievementIsSet(user, Achievement.adept) == false && user.numberOfGame >= NumberOfGame.apprentice)
+		if (this.usersService.AchievementIsSet(user, Achievement.apprentice) == false && user.numberOfGame + 1 >= NumberOfGame.apprentice)
 		{
-			await this.usersService.UnlockAchievement(user, Achievement.adept);
+			console.log("UNLOCK APPRENTICE")
+			await this.usersService.UnlockAchievement(user.id, Achievement.apprentice);
 		}
-		else if (this.usersService.AchievementIsSet(user, Achievement.expert) == false && user.numberOfGame >= NumberOfGame.expert)
+		if (this.usersService.AchievementIsSet(user, Achievement.expert) == false && user.numberOfGame + 1 >= NumberOfGame.expert)
 		{
-			await this.usersService.UnlockAchievement(user, Achievement.expert);
+			console.log("UNLOCK EXPERT")
+			await this.usersService.UnlockAchievement(user.id, Achievement.expert);
 		}
-		else if (this.usersService.AchievementIsSet(user, Achievement.master) == false && user.numberOfGame >= NumberOfGame.master)
+		if (this.usersService.AchievementIsSet(user, Achievement.master) == false && user.numberOfGame + 1 >= NumberOfGame.master)
 		{
-			await this.usersService.UnlockAchievement(user, Achievement.master);
+			console.log("UNLOCK MASTER")
+			await this.usersService.UnlockAchievement(user.id, Achievement.master);
 		}
 	}
 
-	async CheckScore(user: UserEntity, userScore: number, oppponentScore: number)
+	async CheckScore(user: UserEntity, userScore: number, opponentScore: number)
 	{
-		if (this.usersService.AchievementIsSet(user, Achievement.conqueror) == false && userScore == PerfectGame.winnerScore && oppponentScore == PerfectGame.loserScore)
+		console.log("conqueror is set: ", this.usersService.AchievementIsSet(user, Achievement.conqueror), "\nuserScore: ", userScore, "\nopponentScore: ", opponentScore)
+		if (this.usersService.AchievementIsSet(user, Achievement.conqueror) == false && userScore == PerfectGame.winnerScore && opponentScore == PerfectGame.loserScore)
 		{
-			await this.usersService.UnlockAchievement(user, Achievement.conqueror);
+			console.log("UNLOCK CONQUEROR")
+			await this.usersService.UnlockAchievement(user.id, Achievement.conqueror);
 		}
-		else if (this.usersService.AchievementIsSet(user, Achievement.loser) == false && userScore == PerfectGame.loserScore && oppponentScore == PerfectGame.winnerScore)
+		console.log("loser is set: ", this.usersService.AchievementIsSet(user, Achievement.conqueror), "\nuserScore: ", userScore, "\nopponentScore: ", opponentScore)
+		if (this.usersService.AchievementIsSet(user, Achievement.loser) == false && userScore == PerfectGame.loserScore && opponentScore == PerfectGame.winnerScore)
 		{
-			await this.usersService.UnlockAchievement(user, Achievement.loser);
+			console.log("UNLOCK LOSER")
+			await this.usersService.UnlockAchievement(user.id, Achievement.loser);
 		}
 	}
 
-	async UnlockGameAchievementIfPossible(user: UserEntity, userScore: number, oppponentScore: number)
+	async UnlockGameAchievementIfPossible(user: UserEntity, userScore: number, opponentScore: number)
 	{
 		await this.CheckNumberOfGame(user);
-		await this.CheckScore(user, userScore, oppponentScore);
+		//console.log("its okay: ", user, " ", userScore, " ", opponentScore);
+		await this.CheckScore(user, userScore, opponentScore);
 	}
 
 	async CheckNumberOfFriend(user: UserEntity)
 	{
 		if (this.usersService.AchievementIsSet(user, Achievement.notAlone) == false && user.numberOfFriend == numberOfFriend.notAlone)
 		{
-			await this.usersService.UnlockAchievement(user, Achievement.notAlone);
+			await this.usersService.UnlockAchievement(user.id, Achievement.notAlone);
 		}
 		else if (this.usersService.AchievementIsSet(user, Achievement.loser) == false && user.numberOfFriend == numberOfFriend.socialist)
 		{
-			await this.usersService.UnlockAchievement(user, Achievement.socialist);
+			await this.usersService.UnlockAchievement(user.id, Achievement.socialist);
 		}
 	}
 
 	async UnlockFashion(user: UserEntity)
 	{
-		await this.usersService.UnlockAchievement(user, Achievement.fashion);
+		await this.usersService.UnlockAchievement(user.id, Achievement.fashion);
 	}
 
 	async UnlockLocker(user: UserEntity)
 	{
-		await this.usersService.UnlockAchievement(user, Achievement.locker);
+		await this.usersService.UnlockAchievement(user.id, Achievement.locker);
 	}
 }

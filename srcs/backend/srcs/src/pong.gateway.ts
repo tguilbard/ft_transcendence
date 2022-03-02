@@ -122,7 +122,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     init1: user[] = [];
     init2: user[] = [];
-    Q: user[][] = [this.init1, this.init2];
+    Q: user[][] = [[], []];
     oldRoot: Array<string> = [];
     games: Game[] = [];
 
@@ -158,10 +158,10 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         if (user.state == "login")
             await this.userService.UpdateState(user, "logout");
         this.Q[0].forEach((element, index) => {
-            if (element.id.id === client.id) this.Q.splice(index, 1);
+            if (element.id.id === client.id) this.Q[0].length === 1 ? this.Q[0] = [] : this.Q[0].splice(index, 1);
         });
         this.Q[1].forEach((element, index) => {
-            if (element.id.id === client.id) this.Q.splice(index, 1);
+            if (element.id.id === client.id) this.Q[1].length === 1 ? this.Q[1] = [] : this.Q[1].splice(index, 1);
         });
         this.oldRoot.forEach((element, index) => {
             if (element === client.id) this.oldRoot.splice(index, 1);
@@ -201,7 +201,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         else
         {
             this.Q[payload].forEach((element, index) => {
-                if (element.id.id === client.id) this.Q.splice(index, 1);
+                if (element.id.id === client.id) this.Q[payload].splice(index, 1);
             });
         }
     }
@@ -323,52 +323,66 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         this.logger.log(scoreLeft, scoreRight);
         let history;
  
-        
-        if (scoreLeft === "11"){
-            var userW = await this.userService.FindUserByUsername(playerLeft);
-            var userL = await this.userService.FindUserByUsername(playerRight);
-            g.users[0].user.numberOfGame++;
-            g.users[1].user.numberOfGame++;
-            userL.numberOfGame++;
-            userW.numberOfGame++;
+        var userW;
+		var userL;
+
+        console.log('scores : ', scoreLeft,' ', scoreRight)
+        if (scoreLeft === 11){
+            userW = await this.userService.FindUserByUsername(playerLeft);
+            userL = await this.userService.FindUserByUsername(playerRight);
             history = {scoreUser1: scoreLeft , scoreUser2: scoreRight, usersId: [userW.id, userL.id]};
-        }
-        else{
-           
-            var userL = await this.userService.FindUserByUsername(playerLeft);
-            var userW = await this.userService.FindUserByUsername(playerRight);
-            g.users[0].user.numberOfGame++;
-            g.users[1].user.numberOfGame++;
-            userL.numberOfGame++;
-            userW.numberOfGame++;
+		}
+		else
+		{
+			userL = await this.userService.FindUserByUsername(playerLeft);
+			userW = await this.userService.FindUserByUsername(playerRight);
             history = {scoreUser1: scoreLeft , scoreUser2: scoreRight, usersId: [userL.id, userW.id]};
-        }
-        this.gameHistoryService.AddMatchInHistory(history);
+		}
 
-        await this.userService.UpdateState(g.users[0].user, "login");
-        if (!this.server.sockets.adapter.rooms.get(g.users[0].socket.id))
-            await this.userService.UpdateState(g.users[0].user, "logout");
+		let userWUpdate = {
+			numberOfGame: userW.numberOfGame + 1,
+			elo: userW.elo,
+			state: "login"
+		}
 
-        await this.userService.UpdateState(g.users[1].user, "login");
-        if (!this.server.sockets.adapter.rooms.get(g.users[1].socket.id))
-            await this.userService.UpdateState(g.users[1].user, "logout");
-        
-        if (g.privateFlag !== -1)
+		let userLUpdate = {
+			numberOfGame: userL.numberOfGame + 1,
+			elo: userL.elo,
+			state: "login"
+		}
+
+		if (g.privateFlag !== -1)
         {
             var tmp = this.eloChange(userW.elo, userL.elo);
-        
-            userW.elo += tmp;
-            userL.elo = (userL.elo - tmp < 0)? 0 : userL.elo - tmp;
+			
+			userWUpdate.elo += tmp
+            userLUpdate.elo = (userL.elo - tmp < 0) ? 0 : userL.elo - tmp;
         }
+
+        console.log('userW = ', userW.username);
+        console.log('userL = ', userL.username);
+        console.log('playerLeft = ', g.users[0].user.username, scoreLeft);
+        console.log('playerRight = ', g.users[1].user.username, scoreRight);
+        console.log(userWUpdate.elo)
+        console.log(userLUpdate.elo)
+        // Changer les states (ne doit correspond pas au bon user)
+        if (!this.server.sockets.adapter.rooms.get(g.users[0].socket.id))
+            userWUpdate.state = "logout";
+
+        if (!this.server.sockets.adapter.rooms.get(g.users[1].socket.id))
+		    userWUpdate.state = "logout";
+		
+		await this.userService.UpdateUser1(userW.id, {...userWUpdate});
+		await this.userService.UpdateUser1(userL.id, {...userLUpdate})
+        
+		await this.gameHistoryService.AddMatchInHistory(history);
 
         g.endGame();
     }
     
     private async matching() {
         var save: user[][] = [];
-        var matchingQinit1: range[] = [];
-        var matchingQinit2: range[] = [];
-        var matchingQ: range[][] = [matchingQinit1, matchingQinit2];
+        var matchingQ: range[][] = [[], []];
 
         var i: number = 0;
         var j: number = 0;
@@ -380,7 +394,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
                 save[type].sort((a, b) => a.elo - b.elo);
                 for (i = 0; i < save[type].length; i++)
                 {
-                    matchingQ[type][i] = {min:0, max:0, name:""}
                     for (j = 0; matchingQ[type].length && j < matchingQ[type].length; j++)
                     {
                         if (save[type][i].name === matchingQ[type][j].name)
@@ -442,8 +455,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
                 matchingQ[type][i].max++;
             }
             await this.delay(1000);
-            type++;
-            type = (type === 2)? 0 : type;
+            type = (type + 1) % 2
         }
     }
     
