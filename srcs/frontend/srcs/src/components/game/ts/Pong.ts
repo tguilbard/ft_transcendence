@@ -57,6 +57,8 @@ class Pong extends Phaser.Scene {
 
     lock = false;
     flag = 0;
+    p1Name: string;
+    p2Name: string;
 
 
 
@@ -309,6 +311,8 @@ class Pong extends Phaser.Scene {
         store.state.socket.off("setName").on("setName", (p1, p2) => {
             player1Name.setText(p1);
             player2Name.setText(p2);
+            this.p1Name = p1;
+            this.p2Name = p2;
         })
 
         store.state.socket.off("openText").on("openText", (message) => {
@@ -360,13 +364,13 @@ class Pong extends Phaser.Scene {
         
         store.state.socket.off("1Victory").on("1Victory", () => {
             openingText.setVisible(true);
-            openingText.setText('Player 1 WIN!');
+            openingText.setText(`${this.p1Name} WINS !`);
             this.lock = false;
             End();
         });
         store.state.socket.off("2Victory").on("2Victory", () => {
             openingText.setVisible(true);
-            openingText.setText('Player 2 WIN!');
+            openingText.setText(`${this.p2Name} WINS !`);
             this.lock = false;
             End();
         });

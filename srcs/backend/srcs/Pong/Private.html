@@ -113,24 +113,24 @@
 
         socket.off('left').on('left', (message) => {
             if (message == "UP") {
-                player1.body.setVelocityY(-600);
-            }
-            else if (message == "DOWN") {
-                player1.body.setVelocityY(600);
-            }
-        })
-        socket.off('right').on('right', (message) => {
-             if (message == "UP") {
                 player2.body.setVelocityY(-600);
             }
             else if (message == "DOWN") {
                 player2.body.setVelocityY(600);
             }
         })
+        socket.off('right').on('right', (message) => {
+             if (message == "UP") {
+                player1.body.setVelocityY(-600);
+            }
+            else if (message == "DOWN") {
+                player1.body.setVelocityY(600);
+            }
+        })
 
         socket.off('initScore').on('initScore', () => {
-            socket.emit("phaser", "1Score", player1Score);
-            socket.emit("phaser", "2Score", player2Score);
+            socket.emit("phaser", "1Score", player2Score);
+            socket.emit("phaser", "2Score", player1Score);
         })
         
         function update() {
