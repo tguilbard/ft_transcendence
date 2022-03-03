@@ -13,5 +13,5 @@ export enum Achievement {
 	socialist = 1 << 11,
 	perfectionnist = 1 << 12,
 	hacker = 1 << 13,
-	mask = 0b1111111111111
+	mask = 0b111111111111
 }

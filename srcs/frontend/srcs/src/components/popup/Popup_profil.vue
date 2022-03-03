@@ -208,11 +208,15 @@
           <div>
             <button @click="send_message">SEND MESSAGE</button>
           </div>
+           <div v-if="isBlock">
+            <button @click="unBlockUser">UNBLOCK</button>
+          </div>
+           <div v-else>
+            <button @click="blockUser">BLOCK</button>
+          </div>
         </div>
         <div v-else class="btn_select">
-          <div>
-            <button @click="setPopup('')">BACK</button>
-          </div>
+          <button @click="setPopup('')">BACK</button>
         </div>
       </div>
     </div>
@@ -279,8 +283,47 @@ export default defineComponent({
     isQrCode: function () {
       return this.qrCode;
     },
+    isBlock() {
+      return store.getters.GET_LIST_BLOCKED.find(e => e == store.getters.GET_USER_TARGET.username);
+    }
   },
   methods: {
+    async blockUser() {
+        const response = await fetch("http://localhost:3000/users/block/" + store.getters.GET_USER.id + "/" + store.getters.GET_USER_TARGET.id, {
+          method: "Post",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Access-Control-Max-Age": "600",
+            "Cache-Control": "no-cache",
+          },
+        });
+        if (response.ok){
+          store.dispatch("SET_LIST_BLOCKED", await shared.getListBlocked());
+          return await response.json();
+        }
+        return [];
+      },
+    
+      async unBlockUser() {
+        const response = await fetch("http://localhost:3000/users/unblock/" + store.getters.GET_USER.id + "/" + store.getters.GET_USER_TARGET.id, {
+          method: "Delete",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Access-Control-Max-Age": "600",
+            "Cache-Control": "no-cache",
+          },
+        });
+        if (response.ok)
+        {
+          store.dispatch("SET_LIST_BLOCKED", await shared.getListBlocked());
+          return await response.json();
+        }
+        return [];
+      },
     active_game() {
       // store.state.socket.emit("duel", 'aurelien');
       store.state.socket.emit(
@@ -342,7 +385,7 @@ export default defineComponent({
         .then((response) => {
           if (response.ok) {
             this.qrCode = "";
-            store.state.socket.emit("unclock_acheivements", store.getters.GET_USER, AchievementType.locker);
+            store.state.socket.emit("unlock_achievements", store.getters.GET_USER, AchievementType.locker);
             //window.location.href = "http://localhost:8080";
           } else {
             return response.json();

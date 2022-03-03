@@ -33,5 +33,6 @@ async function bootstrap() {
 
   global.init = true;
   global.socketUserList = [];
+  global.server = '';
 }
 bootstrap();

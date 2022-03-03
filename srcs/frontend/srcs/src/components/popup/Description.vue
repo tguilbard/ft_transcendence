@@ -10,6 +10,12 @@
         <div class="block_description">
           <p>{{GET_ACHIEVEMENT.description}}</p>
         </div>
+        <div v-if="(GET_POPUP == 'description2' || GET_USER.username == GET_USER_TARGET.username) && GET_ACHIEVEMENT.name == 'Galaxie'" class="block_description btn_select">
+          <button @click="setGithub">STAR PROJECT ON GITHUB</button>
+        </div>
+        <div v-if="(GET_POPUP == 'description2' || GET_USER.username == GET_USER_TARGET.username) && GET_ACHIEVEMENT.name == 'Follower'" class="block_description btn_select">
+          <button @click="setGithub">FOLLOW ADMINS ON GITHUB</button>
+        </div>
       </div>
     </div>
   </div>
@@ -23,12 +29,19 @@ import store from "../../store";
 
 export default defineComponent({
   computed: {
-    ...mapGetters(["GET_POPUP", "GET_ACHIEVEMENT"]),
+    ...mapGetters(["GET_POPUP", "GET_ACHIEVEMENT", "GET_USER_TARGET", "GET_USER"]),
   },
   methods: {
     setPopup(value: string): void {
       store.commit("SET_POPUP", value);
     },
+    setGithub() {
+      localStorage.setItem('git', store.getters.GET_ACHIEVEMENT.name);
+      if (store.getters.GET_ACHIEVEMENT.name == "Galaxie")
+        return document.location.href = "https://github.com/login/oauth/authorize?scope=repo&client_id=658433bca8c14c8f8d2a";
+      else if (store.getters.GET_ACHIEVEMENT.name == "Follower")
+        return document.location.href = "https://github.com/login/oauth/authorize?scope=user&client_id=658433bca8c14c8f8d2a";
+    }
   },
 });
 </script>

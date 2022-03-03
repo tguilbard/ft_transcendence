@@ -4,6 +4,7 @@
 
 
 <script lang="ts">
+import { AchievementType } from "@/enums/enums";
 import { Options, Vue } from "vue-class-component";
 import shared from "../mixins/Mixins"
 import store from "../store/index"
@@ -16,10 +17,7 @@ import store from "../store/index"
   methods: {
     async follow(code: string) {
 
-    // if ((await isLogin()).log)
-    //     window.location.href = "http://localhost:8080";
-
-      var response = await fetch("http://localhost:3000/achievements/follow/", {
+      await fetch("http://localhost:3000/achievements/follow", {
         method: "POST",
         mode: "cors",
         credentials: "include",
@@ -36,10 +34,7 @@ import store from "../store/index"
 },
 	async star(code: string) {
 
-    // if ((await isLogin()).log)
-    //     window.location.href = "http://localhost:8080";
-
-      var response = await fetch("http://localhost:3000/achievements/star/", {
+      await fetch("http://localhost:3000/achievements/star", {
         method: "POST",
         mode: "cors",
         credentials: "include",
@@ -56,20 +51,29 @@ import store from "../store/index"
 }
   },
   async created() {
-    const code = await shared.GetQueryStringVal("code");
-    if (!code) {
-     //alert(code)
-      return location.href="https://github.com/login/oauth/authorize?scope=repo&client_id=658433bca8c14c8f8d2a"
-    }
-	else
-	{
-        this.star(code);
-    }
-    
-    // if (await this.isLogin())
-    //   this.log = true;
+    if (!(await shared.isLogin())) return this.$router.push("login");
+    if (!store.state.sock_init) store.commit("SET_SOCKET");
 
-  },
+    const user = await shared.getMyUser();
+    store.dispatch("SET_USER", user);
+
+    const code = await shared.GetQueryStringVal("code");
+    if (code)
+    {
+      const git = localStorage.getItem("git");
+      if (git == 'Galaxie')
+      {
+        await this.star(code);
+        store.state.socket.emit("unlock_achievements", store.getters.GET_USER, AchievementType.galaxie);
+      }
+      else if (git == 'Follower')
+      {
+        await this.follow(code);
+        store.state.socket.emit("unlock_achievements", store.getters.GET_USER, AchievementType.follower);
+      }
+    }
+    return this.$router.push('/profil')
+  }
 })
 export default class Register extends Vue {}
 </script>

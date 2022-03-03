@@ -15,7 +15,6 @@ import { MemberType } from './chat/enum/member-type.enum';
 import { ChannelType } from './chat/enum/channel-type.enum';
 import { ChatService } from './chat/chat.service';
 import { ModeService } from './chat/generics/mode.class';
-import { Achievement } from './achievement/enums/achievement.enum';
 
 export interface SocketUser {
 	socket: Socket;
@@ -38,6 +37,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		console.log("handleConnection");
 		if (global.init)
 			await this.userService.InitStateUsersInDB();
+		global.server = this.server;
 		try {
 			var user = await this.userService.FindUserBySocket(client);
 			if (!user)
@@ -143,8 +143,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 
 	async afterInit(server: Server) {
-		
-
 		console.log("afterInit");
 		try {
 			const general = await this.chatService.CreateChannels("General", ChannelType.public, undefined);
@@ -657,8 +655,8 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage("unlock_achievements")
 	async unlockAcheivements(client: Socket, payload: any) {
+		console.log("unlockAcheivements")
 		this.userService.UnlockAchievement(payload[0].id, payload[1]);
-		this.server.emit("refreshAcheivements", payload[0].username);
 	}
 
 	static findSocketInUserSocketObject(id: number) {

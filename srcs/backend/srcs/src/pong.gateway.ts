@@ -60,7 +60,6 @@ class Game {
         this.users[0].socket.leave(this.socketRoomName);
         this.users[1].socket.leave(this.socketRoomName);
         this.phaserServer.leave(this.socketRoomName);
-        console.log("je suis dans endGame")
     }
 
     addToSpec(user: SocketUser) {
@@ -326,7 +325,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         var userW;
 		var userL;
 
-        console.log('scores : ', scoreLeft,' ', scoreRight)
         if (scoreLeft === 11){
             userW = await this.userService.FindUserByUsername(playerLeft);
             userL = await this.userService.FindUserByUsername(playerRight);
@@ -359,13 +357,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
             userLUpdate.elo = (userL.elo - tmp < 0) ? 0 : userL.elo - tmp;
         }
 
-        console.log('userW = ', userW.username);
-        console.log('userL = ', userL.username);
-        console.log('playerLeft = ', g.users[0].user.username, scoreLeft);
-        console.log('playerRight = ', g.users[1].user.username, scoreRight);
-        console.log(userWUpdate.elo)
-        console.log(userLUpdate.elo)
-        // Changer les states (ne doit correspond pas au bon user)
         if (!this.server.sockets.adapter.rooms.get(g.users[0].socket.id))
             userWUpdate.state = "logout";
 

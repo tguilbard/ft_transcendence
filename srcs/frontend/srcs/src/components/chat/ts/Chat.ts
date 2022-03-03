@@ -124,6 +124,10 @@ export default class Chat extends Vue {
   private my_ban = 1 << 3;
   private log = false;
   
+  isBlock(username: string) {
+    return store.getters.GET_LIST_BLOCKED.find(e => e == username);
+  }
+
   setPopup(value: string): void {
     store.dispatch("SET_POPUP", value);
   }
@@ -136,7 +140,8 @@ export default class Chat extends Vue {
     const user = await shared.getMyUser();
 
     store.dispatch("SET_USER", user);
-    store.dispatch("SET_LIST_BLOCKED", await this.getListBlocked());
+    store.dispatch("SET_LIST_BLOCKED", await shared.getListBlocked());
+    
     
     this.refresh();
 
@@ -759,21 +764,6 @@ store.state.socket.off('leave_channel').on('leave_channel', async (chanName: str
         })
         store.dispatch("SET_LIST_CHAN_PRIVATE", tmp);
       }
-  }
-
-  private async getListBlocked(): Promise<string[]> {
-    const response = await fetch("http://localhost:3000/users/blocked", {
-      method: "GET",
-      mode: "cors",
-      credentials: "include",
-      headers: {
-        Accept: "application/json",
-        "Access-Control-Max-Age": "600",
-        "Cache-Control": "no-cache",
-      },
-    });
-    if (response.ok) return await response.json();
-    return [];
   }
 
   setMode(num: number, bit_to_set: number): number {

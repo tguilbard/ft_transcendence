@@ -37,18 +37,21 @@
                                 </div>
                             </div>
                             <div>
-                                    <div v-if="item.mode == 4" class="mod">
-                                        <img src="../../../assets/unmute3.png" alt="engrenage">
-                                    </div>
-                                    <div v-if="item.mode == 8 || item.mode == 12" class="mod">
-                                        <img src="../../../assets/unban3.png" alt="engrenage">
-                                    </div>
-                                    <div v-if="item.mode == 2 || item.mode == 6 || item.mode == 10 || item.mode == 14" class="mod">
-                                        <img src="../../../assets/unadmin3.png" alt="engrenage">
-                                    </div>
-                                    <div v-if="item.mode == 3" class="mod">
-                                        <img src="../../../assets/uowner.png" alt="engrenage">
-                                    </div>
+                                <div v-if="isBlock(item.username)" class="mod">
+                                    <img src="../../../assets/unblock3.png" alt="blocked">
+                                </div>
+                                <div v-if="item.mode == 4" class="mod">
+                                    <img src="../../../assets/unmute3.png" alt="engrenage">
+                                </div>
+                                <div v-if="item.mode == 8 || item.mode == 12" class="mod">
+                                    <img src="../../../assets/unban3.png" alt="engrenage">
+                                </div>
+                                <div v-if="item.mode == 2 || item.mode == 6 || item.mode == 10 || item.mode == 14" class="mod">
+                                    <img src="../../../assets/unadmin3.png" alt="engrenage">
+                                </div>
+                                <div v-if="item.mode == 3" class="mod">
+                                    <img src="../../../assets/uowner.png" alt="engrenage">
+                                </div>
                                 <div v-if="item.state == 'login'" class="mod">
                                     <img src="../../../assets/circle_green.png" alt="login">
                                 </div>

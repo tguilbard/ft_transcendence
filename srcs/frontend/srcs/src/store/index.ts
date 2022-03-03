@@ -119,8 +119,7 @@ export default createStore({
     listMatchs: {} as Match[],
     listMatchsTarget: {} as Match[],
     friends: {} as UserEntity[],
-    listBlocked: [],
-    blocked: String
+    listBlocked: []
   },
   mutations: {
     SET_LIST_BLOCKED(state, value: string[]) {
@@ -316,7 +315,7 @@ export default createStore({
     },
     GET_LIST_BLOCKED(state) {
       return state.listBlocked;
-    }
+    },
   },
   actions: {
     SET_SOCKET(context) {

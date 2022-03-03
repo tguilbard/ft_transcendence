@@ -307,7 +307,6 @@ class Pong extends Phaser.Scene {
         })
     
         store.state.socket.off("setName").on("setName", (p1, p2) => {
-            console.log("TEST");
             player1Name.setText(p1);
             player2Name.setText(p2);
         })

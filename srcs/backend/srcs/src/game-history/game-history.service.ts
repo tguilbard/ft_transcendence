@@ -1,8 +1,6 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { match, notEqual } from 'assert';
 import { AchievementService } from 'src/achievement/achievement.service';
-import { NumberOfGame } from 'src/achievement/enums/achievement-value-to-success.ts';
 import { UserEntity } from 'src/users/entities/users.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
@@ -33,14 +31,11 @@ export class GameHistoryService {
     		.leftJoinAndSelect("match.user1", "user1")
 			.leftJoinAndSelect("match.user2", "user2")
 			.where('user1.id = :id OR user2.id = :id', { id: user.id })
-			//.leftJoinAndSelect("users", "users")
-			//.createQueryBuilder()
 			.getMany();
 	}
 
 	async AddMatchInHistory(addMatchInHistoryDTO : AddMatchInHistoryDTO ) //: Promise<MatchEntity>
 	{
-		//console.log("history:\n ", addMatchInHistoryDTO);
 		const matchToAdd : Partial<MatchEntity> = 
 		{
 			user1: await this.usersService.GetUser(addMatchInHistoryDTO.usersId[0]),

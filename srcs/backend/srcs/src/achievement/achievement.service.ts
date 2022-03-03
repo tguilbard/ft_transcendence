@@ -64,23 +64,22 @@ export class AchievementService {
 
 	async CheckNumberOfGame(user: UserEntity)
 	{
-		console.log ("nb partie = " + user.numberOfGame + " et unlock novice a " + NumberOfGame.novice);
-		if (this.usersService.AchievementIsSet(user, Achievement.novice) == false && user.numberOfGame + 1 >= NumberOfGame.novice)
+		if (this.usersService.AchievementIsSet(user, Achievement.novice) == false && user.numberOfGame >= NumberOfGame.novice)
 		{
 			console.log("UNLOCK NOVICE")
 			await this.usersService.UnlockAchievement(user.id, Achievement.novice);
 		}
-		if (this.usersService.AchievementIsSet(user, Achievement.apprentice) == false && user.numberOfGame + 1 >= NumberOfGame.apprentice)
+		if (this.usersService.AchievementIsSet(user, Achievement.apprentice) == false && user.numberOfGame >= NumberOfGame.apprentice)
 		{
 			console.log("UNLOCK APPRENTICE")
 			await this.usersService.UnlockAchievement(user.id, Achievement.apprentice);
 		}
-		if (this.usersService.AchievementIsSet(user, Achievement.expert) == false && user.numberOfGame + 1 >= NumberOfGame.expert)
+		if (this.usersService.AchievementIsSet(user, Achievement.expert) == false && user.numberOfGame >= NumberOfGame.expert)
 		{
 			console.log("UNLOCK EXPERT")
 			await this.usersService.UnlockAchievement(user.id, Achievement.expert);
 		}
-		if (this.usersService.AchievementIsSet(user, Achievement.master) == false && user.numberOfGame + 1 >= NumberOfGame.master)
+		if (this.usersService.AchievementIsSet(user, Achievement.master) == false && user.numberOfGame >= NumberOfGame.master)
 		{
 			console.log("UNLOCK MASTER")
 			await this.usersService.UnlockAchievement(user.id, Achievement.master);
@@ -106,17 +105,17 @@ export class AchievementService {
 	async UnlockGameAchievementIfPossible(user: UserEntity, userScore: number, opponentScore: number)
 	{
 		await this.CheckNumberOfGame(user);
-		//console.log("its okay: ", user, " ", userScore, " ", opponentScore);
 		await this.CheckScore(user, userScore, opponentScore);
 	}
 
 	async CheckNumberOfFriend(user: UserEntity)
 	{
-		if (this.usersService.AchievementIsSet(user, Achievement.notAlone) == false && user.numberOfFriend == numberOfFriend.notAlone)
+		console.log('number of friends = ', user.numberOfFriend);
+		if (this.usersService.AchievementIsSet(user, Achievement.notAlone) == false && user.numberOfFriend >= numberOfFriend.notAlone)
 		{
 			await this.usersService.UnlockAchievement(user.id, Achievement.notAlone);
 		}
-		else if (this.usersService.AchievementIsSet(user, Achievement.loser) == false && user.numberOfFriend == numberOfFriend.socialist)
+		else if (this.usersService.AchievementIsSet(user, Achievement.socialist) == false && user.numberOfFriend >= numberOfFriend.socialist)
 		{
 			await this.usersService.UnlockAchievement(user.id, Achievement.socialist);
 		}
@@ -135,6 +134,7 @@ export class AchievementService {
 
 	async GetGithubAccess(param)
 	{
+		console.log("je suis dans GetGhithubAcces")
 
 		const headerRequest = {
 			'Accept': 'application/json',
@@ -149,31 +149,25 @@ export class AchievementService {
 										{headers: headerRequest}
 									)
 									.pipe(map(response => response.data)))
-		console.log(githubReturn);
-
 		return githubReturn;
   	}
 
   async FollowGithubUser(githubAccess, githubUsername: string)
   {
-	console.log(githubAccess)
 	const octokit = new Octokit({ auth: githubAccess.token_type + " " + githubAccess.access_token });
 	const resultFollowing = await octokit.request('PUT /user/following/{username}', {
-		username: githubUsername
+		username: githubUsername,
 		})
-	console.log("verify2")
 	return resultFollowing;
   }
 
   async StarGithubProject(githubAccess, githubUsername: string, githubProject: string)
   {
 	const octokit = new Octokit({ auth: githubAccess.token_type + " " + githubAccess.access_token });
-
-	const resultFollowing = await octokit.request('PUT https://api.github.com/user/starred/{owner}/{repo}', {
+	const resultFollowing = await octokit.request('PUT /user/starred/{owner}/{repo}', {
 		owner: githubUsername,
 		repo: githubProject
 	  })
-
 	return resultFollowing;
   }
 }

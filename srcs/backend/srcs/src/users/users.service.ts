@@ -365,13 +365,17 @@ export class UsersService {
 	async UnblockUser(userWhoBlockId: number, userBlockedId: number)
 	{
 		console.log("is_unblock")
-		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: "blockedUsers"});
-		const userBlocked = await this.GetUser(userBlockedId, {relation: "blockedUsers"});
+		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
+		const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
+
 		const index = userWhoBlock.blockedUsers.findIndex(element => element.id == userBlockedId);
-	
+		if (index == -1)
+			return;
+		
+		userWhoBlock.blockedUsers.splice(index, 1);
 		const userWhoBlockUpdate = {
 			id: userWhoBlock.id,
-			blockedUsers: userWhoBlock.BlockedUsers.splice(index, 1)
+			blockedUsers: userWhoBlock.blockedUsers
 		}
 		return await this.usersRepositories.save(userWhoBlockUpdate);
 	}
@@ -405,16 +409,13 @@ export class UsersService {
 
 	async UnlockAchievement(userId: number, achievement: Achievement)
 	{
-		const user = await this.GetUser(userId);
-		//console.log("achievement: ", achievement);
+		let user = await this.GetUser(userId);
 		achievement = user.achievementUnlock | achievement;
 		if (Achievement.mask == (achievement & Achievement.mask))
-			achievement = user.achievementUnlock | Achievement.perfectionnist;
-		
-		//console.log("achievement: ", achievement);
-
+			achievement = achievement | Achievement.perfectionnist;
 		const value = await this.usersRepositories.update({id: user.id}, {achievementUnlock: achievement});
-		console.log(await this.usersRepositories.find({id: user.id}));
+		if (value)
+			global.server.emit("refreshAcheivements", user.username);
 		return value;
 	}
 

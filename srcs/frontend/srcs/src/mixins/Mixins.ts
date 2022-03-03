@@ -27,6 +27,21 @@ export interface UserElement {
         store.state.socket.emit('joinPublic', name, mdp);
     },
 
+    async getListBlocked(): Promise<string[]> {
+        const response = await fetch("http://localhost:3000/users/blocked", {
+          method: "GET",
+          mode: "cors",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Access-Control-Max-Age": "600",
+            "Cache-Control": "no-cache",
+          },
+        });
+        if (response.ok) return await response.json();
+        return [];
+      },
+
     async isLogin(): Promise<boolean> {
         const response = await fetch("http://localhost:3000/users/isLogin", {
             method: "GET",
