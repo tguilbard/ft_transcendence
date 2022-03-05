@@ -13,12 +13,17 @@ import store from "@/store";
     Pong,
     Popup,
   },
+  
   async created() {
     if (!(await shared.isLogin())) return this.$router.push("login");
-    if (!store.state.sock_init) store.commit("SET_SOCKET");
+    if (!store.state.sock_init) store.commit("SET_SOCKET");      
 
     const user = await shared.getMyUser();
 
+
+    if (user.state == 'in match')
+      await this.active_game();
+      
     store.dispatch("SET_USER", user);
     await store.dispatch(
       "SET_LIST_USER_GENERAL",
@@ -159,6 +164,30 @@ import store from "@/store";
     },
   },
   methods: {
+
+
+    async submit() {
+      const response = await fetch("http://localhost:3000/users/update", {
+        method: "PATCH",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Max-Age": "600",
+          "Cache-Control": "no-cache",
+        },
+        body: JSON.stringify({
+          state: 'in game',
+        }),
+      });
+      if (response.ok) {
+        return null;
+      }
+      return await response.json();
+    },
+
+
     setPopup(value: string): void {
       store.dispatch("SET_POPUP", value);
     },

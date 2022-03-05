@@ -129,8 +129,9 @@
         })
 
         socket.off('initScore').on('initScore', () => {
-            socket.emit("phaser", "1Score", player2Score);
-            socket.emit("phaser", "2Score", player1Score);
+            socket.emit("phaser", "1Score", player1Score);
+            socket.emit("phaser", "2Score", player2Score);
+            socket.emit("phaser", 'setName', window.left, window.right, 0);
         })
         
         function update() {

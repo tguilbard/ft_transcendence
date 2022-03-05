@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import Button from './Button';
 import shared from '../../../mixins/Mixins'
 import router from '@/router';
+import { UserEntity } from '@/interface/interface';
 
 const Width = 800;
 const Height = 620;
@@ -35,6 +36,7 @@ let oldMsg1Score: string;
 let oldMsg2Score: string;
 let oldMsgtTime: string;
 let oldMsg: string;
+let myUser: UserEntity;
 
 const lGrey = 0xdcdcdc;
 const Grey = 0xb8b8b8;
@@ -46,6 +48,7 @@ if (!await shared.isLogin())
     return router.push('login');
 if (!store.state.sock_init)
     store.commit("SET_SOCKET");
+myUser = await shared.getMyUser();
 
 let id: string;
 
@@ -76,198 +79,198 @@ class Pong extends Phaser.Scene {
     }
    
     create() {
-
-        background = this.add.image(Width / 2, Height / 2, 'ground');
-        backgroundC = this.add.image(Width / 2, Height / 2, 'groundC');
-
-        ball = this.add.sprite(Width / 2,
-            Height / 2,
-            'ball');
-        ball.setVisible(false);
-        ball.setDisplaySize(15, 15);
+          
+            background = this.add.image(Width / 2, Height / 2, 'ground');
+            backgroundC = this.add.image(Width / 2, Height / 2, 'groundC');
     
-        player1 = this.add.sprite(
-            Width - (ball.width / 2 + 1), // x position
-            Height / 2, // y position
-            'paddle', // key of image for the sprite
-        );
-        player1.setDisplaySize(14, 100);
+            ball = this.add.sprite(Width / 2,
+                Height / 2,
+                'ball');
+            ball.setVisible(false);
+            ball.setDisplaySize(15, 15);
+        
+            player1 = this.add.sprite(
+                Width - (ball.width / 2 + 1), // x position
+                Height / 2, // y position
+                'paddle', // key of image for the sprite
+            );
+            player1.setDisplaySize(14, 100);
+        
+            player2 = this.add.sprite(
+                (ball.width / 2 + 1), // x position
+                Height / 2, // y position
+                'paddle', // key of image for the sprite
+            );
+            player2.setDisplaySize(14, 100);
+        
+            star = this.add.sprite(
+                (ball.width / 2 + 1), // x position
+                Height / 2, // y position
+                'star', // key of image for the sprite
+            );
+            star.setDisplaySize(100, 100);
     
-        player2 = this.add.sprite(
-            (ball.width / 2 + 1), // x position
-            Height / 2, // y position
-            'paddle', // key of image for the sprite
-        );
-        player2.setDisplaySize(14, 100);
+            keysUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+            keysDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+        
+            buttonCustom = new Button(this, Width / 2, Height * 0.25, 'button', lGrey).setDownTexture('button').setOverTint(Grey);
+            buttonCustom.setDisplaySize(500, 100);
     
-        star = this.add.sprite(
-            (ball.width / 2 + 1), // x position
-            Height / 2, // y position
-            'star', // key of image for the sprite
-        );
-        star.setDisplaySize(100, 100);
-
-        keysUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-        keysDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+            buttonPong = new Button(this, Width / 2, Height * 0.5, 'button', lGrey).setDownTexture('button').setOverTint(Grey);
+            buttonPong.setDisplaySize(500, 100);
     
-        buttonCustom = new Button(this, Width / 2, Height * 0.25, 'button', lGrey).setDownTexture('button').setOverTint(Grey);
-        buttonCustom.setDisplaySize(500, 100);
-
-        buttonPong = new Button(this, Width / 2, Height * 0.5, 'button', lGrey).setDownTexture('button').setOverTint(Grey);
-        buttonPong.setDisplaySize(500, 100);
-
-        buttonReturn = new Button(this, Width / 2, Height * 0.75, 'button', lGrey).setDownTexture('button').setOverTint(Grey);
-        buttonReturn.setDisplaySize(500, 100);
-
-        buttonPong = this.add.existing(buttonPong);
-        buttonCustom = this.add.existing(buttonCustom);
-        buttonReturn = this.add.existing(buttonReturn);
-
-        returnText = this.add.text(
-            Width / 2,
-            Height * 0.75,
-            'Return',
-            {
-                fontFamily: 'Monaco, Courier, monospace',
-                fontSize: '50px',
-            }
-        );
-        returnText.setStroke('#000', 5);
-        returnText.setOrigin(0.5);
-
-        customText = this.add.text(
-            Width / 2,
-            Height * 0.25,
-            'Pong',
-            {
-                fontFamily: 'Monaco, Courier, monospace',
-                fontSize: '50px',
-            }
-        );
-        customText.setStroke('#000', 5);
-        customText.setOrigin(0.5);
-
-        openingText = this.add.text(
-            Width / 2,
-            Height / 2,
-            'Press to Search',
-            {
-                fontFamily: 'Monaco, Courier, monospace',
-                fontSize: '50px',
-            }
-        );
-        openingText.setStroke('#000', 5);    
-        openingText.setOrigin(0.5);
+            buttonReturn = new Button(this, Width / 2, Height * 0.75, 'button', lGrey).setDownTexture('button').setOverTint(Grey);
+            buttonReturn.setDisplaySize(500, 100);
     
-        TimerText = this.add.text(
-            Width / 2,
-            50,
-            "0:00",
-            {
-                fontFamily: 'Monaco, Courier, monospace',
-                fontSize: '50px',
-            }
-        );
-        TimerText.setStroke('#000', 1);
+            buttonPong = this.add.existing(buttonPong);
+            buttonCustom = this.add.existing(buttonCustom);
+            buttonReturn = this.add.existing(buttonReturn);
     
-        TimerText.setOrigin(0.5);
-
-        player1ScoreText = this.add.text(
-            Width * 0.20,
-            50,
-            '0',
-            {
-                fontFamily: 'Monaco, Courier, monospace',
-                fontSize: '50px',
-            }
-        );
+            returnText = this.add.text(
+                Width / 2,
+                Height * 0.75,
+                'Return',
+                {
+                    fontFamily: 'Monaco, Courier, monospace',
+                    fontSize: '50px',
+                }
+            );
+            returnText.setStroke('#000', 5);
+            returnText.setOrigin(0.5);
     
-        player1ScoreText.setOrigin(0.5);
+            customText = this.add.text(
+                Width / 2,
+                Height * 0.25,
+                'Pong',
+                {
+                    fontFamily: 'Monaco, Courier, monospace',
+                    fontSize: '50px',
+                }
+            );
+            customText.setStroke('#000', 5);
+            customText.setOrigin(0.5);
     
-        player2ScoreText = this.add.text(
-            Width * 0.80,
-            50,
-            '0',
-            {
-                fontFamily: 'Monaco, Courier, monospace',
-                fontSize: '50px',
-            }
-        );
+            openingText = this.add.text(
+                Width / 2,
+                Height / 2,
+                'Press to Search',
+                {
+                    fontFamily: 'Monaco, Courier, monospace',
+                    fontSize: '50px',
+                }
+            );
+            openingText.setStroke('#000', 5);    
+            openingText.setOrigin(0.5);
+        
+            TimerText = this.add.text(
+                Width / 2,
+                50,
+                "0:00",
+                {
+                    fontFamily: 'Monaco, Courier, monospace',
+                    fontSize: '50px',
+                }
+            );
+            TimerText.setStroke('#000', 1);
+        
+            TimerText.setOrigin(0.5);
     
-        player2ScoreText.setOrigin(0.5);
-
-        player1Name = this.add.text(
-            0,
-            50,
-            'player1',
-            {
-                fontFamily: 'Monaco, Courier, monospace',
-                fontSize: '20px',
-            }
-        );
+            player1ScoreText = this.add.text(
+                Width * 0.20,
+                50,
+                '0',
+                {
+                    fontFamily: 'Monaco, Courier, monospace',
+                    fontSize: '50px',
+                }
+            );
+        
+            player1ScoreText.setOrigin(0.5);
+        
+            player2ScoreText = this.add.text(
+                Width * 0.80,
+                50,
+                '0',
+                {
+                    fontFamily: 'Monaco, Courier, monospace',
+                    fontSize: '50px',
+                }
+            );
+        
+            player2ScoreText.setOrigin(0.5);
     
-        player1Name.setOrigin(0, 0.5);
-
-        player2Name = this.add.text(
-            Width,
-            50,
-            'player2',
-            {
-                fontFamily: 'Monaco, Courier, monospace',
-                fontSize: '20px',
-            }
-        );
+            player1Name = this.add.text(
+                0,
+                50,
+                'player1',
+                {
+                    fontFamily: 'Monaco, Courier, monospace',
+                    fontSize: '20px',
+                }
+            );
+        
+            player1Name.setOrigin(0, 0.5);
     
-        player2Name.setOrigin(1, 0.5);
+            player2Name = this.add.text(
+                Width,
+                50,
+                'player2',
+                {
+                    fontFamily: 'Monaco, Courier, monospace',
+                    fontSize: '20px',
+                }
+            );
+        
+            player2Name.setOrigin(1, 0.5);
 
-        buttonPong.onClick().subscribe(() => {
-            if (this.lock === false)
-            {
-                store.state.socket.emit('matching', this.flag);
-                openingText.setText("Matching...");
-                this.lock = true;
-            }
-            else
-            {
-                store.state.socket.emit('unmatching', this.flag);
-                openingText.setText("Press to Search");
-                this.lock = false;
-            }
-        })
+            background.setVisible(false);
+            backgroundC.setVisible(false);
+            player1.setVisible(false);
+            player2.setVisible(false);
+            star.setVisible(false);
+            TimerText.setVisible(false);
+            player1ScoreText.setVisible(false);
+            player2ScoreText.setVisible(false);
+            player1Name.setVisible(false);
+            player2Name.setVisible(false);
 
-        buttonCustom.onClick().subscribe(() => {
-            if (this.flag === 0 && this.lock === false)
-            {
-                customText.setText("Astro Pong");
-                this.flag++;
-            }
-            else if (this.flag === 1 && this.lock === false)
-            {
-                customText.setText("Pong");
-                this.flag = 0;
-            }
-        })
-
-        buttonReturn.onClick().subscribe(() => {
-            gameStarted = false;
-            store.dispatch("SET_DUEL", false);
-            let check = document.getElementById("grid");
-            if (check !== null) check.style.removeProperty("display");
-            check = document.getElementById("PongBorder");
-            if (check !== null) check.style.setProperty("display", "none");
-        })
-
-        background.setVisible(false);
-        backgroundC.setVisible(false);
-        player1.setVisible(false);
-        player2.setVisible(false);
-        star.setVisible(false);
-        TimerText.setVisible(false);
-        player1ScoreText.setVisible(false);
-        player2ScoreText.setVisible(false);
-        player1Name.setVisible(false);
-        player2Name.setVisible(false);
-
+            buttonPong.onClick().subscribe(() => {
+                if (this.lock === false)
+                {
+                    store.state.socket.emit('matching', this.flag);
+                    openingText.setText("Matching...");
+                    this.lock = true;
+                }
+                else
+                {
+                    store.state.socket.emit('unmatching', this.flag);
+                    openingText.setText("Press to Search");
+                    this.lock = false;
+                }
+            })
+    
+            buttonCustom.onClick().subscribe(() => {
+                if (this.flag === 0 && this.lock === false)
+                {
+                    customText.setText("Astro Pong");
+                    this.flag++;
+                }
+                else if (this.flag === 1 && this.lock === false)
+                {
+                    customText.setText("Pong");
+                    this.flag = 0;
+                }
+            })
+            
+            buttonReturn.onClick().subscribe(() => {
+                gameStarted = false;
+                store.dispatch("SET_DUEL", false);
+                let check = document.getElementById("grid");
+                if (check !== null) check.style.removeProperty("display");
+                check = document.getElementById("PongBorder");
+                if (check !== null) check.style.setProperty("display", "none");
+            })
+        
         store.state.socket.off("ball").on("ball", (x, y) => {
             ball.x = x;
             ball.y = y;
@@ -356,7 +359,7 @@ class Pong extends Phaser.Scene {
         
         store.state.socket.off("1Victory").on("1Victory", () => {
             openingText.setVisible(true);
-            openingText.setText(`${this.p1Name} WINS !`);
+            openingText.setText(`${this.p1Name } WINS !`);
             this.lock = false;
             End();
         });
@@ -366,6 +369,37 @@ class Pong extends Phaser.Scene {
             this.lock = false;
             End();
         });
+
+
+        // if()
+        if (myUser.state == 'in match')
+        {
+            Start();
+            // if (this.flag === 0)
+            // {
+                background.setVisible(true);
+            // }
+            // else if (this.flag === 1)
+            // {
+            //     backgroundC.setVisible(true);
+            //     star.setVisible(true);
+            // }
+            player1.setVisible(true);
+            player2.setVisible(true);
+            TimerText.setVisible(true);
+            player1ScoreText.setVisible(true);
+            player2ScoreText.setVisible(true);
+            player1Name.setVisible(true);
+            player2Name.setVisible(true);
+            buttonPong.setVisible(false);
+            buttonCustom.setVisible(false);
+            buttonReturn.setVisible(false);
+            returnText.setVisible(false);
+            customText.setVisible(false);
+    
+            gameStarted = true;
+            store.state.socket.emit("init_score");
+        }
     }
    
     public update() {

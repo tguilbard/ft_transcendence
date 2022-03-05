@@ -68,6 +68,7 @@ class Game {
         this.server.to(user.socket.id).emit("openText", 0);
         this.spectators.push(user);
         user.socket.join(this.socketRoomName);
+        this.server.to(user.socket.id).emit("start_game");
     }
 
     leaveSpec(socket: Socket) {
@@ -186,6 +187,12 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
                 return ;
             this.Q[payload].push({elo: user.elo, name: user.username, id: client});
         }
+    }
+
+    @SubscribeMessage('init_score')
+    async init_score(client: Socket) {
+        let g = this.games.find(game => game.users[0].socket.id === client.id || game.users[1].socket.id === client.id);
+        this.server.to(g.phaserServer.id).emit('initScore')
     }
 
     @SubscribeMessage('unmatching')
@@ -357,10 +364,20 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         }
 
         if (!this.server.sockets.adapter.rooms.get(g.users[0].socket.id))
-            userWUpdate.state = "logout";
+        {
+            if (userW.username == g.users[0].user.username)
+                userWUpdate.state = "logout";
+            else
+                userLUpdate.state = "logout";
+        }
 
         if (!this.server.sockets.adapter.rooms.get(g.users[1].socket.id))
-		    userWUpdate.state = "logout";
+        {
+            if (userW.username == g.users[1].user.username)
+                userWUpdate.state = "logout";
+            else
+                userLUpdate.state = "logout";
+        }
 		
 		await this.userService.UpdateUser(userW.id, {...userWUpdate});
 		await this.userService.UpdateUser(userL.id, {...userLUpdate})
