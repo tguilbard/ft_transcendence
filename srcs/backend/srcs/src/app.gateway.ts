@@ -647,8 +647,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage("refreshAvatar")
 	async refreshAvatar(client: Socket, username: string) {
-		
-
 		this.server.emit("refreshAvatar", username);
 	}
 

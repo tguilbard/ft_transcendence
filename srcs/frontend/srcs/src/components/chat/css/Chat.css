@@ -26,7 +26,7 @@
     height: 1vmax;
 }
 
-.chanButton p{
+.chanButton p, .button_disabled p{
     text-align: left;
 }
 
@@ -269,7 +269,7 @@ hr {
     font-weight: 900;
 }
 
-.button {
+.button, .button_disabled {
     overflow-wrap: normal;
     border-radius: 0.3vmax 0.3vmax 0.3vmax 0.3vmax;
     -webkit-text-stroke: 1px;
@@ -280,6 +280,10 @@ hr {
     background-color: grey;
     color: white;
     padding: 0.2vmax;
+}
+
+.button_disabled {
+    color: rgb(200, 200, 200);
 }
 
 .button:hover {

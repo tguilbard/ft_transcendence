@@ -1,21 +1,5 @@
-import { Achievements } from '../components/chat/ts/Chat';
+import { Achievements, UserEntity } from '../interface/interface';
 import store from '../store';
-
-export interface UserElement {
-    username: string,
-    state: string,
-    mode: number,
-  }
-
-  export interface UserEntity {
-	id?: number,
-	login?: string,
-	username?: string,
-	state?: string,
-	elo?: number,
-	tfaSecret?: string,
-	tfaActivated?: boolean
-  }
 
   export default {
 
@@ -231,12 +215,6 @@ export interface UserElement {
         return await response.json();
         return [{}];
     },
-
-    modeIsSet(num: number, bit_to_check: number): boolean {
-        if (num & bit_to_check)
-            return true;
-        return false;
-      },
 
     async getMyUser(): Promise<UserEntity> {
         const response = await fetch("http://localhost:3000/users/MyUser", {

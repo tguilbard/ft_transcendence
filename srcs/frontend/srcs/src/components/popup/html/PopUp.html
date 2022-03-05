@@ -67,28 +67,28 @@
                         </div>
                     </div>
                     <div>
-                        <div :class="[((selected_mode == 'mute' || selected_mode == 'unmute') && !modeIsSet(GET_MODE, owner) && (!modeIsSet(GET_MODE, admin) || modeIsSet(GET_MY_MODE, owner)))? 'selected': '', 'mod']">
-                            <div v-if="modeIsSet(GET_MODE, mute)">
+                        <div :class="[((selected_mode == 'mute' || selected_mode == 'unmute') && !modeIsSet(GET_MODE, 'owner') && (!modeIsSet(GET_MODE, 'admin') || modeIsSet(GET_MY_MODE, 'owner')))? 'selected': '', 'mod']">
+                            <div v-if="modeIsSet(GET_MODE, 'mute')">
                                 <img class="link" @click="set_date('unmute')" src="../../../assets/mute3.png" alt="MUTE">
                             </div>
                             <div v-else>
                                 <img class="link" @click="set_date('mute')" src="../../../assets/unmute3.png" alt="UNMUTE">
                             </div>
                         </div>
-                        <div :class="[((selected_mode == 'ban' || selected_mode == 'unban') && !modeIsSet(GET_MODE, owner) && (!modeIsSet(GET_MODE, admin) || modeIsSet(GET_MY_MODE, owner)))? 'selected': '', 'mod']">
-                            <div v-if="modeIsSet(GET_MODE, ban)">
+                        <div :class="[((selected_mode == 'ban' || selected_mode == 'unban') && !modeIsSet(GET_MODE, 'owner') && (!modeIsSet(GET_MODE, 'admin') || modeIsSet(GET_MY_MODE, 'owner')))? 'selected': '', 'mod']">
+                            <div v-if="modeIsSet(GET_MODE, 'ban')">
                                 <img class="link" @click="set_date('unban')" src="../../../assets/ban3.png" alt="BAN">
                             </div>
                             <div v-else>
                                 <img class="link" @click="set_date('ban')" src="../../../assets/unban3.png" alt="UNBAN">
                             </div>
                         </div>
-                        <div class="mod" v-if="modeIsSet(GET_MODE, owner)">
+                        <div class="mod" v-if="modeIsSet(GET_MODE, 'owner')">
                             <img class="link" src="../../../assets/owner.png" alt="OWNER">
                         </div>
                         <div v-else class="mod">
-                            <div :class="[((selected_mode == 'admin' || selected_mode == 'unadmin') && !modeIsSet(GET_MODE, owner) && modeIsSet(GET_MY_MODE, owner))? 'selected': '', 'mod']">
-                                <div class="mod" v-if="modeIsSet(GET_MODE, admin)">
+                            <div :class="[((selected_mode == 'admin' || selected_mode == 'unadmin') && !modeIsSet(GET_MODE, 'owner') && modeIsSet(GET_MY_MODE, 'owner'))? 'selected': '', 'mod']">
+                                <div class="mod" v-if="modeIsSet(GET_MODE, 'admin')">
                                     <img class="link" @click="set_date('unadmin')" src="../../../assets/admin3.png" alt="ADMIN">
                                 </div>
                                 <div v-else class="mod">
@@ -169,12 +169,12 @@
                 <div>
                     <div class="list_chan_popup">
                         <div v-for="item in GET_LIST_CHANNEL_PUBLIC">
-                            <div :class="[ (GET_CHANNEL_TARGET.name == item.name)? 'user_list_selected': '', 'btn_chan' ]">
+                            <div v-if="isNotExist(item.id)" :class="[ (GET_CHANNEL_TARGET.name == item.name)? 'user_list_selected': '', 'btn_chan' ]">
                                 <div>
                                     <p @click="Object.assign(GET_CHANNEL_TARGET, item)">{{ item.name }}</p>
                                 </div>
                                 <div v-if="item.mode == 5">
-                                    <img src="../../../assets/key.png" alt="">
+                                    <img src="@/assets/key.png" alt="">
                                 </div>
                             </div>
                         </div>
@@ -226,7 +226,7 @@
 
                 <div class="list_chan_popup">
                     <div v-for="item in GET_LIST_USER_GENERAL">
-                        <div v-if="((item.username != GET_USERNAME) && (item.state == 'login' || item.state == 'in match'))"
+                        <div v-if="((item.username != GET_USER.username) && (item.state == 'login' || item.state == 'in match'))"
                             :class="[ (item.username == GET_USER_TARGET.username)? 'user_list_selected': '', 'logo_connection']">
                             <div>
                                 <p class="link" @click="setUserTarget(item)" style="text-align: left;">{{
@@ -234,10 +234,10 @@
                             </div>
                             <div>
                                 <div v-if="item.state == 'login'" class="mod">
-                                    <img src="../../../assets/circle_green.png" alt="login">
+                                    <img src="@/assets/circle_green.png" alt="login">
                                 </div>
                                 <div v-else-if="item.state == 'in match'" class="mod">
-                                    <img src="../../../assets/circle_orange.png" alt="in match">
+                                    <img src="@/assets/circle_orange.png" alt="in match">
                                 </div>
                             </div>
                         </div>

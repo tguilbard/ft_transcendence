@@ -6,7 +6,7 @@
                         <p>{{name}}</p>
                     </div>
                     <div>
-                        <img src="@/assets/key.png" alt="">
+                        <img src="../../assets/key.png" alt="">
                     </div>
                 </div>
         </div>
@@ -18,8 +18,8 @@
     </div>
 </template>
 
-<script src="@/components/chat/ts/ChanBut.ts">
+<script src="./ts/ChanBut.ts">
 </script>
 
-<style src="@/components/chat/css/ChanBut.css" scoped>
+<style src="./css/ChanBut.css">
 </style>

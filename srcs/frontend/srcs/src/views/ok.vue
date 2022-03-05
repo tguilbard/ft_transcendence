@@ -2,16 +2,14 @@
   <div></div>
 </template>
 
-
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import shared from "../mixins/Mixins"
-import store from "../store/index"
+import shared from "../mixins/Mixins";
+import store from "../store/index";
 
 @Options({
   data() {
-    return {
-    };
+    return {};
   },
   methods: {
     async login(code: string) {
@@ -21,29 +19,27 @@ import store from "../store/index"
         credentials: "include",
         headers: {
           Accept: "application/json",
-        "Content-Type": "application/json",
-        "Access-Control-Max-Age": "600",
-        "Cache-Control": "no-cache",
+          "Content-Type": "application/json",
+          "Access-Control-Max-Age": "600",
+          "Cache-Control": "no-cache",
         },
         body: JSON.stringify({
           code: code,
         }),
-    });
-    const data = await response.json();
-    await sessionStorage.setItem("login", await JSON.stringify(data.login));
-    await sessionStorage.setItem("src", await JSON.stringify(data.src));
-    store.dispatch("SET_USERNAME", await JSON.stringify(data.username));
-    
-    if (data.state == 'ok') {
-      return this.$router.push("/");
-    }
-    else if (data.state == 'register'){
-      return this.$router.push("register");
-    }
-    else if (data.state == '2fa'){
-      return this.$router.push("authLogin");
-    }
-}
+      });
+      const data = await response.json();
+      await sessionStorage.setItem("login", await JSON.stringify(data.login));
+      await sessionStorage.setItem("src", await JSON.stringify(data.src));
+      store.dispatch("SET_USERNAME", await JSON.stringify(data.username));
+
+      if (data.state == "ok") {
+        return this.$router.push("/");
+      } else if (data.state == "register") {
+        return this.$router.push("register");
+      } else if (data.state == "2fa") {
+        return this.$router.push("authLogin");
+      }
+    },
   },
   async created() {
     const code = await shared.GetQueryStringVal("code");

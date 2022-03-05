@@ -15,3 +15,10 @@ export enum AchievementType {
 	hacker = 1 << 13,
 	mask = 0b1111111111111
 }
+
+export enum MemberType {
+	owner = 1,
+	admin = 1 << 1,
+	mute = 1 << 2,
+	ban = 1 << 3
+}

@@ -53,7 +53,7 @@
                 <button v-else @click="submit">ENREGISTRER</button>
               </div>
               <h1>MODIFY YOUR DOUBLE AUTHENTIFICATION</h1>
-              <div class="block_user" style="height:25vmax;">
+              <div class="block_user" style="height: 25vmax">
                 <div v-if="isCheck">
                   <button @click="switchCheck">DESACTIVATE TFA</button>
                 </div>
@@ -80,9 +80,9 @@
             </div>
           </div>
         </div>
-          <div>
-            <button class="btn" @click="setPopup('')">BACK</button>
-          </div>
+        <div>
+          <button class="btn" @click="setPopup('')">BACK</button>
+        </div>
       </div>
     </div>
   </div>
@@ -96,92 +96,80 @@
       <div class="content_popup">
         <h1>PROFIL</h1>
         <div class="grid_popup_profil">
-          <div id='a'>
-              <!-- <div class="block_container"> -->
-                <div class="content_container">
-                  <div id="friends_content" class="friends_content">
-                    <div>
-                      <h1>GAMES HISTORY</h1>
-                    </div>
-                    <div id="list_history" class="list_history">
-                      <div
-                        v-for="item in GET_LIST_MATCH_TARGET"
-                        :key="item"
-                        class="grid_history"
+          <div id="a">
+            <div class="content_container">
+              <div id="friends_content" class="friends_content">
+                <div>
+                  <h1>GAMES HISTORY</h1>
+                </div>
+                <div id="list_history" class="list_history">
+                  <div
+                    v-for="item in GET_LIST_MATCH_TARGET"
+                    :key="item"
+                    class="grid_history"
+                  >
+                    <div class="block_user1">
+                      <span
+                        :class="[
+                          item.user1.username == GET_USER_TARGET.username
+                            ? 'color1'
+                            : 'color2',
+                          'link',
+                        ]"
+                        @click="active_pop_profil(item.user1)"
                       >
-                        <div class="block_user1">
-                          <span
-                            :class="[
-                              item.user1.username == GET_USER_TARGET.username
-                                ? 'color1'
-                                : 'color2',
-                              'link',
-                            ]"
-                            @click="active_pop_profil(item.user1)"
-                          >
-                            {{ item.user1.username }}
-                          </span>
-                        </div>
-                        <div class="block_score">
-                          <span style=" white-space: nowrap;"
-                            >{{ item.scoreUser1 }} -
-                            {{ item.scoreUser2 }}</span
-                          >
-                        </div>
-                        <div class="block_user2">
-                          <span
-                            :class="[
-                              item.user2.username == GET_USER_TARGET.username
-                                ? 'color1'
-                                : 'color2',
-                              'link',
-                            ]"
-                            @click="active_pop_profil(item.user2)"
-                          >
-                            {{ item.user2.username }}
-                          </span>
-                        </div>
-                      </div>
-
-
-
-                      
-
-
-
-
+                        {{ item.user1.username }}
+                      </span>
+                    </div>
+                    <div class="block_score">
+                      <span style="white-space: nowrap"
+                        >{{ item.scoreUser1 }} - {{ item.scoreUser2 }}</span
+                      >
+                    </div>
+                    <div class="block_user2">
+                      <span
+                        :class="[
+                          item.user2.username == GET_USER_TARGET.username
+                            ? 'color1'
+                            : 'color2',
+                          'link',
+                        ]"
+                        @click="active_pop_profil(item.user2)"
+                      >
+                        {{ item.user2.username }}
+                      </span>
                     </div>
                   </div>
                 </div>
-              <!-- </div> -->
-          </div>
-          <div id='b'>
-            <p class="elo">{{GET_USER_TARGET.elo}}</p>
-            <div class="block_profil">
-                <div class="btn_chan_profil">
-                  <div>
-                    <p>{{ GET_USER_TARGET.username }}</p>
-                  </div>
-                  <div>
-                    <div v-if="GET_USER_TARGET.state == 'login'">
-                      <img src="../../assets/circle_green.png" alt="login" />
-                    </div>
-                    <div v-else-if="GET_USER_TARGET.state == 'in match'">
-                      <img src="../../assets/circle_orange.png" alt="in match" />
-                    </div>
-                    <div v-else>
-                      <img src="../../assets/circle_grey.png" alt="in match" />
-                    </div>
-                  </div>
-                </div>
-                
               </div>
+            </div>
           </div>
-          <div id='c'>
-            <div class="content_popup_profil">
-                <div v-if="GET_IMG_TARGET">
-                  <img id='avatar' v-bind:src="GET_IMG_TARGET" />
+          <div id="b">
+            <p class="elo">{{ GET_USER_TARGET.elo }}</p>
+            <div class="block_profil">
+              <div class="btn_chan_profil">
+                <div>
+                  <p>{{ GET_USER_TARGET.username }}</p>
                 </div>
+                <div>
+                  <div v-if="GET_USER_TARGET.state == 'login'">
+                    <img src="../../assets/circle_green.png" alt="login" />
+                  </div>
+                  <div v-else-if="GET_USER_TARGET.state == 'in match'">
+                    <img src="../../assets/circle_orange.png" alt="in match" />
+                  </div>
+                  <div v-else>
+                    <img src="../../assets/circle_grey.png" alt="in match" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="c">
+            <div class="content_popup_profil">
+              <div v-if="GET_IMG_TARGET">
+                <img id="avatar" v-bind:src="GET_IMG_TARGET" />
+              </div>
             </div>
           </div>
           <div id="d">
@@ -189,7 +177,10 @@
           </div>
         </div>
 
-        <div v-if="GET_USER_TARGET.username != GET_USER.username" class="btn_select">
+        <div
+          v-if="GET_USER_TARGET.username != GET_USER.username"
+          class="btn_select"
+        >
           <div>
             <button @click="setPopup('')">BACK</button>
           </div>
@@ -208,10 +199,10 @@
           <div>
             <button @click="send_message">SEND MESSAGE</button>
           </div>
-           <div v-if="isBlock">
+          <div v-if="isBlock">
             <button @click="unBlockUser">UNBLOCK</button>
           </div>
-           <div v-else>
+          <div v-else>
             <button @click="blockUser">BLOCK</button>
           </div>
         </div>
@@ -227,11 +218,12 @@
 <script scoped lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { mapGetters } from "vuex";
-import store, { Achievements, UserEntity } from "../../store";
+import store from "../../store";
 import Achievement from "../popup/Achievement.vue";
 import Description from "../popup/Description.vue";
 import shared from "../../mixins/Mixins";
-import {AchievementType} from "../../enums/enums"
+import { AchievementType } from "../../enums/enums";
+import { Achievements } from "@/interface/interface";
 
 export interface UserElement {
   name: string;
@@ -275,7 +267,7 @@ export default defineComponent({
       "GET_ACHIEVEMENT",
       "GET_IMG",
       "GET_IMG_TARGET",
-      "GET_LIST_MATCH_TARGET"
+      "GET_LIST_MATCH_TARGET",
     ]),
     isCheck: function () {
       return this.check;
@@ -284,12 +276,19 @@ export default defineComponent({
       return this.qrCode;
     },
     isBlock() {
-      return store.getters.GET_LIST_BLOCKED.find(e => e == store.getters.GET_USER_TARGET.username);
-    }
+      return store.getters.GET_LIST_BLOCKED.find(
+        (e) => e == store.getters.GET_USER_TARGET.username
+      );
+    },
   },
   methods: {
     async blockUser() {
-        const response = await fetch("http://localhost:3000/users/block/" + store.getters.GET_USER.id + "/" + store.getters.GET_USER_TARGET.id, {
+      const response = await fetch(
+        "http://localhost:3000/users/block/" +
+          store.getters.GET_USER.id +
+          "/" +
+          store.getters.GET_USER_TARGET.id,
+        {
           method: "Post",
           mode: "cors",
           credentials: "include",
@@ -298,16 +297,22 @@ export default defineComponent({
             "Access-Control-Max-Age": "600",
             "Cache-Control": "no-cache",
           },
-        });
-        if (response.ok){
-          store.dispatch("SET_LIST_BLOCKED", await shared.getListBlocked());
-          return await response.json();
         }
-        return [];
-      },
-    
-      async unBlockUser() {
-        const response = await fetch("http://localhost:3000/users/unblock/" + store.getters.GET_USER.id + "/" + store.getters.GET_USER_TARGET.id, {
+      );
+      if (response.ok) {
+        store.dispatch("SET_LIST_BLOCKED", await shared.getListBlocked());
+        return await response.json();
+      }
+      return [];
+    },
+
+    async unBlockUser() {
+      const response = await fetch(
+        "http://localhost:3000/users/unblock/" +
+          store.getters.GET_USER.id +
+          "/" +
+          store.getters.GET_USER_TARGET.id,
+        {
           method: "Delete",
           mode: "cors",
           credentials: "include",
@@ -316,14 +321,14 @@ export default defineComponent({
             "Access-Control-Max-Age": "600",
             "Cache-Control": "no-cache",
           },
-        });
-        if (response.ok)
-        {
-          store.dispatch("SET_LIST_BLOCKED", await shared.getListBlocked());
-          return await response.json();
         }
-        return [];
-      },
+      );
+      if (response.ok) {
+        store.dispatch("SET_LIST_BLOCKED", await shared.getListBlocked());
+        return await response.json();
+      }
+      return [];
+    },
     active_game() {
       store.state.socket.emit(
         "invite_game",
@@ -365,7 +370,6 @@ export default defineComponent({
         });
     },
     async submit_code() {
-      // Création d'un formData obligatoire pour submit de l'image
       await fetch("http://localhost:3000/2fa/activate", {
         method: "POST",
         mode: "cors",
@@ -381,7 +385,11 @@ export default defineComponent({
         .then((response) => {
           if (response.ok) {
             this.qrCode = "";
-            store.state.socket.emit("unlock_achievements", store.getters.GET_USER, AchievementType.locker);
+            store.state.socket.emit(
+              "unlock_achievements",
+              store.getters.GET_USER,
+              AchievementType.locker
+            );
           } else {
             return response.json();
           }
@@ -430,8 +438,7 @@ export default defineComponent({
     async sendAvatar() {
       let img = this.file;
       var formData = new FormData();
-      if (!img || !formData)
-        return;
+      if (!img || !formData) return;
       if (img) formData.append("img", img);
       fetch("http://localhost:3000/avatar", {
         method: "PATCH",
@@ -445,8 +452,15 @@ export default defineComponent({
       })
         .then((response) => {
           if (response.ok) {
-            store.state.socket.emit("refreshAvatar", store.getters.GET_USER.username);
-            store.state.socket.emit("unlock_achievements", store.getters.GET_USER, AchievementType.fashion);
+            store.state.socket.emit(
+              "refreshAvatar",
+              store.getters.GET_USER.username
+            );
+            store.state.socket.emit(
+              "unlock_achievements",
+              store.getters.GET_USER,
+              AchievementType.fashion
+            );
           } else {
             return response.json();
           }
@@ -476,7 +490,11 @@ export default defineComponent({
       if (response.ok) {
         this.desable = true;
         const user = await shared.getMyUser();
-        store.state.socket.emit("changeUsername", user, store.getters.GET_USER.username);
+        store.state.socket.emit(
+          "changeUsername",
+          user,
+          store.getters.GET_USER.username
+        );
         store.dispatch("SET_USER", user);
         return null;
       }
@@ -511,57 +529,49 @@ export default defineComponent({
         "joinPrivateMessage",
         store.getters.GET_USER_TARGET.username
       );
-
     },
     myEventHandler() {
-
-    let block_height = document.getElementById('block_popup').offsetHeight;
-    let top = window.innerHeight -  Number(block_height);
-    if (top <= 0)
-    {
-      document.getElementById("block_popup").style.top = "0px";
-      document.getElementById("block_popup").style.transform = 'translate(-50%, 0%)';
-      
-    }
-    else
-    {
-      document.getElementById("block_popup").style.top = '50%';
-      document.getElementById("block_popup").style.transform = 'translate(-50%, -50%)';
-    }
-  }
+      let block_height = document.getElementById("block_popup").offsetHeight;
+      let top = window.innerHeight - Number(block_height);
+      if (top <= 0) {
+        document.getElementById("block_popup").style.top = "0px";
+        document.getElementById("block_popup").style.transform =
+          "translate(-50%, 0%)";
+      } else {
+        document.getElementById("block_popup").style.top = "50%";
+        document.getElementById("block_popup").style.transform =
+          "translate(-50%, -50%)";
+      }
+    },
   },
   async created() {
     window.addEventListener("resize", this.myEventHandler);
     this.username = store.getters.GET_USER.username;
-    this.check = (await shared.getMyUser()).tfaActivated;  
+    this.check = (await shared.getMyUser()).tfaActivated;
   },
   updated() {
-    if (store.getters.GET_POPUP)
-    {
-      let block_height = document.getElementById('block_popup').offsetHeight;
-      let top = window.innerHeight -  Number(block_height);
-  
-      if (top <= 0)
-      {
+    if (store.getters.GET_POPUP) {
+      let block_height = document.getElementById("block_popup").offsetHeight;
+      let top = window.innerHeight - Number(block_height);
+
+      if (top <= 0) {
         document.getElementById("block_popup").style.top = "0px";
-        document.getElementById("block_popup").style.transform = 'translate(-50%, 0%)';
-        
-      }
-      else
-      {
-        document.getElementById("block_popup").style.top = '50%';
-        document.getElementById("block_popup").style.transform = 'translate(-50%, -50%)';
+        document.getElementById("block_popup").style.transform =
+          "translate(-50%, 0%)";
+      } else {
+        document.getElementById("block_popup").style.top = "50%";
+        document.getElementById("block_popup").style.transform =
+          "translate(-50%, -50%)";
       }
     }
   },
   unmounted() {
-  window.removeEventListener("resize", this.myEventHandler);
-},
+    window.removeEventListener("resize", this.myEventHandler);
+  },
 });
 </script>
 
 <style scoped>
-
 p,
 span,
 h1 {
@@ -579,7 +589,7 @@ h1 {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  margin:auto;
+  margin: auto;
   text-align: center;
   z-index: 15;
   color: rgb(255, 255, 255);
@@ -757,7 +767,7 @@ label {
 }
 
 .btn_chan_profil img {
-  display:block;
+  display: block;
   border: none;
   margin: 0.2vmax;
   padding: 0.2vmax;
@@ -843,14 +853,12 @@ label {
   margin-bottom: 1vmax;
 }
 
-
-.link:hover
-{
-    color: #fff12c;
-    cursor: grabbing;
-    -webkit-text-stroke: 1px;
-    -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-family: futura;
+.link:hover {
+  color: #fff12c;
+  cursor: grabbing;
+  -webkit-text-stroke: 1px;
+  -webkit-text-stroke-color: rgb(0, 0, 0);
+  font-family: futura;
 }
 
 .list_history {
@@ -859,7 +867,7 @@ label {
   top: 0px;
   color: darkblue;
   background-color: #f6ecd2;
-  overflow-y:scroll;
+  overflow-y: scroll;
   height: 24.7vmax;
   border-radius: 0vmax 0vmax 0.5vmax 0.5vmax;
   scroll-margin-bottom: 0.5vmax;
@@ -867,7 +875,6 @@ label {
   scroll-snap-type: proximity;
   border: 2px solid darkblue;
   padding: 0.2vmax;
-
 }
 
 .grid_history {
@@ -889,7 +896,7 @@ label {
   text-align: center;
 }
 
-.grid_history span{
+.grid_history span {
   padding: 0.2vmax;
   font-family: futura;
   font-weight: 900;
@@ -903,7 +910,7 @@ label {
 }
 
 .color2 {
-  color:darkblue;
+  color: darkblue;
 }
 
 .block_container {
@@ -948,5 +955,4 @@ label {
   left: 50%;
   transform: translateX(-50%);
 }
-
 </style> >

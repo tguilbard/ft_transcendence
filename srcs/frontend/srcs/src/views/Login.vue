@@ -2,16 +2,16 @@
   <div class="sup">
     <p class="pong">PONG</p>
   </div>
-    <button class="button_login" v-on:click="login">42connect</button>
-    <button class="button_guest" v-on:click="add_guest">GUEST</button>
+  <button class="button_login" v-on:click="login">42connect</button>
+  <button class="button_guest" v-on:click="add_guest">GUEST</button>
   <div :style="inf"></div>
 </template>
 
 <script lang="ts">
 import router from "@/router";
 import { Options, Vue } from "vue-class-component";
-import shared from "../mixins/Mixins"
-import store from "../store/index"
+import shared from "../mixins/Mixins";
+import store from "../store/index";
 
 @Options({
   data() {
@@ -35,7 +35,7 @@ import store from "../store/index"
     },
   },
   methods: {
-    async add_guest(){
+    async add_guest() {
       const response = await fetch("http://localhost:3000/users/guest", {
         method: "POST",
         mode: "cors",
@@ -54,20 +54,19 @@ import store from "../store/index"
         })
         .catch((error) => {
           this.myerror = error;
-          return {state: '', username: ''};
+          return { state: "", username: "" };
         });
-        if (response.state)
-        {
-          await sessionStorage.setItem("src", await JSON.stringify(response.src));
-          await sessionStorage.setItem("login", await JSON.stringify(response.login));
-            store.dispatch("SET_USERNAME", await JSON.stringify(response.username));
-          if (response.state == "register")
-            return router.push('register');
-          else if (response.state == "2fa")
-              return this.$router.push("authLogin");
-          else if (response.state == "ok")
-              return this.$router.push("/");
-        }
+      if (response.state) {
+        await sessionStorage.setItem("src", await JSON.stringify(response.src));
+        await sessionStorage.setItem(
+          "login",
+          await JSON.stringify(response.login)
+        );
+        store.dispatch("SET_USERNAME", await JSON.stringify(response.username));
+        if (response.state == "register") return router.push("register");
+        else if (response.state == "2fa") return this.$router.push("authLogin");
+        else if (response.state == "ok") return this.$router.push("/");
+      }
     },
     login() {
       window.location.href =
@@ -75,8 +74,7 @@ import store from "../store/index"
     },
   },
   async created() {
-    if (await shared.isLogin())
-      this.log = true;
+    if (await shared.isLogin()) this.log = true;
   },
 })
 export default class Register extends Vue {}
@@ -139,5 +137,4 @@ button:hover {
   box-shadow: -2px 2px 5px 2px white;
   border-radius: 15px;
 }
-
 </style>

@@ -4,9 +4,7 @@
       <p v-if="srcImg">
         <img v-bind:src="srcImg" class="avatar" />
       </p>
-      <label for="avatar" class="btn_avatar"
-        ><h2>Choisis un avatar</h2></label
-      >
+      <label for="avatar" class="btn_avatar"><h2>Choisis un avatar</h2></label>
       <input
         type="file"
         id="avatar"
@@ -40,7 +38,7 @@
 import router from "@/router";
 import { Options, Vue } from "vue-class-component";
 import shared from "../mixins/Mixins";
-import store from "../store/index"
+import store from "../store/index";
 
 @Options({
   data() {
@@ -128,10 +126,8 @@ import store from "../store/index"
     if (!this.user) return this.$router.push("login");
     link = (await sessionStorage.getItem("src")) || "";
     link = await JSON.parse(link);
-    if (await shared.myGuest())
-      this.srcImg = require('../assets/' + link);
-    else
-      this.srcImg = link;
+    if (await shared.myGuest()) this.srcImg = require("../assets/" + link);
+    else this.srcImg = link;
     this.activate = true;
   },
 })
@@ -245,5 +241,4 @@ textarea {
   box-shadow: -2px 2px 5px 2px white;
   border-radius: 15px;
 }
-
 </style>

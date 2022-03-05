@@ -24,8 +24,8 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import shared from "../mixins/Mixins"
-import store from "../store/index"
+import shared from "../mixins/Mixins";
+import store from "../store/index";
 
 @Options({
   data() {
@@ -100,7 +100,10 @@ import store from "../store/index"
     },
   },
   async created() {
-    if ((await shared.isGuest(store.getters.GET_USERNAME)) || !(await shared.isAccess("authLogin")))
+    if (
+      (await shared.isGuest(store.getters.GET_USERNAME)) ||
+      !(await shared.isAccess("authLogin"))
+    )
       return this.$router.push("login");
     await this.get_img();
     this.activate = true;
@@ -110,7 +113,6 @@ export default class Register extends Vue {}
 </script>
 
 <style scoped>
-
 *:focus {
   outline: none;
 }
@@ -157,7 +159,7 @@ textarea {
 }
 
 .code {
-   display: block;
+  display: block;
   position: relative;
   top: 0;
   left: 0;

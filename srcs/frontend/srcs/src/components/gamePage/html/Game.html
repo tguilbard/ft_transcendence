@@ -1,0 +1,82 @@
+<section>
+    <Menu page="game" />
+    <div v-if="GET_POPUP">
+        <Popup />
+    </div>
+    <div id="grid">
+        <div id="a" class="block_container">
+            <div class="content_container" @click="active_game">
+                <p>PLAY TO GAME</p>
+            </div>
+        </div>
+        <div id="b" class="block_container">
+            <div class="content_container">
+                <div class="block_text">
+                    <h2>RULES OF GAME</h2>
+                    <br />
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam
+                        fugiat pariatur fuga dolorem veritatis molestias, reprehenderit
+                        soluta porro voluptatem dicta deserunt illo labore harum
+                        temporibus modi minima rerum, aspernatur nisi inventore sunt
+                        explicabo delectus quae natus! Quidem, animi minus magni qui
+                        corrupti amet quibusdam maiores sed, explicabo, facere earum?
+                        Molestias porro suscipit quas? Voluptate nobis voluptatum, aliquid
+                        culpa minus obcaecati, at possimus, nostrum nemo eligendi alias et
+                        saepe numquam cumque qui error assumenda perspiciatis tempora quas
+                        adipisci eum sapiente pariatur? Laudantium eligendi harum tenetur
+                        repudiandae perferendis quas neque impedit animi facere
+                        accusantium deserunt dignissimos voluptate praesentium
+                        reprehenderit, quae dicta omnis?
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div id="c" class="block_container">
+            <div class="content_container">
+                <div class="block_leaderboard">
+                    <div>
+                        <h1>LEADERBOARD</h1>
+                    </div>
+                    <div class="content_leaderboard">
+                        <div v-for="item in GET_LEADER_BOARD" :key="item">
+                            <div class="grid_leaderboard">
+                                <div class="left">
+                                    <p>{{ item.elo }}</p>
+                                </div>
+
+                                <!-- <div id="friends_content" class="friends_content"> -->
+                                <div class="logo_connection right">
+                                    <div>
+                                        <div v-if="item.username == GET_USER.username">
+                                            <p class="link" @click="active_pop_profil(item)"
+                                                style="color: rgb(160, 28, 28); text-align: left">
+                                                {{ item.username }}
+                                            </p>
+                                        </div>
+                                        <div v-else>
+                                            <p class="link" @click="active_pop_profil(item)" style="text-align: left">
+                                                {{ item.username }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div v-if="item.state == 'login'" class="mod">
+                                            <img src="@/assets/circle_green.png" alt="login" />
+                                        </div>
+                                        <div v-else-if="item.state == 'in match'" class="mod">
+                                            <img src="@/assets/circle_orange.png" alt="in match" />
+                                        </div>
+                                        <div v-else class="mod">
+                                            <img src="@/assets/circle_grey.png" alt="logout" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -10,19 +10,23 @@
       </div>
       <div v-else id="nav">
         <router-link id="btn_game" to="/" :style="btn_game">GAME</router-link>
-        <router-link id="btn_chat" to="/chat" :style="btn_chat">CHAT</router-link>
-        <router-link id="btn_profil" to="/profil" :style="btn_profil">PROFIL</router-link>
+        <router-link id="btn_chat" to="/chat" :style="btn_chat"
+          >CHAT</router-link
+        >
+        <router-link id="btn_profil" to="/profil" :style="btn_profil"
+          >PROFIL</router-link
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { Options, Vue } from "vue-class-component";
 
 @Options({
-  props: ['page'],
-data() {
+  props: ["page"],
+  data() {
     return {
       hover: false,
     };
@@ -36,48 +40,40 @@ data() {
       };
     },
     btn_game() {
-      if (this.page == "game")
-      {
+      if (this.page == "game") {
         return {
-              "color": "#fff12c",
+          color: "#fff12c",
           "-webkit-text-stroke": "2px",
           "-webkit-text-stroke-color": "black",
-          "font-family": "futura"
-  
+          "font-family": "futura",
         };
       }
     },
     btn_chat() {
-      if (this.page == "chat")
-      {
+      if (this.page == "chat") {
         return {
-              "color": "#fff12c",
+          color: "#fff12c",
           "-webkit-text-stroke": "2px",
           "-webkit-text-stroke-color": "black",
-          "font-family": "futura"
-  
+          "font-family": "futura",
         };
       }
     },
     btn_profil() {
-      if (this.page == "profil")
-      {
+      if (this.page == "profil") {
         return {
-              "color": "#fff12c",
+          color: "#fff12c",
           "-webkit-text-stroke": "2px",
           "-webkit-text-stroke-color": "black",
-          "font-family": "futura"
-  
+          "font-family": "futura",
         };
       }
     },
   },
 })
-export default class Menu extends Vue {
-}
+export default class Menu extends Vue {}
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="css">
 .sup {
   display: block;
@@ -89,15 +85,16 @@ export default class Menu extends Vue {
 }
 
 .pong {
-  margin-left:auto;
-  margin-right:auto;
-  text-align:center;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
   color: black;
   font-size: 6vmax;
   font-family: futura;
 }
 
-#nav, #nav_hover{
+#nav,
+#nav_hover {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -114,7 +111,9 @@ export default class Menu extends Vue {
   gap: 1px;
 }
 
- #btn_game, #btn_chat, #btn_profil {
+#btn_game,
+#btn_chat,
+#btn_profil {
   flex-basis: calc(100% / 3);
   padding: auto;
   background-color: rgb(236, 236, 236);
@@ -126,15 +125,17 @@ export default class Menu extends Vue {
   border-bottom: 3px solid #8f8f8f;
   box-shadow: 0px 1px 1px 0px #fff12c;
   border-inline: 5px solid #9b9b9b;
-   -webkit-text-stroke: 2px;
-    -webkit-text-stroke-color: black;
+  -webkit-text-stroke: 2px;
+  -webkit-text-stroke-color: black;
 }
 
-#nav_hover #btn_game:hover, #nav_hover #btn_chat:hover, #nav_hover #btn_profil:hover {
-    color: #fff12c;
-    -webkit-text-stroke: 2px;
-    -webkit-text-stroke-color: black;
-    font-family: futura;
+#nav_hover #btn_game:hover,
+#nav_hover #btn_chat:hover,
+#nav_hover #btn_profil:hover {
+  color: #fff12c;
+  -webkit-text-stroke: 2px;
+  -webkit-text-stroke-color: black;
+  font-family: futura;
 }
 
 #btn_game {

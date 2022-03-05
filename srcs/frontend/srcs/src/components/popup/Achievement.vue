@@ -1,45 +1,47 @@
 <template>
-  <!-- <div class="block_container"> -->
-    <!-- <div class="content_container"> -->
-        <h1>ACHIEVEMENTS</h1>
-      <div class="list_acheivements">
-        <div class="container_block_acheivements">
-          <div
-            class="block_acheivements"
-            v-for="item in GET_LIST_ACHIEVEMENTS_TARGET"
-            :key="item"
-          >
-            <div @click="setAchievement(item)" class="color1">
-              <div>
-                <div v-if="item.lock">
-                  <img
-                    v-bind:src="require('../../assets/lock/' + item.imageLockName)"
-                  />
-                </div>
-                <div v-else>
-                  <img
-                    v-bind:src="
-                      require('../../assets/unlock/' + item.imageUnlockName)
-                    "
-                  />
-                </div>
-              </div>
+  <h1>ACHIEVEMENTS</h1>
+  <div class="list_acheivements">
+    <div class="container_block_acheivements">
+      <div
+        class="block_acheivements"
+        v-for="item in GET_LIST_ACHIEVEMENTS_TARGET"
+        :key="item"
+      >
+        <div @click="setAchievement(item)" class="color1">
+          <div>
+            <div v-if="item.lock">
+              <img
+                v-bind:src="require('../../assets/lock/' + item.imageLockName)"
+              />
+            </div>
+            <div v-else>
+              <img
+                v-bind:src="
+                  require('../../assets/unlock/' + item.imageUnlockName)
+                "
+              />
             </div>
           </div>
         </div>
       </div>
-    <!-- </div> -->
-  <!-- </div> -->
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
+import { Achievements } from "@/interface/interface";
 import { defineComponent } from "@vue/runtime-core";
 import { mapGetters } from "vuex";
-import store, { Achievements } from "../../store";
+import store from "../../store";
 
 export default defineComponent({
   computed: {
-    ...mapGetters(["GET_POPUP", "GET_LIST_ACHIEVEMENTS", "GET_LIST_ACHIEVEMENTS_TARGET", "GET_ACHIEVEMENT"]),
+    ...mapGetters([
+      "GET_POPUP",
+      "GET_LIST_ACHIEVEMENTS",
+      "GET_LIST_ACHIEVEMENTS_TARGET",
+      "GET_ACHIEVEMENT",
+    ]),
   },
   methods: {
     setPopup(value: string): void {
@@ -54,7 +56,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 h1 {
   border-radius: 0.5vmax 0.5vmax 0px 0px;
   text-align: center;
@@ -118,5 +119,4 @@ h1 {
   height: 100%;
   width: 100%;
 }
-
 </style> >

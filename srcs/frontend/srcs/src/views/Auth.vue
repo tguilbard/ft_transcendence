@@ -1,5 +1,5 @@
 <template>
-<div v-if="activate">
+  <div v-if="activate">
     <div class="sup">
       <p v-if="srcImg">
         <img v-bind:src="srcImg" alt="qrcode" class="qrcode" />
@@ -18,22 +18,22 @@
         <p style="color: red" v-if="msg.code">{{ msg.code }}</p>
       </div>
       <input class="valider" type="submit" value="VALIDER" />
-      <button class="next" @click="passed" >PASSER</button>
+      <button class="next" @click="passed">PASSER</button>
     </form>
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import shared from "../mixins/Mixins"
+import shared from "../mixins/Mixins";
 
 @Options({
   data() {
     return {
-      srcImg: '',
+      srcImg: "",
       code: "",
       myerror: {},
-      activate: false
+      activate: false,
     };
   },
   computed: {
@@ -53,19 +53,19 @@ import shared from "../mixins/Mixins"
   },
   methods: {
     async submit() {
-        // Création d'un formData obligatoire pour submit de l'image
-        await fetch("http://localhost:3000/2fa/activate", {
-          method: "POST",
-          mode: "cors",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "Access-Control-Max-Age": "600",
-            "Cache-Control": "no-cache",
-          },
-          body: JSON.stringify({"code": this.code})
-        })
+      // Création d'un formData obligatoire pour submit de l'image
+      await fetch("http://localhost:3000/2fa/activate", {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Max-Age": "600",
+          "Cache-Control": "no-cache",
+        },
+        body: JSON.stringify({ code: this.code }),
+      })
         .then((response) => {
           if (response.ok) {
             window.location.href = "http://localhost:8080";
@@ -74,20 +74,18 @@ import shared from "../mixins/Mixins"
           }
         })
         .then((responseJson) => {
-            throw responseJson;
+          throw responseJson;
         })
         .catch((error) => {
           this.myerror = error;
         });
     },
-    passed()
-    {
+    passed() {
       window.location.href = "http://localhost:8080/login";
     },
   },
   async created() {
-    if (!(await shared.isAccess("auth")))
-      return this.$router.push('login');
+    if (!(await shared.isAccess("auth"))) return this.$router.push("login");
     this.srcImg = await shared.getQrCode();
     this.activate = true;
   },
@@ -96,7 +94,6 @@ export default class Register extends Vue {}
 </script>
 
 <style scoped>
-
 *:focus {
   outline: none;
 }
@@ -193,6 +190,4 @@ textarea {
   box-shadow: -2px 2px 5px 2px white;
   border-radius: 15px;
 }
-
-
 </style>

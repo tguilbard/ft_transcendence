@@ -1,0 +1,170 @@
+<section v-if="log">
+    <Menu page="profil"/>
+    <div v-if="GET_POPUP">
+      <Popup />
+    </div>
+    <div class="grid_container">
+      <div id="a" class="block_container">
+        <div class="content_container">
+          <div class="friends_content">
+            <div>
+              <h1>GAMES HISTORY</h1>
+            </div>
+            <div class="list_history">
+              <div v-for="item in GET_LIST_MATCH" :key="item" class="grid_history">
+                <div class="block_user1">
+                  <span
+                    :class="[
+                      item.user1.username == GET_USER.username ? 'color1' : 'color2',
+                      'link',
+                    ]"
+                    @click="active_pop_profil(item.user1)"
+                  >
+                    {{ item.user1.username }}
+                  </span>
+                </div>
+                <div class="block_score">
+                  <span style=" white-space: nowrap;"
+                    >{{ item.scoreUser1 }} -
+                    {{ item.scoreUser2 }}</span
+                  >
+                </div>
+                <div class="block_user2">
+                  <span
+                    :class="[
+                      item.user2.username == GET_USER.username ? 'color1' : 'color2',
+                      'link',
+                    ]"
+                    @click="active_pop_profil(item.user2)"
+                  >
+                    {{ item.user2.username }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="b" class="block_container">
+        <div class="content_container">
+          <div class="friends_content">
+            <div>
+              <h1>FRIENDS</h1>
+            </div>
+            <div class="list_friends_popup">
+              <div v-for="item in GET_FRIENDS" :key="item">
+                <div
+                  v-if="item.username != GET_USER.username"
+                  class="logo_connection"
+                >
+                  <div>
+                    <p
+                      class="link"
+                      @click="active_pop_profil(item)"
+                      style="text-align: left"
+                    >
+                      {{ item.username }}
+                    </p>
+                  </div>
+                  <div>
+                    <div v-if="item.state == 'login'" class="mod">
+                      <img src="@/assets/circle_green.png" alt="login" />
+                    </div>
+                    <div v-else-if="item.state == 'in match'" class="mod">
+                      <img src="@/assets/circle_orange.png" alt="in match" />
+                    </div>
+                    <div v-else class="mod">
+                      <img src="@/assets/circle_grey.png" alt="in match" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="c" class="block_container">
+        <div class="content_container">
+          <div v-if="GET_IMG" class="block_avatar">
+            <img class="avatar" v-bind:src="GET_IMG" />
+          </div>
+        </div>
+      </div>
+      <div id="d" class="block_container">
+        <div class="content_container">
+          <div class="list_acheivements">
+            <h1>ACHIEVEMENTS</h1>
+            <div class="container_block_acheivements">
+              <div
+                class="block_acheivements"
+                v-for="item in GET_LIST_ACHIEVEMENTS"
+                :key="item"
+              >
+                <div @click="setAchievement(item)" class="color1">
+                  <div>
+                    <div v-if="item.lock">
+                      <img
+                        v-bind:src="
+                          require('@/assets/lock/' + item.imageLockName)
+                        "
+                      />
+                    </div>
+                    <div v-else>
+                      <img
+                        v-bind:src="
+                          require('@/assets/unlock/' + item.imageUnlockName)
+                        "
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="e" class="block_container">
+        <div class="content_container">
+          <div class="my_elo">
+            <p>{{ user.elo }}</p>
+          </div>
+        </div>
+      </div>
+      <div id="f" class="block_container">
+        <div class="content_container">
+          <div class="logo_user">
+            <div>
+              <p>{{ GET_USER.username }}</p>
+            </div>
+            <div>
+              <div v-if="this.user.state == 'login'" class="mod">
+                <img src="@/assets/circle_green.png" alt="login" />
+              </div>
+              <div v-else-if="this.user.state == 'in match'" class="mod">
+                <img src="@/assets/circle_orange.png" alt="in match" />
+              </div>
+              <div v-else class="mod">
+                <img src="@/assets/circle_grey.png" alt="in match" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="g" class="block_container">
+        <div class="content_container">
+          <div class="container_logout">
+            <p class="btn_logout" v-on:click="logout">LOGOUT</p>
+          </div>
+        </div>
+      </div>
+      <div id="h" class="block_container">
+        <div class="content_container">
+          <div class="container_logout">
+            <p class="btn_logout" @click="setPopup('modify_profil')">
+              MODIFY PROFIL
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
