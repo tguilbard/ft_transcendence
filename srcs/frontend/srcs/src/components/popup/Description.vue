@@ -93,10 +93,7 @@ label {
 .content_popup_profil {
   display: block;
   width: auto;
-  /* background-color: rgb(112, 112, 112); */
   margin: 0.5vmax;
-
-  /* margin-top: 1vmax; */
 }
 
 .block_description {

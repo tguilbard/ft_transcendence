@@ -204,7 +204,6 @@ export interface UserElement {
           method: "GET",
           mode: "cors",
           credentials: "include",
-          //responseType: "blob",
           headers: {
             "Access-Control-Max-Age": "600",
             "Cache-Control": "no-cache",

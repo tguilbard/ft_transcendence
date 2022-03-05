@@ -130,7 +130,6 @@ class Pong extends Phaser.Scene {
             {
                 fontFamily: 'Monaco, Courier, monospace',
                 fontSize: '50px',
-                // fill: '#fff'
             }
         );
         returnText.setStroke('#000', 5);
@@ -143,7 +142,6 @@ class Pong extends Phaser.Scene {
             {
                 fontFamily: 'Monaco, Courier, monospace',
                 fontSize: '50px',
-                // fill: '#fff'
             }
         );
         customText.setStroke('#000', 5);
@@ -156,7 +154,6 @@ class Pong extends Phaser.Scene {
             {
                 fontFamily: 'Monaco, Courier, monospace',
                 fontSize: '50px',
-                // fill: '#fff'
             }
         );
         openingText.setStroke('#000', 5);    
@@ -169,7 +166,6 @@ class Pong extends Phaser.Scene {
             {
                 fontFamily: 'Monaco, Courier, monospace',
                 fontSize: '50px',
-                // fill: '#fff'
             }
         );
         TimerText.setStroke('#000', 1);
@@ -183,7 +179,6 @@ class Pong extends Phaser.Scene {
             {
                 fontFamily: 'Monaco, Courier, monospace',
                 fontSize: '50px',
-                // fill: '#fff'
             }
         );
     
@@ -196,7 +191,6 @@ class Pong extends Phaser.Scene {
             {
                 fontFamily: 'Monaco, Courier, monospace',
                 fontSize: '50px',
-                // fill: '#fff'
             }
         );
     
@@ -209,7 +203,6 @@ class Pong extends Phaser.Scene {
             {
                 fontFamily: 'Monaco, Courier, monospace',
                 fontSize: '20px',
-                // fill: '#fff'
             }
         );
     
@@ -222,7 +215,6 @@ class Pong extends Phaser.Scene {
             {
                 fontFamily: 'Monaco, Courier, monospace',
                 fontSize: '20px',
-                // fill: '#fff'
             }
         );
     

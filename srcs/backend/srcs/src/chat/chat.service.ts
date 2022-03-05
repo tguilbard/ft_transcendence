@@ -72,32 +72,31 @@ export class ChatService {
 		return await channelRepo.getMany();
 	}
 
-	async RenameUserInChannelPrivateMessage (userId: number, username: string, newName: string){
-		const channelRepo = this.qbService.Create("channel", this.channelRepository)
-		.leftJoin("channel.members", "members")
-		.leftJoin("members.user", "user")
-		.where("user.id = :id", {id: userId})
-		
-		channelRepo.andWhere(this.sqlFunctionService.ChannelIsPrivate)
-		let list = await channelRepo.getMany();
+	async RenameUserInChannelPrivateMessage (userId: number, newName: string, oldname: string){
+
+		const listChannel = await this.GetChannelsOfUser(userId, 'private');
+
 		let li = [];
-		list.forEach(e => {
-			let tmp: string = e.name;
-			let n1 = tmp.substring(tmp.indexOf('-') + 2);
-			let n2 = tmp.substring(0, tmp.indexOf('-') - 1);
-			if (n1 == username)
-				n1 = newName;
-			else
-				n2 = newName;
-			if (n1 < n2)
-				e.name = n1 + " - " + n2;
-			else
-				e.name = n2 + " - " + n1;
-			li.push({oldname: username, newname: newName, oldchan: tmp, newchan: e.name});
-			this.channelRepository.update(e.id, e);
+		listChannel.forEach(e => {
+			if (e.mode == ChannelType.privateMessage)
+			{
+				let tmp: string = e.name;
+				let n1 = tmp.substring(tmp.indexOf('-') + 2);
+				let n2 = tmp.substring(0, tmp.indexOf('-') - 1);
+				if (n1 == oldname)
+					n1 = newName;
+				else
+					n2 = newName;
+				if (n1 < n2)
+					e.name = n1 + " - " + n2;
+				else
+					e.name = n2 + " - " + n1;
+					this.channelRepository.update(e.id, e);
+					li.push({oldname: oldname, newname: newName, oldchan: tmp, newchan: e.name});
+				}
 		})
 		if (!li.length)
-			li.push({oldname: username, newname: newName, oldchan: '', newchan: ''});	
+			li.push({oldname: oldname, newname: newName, oldchan: '', newchan: ''});
 		return li;
 	}
 

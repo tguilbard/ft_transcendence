@@ -325,13 +325,11 @@ export default defineComponent({
         return [];
       },
     active_game() {
-      // store.state.socket.emit("duel", 'aurelien');
       store.state.socket.emit(
         "invite_game",
         store.getters.GET_USER_TARGET.username
       );
       this.setPopup("");
-      // this.$router.push('/');
     },
     active_watch() {
       store.state.socket.emit("spec", store.getters.GET_USER_TARGET.username);
@@ -355,13 +353,11 @@ export default defineComponent({
         .then((response) => {
           if (response.ok) {
             this.qrCode = "";
-            //window.location.href = "http://localhost:8080";
           } else {
             return response.json();
           }
         })
         .then((responseJson) => {
-          // if (!responseJson.statusCode.ok)
           throw responseJson;
         })
         .catch((error) => {
@@ -386,19 +382,16 @@ export default defineComponent({
           if (response.ok) {
             this.qrCode = "";
             store.state.socket.emit("unlock_achievements", store.getters.GET_USER, AchievementType.locker);
-            //window.location.href = "http://localhost:8080";
           } else {
             return response.json();
           }
         })
         .then((responseJson) => {
-          // if (!responseJson.statusCode.ok)
           throw responseJson;
         })
         .catch((error) => {
           this.myerror = error;
         });
-      //this.myerror = {};
     },
     async switchCheck() {
       if (this.check) {
@@ -445,8 +438,6 @@ export default defineComponent({
         mode: "cors",
         credentials: "include",
         headers: {
-          //   Accept: "application/json",
-          //  "Content-Type": "application/json",
           "Access-Control-Max-Age": "600",
           "Cache-Control": "no-cache",
         },
@@ -461,14 +452,11 @@ export default defineComponent({
           }
         })
         .then((responseJson) => {
-          // if (!responseJson.statusCode.ok)
           throw responseJson;
         })
         .catch((error) => {
           this.myerror = error;
         });
-      // }
-      //this.myerror = {};
     },
     async submit() {
       let response = await fetch("http://localhost:3000/users/update", {
@@ -487,22 +475,12 @@ export default defineComponent({
       });
       if (response.ok) {
         this.desable = true;
-        const user = await response.json();
-        store.dispatch("SET_USER", await shared.getMyUser());
-        store.state.socket.emit("changeUsername", user);
+        const user = await shared.getMyUser();
+        store.state.socket.emit("changeUsername", user, store.getters.GET_USER.username);
+        store.dispatch("SET_USER", user);
         return null;
-        //window.location.href = "http://localhost:8080/auth";
       }
       return await response.json();
-      // })
-      // .then((responseJson) => {
-      //   // if (!responseJson.statusCode.ok)
-      //   throw responseJson;
-      // })
-      // .catch((error) => {
-      //   this.myerror = error;
-      // });
-      //this.myerror = {};
     },
     getImg(event: { target: { files: File[] } }) {
       this.file = event.target.files[0];
@@ -882,7 +860,6 @@ label {
   color: darkblue;
   background-color: #f6ecd2;
   overflow-y:scroll;
-  /* overflow-x: none; */
   height: 24.7vmax;
   border-radius: 0vmax 0vmax 0.5vmax 0.5vmax;
   scroll-margin-bottom: 0.5vmax;
@@ -955,17 +932,6 @@ label {
   border: 1px solid black;
   display: block;
 }
-
-/* .content_container {
-  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
-  background-color: #b8b8b8;
-  border: 2px solid #000000;
-  box-sizing: border-box;
-  height: 100%;
-  text-align: left;
-  font-weight: 900;
-  font-size: 1.2vmax;
-} */
 
 .friends_content {
   display: grid;

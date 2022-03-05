@@ -31,8 +31,6 @@ data() {
     styles() {
       return {
         "background-image": `url(https://i.giphy.com/media/9bTjZrytydVRK/giphy.webp)`,
-        // 'background-image': `url(https://i.gifer.com/3qR.gif)`,
-        // 'background-image': `url(https://miro.medium.com/max/1200/1*N-45to24pMCH1pX2_VA-Gw.gif)`,
         "background-repeat": "repeat",
         "background-size": "100% 100%",
       };

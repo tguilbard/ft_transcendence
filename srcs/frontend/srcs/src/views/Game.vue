@@ -208,10 +208,6 @@ store.state.socket.off('changeUsername').on("changeUsername",
       store.dispatch("SET_POPUP", value);
     },
     async active_pop_profil(user: UserEntity): Promise<void> {
-      // if (user.state == "") {
-      //   const myUser = await shared.getUserByUsername(user.username);
-      //   if (myUser.state) user.state = myUser.state;
-      // }
       store.dispatch("SET_USER_TARGET", user);
       store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(user.username));
       await store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());

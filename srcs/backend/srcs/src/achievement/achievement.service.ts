@@ -66,38 +66,30 @@ export class AchievementService {
 	{
 		if (this.usersService.AchievementIsSet(user, Achievement.novice) == false && user.numberOfGame >= NumberOfGame.novice)
 		{
-			console.log("UNLOCK NOVICE")
 			await this.usersService.UnlockAchievement(user.id, Achievement.novice);
 		}
 		if (this.usersService.AchievementIsSet(user, Achievement.apprentice) == false && user.numberOfGame >= NumberOfGame.apprentice)
 		{
-			console.log("UNLOCK APPRENTICE")
 			await this.usersService.UnlockAchievement(user.id, Achievement.apprentice);
 		}
 		if (this.usersService.AchievementIsSet(user, Achievement.expert) == false && user.numberOfGame >= NumberOfGame.expert)
 		{
-			console.log("UNLOCK EXPERT")
 			await this.usersService.UnlockAchievement(user.id, Achievement.expert);
 		}
 		if (this.usersService.AchievementIsSet(user, Achievement.master) == false && user.numberOfGame >= NumberOfGame.master)
 		{
-			console.log("UNLOCK MASTER")
 			await this.usersService.UnlockAchievement(user.id, Achievement.master);
 		}
 	}
 
 	async CheckScore(user: UserEntity, userScore: number, opponentScore: number)
 	{
-		console.log("conqueror is set: ", this.usersService.AchievementIsSet(user, Achievement.conqueror), "\nuserScore: ", userScore, "\nopponentScore: ", opponentScore)
 		if (this.usersService.AchievementIsSet(user, Achievement.conqueror) == false && userScore == PerfectGame.winnerScore && opponentScore == PerfectGame.loserScore)
 		{
-			console.log("UNLOCK CONQUEROR")
 			await this.usersService.UnlockAchievement(user.id, Achievement.conqueror);
 		}
-		console.log("loser is set: ", this.usersService.AchievementIsSet(user, Achievement.conqueror), "\nuserScore: ", userScore, "\nopponentScore: ", opponentScore)
 		if (this.usersService.AchievementIsSet(user, Achievement.loser) == false && userScore == PerfectGame.loserScore && opponentScore == PerfectGame.winnerScore)
 		{
-			console.log("UNLOCK LOSER")
 			await this.usersService.UnlockAchievement(user.id, Achievement.loser);
 		}
 	}
@@ -110,7 +102,6 @@ export class AchievementService {
 
 	async CheckNumberOfFriend(user: UserEntity)
 	{
-		console.log('number of friends = ', user.numberOfFriend);
 		if (this.usersService.AchievementIsSet(user, Achievement.notAlone) == false && user.numberOfFriend >= numberOfFriend.notAlone)
 		{
 			await this.usersService.UnlockAchievement(user.id, Achievement.notAlone);
@@ -123,7 +114,6 @@ export class AchievementService {
 
 	async UnlockFashion(user: UserEntity)
 	{
-		console.log("je suis dans unlock fashion")
 		await this.usersService.UnlockAchievement(user.id, Achievement.fashion);
 	}
 
@@ -134,13 +124,10 @@ export class AchievementService {
 
 	async GetGithubAccess(param)
 	{
-		console.log("je suis dans GetGhithubAcces")
-
 		const headerRequest = {
 			'Accept': 'application/json',
 		};
 	
-
 		const githubReturn = await lastValueFrom(this.httpService.post('https://github.com/login/oauth/access_token', {
 										client_id: "658433bca8c14c8f8d2a",
 										client_secret: "cdb0e5b3551336a2d0c0fd1a9615402802d0015a",

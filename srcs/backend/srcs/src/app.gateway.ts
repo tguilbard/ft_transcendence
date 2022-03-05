@@ -604,22 +604,21 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	async changeUsername(client: Socket, payload: any) {
 		console.log("je suis dans changeUsername");
 		
-	
-		if (payload && payload.length)
+		const info = await this.chatService.RenameUserInChannelPrivateMessage(payload[0].id, payload[0].username, payload[1]);
+		if (info.length >= 1 && info[0].newchan)
 		{
-			payload.forEach(element => {
+			info.forEach(element => {
 				this.server.in(element.oldchan).socketsJoin(element.newchan);
 				this.server.socketsLeave(element.oldchan);
 			});
-	
 		}
 		global.socketUserList.forEach(e =>  {
-			if (e.user.username == payload[0].oldname)
+			if (e.user.id == payload[0].id)
 			{
-				e.user.username = payload[0].newname;
+				e.user.username = payload[1];
 			}
 		})
-		this.server.emit('changeUsername', (payload));
+		this.server.emit('changeUsername', (info));
 	}
 
 	@SubscribeMessage("displayMods")
@@ -655,7 +654,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage("unlock_achievements")
 	async unlockAcheivements(client: Socket, payload: any) {
-		console.log("unlockAcheivements")
 		this.userService.UnlockAchievement(payload[0].id, payload[1]);
 	}
 

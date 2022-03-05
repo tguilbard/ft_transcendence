@@ -29,13 +29,7 @@ import store from "../store/index"
         position: "absolute",
         height: "50%",
         top: "50%",
-
-        //'background-image': `url(https://i.giphy.com/media/9bTjZrytydVRK/giphy.webp)`,
-        // 'backgrouhttps://i.gifer.com/RY6p.gifnd-image': `url(https://i.gifer.com/3qR.gif)`,
         "background-image": `url(https://profgra.org/lycee/img/pong.gif)`,
-        // 'background-image': `url(https://miro.medium.com/max/1200/1*N-45to24pMCH1pX2_VA-Gw.gif)`,
-
-        // 'background-repeat': 'repeat',
         "background-size": "100% 100%",
       };
     },
@@ -58,9 +52,6 @@ import store from "../store/index"
             return response.json();
           }
         })
-        // .then((responseJson) => {
-        //   throw responseJson;
-        // })
         .catch((error) => {
           this.myerror = error;
           return {state: '', username: ''};
@@ -149,24 +140,4 @@ button:hover {
   border-radius: 15px;
 }
 
-/* #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-} */
 </style>

@@ -362,8 +362,8 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         if (!this.server.sockets.adapter.rooms.get(g.users[1].socket.id))
 		    userWUpdate.state = "logout";
 		
-		await this.userService.UpdateUser1(userW.id, {...userWUpdate});
-		await this.userService.UpdateUser1(userL.id, {...userLUpdate})
+		await this.userService.UpdateUser(userW.id, {...userWUpdate});
+		await this.userService.UpdateUser(userL.id, {...userLUpdate})
         
 		await this.gameHistoryService.AddMatchInHistory(history);
 

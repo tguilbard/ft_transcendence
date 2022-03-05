@@ -7,6 +7,7 @@ import { UploadedFile, UseInterceptors } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import AvatarService from './avatar/avatar.service';
+import { UpdateResult } from 'typeorm';
 
 @Controller('users')
 export class UsersController {
@@ -120,7 +121,7 @@ export class UsersController {
 	@Patch('update')
 	async UpdateUser(
 		@Body() updateUserDTO: UpdateUserDTO,
-		@Req() req: Request): Promise<UserEntity> {
+		@Req() req: Request): Promise<UpdateResult> {
 		return await this.usersService.UpdateUser(req.User.id, updateUserDTO);
 	}
 
@@ -139,7 +140,7 @@ export class UsersController {
 	@Patch(":id")
 	async UpdateUserById(
 		@Body() updateUserDTO: UpdateUserDTO,
-		@Param('id', ParseIntPipe) id: number): Promise<UserEntity> {
+		@Param('id', ParseIntPipe) id: number): Promise<UpdateResult> {
 		return await this.usersService.UpdateUser(id, updateUserDTO);
 	}
 

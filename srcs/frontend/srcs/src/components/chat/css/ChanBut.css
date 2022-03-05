@@ -6,27 +6,20 @@
 }
 
 .chanButton {
-    /* height: 50px; */
-    /* width: 100%; */
-    /* background: left/50px no-repeat url(assets/42.png); */
     margin: 0;
     box-sizing: border-box;
     padding: 0.2px;
     position: relative;
-    /* width: calc(100% - 40px); */
     border: 1px solid #383E42;
     border-left: 0;
     border-right: 0;
-    /* font-family: old_game; */
     overflow-wrap: normal;
 
-    /* padding-left:50px; */
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
     font-family: futura;
     font-weight: 900;
     font-size: 1.6vmax;
-    /* margin: 0.2vmax; */
     padding: 0.2vmax;
     padding-left: 0.4vmax;
 }
@@ -35,19 +28,7 @@
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: #fff12c;
     color: black;
-    /* color: rgb(161, 161, 161); */
-    /* font-size: 1.8vmax; */
 }
-
-/* .one {
-    width: 100%;
-}
-
-.two {
-    width: calc(100% - 40px);
-    display: inline;
-} */
-
 
 .btn_chan img {
     height: 1.56vmax;
@@ -55,11 +36,9 @@
 }
 
 .on {
-    /* background-color: grey; */
     color: #fff12c;
 }
 
 .off{
     color: white;
-    /* background-color: grey; */
 }

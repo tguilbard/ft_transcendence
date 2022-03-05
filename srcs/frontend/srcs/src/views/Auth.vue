@@ -46,12 +46,7 @@ import shared from "../mixins/Mixins"
         position: "absolute",
         height: "50%",
         top: "50%",
-        //'background-image': `url(https://i.giphy.com/media/9bTjZrytydVRK/giphy.webp)`,
-        // 'backgrouhttps://i.gifer.com/RY6p.gifnd-image': `url(https://i.gifer.com/3qR.gif)`,
         "background-image": `url(https://profgra.org/lycee/img/pong.gif)`,
-        // 'background-image': `url(https://miro.medium.com/max/1200/1*N-45to24pMCH1pX2_VA-Gw.gif)`,
-
-        // 'background-repeat': 'repeat',
         "background-size": "100% 100%",
       };
     },
@@ -79,13 +74,11 @@ import shared from "../mixins/Mixins"
           }
         })
         .then((responseJson) => {
-          // if (!responseJson.statusCode.ok)
             throw responseJson;
         })
         .catch((error) => {
           this.myerror = error;
         });
-      //this.myerror = {};
     },
     passed()
     {

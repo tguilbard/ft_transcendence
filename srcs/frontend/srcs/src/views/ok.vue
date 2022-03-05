@@ -15,10 +15,6 @@ import store from "../store/index"
   },
   methods: {
     async login(code: string) {
-
-    // if ((await isLogin()).log)
-    //     window.location.href = "http://localhost:8080";
-
       var response = await fetch("http://localhost:3000/users/login", {
         method: "POST",
         mode: "cors",
@@ -38,8 +34,6 @@ import store from "../store/index"
     await sessionStorage.setItem("src", await JSON.stringify(data.src));
     store.dispatch("SET_USERNAME", await JSON.stringify(data.username));
     
-  //   await localStorage.setItem("state", JSON.stringify(data.state));
-
     if (data.state == 'ok') {
       return this.$router.push("/");
     }
@@ -57,10 +51,6 @@ import store from "../store/index"
       window.location.href = "";
     }
     this.login(code);
-    
-    // if (await this.isLogin())
-    //   this.log = true;
-
   },
 })
 export default class Register extends Vue {}

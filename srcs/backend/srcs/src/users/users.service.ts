@@ -59,22 +59,22 @@ export class UsersService {
 		}
 	}
 
-	async UpdateUser1(id: number, userModification: Partial<UserEntity>)
+	async UpdateUser(id: number, userModification: Partial<UserEntity>)
 	{
 		return await this.usersRepositories.update({id: id}, {...userModification});
 	}
 
-	async UpdateUser(id: number, userMofidication: UpdateUserDTO): Promise<any> {
-		const saveUser = (await this.FindUserById(id)).username;
-		const userChanged = await this.usersRepositories.preload({
-			id: id,
-			...userMofidication
-		});
-		let newUser = await this.usersRepositories.save(userChanged);
-		if (newUser)
-			return await this.chatService.RenameUserInChannelPrivateMessage(id, saveUser, userMofidication.username);
-		return null;
-	}
+	// async UpdateUser(id: number, userMofidication: UpdateUserDTO): Promise<any> {
+	// 	const saveUser = (await this.FindUserById(id)).username;
+	// 	const userChanged = await this.usersRepositories.preload({
+	// 		id: id,
+	// 		...userMofidication
+	// 	});
+	// 	let newUser = await this.usersRepositories.save(userChanged);
+	// 	if (newUser)
+	// 		return await this.chatService.RenameUserInChannelPrivateMessage(id, saveUser, userMofidication.username);
+	// 	return null;
+	// }
 
 	async RemoveUser(id: number) {
 		const userToRemove = await this.FindUserById(id);
@@ -351,7 +351,6 @@ export class UsersService {
 
 	async BlockUser(userWhoBlockId: number, userBlockedId: number)
 	{
-		console.log("is_block")
 		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
 		const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
 		
@@ -364,7 +363,6 @@ export class UsersService {
 
 	async UnblockUser(userWhoBlockId: number, userBlockedId: number)
 	{
-		console.log("is_unblock")
 		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
 		const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
 

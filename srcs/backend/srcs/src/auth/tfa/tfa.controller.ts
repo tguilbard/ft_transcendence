@@ -6,6 +6,7 @@ import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken'
 import { UpdateUserDTO } from 'src/users/dto/Update-user.dto';
 import { UserEntity } from 'src/users/entities/users.entity';
+import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 
 @Controller('2fa')
 export class TfaController {
@@ -52,7 +53,7 @@ export class TfaController {
     @Delete()
 	async Desactivate(
 		@Body() updateUserDTO: UpdateUserDTO,
-		@Req() req: Request): Promise<UserEntity> {
+		@Req() req: Request): Promise<UpdateResult> {
 		return await this.usersService.UpdateUser(req.User.id, updateUserDTO);
 	}
 }

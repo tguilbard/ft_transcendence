@@ -1,14 +1,4 @@
 <template>
-  <!-- <div :style="styles" class="back"></div> -->
-  <!-- <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/auth">Auth</router-link> |
-    <router-link to="/login">Login</router-link> |
-    <router-link to="/register">Register</router-link> |
-    <router-link to="/profil">Profil</router-link> |
-    <router-link to="/authLogin">auth login</router-link>
-  </div> -->
   <router-view />
 </template>
 
@@ -20,8 +10,6 @@ import { Options, Vue } from "vue-class-component";
     styles() {
       return {
         "background-image": `url(https://i.giphy.com/media/9bTjZrytydVRK/giphy.webp)`,
-        // 'background-image': `url(https://i.gifer.com/3qR.gif)`,
-        // 'background-image': `url(https://miro.medium.com/max/1200/1*N-45to24pMCH1pX2_VA-Gw.gif)`,
         "background-repeat": "repeat",
         "background-size": "100% 100%",
       };

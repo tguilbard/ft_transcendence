@@ -1,8 +1,8 @@
 export enum NumberOfGame {
 	novice = 1,
-	apprentice = 2,
-	expert = 3,
-	master = 4
+	apprentice = 10,
+	expert = 100,
+	master = 1000
 }
 
 export enum PerfectGame {
@@ -12,5 +12,5 @@ export enum PerfectGame {
 
 export enum numberOfFriend {
 	notAlone = 1,
-	socialist = 2
+	socialist = 10
 }

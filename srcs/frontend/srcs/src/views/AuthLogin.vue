@@ -46,12 +46,7 @@ import store from "../store/index"
         position: "absolute",
         height: "50%",
         top: "50%",
-        //'background-image': `url(https://i.giphy.com/media/9bTjZrytydVRK/giphy.webp)`,
-        // 'backgrouhttps://i.gifer.com/RY6p.gifnd-image': `url(https://i.gifer.com/3qR.gif)`,
         "background-image": `url(https://profgra.org/lycee/img/pong.gif)`,
-        // 'background-image': `url(https://miro.medium.com/max/1200/1*N-45to24pMCH1pX2_VA-Gw.gif)`,
-
-        // 'background-repeat': 'repeat',
         "background-size": "100% 100%",
       };
     },
@@ -90,7 +85,6 @@ import store from "../store/index"
         method: "GET",
         mode: "cors",
         credentials: "include",
-        //responseType: "blob",
         headers: {
           "Access-Control-Max-Age": "600",
           "Cache-Control": "no-cache",
@@ -177,7 +171,6 @@ textarea {
   z-index: 1;
   text-align: center;
   box-shadow: -2px 2px 5px 2px white;
-  /* border-radius: 15px; */
   font-weight: bold;
 }
 

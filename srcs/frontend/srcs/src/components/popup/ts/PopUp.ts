@@ -65,7 +65,6 @@ data: () => {
     async active_popup_profil()
     {
       store.commit("SET_POPUP", 'profil');
-      // store.dispatch("SET_IMG_TARGET", await shared.get_avatar(store.getters.GET_USER_TARGET.username));      
     },
     setPopup(value: string): void {
       store.commit("SET_POPUP", value);

@@ -233,12 +233,8 @@ import { Achievements, Message } from "@/components/chat/ts/Chat";
           }
         })
         .then((responseJson) => {
-          // if (!responseJson.statusCode.ok)
           throw responseJson;
         });
-      // .catch((error) => {
-      // });
-      //this.myerror = {};
     },
     getImg(event: { target: { files: File[] } }) {
       this.file = event.target.files[0];
@@ -453,7 +449,6 @@ h1 {
   margin: auto;
   margin-top: 1vh;
   gap: 0.2vmax;
-  /* justify-items: stretch; */
 }
 
 #a {
@@ -776,8 +771,6 @@ h1 {
   overflow: auto;
   height: 38.8vmax;
   min-height: 70vh;
-
-  /* text-align: center; */
 }
 
 .grid_history {
@@ -800,14 +793,12 @@ h1 {
 }
 
 .grid_history span {
-  /* display: block; */
   padding: 0.2vmax;
   font-family: futura;
   font-weight: 900;
   font-size: 1.5vmax;
   top: 0.5vmax;
   margin: auto;
-  /* left: 50%; */
 }
 
 .color1 {

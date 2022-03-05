@@ -54,15 +54,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* .block_container {
-  display: block;
-  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
-  background-color: #fff12c;
-  border: 2px solid #8f8f8f;
-  padding: 1px;
-  text-align: center;
-  color: rgb(255, 255, 255);
-} */
 
 h1 {
   border-radius: 0.5vmax 0.5vmax 0px 0px;
@@ -78,17 +69,6 @@ h1 {
   border: 1px solid black;
   display: block;
 }
-
-/* .content_container {
-  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
-  background-color: #b8b8b8;
-  border: 2px solid darkblue;
-  box-sizing: border-box;
-  height: auto;
-  text-align: left;
-  font-weight: 900;
-  font-size: 1.2vmax;
-} */
 
 .container_block_acheivements {
   display: grid;
