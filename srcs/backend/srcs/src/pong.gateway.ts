@@ -26,10 +26,11 @@ class Game {
     phaserServer: Socket;
     spectators: SocketUser[] = [];
     socketRoomName: string;
+    GameFlag: number;
     privateFlag: number;
     server: Server;
 
-    constructor(user1: SocketUser, user2: SocketUser, phaserServer: Socket, server: Server, privateFlag=0) {
+    constructor(user1: SocketUser, user2: SocketUser, phaserServer: Socket, server: Server, GameFlag = 0, privateFlag=0) {
         this.id = gameId + 1
         this.users = [user1, user2]
         this.socketRoomName = 'game : ' + this.id.toString();
@@ -37,6 +38,7 @@ class Game {
         user1.socket.join(this.socketRoomName);
         user2.socket.join(this.socketRoomName);
         this.phaserServer.join(this.socketRoomName);
+        this.GameFlag = GameFlag;
         this.privateFlag = privateFlag;
         this.server = server;
     }
@@ -91,7 +93,7 @@ interface range{
     name: string;
 }
 
-function lunchServerPhaser(left: string, right: string, flag: number) {
+function lunchServerPhaser(left: string, right: string, flag: number, pflag: number) {
     JSDOM.fromFile(join(process.cwd(), '/Pong/Private.html'), {
         // To run the scripts in the html file
         url: "http://localhost:3000",
@@ -110,6 +112,7 @@ function lunchServerPhaser(left: string, right: string, flag: number) {
         dom.window.left = left;
         dom.window.right = right;
         dom.window.flag = flag;
+        dom.window.pflag = pflag;
     })
 }
 
@@ -227,20 +230,21 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage("duel")
     async duel(client: Socket, payload: any[]){
-        if (!payload || !payload[1])
+        //payload[2] => flag (0 normale game / 1 special game)
+        if (!payload || !payload[1] || !payload[2])
         return;
         const user1 = await this.userService.FindUserBySocket(client);
         if (!user1)
             return;
         if (payload[0])
-            lunchServerPhaser(user1.username, payload[1], -1);
+            lunchServerPhaser(user1.username, payload[1], payload[2], 1);
     }
 
 
     @SubscribeMessage("startGame")
     async startGame(phaserServer: Socket, payload: any[])
     {
-        if (typeof payload === 'undefined' || payload[0] === 'undefined' || payload[1] === 'undefined' || payload[2] === 'undefined') 
+        if (typeof payload === 'undefined' || payload[0] === 'undefined' || payload[1] === 'undefined' || payload[2] === 'undefined' || payload[3] === 'undefined') 
         {return;}
 
         let user1 = await this.userService.FindUserByUsername(payload[0]);
@@ -248,6 +252,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         await this.userService.UpdateState(user1, 'in match');
         await this.userService.UpdateState(user2, 'in match');
         let flag = payload[2];
+        let pflag = payload[3];
 
         if (!user1 || !user2) return;
         
@@ -256,7 +261,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         
         let test1 : SocketUser = {socket: socket1, user: user1};
         let test2 : SocketUser = {socket: socket2, user: user2};
-        let g = new Game(test1, test2, phaserServer, this.server, flag);
+        let g = new Game(test1, test2, phaserServer, this.server, flag, pflag);
         this.games.push(g);
         socket1.emit('start_game');
         socket2.emit('start_game');
@@ -355,7 +360,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 			state: "login"
 		}
 
-		if (g.privateFlag !== -1)
+		if (g.privateFlag === 0)
         {
             var tmp = this.eloChange(userW.elo, userL.elo);
 			
@@ -437,7 +442,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
                     while (j < matchingQ[type].length) {
                         if (matchingQ[type][i].max > matchingQ[type][j].min)
                         {
-                            lunchServerPhaser(save[type][i].name, save[type][j].name, type);
+                            lunchServerPhaser(save[type][i].name, save[type][j].name, type, 0);
     
                             this.Q[type].splice(this.Q[type].indexOf(save[type][i]), 1);
                             this.Q[type].splice(this.Q[type].indexOf(save[type][j]), 1);

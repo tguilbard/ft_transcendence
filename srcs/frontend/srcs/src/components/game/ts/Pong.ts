@@ -310,14 +310,14 @@ class Pong extends Phaser.Scene {
             this.p2Name = p2;
         })
 
-        store.state.socket.off("openText").on("openText", (message) => {
+        store.state.socket.off("openText").on("openText", (message, flag) => {
             if (gameStarted === false)
             {
-                if (this.flag === 0)
+                if (flag === 0)
                 {
                     background.setVisible(true);
                 }
-                else if (this.flag === 1)
+                else if (flag === 1)
                 {
                     backgroundC.setVisible(true);
                     star.setVisible(true);

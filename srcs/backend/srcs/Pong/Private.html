@@ -24,7 +24,7 @@
         
         const socket = io("http://localhost:3000");
 
-        socket.emit("startGame", window.left, window.right, window.flag);
+        socket.emit("startGame", window.left, window.right, window.flag, window.pflag);
 
         var Width = 800;
         var Height = 620;
@@ -213,7 +213,7 @@
         function OnEvent() {
             if (!gameStarted && Timer > 0) {
                 Timer -= 1;
-                socket.emit("phaser", 'openText', Timer);
+                socket.emit("phaser", 'openText', Timer, window.flag, 0);
                 socket.emit("phaser", 'setName', window.left, window.right, 0);
                 if (Timer == 0){
                     Start();
