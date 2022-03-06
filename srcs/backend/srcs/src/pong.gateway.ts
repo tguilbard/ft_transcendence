@@ -1,19 +1,13 @@
-/*
-https://docs.nestjs.com/websockets/gateways#gateways
-*/
-
-import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit } from '@nestjs/websockets';
-import { HttpStatus, Logger } from '@nestjs/common';
+import { SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit } from '@nestjs/websockets';
+import { Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 import { JSDOM } from 'jsdom';
 import { join } from 'path';
-import { emit, exit } from 'process';
 import { UsersService } from './users/users.service';
-import { UserEntity } from './users/entities/users.entity';
-import { ChatGateway, SocketUser } from './app.gateway';
-import { Index } from 'typeorm';
+import { SocketUser } from './app.gateway';
 import { GameHistoryService } from './game-history/game-history.service';
 import { ChatService } from './chat/chat.service';
+import { UserEntity } from './users/entities/users.entity';
 const DataURIParser = require('datauri/parser');
 
 const datauri = new DataURIParser();
@@ -230,7 +224,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage("duel")
     async duel(client: Socket, payload: any[]){
-        //payload[2] => flag (0 normale game / 1 special game)
         if (!payload || !payload[1] || !payload[2])
         return;
         const user1 = await this.userService.FindUserBySocket(client);
@@ -263,10 +256,8 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         let test2 : SocketUser = {socket: socket2, user: user2};
         let g = new Game(test1, test2, phaserServer, this.server, flag, pflag);
         this.games.push(g);
-        socket1.emit('start_game');
-        socket2.emit('start_game');
+        g.sendMessage(['start_game']);
         this.server.emit('refresh_user', 'all');
-        // g.sendMessage(['start_game']);
     }
 
     @SubscribeMessage("phaser")
@@ -293,7 +284,6 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage("spec")
     async spec(client: Socket, payload: any) {
-        // Payload == nom de la personne à spec
         let spec = global.socketUserList.find(elem => elem.socket.id === client.id);
         let g = this.games.find(game => game.users[0].user.username === payload || game.users[1].user.username === payload);
         if (!g)
@@ -331,10 +321,10 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         let playerRight = payload[3];
 
         this.logger.log(scoreLeft, scoreRight);
-        let history;
+        let history: any;
  
-        var userW;
-		var userL;
+        var userW: UserEntity;
+        var userL: UserEntity;
 
         if (scoreLeft === 11){
             userW = await this.userService.FindUserByUsername(playerLeft);
@@ -406,32 +396,15 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
                 save[type].sort((a, b) => a.elo - b.elo);
                 for (i = 0; i < save[type].length; i++)
                 {
-                    for (j = 0; matchingQ[type].length && j < matchingQ[type].length; j++)
-                    {
-                        if (save[type][i].name === matchingQ[type][j].name)
-                            break;
-                    }
-                    if (matchingQ[type].length === 0 || j === matchingQ[type].length)
-                    {
-                        var tmp: range = {min: 0, max: 0, name: ""};
-                        tmp.min = save[type][i].elo - 20;
-                        tmp.max = save[type][i].elo + 20;
-                        tmp.name = save[type][i].name;
-                        matchingQ[type][i] = tmp;
-                    }
+                    j = matchingQ[type].findIndex(e => save[type][i].name === e.name)
+                    if (matchingQ[type].length === 0 || j === -1)
+                        matchingQ[type].splice(i, 0, {min: save[type][i].elo - 20, max: save[type][i].elo + 20, name: save[type][i].name});
                 }
                 for(i = 0; matchingQ[type].length && i < matchingQ[type].length; i++)
                 {
-                    for (j = 0; j < save[type].length; j++)
-                    {
-                        if (save[type][j].name === matchingQ[type][i].name)
-                            break;
-                    }
-                    if (j === save[type].length)
-                    {
-                        matchingQ[type].splice(i, 1);
-                        i--;
-                    }
+                    j = save[type].findIndex(e => e.name === matchingQ[type][i].name)
+                    if (j === -1)
+                        matchingQ[type].splice(i--, 1);
                 }
     
                 i = 0;
