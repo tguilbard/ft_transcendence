@@ -389,7 +389,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		let socket = ChatGateway.findSocketInUserSocketObject(userTarget.id);
 		if (socket)
 			socket.join(chanName);
-		console.log("emit de goMsg")
 		this.server.to(client.id).emit('goMsg', targetChan);
 	}
 
@@ -588,7 +587,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage("displayMods")
 	async displayMods(client: Socket, payload: string[]) {
- 		console.log("displayMods");
 		let userName = payload[0];
 		let chanName = payload[1];
 		let chan = await this.chatService.GetChannel(chanName);

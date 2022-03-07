@@ -86,7 +86,6 @@
       </div>
     </div>
   </div>
-  <div v-if="GET_POPUP == 'profil' || GET_POPUP == 'description'">
     <div
       v-if="GET_POPUP == 'profil'"
       @click="setPopup('')"
@@ -211,19 +210,20 @@
         </div>
       </div>
     </div>
-  </div>
   <Description />
+  <PopupGame />
 </template>
 
 <script scoped lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { mapGetters } from "vuex";
-import store from "../../store";
-import Achievement from "../popup/Achievement.vue";
-import Description from "../popup/Description.vue";
-import shared from "../../mixins/Mixins";
-import { AchievementType } from "../../enums/enums";
+import store from "@/store";
+import Achievement from "@/components/popup/Achievement.vue";
+import Description from "@/components/popup/Description.vue";
+import shared from "@/mixins/Mixins";
+import { AchievementType } from "@/enums/enums";
 import { Achievements } from "@/interface/interface";
+import PopupGame from "../popup/PopupGame.vue";
 
 export interface UserElement {
   name: string;
@@ -241,6 +241,7 @@ export type Avatar = File | null;
 export default defineComponent({
   components: {
     Achievement,
+    PopupGame,
     Description,
   },
   data: () => {
@@ -330,11 +331,7 @@ export default defineComponent({
       return [];
     },
     active_game() {
-      store.state.socket.emit(
-        "invite_game",
-        store.getters.GET_USER_TARGET.username
-      );
-      this.setPopup("");
+      this.setPopup("duel");
     },
     active_watch() {
       store.state.socket.emit("spec", store.getters.GET_USER_TARGET.username);

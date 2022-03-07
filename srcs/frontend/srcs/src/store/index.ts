@@ -36,9 +36,24 @@ export default createStore({
 		listMatchs: {} as Match[],
 		listMatchsTarget: {} as Match[],
 		friends: {} as UserEntity[],
-		listBlocked: []
+		listBlocked: [],
+		game: '',
+		save_popup: '',
+		inv: false
 	},
 	mutations: {
+		SET_INV(state, value: boolean) {
+			state.inv = value;
+		},
+		SET_SAVE_POPUP(state) {
+			if (state.popup == 'duel')
+				state.save_popup = 'profil';
+			else
+				state.save_popup = state.popup;
+		},
+		SET_GAME(state, value: string) {
+			state.game = value;
+		},
 		SET_LIST_BLOCKED(state, value: string[]) {
 			state.listBlocked = value;
 		},
@@ -228,6 +243,15 @@ export default createStore({
 		GET_LIST_BLOCKED(state) {
 			return state.listBlocked;
 		},
+		GET_GAME(state) {
+			return state.game;
+		},
+		GET_SAVE_POPUP(state) {
+			return state.save_popup;
+		},
+		GET_INV(state) {
+			return state.inv;
+		}
 	},
 	actions: {
 		SET_SOCKET(context) {
@@ -322,6 +346,15 @@ export default createStore({
 		},
 		SET_LIST_BLOCKED(context, value: string[]) {
 			context.commit("SET_LIST_BLOCKED", value)
+		},
+		SET_GAME(context, value: string) {
+			context.commit("SET_GAME", value);
+		},
+		SET_SAVE_POPUP(context) {
+			context.commit("SET_SAVE_POPUP");
+		},
+		SET_INV(context, value: boolean) {
+			context.commit("SET_INV", value);
 		},
 	},
 	modules: {

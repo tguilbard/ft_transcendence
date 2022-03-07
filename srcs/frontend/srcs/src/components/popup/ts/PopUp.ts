@@ -7,13 +7,15 @@ import Datepicker from 'vue3-date-time-picker';
 import 'vue3-date-time-picker/dist/main.css'
 import { MemberType } from "@/enums/enums";
 import { UserEntity } from "@/interface/interface";
+import PopupAlert from "@/components/popup/PopupAlert.vue";
 
 export type Avatar = File | null;
 
 export default defineComponent({
 	components: {
 		PopupProfil,
-		Datepicker
+		Datepicker,
+		PopupAlert
 	},
 	data: () => {
 		return {
@@ -37,21 +39,30 @@ export default defineComponent({
 			'GET_MSG_ALERT',
 			'GET_MODE',
 			'GET_MY_MODE',
+			'GET_SAVE_POPUP'
 		]),
 	},
+	// async created() {
+	// 	// store.state.socket.off('alertMessage').on('alertMessage', async (msg: string) => {
+	// 	// 	store.dispatch("SET_SAVE_POPUP");
+	// 	// 	store.dispatch("SET_MSG_ALERT", msg);
+	// 	// 	store.dispatch("SET_POPUP", 'alert' + store.getters.GET_POPUP);
+	// 	// 	alert(store.getters.GET_POPUP);
+	// 	// });
+	// },
 	methods: {
 
 		isNotExist(id: number) {
 			return !store.getters.GET_LIST_CHAN_PUBLIC.find(e => e.id == id);
 		},
 		async active_popup_profil() {
-			store.commit("SET_POPUP", 'profil');
+			store.dispatch("SET_POPUP", 'profil');
 		},
 		setPopup(value: string): void {
-			store.commit("SET_POPUP", value);
+			store.dispatch("SET_POPUP", value);
 		},
 		setUserTarget(value: UserEntity): void {
-			store.commit("SET_USER_TARGET", value);
+			store.dispatch("SET_USER_TARGET", value);
 		},
 		create_room() {
 			if (this.mdp != this.mdp2)
@@ -60,19 +71,22 @@ export default defineComponent({
 				shared.joinPublic(store.getters.GET_CHANNEL_TARGET.name, this.mdp);
 			else
 				shared.joinPrivate(store.getters.GET_CHANNEL_TARGET.name);
-			store.commit("SET_POPUP", '');
+			store.dispatch("SET_POPUP", '');
 		},
 		addUser() {
 			store.state.socket.emit('invite', store.getters.GET_USER_TARGET.username, store.getters.GET_CHAN_PRIVATE.realname);
-			store.commit("SET_POPUP", '');
+			store.dispatch("SET_POPUP", '');
 		},
 		response_inv(ret: boolean) {
 			store.state.socket.emit('valInvite', ret, store.getters.GET_CHANNEL_TARGET.name, store.getters.GET_USER_TARGET.username);
-			store.commit("SET_POPUP", '');
+			store.dispatch("SET_POPUP", '');
 		},
 		response_inv_game(ret: boolean) {
-			store.state.socket.emit('duel', ret, store.getters.GET_USER_TARGET.username);
-			store.commit("SET_POPUP", '');
+			if (store.getters.GET_GAME == 'pong')
+				store.state.socket.emit('duel', ret, store.getters.GET_USER_TARGET, store.getters.GET_USER, 2);
+			else if (store.getters.GET_GAME == 'star')
+				store.state.socket.emit('duel', ret, store.getters.GET_USER_TARGET, store.getters.GET_USER, 1);
+			store.dispatch("SET_POPUP", '');
 		},
 		async set_ban() {
 			if (this.modeIsSet(store.getters.GET_MODE, 'ban'))
@@ -139,7 +153,7 @@ export default defineComponent({
 		set_pass(): void {
 			if (this.mdp == this.mdp2) {
 				store.state.socket.emit('passChan', this.mdp, store.getters.GET_CHAN_CURRENT.realname);
-				store.commit("SET_POPUP", '');
+				store.dispatch("SET_POPUP", '');
 			}
 		},
 		add_friend(): void {

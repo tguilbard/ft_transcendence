@@ -60,7 +60,7 @@ class Game {
 
     addToSpec(user: SocketUser) {
         user.socket.to(this.phaserServer.id).emit("initScore");
-        this.server.to(user.socket.id).emit("START", this.privateFlag);
+        this.server.to(user.socket.id).emit("START", this.GameFlag);
         this.server.to(user.socket.id).emit("openText", 0);
         this.spectators.push(user);
         user.socket.join(this.socketRoomName);
@@ -79,6 +79,11 @@ interface user{
     elo: number;
     name: string;
     id: Socket;
+}
+
+interface Duel{
+    user1: UserEntity;
+    user2: UserEntity;
 }
 
 interface range{
@@ -121,6 +126,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     Q: user[][] = [[], []];
     oldRoot: Array<string> = [];
     games: Game[] = [];
+    initDuel: Duel[] = [];
 
     @WebSocketServer()
     server: Server;
@@ -190,6 +196,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     async init_score(client: Socket) {
         let g = this.games.find(game => game.users[0].socket.id === client.id || game.users[1].socket.id === client.id);
         this.server.to(g.phaserServer.id).emit('initScore')
+        this.server.to(client.id).emit('START', g.GameFlag);
     }
 
     @SubscribeMessage('unmatching')
@@ -209,30 +216,46 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     }
     
     @SubscribeMessage("invite_game")
-    async invite_game(client: Socket, payload: string){
-        if (!payload || !payload)
+    async invite_game(client: Socket, payload: any[]){
+        if (!payload || !payload[1])
             return;
         const user = await this.userService.FindUserBySocket(client);
         if (!user)
         return;
-        const user_target = await this.userService.FindUserByUsername(payload);
+        const user_target = payload[0];
         const socket = this.findSocketInUserSocketObject(user_target.id);
         if (!socket)
             return;
-        this.server.to(socket.id).emit("rcv_inv_game", user);
+        this.initDuel.push({user1: user, user2: user_target});
+        this.server.to(socket.id).emit("rcv_inv_game", user, payload[1]);
+    }
+
+    @SubscribeMessage("cancel_invite_game")
+    async cancel__game(client: Socket, payload: UserEntity[]){
+        const index = this.initDuel.findIndex(e => e.user1.id == payload[0].id && e.user2.id == payload[1].id )
+        if (index > -1)
+            this.initDuel.splice(index, 1);
     }
 
     @SubscribeMessage("duel")
     async duel(client: Socket, payload: any[]){
-        if (!payload || !payload[1] || !payload[2])
+        if (!payload || !payload[1] || !payload[2] || !payload[3])
         return;
-        const user1 = await this.userService.FindUserBySocket(client);
-        if (!user1)
-            return;
-        if (payload[0])
-            lunchServerPhaser(user1.username, payload[1], payload[2], 1);
+        const gduel = this.initDuel.find(e => e.user1.id == payload[1].id && e.user2.id == payload[2].id)
+        let socket = global.socketUserList.find(elem => elem.user.id === payload[1].id).socket;
+    
+        if (payload[0] && gduel)
+        {
+            lunchServerPhaser(gduel.user1.username, gduel.user2.username, payload[3], 1);
+        }
+        else if (!payload[0] && gduel)
+            socket.emit('alertMessage', payload[2].username + " cancel your invitation for gaming");
+        else if (payload[0] && !gduel)
+            client.emit('alertMessage', payload[1].username + " cancel his invitation for gamimg");
+        const index = this.initDuel.findIndex(e => e.user1.id == payload[1].id && e.user2.id == payload[2].id )
+        if (index > -1)
+            this.initDuel.splice(index, 1);
     }
-
 
     @SubscribeMessage("startGame")
     async startGame(phaserServer: Socket, payload: any[])

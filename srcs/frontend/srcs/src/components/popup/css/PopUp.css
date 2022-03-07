@@ -1,4 +1,4 @@
-.container_popup {
+.container_popup, .container_popup_alert {
     display: block;
     position: absolute;
     height: 100vh;
@@ -10,13 +10,17 @@
     overflow: hidden;
 }
 
-.container_popup {
+.container_popup, .container_popup_alert{
     z-index: 10;
     background-color: rgba(0, 0, 0, 0.8);
     visibility: visible;
 }
 
-.block_popup {
+.container_popup_alert {
+    z-index: 1000;
+}
+
+.block_popup, .block_popup_alert {
     display: block;
     position: absolute;
     border-radius: 7px 7px 7px 7px;
@@ -31,7 +35,7 @@
     color: rgb(255, 255, 255);
 }
 
-.block_popup h1 {
+.block_popup h1, .block_popup_alert{
     border-radius: 7px 7px 0px 0px;
     text-align: center;
     background-color: grey;
@@ -43,6 +47,10 @@
     font-weight: 900;
     font-size: 1.5vmax;
     border: 1px solid black;
+}
+
+.block_popup_alert {
+    z-index: 500;
 }
 
 .content_popup {

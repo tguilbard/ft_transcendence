@@ -38,8 +38,6 @@ let oldMsgtTime: string;
 let oldMsg: string;
 let myUser: UserEntity;
 
-let origin: number;
-
 const lGrey = 0xdcdcdc;
 const Grey = 0xb8b8b8;
 
@@ -352,6 +350,7 @@ class Pong extends Phaser.Scene {
         store.state.socket.on("START", (message) => {
             if (message === 1)
             {
+                alert("START et msg = " + message)
                 background.setVisible(false);
                 backgroundC.setVisible(true);
                 star.setVisible(true);
@@ -373,13 +372,12 @@ class Pong extends Phaser.Scene {
         });
 
 
-        // if()
         if (myUser.state == 'in match')
         {
-            Start();
+            // Start();
             // if (this.flag === 0)
             // {
-                background.setVisible(true);
+            //     background.setVisible(true);
             // }
             // else if (this.flag === 1)
             // {
@@ -402,11 +400,6 @@ class Pong extends Phaser.Scene {
             gameStarted = true;
             store.state.socket.emit("init_score");
         }
-
-        this.input.on('pointerdown', function (p) {
-            origin = p.y;
-        });
-
     }
    
     public update() {
@@ -414,15 +407,6 @@ class Pong extends Phaser.Scene {
             store.state.socket.emit("players", "UP");
         } else if (keysDOWN.isDown) {
             store.state.socket.emit("players", "DOWN");
-        }
-
-        if (game.input.mousePointer.isDown)
-        {
-            if (game.input.mousePointer.y - origin < 0) {
-                store.state.socket.emit("players", "UP");
-            } else if (game.input.mousePointer.y - origin > 0) {
-                store.state.socket.emit("players", "DOWN");
-            }
         }
     }
 }

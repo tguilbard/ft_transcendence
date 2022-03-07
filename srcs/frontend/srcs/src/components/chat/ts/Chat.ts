@@ -510,8 +510,9 @@ export default class Chat extends Vue {
 		});
 	
 		store.state.socket.off('alertMessage').on('alertMessage', async (msg: string) => {
+			store.dispatch("SET_SAVE_POPUP");
 			store.dispatch("SET_MSG_ALERT", msg);
-			store.dispatch("SET_POPUP", 'alert');
+			store.dispatch("SET_POPUP", 'alert' + store.getters.GET_POPUP);
 		});
 	
 		store.state.socket.off('goMsg').on('goMsg', async (channel: ChannelEntity) => {
@@ -647,13 +648,15 @@ export default class Chat extends Vue {
 			this.conf(channel_target);
 		});
 	
-		store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity) => {
+		store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity, game: string) => {
 			store.dispatch("SET_USER_TARGET", user_target);
+			store.dispatch("SET_GAME", game);
 			this.setPopup('inv_game')
 		});
 	
 		store.state.socket.off('start_game').on('start_game', () => {
 			store.dispatch("SET_DUEL", true);
+			this.setPopup('');
 			this.$router.push('/');
 		});
 	}

@@ -1,6 +1,8 @@
 <section>
-    <div v-if="GET_POPUP == 'profil'"></div>
-    <PopupProfil/>
+    <div v-if="GET_POPUP == 'profil' || GET_POPUP == 'duel' || GET_POPUP == 'description' || GET_POPUP == 'alertprofil' || GET_POPUP == 'alertduel' ">
+        <PopupProfil/>
+    </div>
+    <PopupAlert/>
     <div v-if="GET_POPUP == 'pass' && GET_ROOM">
         <div @click="setPopup('')" class="container_popup"></div>
         <div class="block_popup">
@@ -36,22 +38,6 @@
                         </div>
                     </form>
                 </form>
-            </div>
-        </div>
-    </div>
-    <div v-if="GET_POPUP == 'alert'">
-        <div @click="setPopup('')" class="container_popup"></div>
-        <div class="block_popup">
-            <div class="content_popup">
-                <h1>ALERT</h1>
-                <div class="grid_popup_inv">
-                    <div>
-                        <p>{{GET_MSG_ALERT}}</p>
-                    </div>
-                    <div class="btn_select">
-                        <button @click="setPopup('')">BACK</button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
