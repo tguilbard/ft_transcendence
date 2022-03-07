@@ -38,6 +38,8 @@ let oldMsgtTime: string;
 let oldMsg: string;
 let myUser: UserEntity;
 
+let origin: number;
+
 const lGrey = 0xdcdcdc;
 const Grey = 0xb8b8b8;
 
@@ -400,6 +402,11 @@ class Pong extends Phaser.Scene {
             gameStarted = true;
             store.state.socket.emit("init_score");
         }
+
+        this.input.on('pointerdown', function (p) {
+            origin = p.y;
+        });
+
     }
    
     public update() {
@@ -407,6 +414,15 @@ class Pong extends Phaser.Scene {
             store.state.socket.emit("players", "UP");
         } else if (keysDOWN.isDown) {
             store.state.socket.emit("players", "DOWN");
+        }
+
+        if (game.input.mousePointer.isDown)
+        {
+            if (game.input.mousePointer.y - origin < 0) {
+                store.state.socket.emit("players", "UP");
+            } else if (game.input.mousePointer.y - origin > 0) {
+                store.state.socket.emit("players", "DOWN");
+            }
         }
     }
 }
