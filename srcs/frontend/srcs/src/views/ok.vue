@@ -13,7 +13,7 @@ import store from "../store/index";
   },
   methods: {
     async login(code: string) {
-      var response = await fetch("http://localhost:3000/users/login", {
+      var response = await fetch(`http://${process.env.VUE_APP_BACK}/users/login`, {
         method: "POST",
         mode: "cors",
         credentials: "include",

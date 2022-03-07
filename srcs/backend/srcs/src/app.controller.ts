@@ -34,4 +34,10 @@ export class AppController {
 		}
 		return {log: true};
 	}
+
+	@Get("/is-alive")
+	isAlive() : number
+	{
+		return 0;
+	}
 }

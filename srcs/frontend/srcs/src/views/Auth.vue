@@ -54,7 +54,7 @@ import shared from "../mixins/Mixins";
   methods: {
     async submit() {
       // Création d'un formData obligatoire pour submit de l'image
-      await fetch("http://localhost:3000/2fa/activate", {
+      await fetch(`http://${process.env.VUE_APP_BACK}/2fa/activate`, {
         method: "POST",
         mode: "cors",
         credentials: "include",
@@ -68,7 +68,7 @@ import shared from "../mixins/Mixins";
       })
         .then((response) => {
           if (response.ok) {
-            window.location.href = "http://localhost:8080";
+            window.location.href = "http://127.0.0.1:8080";
           } else {
             return response.json();
           }
@@ -81,7 +81,7 @@ import shared from "../mixins/Mixins";
         });
     },
     passed() {
-      window.location.href = "http://localhost:8080/login";
+      window.location.href = "http://127.0.0.1:8080/login";
     },
   },
   async created() {
