@@ -17,78 +17,75 @@ services:
       - PGDATA=${DATABASE_DATA}
       - NODE_ENV=${NODE_ENV}
 
-  pgadmin:
-    container_name: pgadmin_container
-    build:
-      context: srcs/pgadmin4
+  # pgadmin:
+  #   container_name: pgadmin_container
+  #   build:
+  #     context: srcs/pgadmin4
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - JSON_FILE=${PGADMIN_SERVER_JSON_FILE}
+  #   restart: always
+  #   ports:
+  #     - ${PGADMIN_HOST}:${PGADMIN_LISTEN_PORT}:${PGADMIN_LISTEN_PORT}
+  #   links: 
+  #     - "database:${DATABASE_LINK}"
+  #   depends_on:
+  #     database:
+  #       condition: service_healthy
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+  #     - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+  #     - PGADMIN_LISTEN_PORT=${PGADMIN_LISTEN_PORT}
+  #     - PGADMIN_SERVER_JSON_FILE=${PGADMIN_SERVER_JSON_FILE}
+
+  backend:
+    build: 
+      context: srcs/backend
       dockerfile: Dockerfile
-      args:
-        - JSON_FILE=${PGADMIN_SERVER_JSON_FILE}
-    restart: always
+    image: backend
+    #hostname: 127.0.0.1
     ports:
-      - ${PGADMIN_HOST}:${PGADMIN_LISTEN_PORT}:${PGADMIN_LISTEN_PORT}
-    links: 
-      - "database:${DATABASE_LINK}"
+      - "${BACK_HOST}:${BACK_PORT}:${BACK_PORT}"
+    container_name: backend_container
     depends_on:
       database:
         condition: service_healthy
     environment:
-      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
-      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
-      - PGADMIN_LISTEN_PORT=${PGADMIN_LISTEN_PORT}
-      - PGADMIN_SERVER_JSON_FILE=${PGADMIN_SERVER_JSON_FILE}
+      PORT: ${BACK_PORT}
+      HOST: ${BACK_HOST}
+      ADDRESS: ${BACK_HOST}:${BACK_PORT}
 
-  # backend:
-  #   build: 
-  #     context: srcs/backend
-  #     dockerfile: Dockerfile
-  #   image: backend
-  #   #hostname: 127.0.0.1
-  #   ports:
-  #     - "${BACK_PORT}:${BACK_PORT}"
-  #   container_name: backend_container
-  #   environment:
-  #     PORT: ${BACK_PORT}
-  #     HOST: ${BACK_HOST}
-  #     ADDRESS: ${BACK_HOST}:${BACK_PORT}
+      FRONT_ADDRESS: ${FRONT_HOST}:${FRONT_PORT}
 
-  #     FRONT_ADDRESS: ${FRONT_HOST}:${FRONT_PORT}
+      DATABASE_TYPE: ${DATABASE_TYPE}
+      DATABASE_HOST: ${DATABASE_LINK}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_ADDRESS: ${DATABASE_HOST}:${DATABASE_PORT}
 
-  #     DATABASE_TYPE: ${DATABASE_TYPE}
-  #     DATABASE_HOST: ${DATABASE_HOST}
-  #     DATABASE_PORT: ${DATABASE_PORT}
-  #     DATABASE_ADDRESS: ${DATABASE_HOST}:${DATABASE_PORT}
+      NODE_ENV: ${NODE_ENV}
 
-  #     NODE_ENV: ${NODE_ENV}
+      # #THAT MUST BE MOVE INSIDE SECRET
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
 
-  #     # #THAT MUST BE MOVE INSIDE SECRET
-  #     DATABASE_USER: ${DATABASE_USER}
-  #     DATABASE_NAME: ${DATABASE_NAME}
-  #     DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-
-  #   depends_on:
-  #     database:
-  #       condition: service_healthy
-
-  # frontend:
-  #   build: 
-  #     context: srcs/frontend
-  #     dockerfile: Dockerfile
-  #   #hostname: 127.0.0.1
-  #   image: frontend
-  #   ports:
-  #     - "${FRONT_PORT}:${FRONT_PORT}"
-  #   environment:
-  #     PORT: ${FRONT_PORT}
-  #     HOST: ${FRONT_HOST}
-  #     ADDRESS: ${FRONT_HOST}:${FRONT_PORT}
-
-        # NODE_ENV: ${NODE_ENV}
-
-  #     BACK_ADDRESS: ${BACK_HOST}:${BACK_PORT}
-  #   container_name: frontend_container
-  #   # depends_on:
-  #   #   - backend
+  frontend:
+    build: 
+      context: srcs/frontend
+      dockerfile: Dockerfile
+    #hostname: 127.0.0.1
+    image: frontend
+    ports:
+      - "${FRONT_HOST}:${FRONT_PORT}:${FRONT_PORT}"
+    depends_on:
+      - backend
+    container_name: frontend_container
+    environment:
+      PORT: ${FRONT_PORT}
+      HOST: ${FRONT_HOST}
+      ADDRESS: ${FRONT_HOST}:${FRONT_PORT}
+      BACK_ADDRESS: ${BACK_LINK}:${BACK_PORT}
+      NODE_ENV: ${NODE_ENV}
 
 # secrets:
 #   database_password:
