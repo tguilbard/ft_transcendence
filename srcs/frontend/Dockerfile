@@ -20,4 +20,4 @@ COPY srcs .
 # build app for production with minification
 RUN npm run build
 
-CMD [ "npm", "run", "serve" ]
+CMD [ "npm", "run", "serve", "--", "--mode", "production" ]
