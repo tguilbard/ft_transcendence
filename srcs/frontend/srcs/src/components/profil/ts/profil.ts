@@ -219,6 +219,16 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 			}
 		});
 
+		store.state.socket.off('rcvInvite').on('rcvInvite', (channel_target: ChannelEntity, user_target: UserEntity) => {
+			
+			store.dispatch("SET_CHANNEL_TARGET", channel_target);
+			store.dispatch("SET_USER_TARGET", user_target);
+			if (typeof channel_target !== 'undefined') {
+				store.dispatch("SET_SAVE_POPUP");
+				store.dispatch("SET_POPUP", 'inv');
+			}
+		});
+
 		this.log = true;
 	},
 })

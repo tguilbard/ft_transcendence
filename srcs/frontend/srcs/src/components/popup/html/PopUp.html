@@ -244,17 +244,14 @@
                         </div>
                     </div>
                 </div>
-                <form @submit="addUser">
-                    <div class="btn_select">
-                        <div>
-                            <button @click="setPopup('')">BACK</button>
-                        </div>
-                        <div>
-                            <input type="submit" value="Send invitation"
-                                :disabled="GET_USER_TARGET.username ? disabled : ''">
-                        </div>
+                <div class="btn_select">
+                    <div>
+                        <button @click="setPopup('')">BACK</button>
                     </div>
-                </form>
+                    <div>
+                        <button @click="addUser" :disabled="GET_USER_TARGET.username ? disabled : ''">Send invitation</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

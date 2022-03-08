@@ -547,22 +547,22 @@ export default defineComponent({
         store.getters.GET_USER_TARGET.username
       );
     },
-    myEventHandler() {
-      let block_height = document.getElementById("block_popup").offsetHeight;
-      let top = window.innerHeight - Number(block_height);
-      if (top <= 0) {
-        document.getElementById("block_popup").style.top = "0px";
-        document.getElementById("block_popup").style.transform =
-          "translate(-50%, 0%)";
-      } else {
-        document.getElementById("block_popup").style.top = "50%";
-        document.getElementById("block_popup").style.transform =
-          "translate(-50%, -50%)";
-      }
-    },
+    // myEventHandler() {
+    //   let block_height = document.getElementById("block_popup").offsetHeight;
+    //   let top = window.innerHeight - Number(block_height);
+    //   if (top <= 0) {
+    //     document.getElementById("block_popup").style.top = "0px";
+    //     document.getElementById("block_popup").style.transform =
+    //       "translate(-50%, 0%)";
+    //   } else {
+    //     document.getElementById("block_popup").style.top = "50%";
+    //     document.getElementById("block_popup").style.transform =
+    //       "translate(-50%, -50%)";
+    //   }
+    // },
   },
   async created() {
-    window.addEventListener("resize", this.myEventHandler);
+    // window.addEventListener("resize", this.myEventHandler);
     this.username = store.getters.GET_USER.username;
     this.check = (await shared.getMyUser()).tfaActivated;
   },

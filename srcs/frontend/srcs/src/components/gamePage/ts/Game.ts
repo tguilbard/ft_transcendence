@@ -159,6 +159,16 @@ import store from "@/store";
 				await store.dispatch("SET_LEADER_BOARD", await shared.getLeaderBoard());
 			}
 		);
+
+		store.state.socket.off('rcvInvite').on('rcvInvite', (channel_target: ChannelEntity, user_target: UserEntity) => {
+			
+			store.dispatch("SET_CHANNEL_TARGET", channel_target);
+			store.dispatch("SET_USER_TARGET", user_target);
+			if (typeof channel_target !== 'undefined') {
+				store.dispatch("SET_SAVE_POPUP");
+				store.dispatch("SET_POPUP", 'inv');
+			}
+		});
 	},
 	computed: {
 		...mapGetters([

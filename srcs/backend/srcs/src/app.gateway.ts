@@ -431,7 +431,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage("valInvite")
 	async valInvite(client: Socket, payload: any[]) {
-
 		let ret: boolean = payload[0];
 		let chanName = payload[1];
 		let chan = await this.chatService.GetChannel(chanName);
