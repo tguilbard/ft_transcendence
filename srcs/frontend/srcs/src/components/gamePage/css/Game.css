@@ -198,3 +198,8 @@ span {
   height: 38vmax;
   border-radius: 0vmax 0vmax 0.5vmax 0.5vmax;
 }
+
+.block_text, .block_text img {
+  width: 100%;
+  height: 100%;
+}
