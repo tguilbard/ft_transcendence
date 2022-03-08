@@ -70,7 +70,7 @@ import store from "../store/index";
       })
         .then((response) => {
           if (response.ok) {
-            window.location.href = "http://localhost:8080";
+            window.location.href = "http://localhost:3000";
           } else {
             return response.json();
           }

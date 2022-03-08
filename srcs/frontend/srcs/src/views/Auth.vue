@@ -70,7 +70,7 @@ import shared from "../mixins/Mixins";
       })
         .then((response) => {
           if (response.ok) {
-            window.location.href = "http://localhost:8080";
+            window.location.href = "http://localhost:3000";
           } else {
             return response.json();
           }
@@ -83,7 +83,7 @@ import shared from "../mixins/Mixins";
         });
     },
     passed() {
-      window.location.href = "http://localhost:8080/login";
+      window.location.href = "http://localhost:3000/login";
     },
   },
   async created() {

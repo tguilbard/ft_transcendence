@@ -70,7 +70,7 @@ import store from "../store/index";
     },
     login() {
       window.location.href =
-        "https://api.intra.42.fr/oauth/authorize?client_id=61094fffbf3140a13c461779c220cbc96dfbad643921a60e345ff8a99928a7a2&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fok&response_type=code";
+        "https://api.intra.42.fr/oauth/authorize?client_id=61094fffbf3140a13c461779c220cbc96dfbad643921a60e345ff8a99928a7a2&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fok&response_type=code";
     },
   },
   async created() {

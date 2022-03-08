@@ -4,7 +4,7 @@ import { Achievements, ChannelEntity, Match, Message, MessagesList, UserEntity }
 
 export default createStore({
 	state: {
-		socket: io(),
+		socket: io('http://0.0.0.1:2000', { transports: ['websocket', 'polling', 'flashsocket'] }),
 		sock_init: false,
 		listUsersCurrent: [{} as UserEntity],
 		user: {} as UserEntity,
