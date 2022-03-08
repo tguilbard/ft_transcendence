@@ -1,16 +1,14 @@
 <template>
-  <div v-if="GET_POPUP == 'alert' || GET_POPUP == 'alertduel'">
-    <div @click="leave" class="container_popup3"></div>
-    <div class="block_popup2">
-      <div class="content_popup">
-        <h1>ALERT</h1>
-        <div class="grid_popup_inv">
-          <div>
-            <p>{{ GET_MSG_ALERT }}</p>
-          </div>
-          <div class="btn_select">
-            <button @click="leave">BACK</button>
-          </div>
+  <div @click="leave" class="container_popup3"></div>
+  <div class="block_popup2">
+    <div class="content_popup">
+      <h1>ALERT</h1>
+      <div class="grid_popup_inv">
+        <div>
+          <p>{{ GET_MSG_ALERT }}</p>
+        </div>
+        <div class="btn_select">
+          <button @click="leave">BACK</button>
         </div>
       </div>
     </div>
@@ -36,7 +34,6 @@ export default defineComponent({
     leave() {
       if (store.getters.GET_POPUP == "alertduel")
         store.dispatch("SET_INV", false);
-	alert(store.getters.GET_SAVE_POPUP)
       this.setPopup(store.getters.GET_SAVE_POPUP);
     },
     sendInv(): void {

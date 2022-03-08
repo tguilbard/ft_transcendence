@@ -39,7 +39,7 @@
                         <h1>LEADERBOARD</h1>
                     </div>
                     <div class="content_leaderboard">
-                        <div v-for="item in GET_LEADER_BOARD" :key="item">
+                        <div v-if="GET_LEADER_BOARD" v-for="item in GET_LEADER_BOARD" :key="item">
                             <div class="grid_leaderboard">
                                 <div class="left">
                                     <p>{{ item.elo }}</p>

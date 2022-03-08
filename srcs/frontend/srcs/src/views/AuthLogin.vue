@@ -14,8 +14,10 @@
         placeholder="Entre le code recus"
         v-model="code"
       />
-      <div class="msg" v-for="msg in myerror.message" :key="msg">
-        <p style="color: red" v-if="msg.code">{{ msg.code }}</p>
+      <div v-if="myerror && myerror.message">
+        <div class="msg" v-for="msg in myerror.message" :key="msg">
+          <p style="color: red" v-if="msg.code">{{ msg.code }}</p>
+        </div>
       </div>
       <input class="valider" type="submit" value="VALIDEZ" />
     </form>

@@ -177,6 +177,12 @@ export default class Chat extends Vue {
 		await store.dispatch("SET_LIST_CHANNEL_PUBLIC", await this.getListChannelPublic());
 		await store.dispatch("SET_LIST_USER_GENERAL", await shared.getUserInChan("General"));
 		store.dispatch("SET_POPUP", 'add');
+		store.dispatch("SET_SAVE_POPUP");
+	}
+
+	private async active_pop_create(): Promise<void> {
+		store.dispatch("SET_POPUP", 'create');
+		store.dispatch("SET_SAVE_POPUP");
 	}
 
 	private async active_pop_profil_mode(user_target: UserEntity): Promise<void> {
@@ -185,6 +191,7 @@ export default class Chat extends Vue {
 		store.dispatch("SET_USER_TARGET", user_target);
 		await store.dispatch("SET_MODE", await this.getMode(user_target.username));
 		store.dispatch("SET_POPUP", 'profil_mode');
+		store.dispatch("SET_SAVE_POPUP");
 		store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
 		store.dispatch("SET_LIST_ACHIEVEMENTS_TARGET", await shared.getAchievements(store.getters.GET_USER_TARGET.username));
 		await store.dispatch("SET_IMG_TARGET", await shared.get_avatar(user_target.username));
@@ -223,6 +230,7 @@ export default class Chat extends Vue {
 	private async conf(channel: ChannelEntity): Promise<void> {
 		if (typeof channel !== 'undefined') {
 			store.dispatch("SET_CHAN_CURRENT", channel);
+			store.dispatch("SET_SAVE_POPUP");
 			store.dispatch("SET_POPUP", 'inv');
 		}
 	}
@@ -484,6 +492,7 @@ export default class Chat extends Vue {
 						store.dispatch("SET_ROOM", false);
 						store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
 						store.dispatch("SET_POPUP", 'alert');
+						store.dispatch("SET_SAVE_POPUP");
 						store.dispatch("SET_LIST_CHAN_PRIVATE", tmp)
 					}
 	
@@ -525,6 +534,7 @@ export default class Chat extends Vue {
 			store.dispatch("SET_CHAN_PRIVATE", channel);
 			store.dispatch("SET_CHAN_CURRENT", channel);
 			store.dispatch("SET_POPUP", '');
+			store.dispatch("SET_SAVE_POPUP");
 	
 			await this.refresh();
 			return this.$router.push("/chat");
@@ -649,8 +659,10 @@ export default class Chat extends Vue {
 		});
 	
 		store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity, game: string) => {
+			store.dispatch("SET_SAVE_POPUP");
 			store.dispatch("SET_USER_TARGET", user_target);
 			store.dispatch("SET_GAME", game);
+			store.dispatch("SET_POPUP", 'alert' + store.getters.GET_POPUP);
 			this.setPopup('inv_game')
 		});
 	

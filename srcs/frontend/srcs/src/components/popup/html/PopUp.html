@@ -1,9 +1,11 @@
 <section>
-    <div v-if="GET_POPUP == 'profil' || GET_POPUP == 'duel' || GET_POPUP == 'description' || GET_POPUP == 'alertprofil' || GET_POPUP == 'alertduel' ">
-        <PopupProfil/>
+    <div v-if="GET_POPUP">
+        <PopupProfil />
     </div>
-    <PopupAlert/>
-    <div v-if="GET_POPUP == 'pass' && GET_ROOM">
+    <div v-if="isAlert">
+        <PopupAlert />
+    </div>
+    <div v-if="(GET_POPUP == 'pass' || GET_SAVE_POPUP == 'pass') && GET_ROOM">
         <div @click="setPopup('')" class="container_popup"></div>
         <div class="block_popup">
             <div class="content_popup">
@@ -41,7 +43,7 @@
             </div>
         </div>
     </div>
-    <div v-if="GET_POPUP == 'profil_mode'">
+    <div v-if="GET_POPUP == 'profil_mode' || GET_SAVE_POPUP == 'profil_mode'">
         <div @click="setPopup('')" class="container_popup"></div>
         <div class="block_popup">
             <div class="content_popup">
@@ -53,15 +55,19 @@
                         </div>
                     </div>
                     <div>
-                        <div :class="[((selected_mode == 'mute' || selected_mode == 'unmute') && !modeIsSet(GET_MODE, 'owner') && (!modeIsSet(GET_MODE, 'admin') || modeIsSet(GET_MY_MODE, 'owner')))? 'selected': '', 'mod']">
+                        <div
+                            :class="[((selected_mode == 'mute' || selected_mode == 'unmute') && !modeIsSet(GET_MODE, 'owner') && (!modeIsSet(GET_MODE, 'admin') || modeIsSet(GET_MY_MODE, 'owner')))? 'selected': '', 'mod']">
                             <div v-if="modeIsSet(GET_MODE, 'mute')">
-                                <img class="link" @click="set_date('unmute')" src="../../../assets/mute3.png" alt="MUTE">
+                                <img class="link" @click="set_date('unmute')" src="../../../assets/mute3.png"
+                                    alt="MUTE">
                             </div>
                             <div v-else>
-                                <img class="link" @click="set_date('mute')" src="../../../assets/unmute3.png" alt="UNMUTE">
+                                <img class="link" @click="set_date('mute')" src="../../../assets/unmute3.png"
+                                    alt="UNMUTE">
                             </div>
                         </div>
-                        <div :class="[((selected_mode == 'ban' || selected_mode == 'unban') && !modeIsSet(GET_MODE, 'owner') && (!modeIsSet(GET_MODE, 'admin') || modeIsSet(GET_MY_MODE, 'owner')))? 'selected': '', 'mod']">
+                        <div
+                            :class="[((selected_mode == 'ban' || selected_mode == 'unban') && !modeIsSet(GET_MODE, 'owner') && (!modeIsSet(GET_MODE, 'admin') || modeIsSet(GET_MY_MODE, 'owner')))? 'selected': '', 'mod']">
                             <div v-if="modeIsSet(GET_MODE, 'ban')">
                                 <img class="link" @click="set_date('unban')" src="../../../assets/ban3.png" alt="BAN">
                             </div>
@@ -73,19 +79,24 @@
                             <img class="link" src="../../../assets/owner.png" alt="OWNER">
                         </div>
                         <div v-else class="mod">
-                            <div :class="[((selected_mode == 'admin' || selected_mode == 'unadmin') && !modeIsSet(GET_MODE, 'owner') && modeIsSet(GET_MY_MODE, 'owner'))? 'selected': '', 'mod']">
+                            <div
+                                :class="[((selected_mode == 'admin' || selected_mode == 'unadmin') && !modeIsSet(GET_MODE, 'owner') && modeIsSet(GET_MY_MODE, 'owner'))? 'selected': '', 'mod']">
                                 <div class="mod" v-if="modeIsSet(GET_MODE, 'admin')">
-                                    <img class="link" @click="set_date('unadmin')" src="../../../assets/admin3.png" alt="ADMIN">
+                                    <img class="link" @click="set_date('unadmin')" src="../../../assets/admin3.png"
+                                        alt="ADMIN">
                                 </div>
                                 <div v-else class="mod">
-                                    <img class="link" @click="set_date('admin')" src="../../../assets/unadmin3.png" alt="UNADMIN">
+                                    <img class="link" @click="set_date('admin')" src="../../../assets/unadmin3.png"
+                                        alt="UNADMIN">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div>
                         <div v-if="selected_mode">
-                            <Datepicker :style="{ visibility: [(selected_mode != 'mute' && selected_mode != 'ban')? 'hidden': ''] }" v-model="date"></Datepicker>
+                            <Datepicker
+                                :style="{ visibility: [(selected_mode != 'mute' && selected_mode != 'ban')? 'hidden': ''] }"
+                                v-model="date"></Datepicker>
                             <div class="btn_select">
                                 <button @click="set_mode">set {{selected_mode}}</button>
                             </div>
@@ -97,7 +108,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="btn_select">
                         <button @click="setPopup('')">BACK</button>
                     </div>
@@ -105,7 +116,7 @@
             </div>
         </div>
     </div>
-    <div v-if="GET_POPUP == 'create'">
+    <div v-if="GET_POPUP == 'create' || GET_SAVE_POPUP == 'create'">
         <div @click="setPopup('')" class="container_popup"></div>
         <div class="block_popup">
             <div class="content_popup">
@@ -125,7 +136,8 @@
                         </div>
                         <div>
                             <div>
-                                <input maxlength="7" type="text" id="name" name="name" v-model="GET_CHANNEL_TARGET.name">
+                                <input maxlength="7" type="text" id="name" name="name"
+                                    v-model="GET_CHANNEL_TARGET.name">
                             </div>
                             <div v-if="GET_ROOM">
                                 <input type="text" id="mdp" name="mdp" v-model="mdp">
@@ -147,20 +159,23 @@
             </div>
         </div>
     </div>
-    <div v-if="GET_POPUP == 'add'">
+    <div v-if="GET_POPUP == 'add' || GET_SAVE_POPUP == 'add'">
         <div @click="setPopup('')" class="container_popup"></div>
         <div class="block_popup">
             <div v-if="GET_ROOM" class="content_popup">
                 <h1>AJOUT D'UN SALON</h1>
                 <div>
                     <div class="list_chan_popup">
-                        <div v-for="item in GET_LIST_CHANNEL_PUBLIC">
-                            <div v-if="isNotExist(item.id)" :class="[ (GET_CHANNEL_TARGET.name == item.name)? 'user_list_selected': '', 'btn_chan' ]">
-                                <div>
-                                    <p @click="Object.assign(GET_CHANNEL_TARGET, item)">{{ item.name }}</p>
-                                </div>
-                                <div v-if="item.mode == 5">
-                                    <img src="@/assets/key.png" alt="">
+                        <div v-if="GET_LIST_CHANNEL_PUBLIC" v-for="item in GET_LIST_CHANNEL_PUBLIC">
+                            <div v-if="isNotExist(item.id)"
+                                :class="[ (GET_CHANNEL_TARGET.name == item.name)? 'user_list_selected': '', 'btn_chan' ]">
+                                <div class="tab_mdp">
+                                    <div>
+                                        <p @click="Object.assign(GET_CHANNEL_TARGET, item)">{{ item.name }}</p>
+                                    </div>
+                                    <div v-if="item.mode == 5">
+                                        <img src="@/assets/key.png" alt="">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -177,8 +192,8 @@
                             </div>
                             <div>
                                 <div>
-                                    <input type="text" id="mdp" name="mdp" v-model="mdp" v-if="GET_CHANNEL_TARGET.mode != 5"
-                                        disabled>
+                                    <input type="text" id="mdp" name="mdp" v-model="mdp"
+                                        v-if="GET_CHANNEL_TARGET.mode != 5" disabled>
                                     <input type="text" id="mdp" name="mdp" v-model="mdp"
                                         v-if="GET_CHANNEL_TARGET.mode == 5">
                                 </div>
@@ -211,8 +226,8 @@
                 <h1>INVITATION D'UN USER</h1>
 
                 <div class="list_chan_popup">
-                    <div v-for="item in GET_LIST_USER_GENERAL">
-                        <div v-if="((item.username != GET_USER.username) && (item.state == 'login' || item.state == 'in match'))"
+                    <div v-if="GET_LIST_USER_GENERAL" v-for="item in GET_LIST_USER_GENERAL">
+                        <div v-if="((item.username != GET_USER.username) && item.state == 'login')"
                             :class="[ (item.username == GET_USER_TARGET.username)? 'user_list_selected': '', 'logo_connection']">
                             <div>
                                 <p class="link" @click="setUserTarget(item)" style="text-align: left;">{{
@@ -235,60 +250,58 @@
                             <button @click="setPopup('')">BACK</button>
                         </div>
                         <div>
-                            <input type="submit" value="Send invitation" :disabled="GET_USER_TARGET.username ? disabled : ''">
+                            <input type="submit" value="Send invitation"
+                                :disabled="GET_USER_TARGET.username ? disabled : ''">
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <div v-if="GET_POPUP == 'inv'">
-        <div @click="setPopup('')" class="container_popup"></div>
-        <div class="block_popup">
+    <div v-if="GET_POPUP == 'inv' || GET_SAVE_POPUP == 'inv'">
+        <div @click="setPopup('GET_SAVE_POPUP')" class="container_popup inv"></div>
+        <div class="block_popup inv">
             <div class="content_popup">
                 <h1>INVITATION</h1>
-                <form @submit="response_inv(true)">
-                    <div class="btn_select">
-                        <div class="grid_popup_inv">
+                <div class="btn_select">
+                    <div class="grid_popup_inv">
+                        <div>
+                            <p>{{GET_USER_TARGET.username}} invite you on {{GET_CHANNEL_TARGET.name}} private
+                                channel</p>
+                        </div>
+                        <div class="btn_select">
                             <div>
-                                <p>{{GET_USER_TARGET.username}} invite you on {{GET_CHANNEL_TARGET.name}} private channel</p>
+                                <button @click="response_inv(false)">Declaimed</button>
                             </div>
-                            <div class="btn_select">
-                                <div>
-                                    <button @click="response_inv(false)">Declaimed</button>
-                                </div>
-                                <div>
-                                    <input type="submit" value="Accepted">
-                                </div>
+                            <div>
+                                <button @click="response_inv(true)">Accepted</button>
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-    <div v-if="GET_POPUP == 'inv_game'">
-        <div @click="setPopup('')" class="container_popup"></div>
-        <div class="block_popup">
+    <div v-if="GET_POPUP == 'inv_game' || GET_SAVE_POPUP == 'inv_game'">
+        <div @click="setPopup(GET_SAVE_POPUP)" class="container_popup inv"></div>
+        <div class="block_popup inv">
             <div class="content_popup">
                 <h1>INVITATION</h1>
-                <form @submit="response_inv_game(true)">
-                    <div class="btn_select">
-                        <div class="grid_popup_inv">
+                <div class="btn_select">
+                    <div class="grid_popup_inv">
+                        <div>
+                            <p>{{GET_USER_TARGET.username}} invite you for playing</p>
+                        </div>
+                        <div class="btn_select">
                             <div>
-                                <p>{{GET_USER_TARGET.username}} invite you for play</p>
+                                <button @click="response_inv_game(false)">Declaimed</button>
                             </div>
-                            <div class="btn_select">
-                                <div>
-                                    <button @click="response_inv_game(false)">Declaimed</button>
-                                </div>
-                                <div>
-                                    <input type="submit" value="Accepted">
-                                </div>
+                            <div>
+                                <button @click="response_inv_game(true)">Accepted</button>
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

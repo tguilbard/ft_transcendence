@@ -1,5 +1,4 @@
 <template>
-  <div v-if="GET_POPUP == 'duel' || GET_POPUP == 'alertduel'">
     <div @click="cancelInv" class="container_popup3"></div>
     <div class="block_popup2">
       <div class="content_popup">
@@ -38,7 +37,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script lang="ts">
@@ -120,7 +118,6 @@ export default defineComponent({
 }
 
 .container_popup3 {
-  z-index: 110;
   background-color: rgba(0, 0, 0, 0.8);
   visibility: visible;
 }
@@ -132,7 +129,6 @@ export default defineComponent({
   height: stretch;
   text-align: left;
   overflow: auto;
-  z-index: 20;
   font-weight: 900;
   font-size: 1.2vmax;
 }
@@ -168,7 +164,7 @@ label {
   top: 40%;
   transform: translate(-50%, -50%);
   text-align: center;
-  z-index: 500;
+  z-index: 110;
   color: rgb(255, 255, 255);
 }
 

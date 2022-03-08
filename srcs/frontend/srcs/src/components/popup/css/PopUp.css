@@ -167,9 +167,16 @@
     border: 2px solid #8f8f8f;
 }
 
-.list_chan_popup p, img {
+.list_chan_popup p {
     margin: 0.2vmax;
     padding: 0.4vmax;
+}
+
+.list_chan_popup img {
+    margin: 0.2vmax;
+    padding: 0.4vmax;
+    width: 2vmax;
+    height: auto;
 }
 
 .user_list_selected {
@@ -199,4 +206,8 @@
 .logo_connection img {
     width: 1vmax;
     height: 1vmax;
+}
+
+.inv {
+    z-index: 1000;
 }

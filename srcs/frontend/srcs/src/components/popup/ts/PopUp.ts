@@ -41,15 +41,12 @@ export default defineComponent({
 			'GET_MY_MODE',
 			'GET_SAVE_POPUP'
 		]),
+		isAlert() {
+			if (store.getters.GET_POPUP.substring(0, 5) == 'alert')
+				return true;
+			return false;
+		}
 	},
-	// async created() {
-	// 	// store.state.socket.off('alertMessage').on('alertMessage', async (msg: string) => {
-	// 	// 	store.dispatch("SET_SAVE_POPUP");
-	// 	// 	store.dispatch("SET_MSG_ALERT", msg);
-	// 	// 	store.dispatch("SET_POPUP", 'alert' + store.getters.GET_POPUP);
-	// 	// 	alert(store.getters.GET_POPUP);
-	// 	// });
-	// },
 	methods: {
 
 		isNotExist(id: number) {
@@ -57,6 +54,7 @@ export default defineComponent({
 		},
 		async active_popup_profil() {
 			store.dispatch("SET_POPUP", 'profil');
+			store.dispatch("SET_SAVE_POPUP");
 		},
 		setPopup(value: string): void {
 			store.dispatch("SET_POPUP", value);
@@ -72,21 +70,24 @@ export default defineComponent({
 			else
 				shared.joinPrivate(store.getters.GET_CHANNEL_TARGET.name);
 			store.dispatch("SET_POPUP", '');
+			store.dispatch("SET_SAVE_POPUP");
 		},
 		addUser() {
 			store.state.socket.emit('invite', store.getters.GET_USER_TARGET.username, store.getters.GET_CHAN_PRIVATE.realname);
 			store.dispatch("SET_POPUP", '');
+			store.dispatch("SET_SAVE_POPUP");
 		},
 		response_inv(ret: boolean) {
+			store.dispatch("SET_POPUP", store.getters.GET_SAVE_POPUP);
+			store.dispatch("SET_SAVE_POPUP");
 			store.state.socket.emit('valInvite', ret, store.getters.GET_CHANNEL_TARGET.name, store.getters.GET_USER_TARGET.username);
-			store.dispatch("SET_POPUP", '');
 		},
 		response_inv_game(ret: boolean) {
+			store.dispatch("SET_POPUP", store.getters.GET_SAVE_POPUP);
 			if (store.getters.GET_GAME == 'pong')
 				store.state.socket.emit('duel', ret, store.getters.GET_USER_TARGET, store.getters.GET_USER, 2);
 			else if (store.getters.GET_GAME == 'star')
 				store.state.socket.emit('duel', ret, store.getters.GET_USER_TARGET, store.getters.GET_USER, 1);
-			store.dispatch("SET_POPUP", '');
 		},
 		async set_ban() {
 			if (this.modeIsSet(store.getters.GET_MODE, 'ban'))
@@ -154,6 +155,7 @@ export default defineComponent({
 			if (this.mdp == this.mdp2) {
 				store.state.socket.emit('passChan', this.mdp, store.getters.GET_CHAN_CURRENT.realname);
 				store.dispatch("SET_POPUP", '');
+				store.dispatch("SET_SAVE_POPUP");
 			}
 		},
 		add_friend(): void {

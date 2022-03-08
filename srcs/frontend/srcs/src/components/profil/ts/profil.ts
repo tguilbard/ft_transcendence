@@ -24,12 +24,14 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 			"GET_IMG",
 			"GET_LIST_ACHIEVEMENTS",
 			"GET_LIST_MATCH",
-			"GET_FRIENDS"
+			"GET_FRIENDS",
+			"GET_SAVE_POPUP"
 		]),
 	},
 	methods: {
 		setAchievement(value: Achievements): void {
 			store.dispatch("SET_ACHIEVEMENT", value);
+			store.dispatch("SET_SAVE_POPUP");
 			this.setPopup("description2");
 		},
 		setPopup(value: string): void {
@@ -92,7 +94,12 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 				await shared.get_avatar(user.username)
 			);
 			store.dispatch("SET_LIST_ACHIEVEMENTS_TARGET", await shared.getAchievements(user.username));
-			store.commit("SET_POPUP", "profil");
+			this.setPopup('profil')
+			store.dispatch("SET_SAVE_POPUP");
+		},
+		active_modify_profil(): void{
+			this.setPopup('modify_profil')
+			store.dispatch("SET_SAVE_POPUP");
 		},
 	},
 	async created() {
@@ -100,7 +107,6 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 		if (!store.state.sock_init) store.commit("SET_SOCKET");
 		this.user = await shared.getMyUser();
 		store.dispatch("SET_USER", this.user);
-		store.dispatch("SET_CHECK", this.user.tfaActivated);
 		store.dispatch("SET_IMG", await shared.get_avatar(this.user.username));
 		store.dispatch("SET_FRIENDS", await this.getListFriends());
 		store.dispatch("SET_LIST_MATCH", await shared.getListMatchs(this.user.username));
@@ -115,10 +121,12 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 		});
 
 		store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity, game: string) => {
+			store.dispatch("SET_SAVE_POPUP");
 			store.dispatch("SET_USER_TARGET", user_target);
 			store.dispatch("SET_GAME", game);
-			this.setPopup('inv_game')
 			store.dispatch("SET_INV", false);
+			store.dispatch("SET_POPUP", store.getters.GET_POPUP);
+			this.setPopup('inv_game')
 		});
 
 		store.state.socket.off('refresh_user').on('refresh_user', async (chanName: string) => {
@@ -135,7 +143,7 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 		store.state.socket.off('alertMessage').on('alertMessage', async (msg: string) => {
 			store.dispatch("SET_SAVE_POPUP");
 			store.dispatch("SET_MSG_ALERT", msg);
-			store.dispatch("SET_POPUP", 'alert');
+			store.dispatch("SET_POPUP", 'alert' + store.getters.GET_POPUP);
 		});
 
 		store.state.socket.off('refresh_friends').on('refresh_friends', async () => {
@@ -169,7 +177,6 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 				})
 				const user = await shared.getMyUser();
 				store.dispatch("SET_USER", user);
-				store.dispatch("SET_CHECK", user.tfaActivated);
 				store.dispatch("SET_IMG", await shared.get_avatar(user.username));
 				store.dispatch("SET_FRIENDS", await this.getListFriends());
 				store.dispatch("SET_LIST_MATCH", await shared.getListMatchs(user.username));
@@ -194,6 +201,7 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 		store.state.socket.off('msgToClientPrivate').on('msgToClientPrivate', (newMsg: Message, channel: ChannelEntity) => {
 			store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
 			store.dispatch("SET_POPUP", 'alert');
+			store.dispatch("SET_SAVE_POPUP");
 		});
 
 		store.state.socket.off("refreshAcheivements").on("refreshAcheivements", async (username: string) => {

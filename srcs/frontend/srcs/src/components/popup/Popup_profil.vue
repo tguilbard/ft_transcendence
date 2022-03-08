@@ -1,5 +1,5 @@
 <template>
-  <div v-if="GET_POPUP == 'modify_profil'">
+  <div v-if="GET_POPUP == 'modify_profil' || GET_SAVE_POPUP == 'modify_profil'">
     <div @click="setPopup('')" class="container_popup"></div>
     <div id="block_popup">
       <div class="content_popup">
@@ -42,7 +42,7 @@
                   required
                   :disabled="desable ? '' : disabled"
                 />
-                <div v-if="myerror">
+                <div v-if="myerror && myerror.message">
                   <div v-for="msg in myerror.message" :key="msg">
                     <p style="color: red" v-if="msg.username">
                       {{ msg.username }}
@@ -69,7 +69,7 @@
                     placeholder="Entre le code recus"
                     v-model="code"
                   />
-                  <div v-if="myerror">
+                  <div v-if="myerror && myerror.message">
                     <div v-for="msg in myerror.message" :key="msg">
                       <p style="color: red" v-if="msg.code">{{ msg.code }}</p>
                     </div>
@@ -86,11 +86,15 @@
       </div>
     </div>
   </div>
-    <div
-      v-if="GET_POPUP == 'profil'"
-      @click="setPopup('')"
-      class="container_popup"
-    ></div>
+  <div
+    v-if="
+      GET_POPUP == 'profil' ||
+      GET_SAVE_POPUP == 'profil' ||
+      GET_POPUP == 'description' ||
+      GET_POPUP == 'duel'
+    "
+  >
+    <div @click="setPopup('')" class="container_popup" />
     <div id="block_popup">
       <div class="content_popup">
         <h1>PROFIL</h1>
@@ -102,41 +106,43 @@
                   <h1>GAMES HISTORY</h1>
                 </div>
                 <div id="list_history" class="list_history">
-                  <div
-                    v-for="item in GET_LIST_MATCH_TARGET"
-                    :key="item"
-                    class="grid_history"
-                  >
-                    <div class="block_user1">
-                      <span
-                        :class="[
-                          item.user1.username == GET_USER_TARGET.username
-                            ? 'color1'
-                            : 'color2',
-                          'link',
-                        ]"
-                        @click="active_pop_profil(item.user1)"
-                      >
-                        {{ item.user1.username }}
-                      </span>
-                    </div>
-                    <div class="block_score">
-                      <span style="white-space: nowrap"
-                        >{{ item.scoreUser1 }} - {{ item.scoreUser2 }}</span
-                      >
-                    </div>
-                    <div class="block_user2">
-                      <span
-                        :class="[
-                          item.user2.username == GET_USER_TARGET.username
-                            ? 'color1'
-                            : 'color2',
-                          'link',
-                        ]"
-                        @click="active_pop_profil(item.user2)"
-                      >
-                        {{ item.user2.username }}
-                      </span>
+                  <div v-if="GET_LIST_MATCH_TARGET">
+                    <div
+                      v-for="item in GET_LIST_MATCH_TARGET"
+                      :key="item"
+                      class="grid_history"
+                    >
+                      <div class="block_user1">
+                        <span
+                          :class="[
+                            item.user1.username == GET_USER_TARGET.username
+                              ? 'color1'
+                              : 'color2',
+                            'link',
+                          ]"
+                          @click="active_pop_profil(item.user1)"
+                        >
+                          {{ item.user1.username }}
+                        </span>
+                      </div>
+                      <div class="block_score">
+                        <span style="white-space: nowrap"
+                          >{{ item.scoreUser1 }} - {{ item.scoreUser2 }}</span
+                        >
+                      </div>
+                      <div class="block_user2">
+                        <span
+                          :class="[
+                            item.user2.username == GET_USER_TARGET.username
+                              ? 'color1'
+                              : 'color2',
+                            'link',
+                          ]"
+                          @click="active_pop_profil(item.user2)"
+                        >
+                          {{ item.user2.username }}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -210,8 +216,26 @@
         </div>
       </div>
     </div>
-  <Description />
-  <PopupGame />
+  </div>
+  <div
+    v-if="
+      GET_POPUP == 'description' ||
+      GET_POPUP == 'description2' ||
+      GET_SAVE_POPUP == 'description' ||
+      GET_SAVE_POPUP == 'description2'
+    "
+  >
+    <Description />
+  </div>
+  <div
+    v-if="
+      GET_POPUP == 'duel' ||
+      GET_POPUP == 'alertduel' ||
+      GET_SAVE_POPUP == 'duel'
+    "
+  >
+    <PopupGame />
+  </div>
 </template>
 
 <script scoped lang="ts">
@@ -222,7 +246,6 @@ import Achievement from "@/components/popup/Achievement.vue";
 import Description from "@/components/popup/Description.vue";
 import shared from "@/mixins/Mixins";
 import { AchievementType } from "@/enums/enums";
-import { Achievements } from "@/interface/interface";
 import PopupGame from "../popup/PopupGame.vue";
 
 export interface UserElement {
@@ -269,6 +292,7 @@ export default defineComponent({
       "GET_IMG",
       "GET_IMG_TARGET",
       "GET_LIST_MATCH_TARGET",
+      "GET_SAVE_POPUP",
     ]),
     isCheck: function () {
       return this.check;
@@ -516,10 +540,6 @@ export default defineComponent({
     setPopup(value: string): void {
       store.commit("SET_POPUP", value);
     },
-    setAchievement(value: Achievements): void {
-      store.dispatch("SET_ACHIEVEMENT", value);
-      this.setPopup("description");
-    },
     send_message(): void {
       store.commit("SET_POPUP", "");
       store.state.socket.emit(
@@ -546,25 +566,25 @@ export default defineComponent({
     this.username = store.getters.GET_USER.username;
     this.check = (await shared.getMyUser()).tfaActivated;
   },
-  updated() {
-    if (store.getters.GET_POPUP) {
-      let block_height = document.getElementById("block_popup").offsetHeight;
-      let top = window.innerHeight - Number(block_height);
+  // updated() {
+  //   if (store.getters.GET_POPUP) {
+  //     let block_height = document.getElementById("block_popup").offsetHeight;
+  //     let top = window.innerHeight - Number(block_height);
 
-      if (top <= 0) {
-        document.getElementById("block_popup").style.top = "0px";
-        document.getElementById("block_popup").style.transform =
-          "translate(-50%, 0%)";
-      } else {
-        document.getElementById("block_popup").style.top = "50%";
-        document.getElementById("block_popup").style.transform =
-          "translate(-50%, -50%)";
-      }
-    }
-  },
-  unmounted() {
-    window.removeEventListener("resize", this.myEventHandler);
-  },
+  //     if (top <= 0) {
+  //       document.getElementById("block_popup").style.top = "0px";
+  //       document.getElementById("block_popup").style.transform =
+  //         "translate(-50%, 0%)";
+  //     } else {
+  //       document.getElementById("block_popup").style.top = "50%";
+  //       document.getElementById("block_popup").style.transform =
+  //         "translate(-50%, -50%)";
+  //     }
+  //   }
+  // },
+  // unmounted() {
+  //   window.removeEventListener("resize", this.myEventHandler);
+  // },
 });
 </script>
 

@@ -1,8 +1,6 @@
 <template>
-<div v-if="GET_POPUP == 'description' || GET_POPUP == 'description2'">
-
-  <div v-if="GET_POPUP == 'description2'"  @click="setPopup('')" class="container_popup3"></div>
-  <div v-else  @click="setPopup('profil')" class="container_popup3"></div>
+  <div v-if="GET_POPUP == 'description2' || GET_SAVE_POPUP == 'description2'"  @click="leave('')" class="container_popup3"></div>
+  <div v-else  @click="leave('profil')" class="container_popup3"></div>
   <div class="block_popup2">
     <div class="content_popup">
       <h1>{{GET_ACHIEVEMENT.name}}</h1>
@@ -19,19 +17,22 @@
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "@vue/runtime-core";
 import { mapGetters } from "vuex";
-import store from "../../store";
+import store from "@/store";
 
 export default defineComponent({
   computed: {
-    ...mapGetters(["GET_POPUP", "GET_ACHIEVEMENT", "GET_USER_TARGET", "GET_USER"]),
+    ...mapGetters(["GET_POPUP", "GET_SAVE_POPUP", "GET_ACHIEVEMENT", "GET_USER_TARGET", "GET_USER"]),
   },
   methods: {
+    leave(pop: string) {
+      this.setPopup(pop);
+      store.dispatch("SET_SAVE_POPUP");
+    },
     setPopup(value: string): void {
       store.commit("SET_POPUP", value);
     },
@@ -60,7 +61,6 @@ export default defineComponent({
 }
 
 .container_popup3 {
-  z-index: 110;
   background-color: rgba(0, 0, 0, 0.8);
   visibility: visible;
 }
@@ -72,7 +72,6 @@ export default defineComponent({
   height: stretch;
   text-align: left;
   overflow: auto;
-  z-index: 20;
   font-weight: 900;
   font-size: 1.2vmax;
 }
@@ -115,7 +114,7 @@ label {
   top: 40%;
   transform: translate(-50%, -50%);
   text-align: center;
-  z-index: 5000;
+  z-index: 110;
   color: rgb(255, 255, 255);
 }
 
@@ -134,4 +133,5 @@ label {
   border: 1px solid black;
   display: block;
 }
+
 </style> >

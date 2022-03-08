@@ -35,7 +35,6 @@ let player2Name: Phaser.GameObjects.Text;
 let oldMsg1Score: string;
 let oldMsg2Score: string;
 let oldMsgtTime: string;
-let oldMsg: string;
 let myUser: UserEntity;
 let origin: number;
 
@@ -50,12 +49,6 @@ if (!await shared.isLogin())
 if (!store.state.sock_init)
     store.commit("SET_SOCKET");
 myUser = await shared.getMyUser();
-
-let id: string;
-
-store.state.socket.off("connect").on("connect", () => {
-    id = store.state.socket.id;
-});
 
 class Pong extends Phaser.Scene {
 
@@ -374,16 +367,6 @@ class Pong extends Phaser.Scene {
 
         if (myUser.state == 'in match')
         {
-            // Start();
-            // if (this.flag === 0)
-            // {
-            //     background.setVisible(true);
-            // }
-            // else if (this.flag === 1)
-            // {
-            //     backgroundC.setVisible(true);
-            //     star.setVisible(true);
-            // }
             player1.setVisible(true);
             player2.setVisible(true);
             TimerText.setVisible(true);
