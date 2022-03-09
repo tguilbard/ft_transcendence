@@ -6,52 +6,50 @@
         <PopupAlert />
     </div>
     <div v-if="(GET_POPUP == 'pass' || GET_SAVE_POPUP == 'pass') && GET_ROOM">
-        <div @click="setPopup('')" class="container_popup"></div>
+        <div @click="back" class="container_popup"></div>
         <div class="block_popup">
             <div class="content_popup">
                 <h1>CONFIG OF ROOM</h1>
-                <form>
-                    <form @submit="set_pass">
-                        <div class="tab_mdp">
+                <form @submit="set_pass">
+                    <div class="tab_mdp">
+                        <div>
                             <div>
-                                <div>
-                                    <label for="mdp">Mot de passe pour le salon: </label>
-                                </div>
-                                <div>
-                                    <label for="mdp2">Verification du mot de passe: </label>
-                                </div>
+                                <label for="mdp">Room password: </label>
                             </div>
                             <div>
-                                <div>
-                                    <input type="text" id="mdp" name="mdp" v-model="mdp">
-                                </div>
-                                <div>
-                                    <input type="text" id="mdp2" name="mdp2" v-model="mdp2">
-                                </div>
+                                <label for="mdp2">Check password: </label>
                             </div>
                         </div>
-                        <div class="btn_select">
+                        <div>
                             <div>
-                                <button @click="setPopup('')">Annuler</button>
+                                <input type="text" id="mdp" name="mdp" v-model="mdp">
                             </div>
                             <div>
-                                <input type="submit" value="Modify">
+                                <input type="text" id="mdp2" name="mdp2" v-model="mdp2">
                             </div>
                         </div>
-                    </form>
+                    </div>
+                    <div class="btn_select">
+                        <div>
+                            <button @click="back">Cancel</button>
+                        </div>
+                        <div>
+                            <input type="submit" value="Modify" :disabled="mdp == mdp2? false: true">
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-    <div v-if="GET_POPUP == 'profil_mode' || GET_SAVE_POPUP == 'profil_mode'">
-        <div @click="setPopup('')" class="container_popup"></div>
+    <div v-if="GET_POPUP == 'profil_mode'">
+        <div @click="back" class="container_popup"></div>
         <div class="block_popup">
             <div class="content_popup">
                 <h1>USER INFOS</h1>
                 <div class="grid_popup_mode">
                     <div>
                         <div class="btn_select">
-                            <button @click="active_popup_profil">SEE PROFIL OF USER</button>
+                            <button @click="active_popup_profil">SEE PROFILE OF USER</button>
                         </div>
                     </div>
                     <div>
@@ -110,33 +108,33 @@
                     </div>
 
                     <div class="btn_select">
-                        <button @click="setPopup('')">BACK</button>
+                        <button @click="back">BACK</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div v-if="GET_POPUP == 'create' || GET_SAVE_POPUP == 'create'">
-        <div @click="setPopup('')" class="container_popup"></div>
+        <div @click="back" class="container_popup"></div>
         <div class="block_popup">
             <div class="content_popup">
-                <h1>CREATION D'UN SALON</h1>
+                <h1>ROOM CREATION</h1>
                 <form>
                     <div class="tab_mdp">
                         <div>
                             <div>
-                                <label for="name">Nom du salon </label>
+                                <label for="name">Room name </label>
                             </div>
                             <div v-if="GET_ROOM">
-                                <label for="mdp">Mot de passe pour le salon: </label>
+                                <label for="mdp">Room password: </label>
                             </div>
                             <div v-if="GET_ROOM">
-                                <label for="mdp2">Verification du mot de passe: </label>
+                                <label for="mdp2">Check of password: </label>
                             </div>
                         </div>
                         <div>
                             <div>
-                                <input maxlength="7" type="text" id="name" name="name"
+                                <input required="required" minlength="3" maxlength="7" type="text" id="name" name="name"
                                     v-model="GET_CHANNEL_TARGET.name">
                             </div>
                             <div v-if="GET_ROOM">
@@ -149,10 +147,10 @@
                     </div>
                     <div class="btn_select">
                         <div>
-                            <button @click="setPopup('')">Annuler</button>
+                            <button @click="back">Cancel</button>
                         </div>
                         <div>
-                            <button @click="create_room">Create</button>
+                            <button @click="create_room" :disabled="(mdp == mdp2 && GET_CHANNEL_TARGET.name)? false: true">Create</button>
                         </div>
                     </div>
                 </form>
@@ -160,10 +158,10 @@
         </div>
     </div>
     <div v-if="GET_POPUP == 'add' || GET_SAVE_POPUP == 'add'">
-        <div @click="setPopup('')" class="container_popup"></div>
+        <div @click="back" class="container_popup"></div>
         <div class="block_popup">
             <div v-if="GET_ROOM" class="content_popup">
-                <h1>AJOUT D'UN SALON</h1>
+                <h1>ADD ROOM</h1>
                 <div>
                     <div class="list_chan_popup">
                         <div v-if="GET_LIST_CHANNEL_PUBLIC" v-for="item in GET_LIST_CHANNEL_PUBLIC">
@@ -180,14 +178,14 @@
                             </div>
                         </div>
                     </div>
-                    <form @submit="create_room">
+                    <form @submit="add_room">
                         <div class="tab_mdp">
                             <div>
                                 <div>
-                                    <label for="mdp">Mot de passe pour le salon: </label>
+                                    <label for="mdp">Room password: </label>
                                 </div>
                                 <div>
-                                    <label for="mdp2">Verification du mot de passe: </label>
+                                    <label for="mdp2">Check of password: </label>
                                 </div>
                             </div>
                             <div>
@@ -207,14 +205,11 @@
                         </div>
                         <div class="btn_select">
                             <div>
-                                <button @click="setPopup('')">Annuler</button>
+                                <button @click="back">Cancel</button>
                             </div>
                             <div>
-                                <div v-if="GET_CHANNEL_TARGET.mode == 5 && (!mdp || mdp != mdp2)">
-                                    <input type="submit" value="Add room" disabled>
-                                </div>
-                                <div v-else>
-                                    <input type="submit" value="Add room">
+                                <div>
+                                    <input type="submit" value="Add room" :disabled="(mdp == mdp2 && GET_CHANNEL_TARGET.name)? false: true">
                                 </div>
                             </div>
                         </div>
@@ -223,7 +218,7 @@
             </div>
             <div v-else class="block_popup, content_popup">
 
-                <h1>INVITATION D'UN USER</h1>
+                <h1>USER INVITATION</h1>
 
                 <div class="list_chan_popup">
                     <div v-if="GET_LIST_USER_GENERAL" v-for="item in GET_LIST_USER_GENERAL">
@@ -244,17 +239,14 @@
                         </div>
                     </div>
                 </div>
-                <form @submit="addUser">
-                    <div class="btn_select">
-                        <div>
-                            <button @click="setPopup('')">BACK</button>
-                        </div>
-                        <div>
-                            <input type="submit" value="Send invitation"
-                                :disabled="GET_USER_TARGET.username ? disabled : ''">
-                        </div>
+                <div class="btn_select">
+                    <div>
+                        <button @click="back">BACK</button>
                     </div>
-                </form>
+                    <div>
+                        <button @click="addUser" :disabled="GET_USER_TARGET.username ? disabled : ''">Send invitation</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

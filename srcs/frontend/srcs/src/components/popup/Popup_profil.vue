@@ -1,9 +1,9 @@
 <template>
   <div v-if="GET_POPUP == 'modify_profil' || GET_SAVE_POPUP == 'modify_profil'">
-    <div @click="setPopup('')" class="container_popup"></div>
+    <div @click="back" class="container_popup"></div>
     <div id="block_popup">
       <div class="content_popup">
-        <h1>MODIFY PROFIL</h1>
+        <h1>MODIFY PROFILE</h1>
         <div class="grid_modify">
           <div>
             <h1>MODIFY YOUR AVATAR</h1>
@@ -12,7 +12,7 @@
             </div>
             <div class="block_avatar_inf">
               <label for="avatar" class="btn"
-                ><h2 style="ground: #f5ba1a">Choisis un avatar</h2></label
+                ><h2 style="ground: #f5ba1a">Change avatar</h2></label
               >
               <input
                 type="file"
@@ -24,7 +24,7 @@
                 placeholder="Choississez un avatar"
               />
               <div>
-                <button v-on:click="sendAvatar">ENREGISTRE AVATAR</button>
+                <button v-on:click="sendAvatar">SAVE AVATAR</button>
               </div>
             </div>
           </div>
@@ -49,8 +49,8 @@
                     </p>
                   </div>
                 </div>
-                <button v-if="desable" @click="toggle">MODIFIER</button>
-                <button v-else @click="submit">ENREGISTRER</button>
+                <button v-if="desable" @click="toggle">MODIFY</button>
+                <button v-else @click="submit">SAVE</button>
               </div>
               <h1>MODIFY YOUR DOUBLE AUTHENTIFICATION</h1>
               <div class="block_user" style="height: 25vmax">
@@ -74,14 +74,14 @@
                       <p style="color: red" v-if="msg.code">{{ msg.code }}</p>
                     </div>
                   </div>
-                  <button @click="submit_code">VALIDEZ CODE</button>
+                  <button @click="submit_code">DONE</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div>
-          <button class="btn" @click="setPopup('')">BACK</button>
+          <button class="btn" @click="back">BACK</button>
         </div>
       </div>
     </div>
@@ -94,10 +94,10 @@
       GET_POPUP == 'duel'
     "
   >
-    <div @click="setPopup('')" class="container_popup" />
+    <div @click="back" class="container_popup" />
     <div id="block_popup">
       <div class="content_popup">
-        <h1>PROFIL</h1>
+        <h1>PROFILE</h1>
         <div class="grid_popup_profil">
           <div id="a">
             <div class="content_container">
@@ -187,7 +187,7 @@
           class="btn_select"
         >
           <div>
-            <button @click="setPopup('')">BACK</button>
+            <button @click="back">BACK</button>
           </div>
           <div v-if="GET_IS_FRIEND">
             <button @click="delete_friend">REMOVE</button>
@@ -212,7 +212,7 @@
           </div>
         </div>
         <div v-else class="btn_select">
-          <button @click="setPopup('')">BACK</button>
+          <button @click="back">BACK</button>
         </div>
       </div>
     </div>
@@ -307,6 +307,11 @@ export default defineComponent({
     },
   },
   methods: {
+    back() {
+      this.setPopup('');
+      store.dispatch("SET_SAVE_POPUP");
+    },
+
     async blockUser() {
       const response = await fetch(
         "http://localhost:3000/users/block/" +
@@ -547,22 +552,22 @@ export default defineComponent({
         store.getters.GET_USER_TARGET.username
       );
     },
-    myEventHandler() {
-      let block_height = document.getElementById("block_popup").offsetHeight;
-      let top = window.innerHeight - Number(block_height);
-      if (top <= 0) {
-        document.getElementById("block_popup").style.top = "0px";
-        document.getElementById("block_popup").style.transform =
-          "translate(-50%, 0%)";
-      } else {
-        document.getElementById("block_popup").style.top = "50%";
-        document.getElementById("block_popup").style.transform =
-          "translate(-50%, -50%)";
-      }
-    },
+    // myEventHandler() {
+    //   let block_height = document.getElementById("block_popup").offsetHeight;
+    //   let top = window.innerHeight - Number(block_height);
+    //   if (top <= 0) {
+    //     document.getElementById("block_popup").style.top = "0px";
+    //     document.getElementById("block_popup").style.transform =
+    //       "translate(-50%, 0%)";
+    //   } else {
+    //     document.getElementById("block_popup").style.top = "50%";
+    //     document.getElementById("block_popup").style.transform =
+    //       "translate(-50%, -50%)";
+    //   }
+    // },
   },
   async created() {
-    window.addEventListener("resize", this.myEventHandler);
+    // window.addEventListener("resize", this.myEventHandler);
     this.username = store.getters.GET_USER.username;
     this.check = (await shared.getMyUser()).tfaActivated;
   },

@@ -48,6 +48,10 @@ export default defineComponent({
 		}
 	},
 	methods: {
+		back() {
+			this.setPopup('');
+			store.dispatch("SET_SAVE_POPUP");
+		},
 
 		isNotExist(id: number) {
 			return !store.getters.GET_LIST_CHAN_PUBLIC.find(e => e.id == id);
@@ -62,13 +66,23 @@ export default defineComponent({
 		setUserTarget(value: UserEntity): void {
 			store.dispatch("SET_USER_TARGET", value);
 		},
-		create_room() {
+		add_room() {
 			if (this.mdp != this.mdp2)
 				return;
 			if (store.getters.GET_ROOM)
 				shared.joinPublic(store.getters.GET_CHANNEL_TARGET.name, this.mdp);
 			else
 				shared.joinPrivate(store.getters.GET_CHANNEL_TARGET.name);
+			store.dispatch("SET_POPUP", '');
+			store.dispatch("SET_SAVE_POPUP");
+		},
+		create_room() {
+			if (this.mdp != this.mdp2)
+				return;
+			if (store.getters.GET_ROOM)
+				shared.createPublic(store.getters.GET_CHANNEL_TARGET.name, this.mdp);
+			else
+				shared.createPrivate(store.getters.GET_CHANNEL_TARGET.name);
 			store.dispatch("SET_POPUP", '');
 			store.dispatch("SET_SAVE_POPUP");
 		},
@@ -133,7 +147,7 @@ export default defineComponent({
 		},
 		modeIsSet(num: number, mode: string): boolean {
 			let mode_set: number;
-			switch(mode) {
+			switch (mode) {
 				case "owner":
 					mode_set = MemberType.owner;
 					break;

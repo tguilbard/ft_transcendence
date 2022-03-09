@@ -128,7 +128,7 @@
       <div id="e" class="block_container">
         <div class="content_container">
           <div class="my_elo">
-            <p>{{ user.elo }}</p>
+            <p>{{ GET_USER.elo }}</p>
           </div>
         </div>
       </div>
@@ -139,10 +139,10 @@
               <p>{{ GET_USER.username }}</p>
             </div>
             <div>
-              <div v-if="this.user.state == 'login'" class="mod">
+              <div v-if="GET_USER.state == 'login'" class="mod">
                 <img src="@/assets/circle_green.png" alt="login" />
               </div>
-              <div v-else-if="this.user.state == 'in match'" class="mod">
+              <div v-else-if="GET_USER.state == 'in match'" class="mod">
                 <img src="@/assets/circle_orange.png" alt="in match" />
               </div>
               <div v-else class="mod">
@@ -163,7 +163,7 @@
         <div class="content_container">
           <div class="container_logout">
             <p class="btn_logout" @click="active_modify_profil">
-              MODIFY PROFIL
+              MODIFY PROFILE
             </p>
           </div>
         </div>
