@@ -126,7 +126,6 @@ export class UsersService {
 	}
 
 	async isLogin(req: Request) {
-		if (!req.User)
 		if (req.User && req.User.state == 'ok')
 		{
 			try {
