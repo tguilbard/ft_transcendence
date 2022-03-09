@@ -299,6 +299,8 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
         let g = this.games.find(game => game.users[0].socket.id === client.id || game.users[1].socket.id === client.id);
 
+        if (!g)
+            return;
         if (g.users[0].socket.id == client.id)
             g.sendMessage(['left', payload]);
         else if (g.users[1].socket.id == client.id)

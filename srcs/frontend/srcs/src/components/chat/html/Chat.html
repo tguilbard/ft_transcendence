@@ -1,8 +1,6 @@
 <section v-if="log">
     <Menu class="menu" page="chat"/>
     <div v-if="GET_POPUP">
-        <p class="test">POPUP = {{GET_POPUP}}</p>
-        <p class="test">SAVE POPUP = {{GET_SAVE_POPUP}}</p>
         <PopUp/>
     </div>
     <div class=global>
@@ -70,7 +68,7 @@
             </div>
             <div class="logo">
                 <div v-if="GET_ROOM">
-                    <button class="of button" @click="active_pop_add">ADD SALON</button>
+                    <button class="of button" @click="active_pop_add">ADD ROOM</button>
                 </div>
                 <div v-else-if="GET_LIST_CHAN_PRIVATE && GET_LIST_CHAN_PRIVATE.length && (GET_CHAN_CURRENT).mode == 2">
                     <button class="of button" @click="active_pop_add">INVITE USER</button>
@@ -79,7 +77,7 @@
                     <button class="of button_disabled" @click="active_pop_add" disabled>INVITE USER</button>
                 </div>
                 <div>
-                    <button class="of button" @click="active_pop_create">CREATE SALON</button>
+                    <button class="of button" @click="active_pop_create">CREATE ROOM</button>
                 </div>
             </div>
         </div>

@@ -157,6 +157,8 @@ export default defineComponent({
 		},
 		set_pass(): void {
 			if (this.mdp == this.mdp2) {
+				alert(this.mdp)
+				alert(this.mdp2)
 				store.state.socket.emit('passChan', this.mdp, store.getters.GET_CHAN_CURRENT.realname);
 				store.dispatch("SET_POPUP", '');
 				store.dispatch("SET_SAVE_POPUP");

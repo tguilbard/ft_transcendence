@@ -10,35 +10,33 @@
         <div class="block_popup">
             <div class="content_popup">
                 <h1>CONFIG OF ROOM</h1>
-                <form>
-                    <form @submit="set_pass">
-                        <div class="tab_mdp">
+                <form @submit="set_pass">
+                    <div class="tab_mdp">
+                        <div>
                             <div>
-                                <div>
-                                    <label for="mdp">Room password: </label>
-                                </div>
-                                <div>
-                                    <label for="mdp2">Check password: </label>
-                                </div>
+                                <label for="mdp">Room password: </label>
                             </div>
                             <div>
-                                <div>
-                                    <input type="text" id="mdp" name="mdp" v-model="mdp">
-                                </div>
-                                <div>
-                                    <input type="text" id="mdp2" name="mdp2" v-model="mdp2">
-                                </div>
+                                <label for="mdp2">Check password: </label>
                             </div>
                         </div>
-                        <div class="btn_select">
+                        <div>
                             <div>
-                                <button @click="back">Cancel</button>
+                                <input type="text" id="mdp" name="mdp" v-model="mdp">
                             </div>
                             <div>
-                                <input type="submit" value="Modify">
+                                <input type="text" id="mdp2" name="mdp2" v-model="mdp2">
                             </div>
                         </div>
-                    </form>
+                    </div>
+                    <div class="btn_select">
+                        <div>
+                            <button @click="back">Cancel</button>
+                        </div>
+                        <div>
+                            <input type="submit" value="Modify" :disabled="mdp == mdp2? false: true">
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -136,7 +134,7 @@
                         </div>
                         <div>
                             <div>
-                                <input maxlength="7" type="text" id="name" name="name"
+                                <input required="required" minlength="3" maxlength="7" type="text" id="name" name="name"
                                     v-model="GET_CHANNEL_TARGET.name">
                             </div>
                             <div v-if="GET_ROOM">
@@ -152,7 +150,7 @@
                             <button @click="back">Annuler</button>
                         </div>
                         <div>
-                            <button @click="create_room">Create</button>
+                            <button @click="create_room" :disabled="(mdp == mdp2 && GET_CHANNEL_TARGET.name)? false: true">Create</button>
                         </div>
                     </div>
                 </form>
@@ -210,11 +208,8 @@
                                 <button @click="back">Cancel</button>
                             </div>
                             <div>
-                                <div v-if="GET_CHANNEL_TARGET.mode == 5 && (!mdp || mdp != mdp2)">
-                                    <input type="submit" value="Add room" disabled>
-                                </div>
-                                <div v-else>
-                                    <input type="submit" value="Add room">
+                                <div>
+                                    <input type="submit" value="Add room" :disabled="(mdp == mdp2 && GET_CHANNEL_TARGET.name)? false: true">
                                 </div>
                             </div>
                         </div>
