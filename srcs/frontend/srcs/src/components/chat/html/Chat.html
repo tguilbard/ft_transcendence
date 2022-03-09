@@ -1,6 +1,8 @@
 <section v-if="log">
     <Menu class="menu" page="chat"/>
     <div v-if="GET_POPUP">
+        <p class="test">POPUP = {{GET_POPUP}}</p>
+        <p class="test">SAVE POPUP = {{GET_SAVE_POPUP}}</p>
         <PopUp/>
     </div>
     <div class=global>
@@ -96,14 +98,14 @@
                         <img class="link" src="../../../assets/ban3.png" alt="BAN">
                     </div>
                     <div class="mod" v-if="modeIsSet(GET_MY_MODE, 'owner')">
-                        <img class="link" @click="setPopup('pass')" src="../../../assets/owner.png" alt="BAN">
-                        <img v-if="GET_ROOM" class="link" @click="setPopup('pass')" src="../../../assets/engrenage.png" alt="BAN">
+                        <img src="../../../assets/owner.png" alt="BAN">
+                        <img v-if="GET_ROOM" class="link" @click="active_pop_pass" src="../../../assets/engrenage.png" alt="BAN">
                     </div>
                     <div class="mod" v-else-if="modeIsSet(GET_MY_MODE, 'admin')">
                         <img class="link" src="../../../assets/admin3.png" alt="BAN">
                     </div>
 
-                    <div v-if="(GET_CHAN_CURRENT).mode == 2 && GET_CHAN_CURRENT.realname != 'General'" class="mod">
+                    <div v-if="(GET_CHAN_CURRENT).mode != 8 && GET_CHAN_CURRENT.realname != 'General'" class="mod">
                         <img class="link" @click="quit_channel" src="../../../assets/close2.png" alt="leave">
                     </div>
                 </div>

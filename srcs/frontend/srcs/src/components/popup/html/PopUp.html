@@ -6,7 +6,7 @@
         <PopupAlert />
     </div>
     <div v-if="(GET_POPUP == 'pass' || GET_SAVE_POPUP == 'pass') && GET_ROOM">
-        <div @click="setPopup('')" class="container_popup"></div>
+        <div @click="back" class="container_popup"></div>
         <div class="block_popup">
             <div class="content_popup">
                 <h1>CONFIG OF ROOM</h1>
@@ -15,10 +15,10 @@
                         <div class="tab_mdp">
                             <div>
                                 <div>
-                                    <label for="mdp">Mot de passe pour le salon: </label>
+                                    <label for="mdp">Room password: </label>
                                 </div>
                                 <div>
-                                    <label for="mdp2">Verification du mot de passe: </label>
+                                    <label for="mdp2">Check password: </label>
                                 </div>
                             </div>
                             <div>
@@ -32,7 +32,7 @@
                         </div>
                         <div class="btn_select">
                             <div>
-                                <button @click="setPopup('')">Annuler</button>
+                                <button @click="back">Cancel</button>
                             </div>
                             <div>
                                 <input type="submit" value="Modify">
@@ -43,8 +43,8 @@
             </div>
         </div>
     </div>
-    <div v-if="GET_POPUP == 'profil_mode' || GET_SAVE_POPUP == 'profil_mode'">
-        <div @click="setPopup('')" class="container_popup"></div>
+    <div v-if="GET_POPUP == 'profil_mode'">
+        <div @click="back" class="container_popup"></div>
         <div class="block_popup">
             <div class="content_popup">
                 <h1>USER INFOS</h1>
@@ -110,14 +110,14 @@
                     </div>
 
                     <div class="btn_select">
-                        <button @click="setPopup('')">BACK</button>
+                        <button @click="back">BACK</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div v-if="GET_POPUP == 'create' || GET_SAVE_POPUP == 'create'">
-        <div @click="setPopup('')" class="container_popup"></div>
+        <div @click="back" class="container_popup"></div>
         <div class="block_popup">
             <div class="content_popup">
                 <h1>CREATION D'UN SALON</h1>
@@ -149,7 +149,7 @@
                     </div>
                     <div class="btn_select">
                         <div>
-                            <button @click="setPopup('')">Annuler</button>
+                            <button @click="back">Annuler</button>
                         </div>
                         <div>
                             <button @click="create_room">Create</button>
@@ -160,7 +160,7 @@
         </div>
     </div>
     <div v-if="GET_POPUP == 'add' || GET_SAVE_POPUP == 'add'">
-        <div @click="setPopup('')" class="container_popup"></div>
+        <div @click="back" class="container_popup"></div>
         <div class="block_popup">
             <div v-if="GET_ROOM" class="content_popup">
                 <h1>AJOUT D'UN SALON</h1>
@@ -207,7 +207,7 @@
                         </div>
                         <div class="btn_select">
                             <div>
-                                <button @click="setPopup('')">Annuler</button>
+                                <button @click="back">Cancel</button>
                             </div>
                             <div>
                                 <div v-if="GET_CHANNEL_TARGET.mode == 5 && (!mdp || mdp != mdp2)">
@@ -246,7 +246,7 @@
                 </div>
                 <div class="btn_select">
                     <div>
-                        <button @click="setPopup('')">BACK</button>
+                        <button @click="back">BACK</button>
                     </div>
                     <div>
                         <button @click="addUser" :disabled="GET_USER_TARGET.username ? disabled : ''">Send invitation</button>

@@ -331,3 +331,8 @@ hr {
     font-size: 1.5vmax;
     border-color: #fff12c;
 }
+
+.test {
+    color: #fff12c;
+    font-size: 5vmax;
+}

@@ -1,6 +1,6 @@
 <template>
   <div v-if="GET_POPUP == 'modify_profil' || GET_SAVE_POPUP == 'modify_profil'">
-    <div @click="setPopup('')" class="container_popup"></div>
+    <div @click="back" class="container_popup"></div>
     <div id="block_popup">
       <div class="content_popup">
         <h1>MODIFY PROFIL</h1>
@@ -81,7 +81,7 @@
           </div>
         </div>
         <div>
-          <button class="btn" @click="setPopup('')">BACK</button>
+          <button class="btn" @click="back">BACK</button>
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@
       GET_POPUP == 'duel'
     "
   >
-    <div @click="setPopup('')" class="container_popup" />
+    <div @click="back" class="container_popup" />
     <div id="block_popup">
       <div class="content_popup">
         <h1>PROFIL</h1>
@@ -187,7 +187,7 @@
           class="btn_select"
         >
           <div>
-            <button @click="setPopup('')">BACK</button>
+            <button @click="back">BACK</button>
           </div>
           <div v-if="GET_IS_FRIEND">
             <button @click="delete_friend">REMOVE</button>
@@ -212,7 +212,7 @@
           </div>
         </div>
         <div v-else class="btn_select">
-          <button @click="setPopup('')">BACK</button>
+          <button @click="back">BACK</button>
         </div>
       </div>
     </div>
@@ -307,6 +307,11 @@ export default defineComponent({
     },
   },
   methods: {
+    back() {
+      this.setPopup('');
+      store.dispatch("SET_SAVE_POPUP");
+    },
+
     async blockUser() {
       const response = await fetch(
         "http://localhost:3000/users/block/" +

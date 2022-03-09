@@ -48,6 +48,10 @@ export default defineComponent({
 		}
 	},
 	methods: {
+		back() {
+			this.setPopup('');
+			store.dispatch("SET_SAVE_POPUP");
+		},
 
 		isNotExist(id: number) {
 			return !store.getters.GET_LIST_CHAN_PUBLIC.find(e => e.id == id);
@@ -133,7 +137,7 @@ export default defineComponent({
 		},
 		modeIsSet(num: number, mode: string): boolean {
 			let mode_set: number;
-			switch(mode) {
+			switch (mode) {
 				case "owner":
 					mode_set = MemberType.owner;
 					break;

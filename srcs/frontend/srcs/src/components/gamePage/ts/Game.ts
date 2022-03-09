@@ -126,7 +126,6 @@ import store from "@/store";
 						newMsg.username + " send to you a message private"
 					);
 					store.dispatch("SET_POPUP", "alert");
-					store.dispatch("SET_SAVE_POPUP");
 				}
 			});
 

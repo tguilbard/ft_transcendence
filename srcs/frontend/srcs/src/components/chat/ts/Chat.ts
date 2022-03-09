@@ -185,6 +185,11 @@ export default class Chat extends Vue {
 		store.dispatch("SET_SAVE_POPUP");
 	}
 
+	private async active_pop_pass(): Promise<void> {
+		store.dispatch("SET_POPUP", 'pass');
+		store.dispatch("SET_SAVE_POPUP");
+	}
+
 	private async active_pop_profil_mode(user_target: UserEntity): Promise<void> {
 		if (user_target.state == '')
 			user_target = await shared.getUserByUsername(user_target.username);
@@ -492,7 +497,6 @@ export default class Chat extends Vue {
 						store.dispatch("SET_ROOM", false);
 						store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
 						store.dispatch("SET_POPUP", 'alert');
-						store.dispatch("SET_SAVE_POPUP");
 						store.dispatch("SET_LIST_CHAN_PRIVATE", tmp)
 					}
 	

@@ -78,6 +78,7 @@ export default defineComponent({
         this.selected
       );
       this.setPopup("profil");
+      store.dispatch("SET_SAVE_POPUP");
     },
 
     setPopup(value: string): void {
