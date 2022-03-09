@@ -66,13 +66,23 @@ export default defineComponent({
 		setUserTarget(value: UserEntity): void {
 			store.dispatch("SET_USER_TARGET", value);
 		},
-		create_room() {
+		add_room() {
 			if (this.mdp != this.mdp2)
 				return;
 			if (store.getters.GET_ROOM)
 				shared.joinPublic(store.getters.GET_CHANNEL_TARGET.name, this.mdp);
 			else
 				shared.joinPrivate(store.getters.GET_CHANNEL_TARGET.name);
+			store.dispatch("SET_POPUP", '');
+			store.dispatch("SET_SAVE_POPUP");
+		},
+		create_room() {
+			if (this.mdp != this.mdp2)
+				return;
+			if (store.getters.GET_ROOM)
+				shared.createPublic(store.getters.GET_CHANNEL_TARGET.name, this.mdp);
+			else
+				shared.createPrivate(store.getters.GET_CHANNEL_TARGET.name);
 			store.dispatch("SET_POPUP", '');
 			store.dispatch("SET_SAVE_POPUP");
 		},
@@ -157,8 +167,6 @@ export default defineComponent({
 		},
 		set_pass(): void {
 			if (this.mdp == this.mdp2) {
-				alert(this.mdp)
-				alert(this.mdp2)
 				store.state.socket.emit('passChan', this.mdp, store.getters.GET_CHAN_CURRENT.realname);
 				store.dispatch("SET_POPUP", '');
 				store.dispatch("SET_SAVE_POPUP");

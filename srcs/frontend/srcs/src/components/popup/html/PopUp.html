@@ -118,18 +118,18 @@
         <div @click="back" class="container_popup"></div>
         <div class="block_popup">
             <div class="content_popup">
-                <h1>CREATION D'UN SALON</h1>
+                <h1>ROOM CREATION</h1>
                 <form>
                     <div class="tab_mdp">
                         <div>
                             <div>
-                                <label for="name">Nom du salon </label>
+                                <label for="name">Room name </label>
                             </div>
                             <div v-if="GET_ROOM">
-                                <label for="mdp">Mot de passe pour le salon: </label>
+                                <label for="mdp">Room password: </label>
                             </div>
                             <div v-if="GET_ROOM">
-                                <label for="mdp2">Verification du mot de passe: </label>
+                                <label for="mdp2">Check of password: </label>
                             </div>
                         </div>
                         <div>
@@ -147,7 +147,7 @@
                     </div>
                     <div class="btn_select">
                         <div>
-                            <button @click="back">Annuler</button>
+                            <button @click="back">Cancel</button>
                         </div>
                         <div>
                             <button @click="create_room" :disabled="(mdp == mdp2 && GET_CHANNEL_TARGET.name)? false: true">Create</button>
@@ -161,7 +161,7 @@
         <div @click="back" class="container_popup"></div>
         <div class="block_popup">
             <div v-if="GET_ROOM" class="content_popup">
-                <h1>AJOUT D'UN SALON</h1>
+                <h1>ADD ROOM</h1>
                 <div>
                     <div class="list_chan_popup">
                         <div v-if="GET_LIST_CHANNEL_PUBLIC" v-for="item in GET_LIST_CHANNEL_PUBLIC">
@@ -178,14 +178,14 @@
                             </div>
                         </div>
                     </div>
-                    <form @submit="create_room">
+                    <form @submit="add_room">
                         <div class="tab_mdp">
                             <div>
                                 <div>
-                                    <label for="mdp">Mot de passe pour le salon: </label>
+                                    <label for="mdp">Room password: </label>
                                 </div>
                                 <div>
-                                    <label for="mdp2">Verification du mot de passe: </label>
+                                    <label for="mdp2">Check of password: </label>
                                 </div>
                             </div>
                             <div>
@@ -218,7 +218,7 @@
             </div>
             <div v-else class="block_popup, content_popup">
 
-                <h1>INVITATION D'UN USER</h1>
+                <h1>USER INVITATION</h1>
 
                 <div class="list_chan_popup">
                     <div v-if="GET_LIST_USER_GENERAL" v-for="item in GET_LIST_USER_GENERAL">

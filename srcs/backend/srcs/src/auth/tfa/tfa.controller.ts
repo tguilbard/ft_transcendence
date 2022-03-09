@@ -40,7 +40,7 @@ export class TfaController {
             );
             res.status(204).cookie('access_token', accessToken, {
                 httpOnly: true,
-                secure: true
+                secure: false
             });
             res.send(
                 {

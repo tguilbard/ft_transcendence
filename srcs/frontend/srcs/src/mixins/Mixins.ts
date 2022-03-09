@@ -11,6 +11,14 @@ import store from '../store';
         store.state.socket.emit('joinPublic', name, mdp);
     },
 
+    createPublic(name: string, mdp: string): void {
+        store.state.socket.emit('createPublic', name, mdp);
+    },
+
+    createPrivate(name: string): void {
+        store.state.socket.emit('createPrivate', name);
+      },
+
     async getListBlocked(): Promise<string[]> {
         const response = await fetch("http://localhost:3000/users/blocked", {
           method: "GET",

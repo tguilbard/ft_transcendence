@@ -12,7 +12,7 @@
             </div>
             <div class="block_avatar_inf">
               <label for="avatar" class="btn"
-                ><h2 style="ground: #f5ba1a">Choisis un avatar</h2></label
+                ><h2 style="ground: #f5ba1a">Change avatar</h2></label
               >
               <input
                 type="file"
@@ -24,7 +24,7 @@
                 placeholder="Choississez un avatar"
               />
               <div>
-                <button v-on:click="sendAvatar">ENREGISTRE AVATAR</button>
+                <button v-on:click="sendAvatar">SAVE AVATAR</button>
               </div>
             </div>
           </div>
@@ -49,8 +49,8 @@
                     </p>
                   </div>
                 </div>
-                <button v-if="desable" @click="toggle">MODIFIER</button>
-                <button v-else @click="submit">ENREGISTRER</button>
+                <button v-if="desable" @click="toggle">MODIFY</button>
+                <button v-else @click="submit">SAVE</button>
               </div>
               <h1>MODIFY YOUR DOUBLE AUTHENTIFICATION</h1>
               <div class="block_user" style="height: 25vmax">
@@ -74,7 +74,7 @@
                       <p style="color: red" v-if="msg.code">{{ msg.code }}</p>
                     </div>
                   </div>
-                  <button @click="submit_code">VALIDEZ CODE</button>
+                  <button @click="submit_code">DONE</button>
                 </div>
               </div>
             </div>
