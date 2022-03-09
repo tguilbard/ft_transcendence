@@ -6,7 +6,7 @@
       <div v-if="hover" id="nav_hover">
         <router-link id="btn_game" to="/">GAME</router-link>
         <router-link id="btn_chat" to="/chat">CHAT</router-link>
-        <router-link id="btn_profil" to="/profil">PROFIL</router-link>
+        <router-link id="btn_profil" to="/profil">PROFILE</router-link>
       </div>
       <div v-else id="nav">
         <router-link id="btn_game" to="/" :style="btn_game">GAME</router-link>
@@ -14,7 +14,7 @@
           >CHAT</router-link
         >
         <router-link id="btn_profil" to="/profil" :style="btn_profil"
-          >PROFIL</router-link
+          >PROFILE</router-link
         >
       </div>
     </div>

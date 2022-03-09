@@ -3,7 +3,7 @@
     <div @click="back" class="container_popup"></div>
     <div id="block_popup">
       <div class="content_popup">
-        <h1>MODIFY PROFIL</h1>
+        <h1>MODIFY PROFILE</h1>
         <div class="grid_modify">
           <div>
             <h1>MODIFY YOUR AVATAR</h1>
@@ -97,7 +97,7 @@
     <div @click="back" class="container_popup" />
     <div id="block_popup">
       <div class="content_popup">
-        <h1>PROFIL</h1>
+        <h1>PROFILE</h1>
         <div class="grid_popup_profil">
           <div id="a">
             <div class="content_container">

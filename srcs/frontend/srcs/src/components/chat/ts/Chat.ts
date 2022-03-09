@@ -39,10 +39,12 @@ export default class Chat extends Vue {
 	private log = false;
 
 	async created(): Promise<void | NavigationFailure> {
-		if (!(await shared.isLogin())) return this.$router.push("login");
-		if (!store.state.sock_init) store.dispatch("SET_SOCKET");
-
+		if (!await shared.isLogin())
+			return this.$router.push("login");
+		if (!store.state.sock_init) await store.commit("SET_SOCKET");
 		const user = await shared.getMyUser();
+		if (user.state == 'logout')
+			user.state = 'login';
 
 		store.dispatch("SET_USER", user);
 		store.dispatch("SET_LIST_BLOCKED", await shared.getListBlocked());
@@ -174,6 +176,7 @@ export default class Chat extends Vue {
 	}
 
 	private async active_pop_add(): Promise<void> {
+		store.dispatch("SET_CHANNEL_TARGET", {})
 		await store.dispatch("SET_LIST_CHANNEL_PUBLIC", await this.getListChannelPublic());
 		await store.dispatch("SET_LIST_USER_GENERAL", await shared.getUserInChan("General"));
 		store.dispatch("SET_POPUP", 'add');
@@ -214,6 +217,7 @@ export default class Chat extends Vue {
 		await this.getMessagesInChannel(channel.realname);
 		await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(channel.realname));
 		await store.dispatch("SET_MY_MODE", await this.getMyMode());
+
 	}
 
 	private async changeRoom(room: boolean): Promise<void> {
@@ -271,7 +275,13 @@ export default class Chat extends Vue {
 
 	private async refresh() {
 		await store.dispatch("SET_MY_MODE", await this.getMyMode());
-		await this.getMessagesInChannel(store.getters.GET_CHAN_CURRENT.realname);
+		if (!store.getters.GET_CHAN_CURRENT.realname)
+		{
+			store.dispatch("SET_LIST_MESSAGES_BY_CHAN", [])
+			store.dispatch("SET_LIST_MESSAGES", []);
+		}
+		else
+			await this.getMessagesInChannel(store.getters.GET_CHAN_CURRENT.realname);
 		await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
 		if (store.getters.GET_ROOM) {
 			const tmp = await this.getChanListByMode('public');
@@ -592,7 +602,9 @@ export default class Chat extends Vue {
 			store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
 		});
 	
-		store.state.socket.off('leave_channel').on('leave_channel', async (chanName: string) => {
+		store.state.socket.off('leave_channel').on('leave_channel', async (channel: ChannelEntity) => {
+			channel.realname = channel.name;
+			channel.name = '';
 			if (store.getters.GET_ROOM) {
 				await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan('General'));
 				await this.getMessagesInChannel('General');
@@ -607,23 +619,6 @@ export default class Chat extends Vue {
 				await store.dispatch("SET_LIST_CHAN_PUBLIC", tmp);
 			}
 			else {
-				let chan;
-				if (store.getters.GET_LIST_CHAN_PRIVATE[0].realname == chanName && store.getters.GET_LIST_CHAN_PRIVATE > 1)
-					chan = store.getters.GET_LIST_CHAN_PRIVATE[1];
-				else
-					chan = store.getters.GET_LIST_CHAN_PRIVATE[0];
-	
-				store.dispatch("SET_CHAN_CURRENT", chan);
-				store.dispatch("SET_CHAN", chan);
-				if (chan) {
-					await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(chan.realname));
-					await this.getMessagesInChannel(chan.realname);
-				}
-				else {
-					await store.dispatch("SET_LIST_USER_CURRENT", []);
-					store.dispatch("SET_LIST_MESSAGES_BY_CHAN", [])
-					store.dispatch("SET_LIST_MESSAGES", []);
-				}
 				const tmp = await this.getChanListByMode('private');
 				tmp.forEach(e => {
 					e.realname = e.name;
@@ -635,6 +630,23 @@ export default class Chat extends Vue {
 					}
 				})
 				store.dispatch("SET_LIST_CHAN_PRIVATE", tmp);
+				if (tmp.length)
+				{
+					const chan = store.getters.GET_LIST_CHAN_PRIVATE[0];
+					store.dispatch("SET_CHAN_CURRENT", chan);
+					store.dispatch("SET_CHAN_PRIVATE", chan);
+					await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(chan.realname));
+					await this.getMessagesInChannel(chan.realname);
+				}
+				else
+				{
+					store.dispatch("SET_CHAN_CURRENT", []);
+					store.dispatch("SET_CHAN_PRIVATE", []);
+					await store.dispatch("SET_LIST_USER_CURRENT", []);
+					store.dispatch("SET_LIST_MESSAGES_BY_CHAN", [])
+					store.dispatch("SET_LIST_MESSAGES", []);
+				}
+
 			}
 		});
 	

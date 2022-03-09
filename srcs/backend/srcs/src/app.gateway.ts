@@ -34,7 +34,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	) { }
 
 	async handleConnection(client: Socket, ...args: any[]) {
-
 		global.server = this.server;
 		try {
 			var user = await this.userService.FindUserBySocket(client);
@@ -48,6 +47,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		this.logger.log(`User ${user.username} is connected`)
 		if (user.state == "logout")
 			await this.userService.UpdateState(user, "login");
+		
 		let chanList = await this.chatService.GetChannelsOfUser(user.id);
 		let general = await this.chatService.GetChannel("General");
 
@@ -148,15 +148,18 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 
 	@SubscribeMessage("leaveChanServer")
-	async leaveChan(client, chanName: string) {
+	async leaveChan(client: Socket, chanName: string) {
 
 		let user = await this.userService.FindUserBySocket(client);
 		let chan = await this.chatService.GetChannel(chanName);
+		if (!chan)
+			return;
 		let member = await this.chatService.GetMemberByUserIdAndChannelId(user.id, chan.id);
 		if (member && chan.name !== "General") {
 			await this.chatService.SoftDeleteMember(member.id);
 			this.server.in(chanName).emit('refresh_user', chanName);
-			client.emit('leave_channel', chanName);
+			client.leave(chanName);
+			client.emit('leave_channel', chan);
 		}
 		member = null;
 		member = await this.chatService.GetMemberByUserIdAndChannelId(user.id, chan.id);

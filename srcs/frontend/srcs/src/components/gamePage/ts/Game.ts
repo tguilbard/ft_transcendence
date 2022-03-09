@@ -15,15 +15,15 @@ import store from "@/store";
 	},
 
 	async created() {
-		if (!(await shared.isLogin())) return this.$router.push("login");
-		if (!store.state.sock_init) store.commit("SET_SOCKET");
 
+		if (!await shared.isLogin())
+			return this.$router.push("login");
+		if (!store.state.sock_init) await store.commit("SET_SOCKET");
 		const user = await shared.getMyUser();
-
-
 		if (user.state == 'in match')
 			await this.active_game();
-
+		if (user.state == 'logout')
+			user.state = 'login';
 		store.dispatch("SET_USER", user);
 		await store.dispatch(
 			"SET_LIST_USER_GENERAL",
@@ -41,6 +41,8 @@ import store from "@/store";
 		});
 
 		store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity, game: string) => {
+			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
+				return;
 			store.dispatch("SET_SAVE_POPUP");
 			store.dispatch("SET_USER_TARGET", user_target);
 			store.dispatch("SET_GAME", game);
@@ -87,6 +89,8 @@ import store from "@/store";
 		store.state.socket
 			.off("alertMessage")
 			.on("alertMessage", async (msg: string) => {
+				if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
+					return;
 				store.dispatch("SET_SAVE_POPUP");
 				store.dispatch("SET_MSG_ALERT", msg);
 				store.dispatch("SET_POPUP", 'alert' + store.getters.GET_POPUP);
@@ -160,7 +164,8 @@ import store from "@/store";
 		);
 
 		store.state.socket.off('rcvInvite').on('rcvInvite', (channel_target: ChannelEntity, user_target: UserEntity) => {
-			
+			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
+				return;
 			store.dispatch("SET_CHANNEL_TARGET", channel_target);
 			store.dispatch("SET_USER_TARGET", user_target);
 			if (typeof channel_target !== 'undefined') {
@@ -181,30 +186,6 @@ import store from "@/store";
 		},
 	},
 	methods: {
-
-
-		async submit() {
-			const response = await fetch("http://localhost:3000/users/update", {
-				method: "PATCH",
-				mode: "cors",
-				credentials: "include",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-					"Access-Control-Max-Age": "600",
-					"Cache-Control": "no-cache",
-				},
-				body: JSON.stringify({
-					state: 'in game',
-				}),
-			});
-			if (response.ok) {
-				return null;
-			}
-			return await response.json();
-		},
-
-
 		setPopup(value: string): void {
 			store.dispatch("SET_POPUP", value);
 		},

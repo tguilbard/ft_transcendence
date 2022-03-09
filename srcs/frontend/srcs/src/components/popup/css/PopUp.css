@@ -1,4 +1,5 @@
 .container_popup, .container_popup_alert {
+    position: fixed;
     display: block;
     position: absolute;
     height: 100vh;

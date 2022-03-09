@@ -126,11 +126,14 @@ export class UsersService {
 	}
 
 	async isLogin(req: Request) {
+		if (!req.User)
 		if (req.User && req.User.state == 'ok')
 		{
 			try {
 				if (await this.FindUserById(req.User.id))
+				{
 					return { log: true };
+				}
 			}
 			catch{}
 		}
