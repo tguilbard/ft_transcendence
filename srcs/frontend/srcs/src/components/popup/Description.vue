@@ -1,6 +1,6 @@
 <template>
-  <div v-if="GET_POPUP == 'description2' || GET_SAVE_POPUP == 'description2'"  @click="leave('')" class="container_popup3"></div>
-  <div v-else  @click="leave('profil')" class="container_popup3"></div>
+  <div v-if="GET_POPUP == 'description2'"  @click="leave('')" class="container_popup3"></div>
+  <div v-else-if="GET_POPUP == 'description'" @click="leave('profil')" class="container_popup3"></div>
   <div class="block_popup2">
     <div class="content_popup">
       <h1>{{GET_ACHIEVEMENT.name}}</h1>
@@ -50,7 +50,7 @@ export default defineComponent({
 <style scoped>
 .container_popup3 {
   display: block;
-  position: absolute;
+  position: fixed;
   height: 100vh;
   width: 100vw;
   text-align: center;
@@ -69,11 +69,11 @@ export default defineComponent({
   border-radius: 7px 7px 7px 7px;
   background-color: #b8b8b8;
   border: 2px solid #a8a8a8;
-  height: stretch;
+  /* height: stretch; */
   text-align: left;
   overflow: auto;
   font-weight: 900;
-  font-size: 1.2vmax;
+  font-size: 1.2vw;
 }
 
 .content_popup p,
@@ -92,21 +92,21 @@ label {
 .content_popup_profil {
   display: block;
   width: auto;
-  margin: 0.5vmax;
+  margin: 0.5vw;
 }
 
 .block_description {
   display: block;
-  margin: 0.2vmax;
+  margin: 0.2vw;
   text-align: center;
-  font-size: 1.5vmax;
-  padding: 2vmax;
+  font-size: 1.5vw;
+  padding: 2vw;
 }
 
 .block_popup2 {
   display: block;
   position: absolute;
-  border-radius: 7px 7px 7px 7px;
+  border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
   background-color: #fff12c;
   border: 2px solid #8f8f8f;
   padding: 1px;
@@ -129,7 +129,7 @@ label {
   -webkit-text-stroke-color: rgb(0, 0, 0);
   font-family: futura;
   font-weight: 900;
-  font-size: 1.5vmax;
+  font-size: 1.5vw;
   border: 1px solid black;
   display: block;
 }

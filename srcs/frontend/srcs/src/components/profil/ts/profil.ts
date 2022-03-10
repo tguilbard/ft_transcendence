@@ -27,6 +27,14 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 			"GET_FRIENDS",
 			"GET_SAVE_POPUP"
 		]),
+		get_hh() {
+			const h = shared.vw(26);
+			return 'height: ' + h + 'px';
+		},
+		get_hh2() {
+			const h = shared.vh(41);
+			return 'max-height: ' + h + 'px';
+		}
 	},
 	methods: {
 		setAchievement(value: Achievements): void {
@@ -97,7 +105,7 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 			this.setPopup('profil')
 			store.dispatch("SET_SAVE_POPUP");
 		},
-		active_modify_profil(): void{
+		active_modify_profil(): void {
 			this.setPopup('modify_profil')
 			store.dispatch("SET_SAVE_POPUP");
 		},
@@ -124,7 +132,7 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 		});
 
 		store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity, game: string) => {
-			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
+			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game")
 				return;
 			store.dispatch("SET_SAVE_POPUP");
 			store.dispatch("SET_USER_TARGET", user_target);
@@ -146,7 +154,7 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 		});
 
 		store.state.socket.off('alertMessage').on('alertMessage', async (msg: string) => {
-			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
+			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game")
 				return;
 			store.dispatch("SET_SAVE_POPUP");
 			store.dispatch("SET_MSG_ALERT", msg);
@@ -226,7 +234,7 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 		});
 
 		store.state.socket.off('rcvInvite').on('rcvInvite', (channel_target: ChannelEntity, user_target: UserEntity) => {
-			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
+			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game")
 				return;
 			store.dispatch("SET_CHANNEL_TARGET", channel_target);
 			store.dispatch("SET_USER_TARGET", user_target);

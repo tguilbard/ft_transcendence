@@ -1,9 +1,8 @@
 .container_popup, .container_popup_alert {
-    position: fixed;
     display: block;
     position: absolute;
     height: 100vh;
-    width: 100vmax;
+    width: 100vw;
     text-align: center;
     z-index: 10;
     visibility: hidden;
@@ -12,6 +11,7 @@
 }
 
 .container_popup, .container_popup_alert{
+    position: fixed;
     z-index: 10;
     background-color: rgba(0, 0, 0, 0.8);
     visibility: visible;
@@ -46,7 +46,7 @@
     -webkit-text-stroke-color: rgb(0, 0, 0);
     font-family: futura;
     font-weight: 900;
-    font-size: 1.5vmax;
+    font-size: 1.5vw;
     border: 1px solid black;
 }
 
@@ -58,12 +58,12 @@
     border-radius: 7px 7px 7px 7px;
     background-color: #B8B8B8;
     border: 2px solid #a8a8a8;
-    height: stretch;
+    /* height: stretch; */
     text-align: left;
     overflow: auto;
     z-index: 20;
     font-weight: 900;
-    font-size: 1.2vmax;
+    font-size: 1.2vw;
 }
 
 .content_popup p, label{
@@ -91,12 +91,12 @@
 }
 
 .btn_select input, .btn_select button {
-    padding: 0.5vmax;
+    padding: 0.5vw;
     text-align: center;
-    margin: 0.5vmax;
-    border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
+    margin: 0.5vw;
+    border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
     font-family: futura;
-    font-size: 1vmax;
+    font-size: 1vw;
     font-weight: bold;
 }
 
@@ -105,38 +105,38 @@
     cursor: grabbing;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-size: 1.05vmax;
+    font-size: 1.05vw;
     border-color: #fff12c;
 }
 
 .grid_popup_inv {
     display: grid;
     grid-template-rows: auto;
-    gap: 1vmax;
+    gap: 1vw;
     justify-items: center;
     align-items: center;
 }
 
 .grid_popup_inv p {
-    padding: 2vmax;
+    padding: 2vw;
     text-align: center;
 }
 
 .grid_popup_mode {
     display: grid;
     grid-template-rows: auto;
-    gap: 1vmax;
+    gap: 1vw;
     justify-items: center;
     align-items: center;
 }
 
 .grid_popup_mode p {
-    padding: 2vmax;
+    padding: 2vw;
     text-align: center;
 }
 
 .grid_popup_mode img {
-    width: 4vmax;
+    width: 4vw;
     height: auto;
 }
 
@@ -155,10 +155,10 @@
 }
 
 .list_chan_popup {
-    margin: 0.5vmax;
-    margin-top: 1vmax;
-    margin-bottom: 1vmax;
-    padding: 1vmax;
+    margin: 0.5vw;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
+    padding: 1vw;
     background-color: #000000;
     background-color: #f6ecd2;
     overflow: auto;
@@ -169,20 +169,20 @@
 }
 
 .list_chan_popup p {
-    margin: 0.2vmax;
-    padding: 0.4vmax;
+    margin: 0.2vw;
+    padding: 0.4vw;
 }
 
 .list_chan_popup img {
-    margin: 0.2vmax;
-    padding: 0.4vmax;
-    width: 2vmax;
+    margin: 0.2vw;
+    padding: 0.4vw;
+    width: 2vw;
     height: auto;
 }
 
 .user_list_selected {
     background-color: rgb(163, 85, 13);
-    border-radius: 0.5vmax;
+    border-radius: 0.5vw;
 }
 
 .user_list_selected p {
@@ -190,7 +190,7 @@
     cursor: grabbing;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-size: 1.5vmax;
+    font-size: 1.5vw;
     border-color: #fff12c;
 }
 
@@ -205,8 +205,8 @@
 }
 
 .logo_connection img {
-    width: 1vmax;
-    height: 1vmax;
+    width: 1vw;
+    height: 1vw;
 }
 
 .inv {

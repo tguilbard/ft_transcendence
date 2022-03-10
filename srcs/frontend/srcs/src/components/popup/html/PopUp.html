@@ -6,11 +6,11 @@
         <PopupAlert />
     </div>
     <div v-if="(GET_POPUP == 'pass' || GET_SAVE_POPUP == 'pass') && GET_ROOM">
-        <div @click="back" class="container_popup"></div>
+        <div v-if="GET_POPUP == 'pass'" @click="back" class="container_popup"></div>
         <div class="block_popup">
             <div class="content_popup">
                 <h1>CONFIG OF ROOM</h1>
-                <form @submit="set_pass">
+                <form @submit.prevent="set_pass">
                     <div class="tab_mdp">
                         <div>
                             <div>
@@ -22,10 +22,10 @@
                         </div>
                         <div>
                             <div>
-                                <input type="text" id="mdp" name="mdp" v-model="mdp">
+                                <input type="text" id="mdp" name="mdp" v-model="mdp" maxlength="15">
                             </div>
                             <div>
-                                <input type="text" id="mdp2" name="mdp2" v-model="mdp2">
+                                <input type="text" id="mdp2" name="mdp2" v-model="mdp2" maxlength="15">
                             </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
         </div>
     </div>
     <div v-if="GET_POPUP == 'profil_mode'">
-        <div @click="back" class="container_popup"></div>
+        <div v-if="GET_POPUP == 'profil_mode'" @click="back" class="container_popup"></div>
         <div class="block_popup">
             <div class="content_popup">
                 <h1>USER INFOS</h1>
@@ -119,7 +119,7 @@
         <div class="block_popup">
             <div class="content_popup">
                 <h1>ROOM CREATION</h1>
-                <form>
+                <form @submit.prevent="create_room">
                     <div class="tab_mdp">
                         <div>
                             <div>
@@ -138,10 +138,10 @@
                                     v-model="GET_CHANNEL_TARGET.name">
                             </div>
                             <div v-if="GET_ROOM">
-                                <input type="text" id="mdp" name="mdp" v-model="mdp">
+                                <input type="text" id="mdp" name="mdp" v-model="mdp" maxlength="15">
                             </div>
                             <div v-if="GET_ROOM">
-                                <input type="text" id="mdp2" name="mdp2" v-model="mdp2">
+                                <input type="text" id="mdp2" name="mdp2" v-model="mdp2" maxlength="15">
                             </div>
                         </div>
                     </div>
@@ -150,7 +150,7 @@
                             <button @click="back">Cancel</button>
                         </div>
                         <div>
-                            <button @click="create_room" :disabled="(mdp == mdp2 && GET_CHANNEL_TARGET.name)? false: true">Create</button>
+                            <input type="submit" value="Create" :disabled="(mdp == mdp2 && GET_CHANNEL_TARGET.name)? false: true">
                         </div>
                     </div>
                 </form>
@@ -158,7 +158,7 @@
         </div>
     </div>
     <div v-if="GET_POPUP == 'add' || GET_SAVE_POPUP == 'add'">
-        <div @click="back" class="container_popup"></div>
+        <div v-if="GET_POPUP == 'add'" @click="back" class="container_popup"></div>
         <div class="block_popup">
             <div v-if="GET_ROOM" class="content_popup">
                 <h1>ADD ROOM</h1>
@@ -178,7 +178,7 @@
                             </div>
                         </div>
                     </div>
-                    <form @submit="add_room">
+                    <form @submit.prevent="add_room">
                         <div class="tab_mdp">
                             <div>
                                 <div>
@@ -193,13 +193,13 @@
                                     <input type="text" id="mdp" name="mdp" v-model="mdp"
                                         v-if="GET_CHANNEL_TARGET.mode != 5" disabled>
                                     <input type="text" id="mdp" name="mdp" v-model="mdp"
-                                        v-if="GET_CHANNEL_TARGET.mode == 5">
+                                        v-if="GET_CHANNEL_TARGET.mode == 5" maxlength="15">
                                 </div>
                                 <div>
                                     <input type="text" id="mdp2" name="mdp2" v-model="mdp2"
                                         v-if="GET_CHANNEL_TARGET.mode != 5" disabled>
                                     <input type="text" id="mdp2" name="mdp2" v-model="mdp2"
-                                        v-if="GET_CHANNEL_TARGET.mode == 5">
+                                        v-if="GET_CHANNEL_TARGET.mode == 5" maxlength="15">
                                 </div>
                             </div>
                         </div>
@@ -251,7 +251,7 @@
         </div>
     </div>
     <div v-if="GET_POPUP == 'inv' || GET_SAVE_POPUP == 'inv'">
-        <div @click="setPopup('GET_SAVE_POPUP')" class="container_popup inv"></div>
+        <div v-if="GET_POPUP == 'inv'" @click="response_inv(false)" class="container_popup inv"></div>
         <div class="block_popup inv">
             <div class="content_popup">
                 <h1>INVITATION</h1>
@@ -275,7 +275,7 @@
         </div>
     </div>
     <div v-if="GET_POPUP == 'inv_game' || GET_SAVE_POPUP == 'inv_game'">
-        <div @click="setPopup(GET_SAVE_POPUP)" class="container_popup inv"></div>
+        <div v-if="GET_POPUP == 'inv_game'" @click="response_inv_game(false)" class="container_popup inv"></div>
         <div class="block_popup inv">
             <div class="content_popup">
                 <h1>INVITATION</h1>

@@ -127,11 +127,10 @@ export default defineComponent({
   border-radius: 7px 7px 7px 7px;
   background-color: #b8b8b8;
   border: 2px solid #a8a8a8;
-  height: stretch;
   text-align: left;
   overflow: auto;
   font-weight: 900;
-  font-size: 1.2vmax;
+  font-size: 1.2vw;
 }
 
 .content_popup p,
@@ -143,15 +142,15 @@ label {
 .content_popup_profil {
   display: block;
   width: auto;
-  margin: 0.5vmax;
+  margin: 0.5vw;
 }
 
 .block_description {
   display: block;
-  margin: 0.2vmax;
+  margin: 0.2vw;
   text-align: center;
-  font-size: 1.5vmax;
-  padding: 2vmax;
+  font-size: 1.5vw;
+  padding: 2vw;
 }
 
 .block_popup2 {
@@ -180,7 +179,7 @@ label {
   -webkit-text-stroke-color: rgb(0, 0, 0);
   font-family: futura;
   font-weight: 900;
-  font-size: 1.5vmax;
+  font-size: 1.5vw;
   border: 1px solid black;
   display: block;
 }
@@ -191,12 +190,12 @@ label {
 }
 
 button {
-  padding: 0.5vmax;
+  padding: 0.5vw;
   text-align: center;
-  margin: 0.5vmax;
-  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
+  margin: 0.5vw;
+  border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
   font-family: futura;
-  font-size: 1vmax;
+  font-size: 1vw;
   font-weight: bold;
 }
 
@@ -206,7 +205,7 @@ button:hover,
   cursor: grabbing;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-size: 1.05vmax;
+  font-size: 1.05vw;
   border-color: #fff12c;
 }
 </style> >

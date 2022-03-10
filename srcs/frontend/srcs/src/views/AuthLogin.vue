@@ -13,6 +13,9 @@
         name="code"
         placeholder="Entre le code recus"
         v-model="code"
+        required
+        minlength="6"
+        maxlength="6"
       />
       <div v-if="myerror && myerror.message">
         <div class="msg" v-for="msg in myerror.message" :key="msg">

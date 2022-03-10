@@ -177,7 +177,7 @@ export class UsersService {
 		);
 		res.cookie('access_token', accessToken, {
 			httpOnly: true,
-			secure: true
+			secure: false
 		});
 
 		res.json({

@@ -24,6 +24,8 @@
         placeholder="Entre ton pseudo"
         v-model="username"
         required
+        minlength="3"
+        maxlength="7"
       />
       <p>{{ username }}</p>
       <div v-if="myerror && myerror.message">

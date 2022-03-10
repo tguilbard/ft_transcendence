@@ -4,8 +4,8 @@ import { TfaCodeDTO } from './dto/Tfa-code.dto';
 import { UsersService } from 'src/users/users.service';
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken'
+
 import { UpdateUserDTO } from 'src/users/dto/Update-user.dto';
-import { UserEntity } from 'src/users/entities/users.entity';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 
 @Controller('2fa')

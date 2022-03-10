@@ -75,7 +75,7 @@
     padding: 0.2vmax;
     background-color: #000000;
     background-color: #f6ecd2;
-    height: 60vh;
+    /* height: 60vh; */
     overflow: auto;
 }
 
@@ -109,7 +109,7 @@
     grid-template-columns: auto auto;
     grid-gap: 0.1vmax;
     background-color: rgb(163, 162, 162);
-    height: 61vh;
+    /* height: 81vh; */
     border: 2px solid rgb(129, 129, 129);
 }
 
@@ -127,8 +127,10 @@
 
 .right {
     display: grid;
-    grid-template-rows: minmax(min-content, max-content) minmax(min-content, auto) minmax(min-content, max-content);
+    grid-template-rows: minmax(min-content, 0) minmax(min-content, auto) minmax(min-content, 0);
     height: 100%;
+    background-color: #ffffffe1;
+
 }
 
 .logo {
@@ -147,7 +149,7 @@
     padding: 0.2vmax;
     text-align: center;
     overflow: auto;
-    height: 60vh;
+    /* height: 1px; */
 }
 
 .banner img {
@@ -179,9 +181,14 @@ hr {
 
 .chatbox {
     position: relative;
-    border-radius: 0px 0px 7px 0px;
+    border-radius: none;
     background-color: #ffffffe1;
-    border: 2px solid #8f8f8f;
+    max-height: 100%;
+}
+
+.post {
+    background-color: #ffffffe1;
+    padding: 0.5vw;
 }
 
 .chat {
@@ -191,7 +198,7 @@ hr {
     margin-top: 1px;
     margin-bottom: 0px;
     overflow: auto;
-    height: 61vh;
+    height: 100%;
 }
 
 .input {

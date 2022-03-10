@@ -2,7 +2,23 @@ import { Achievements, UserEntity } from '../interface/interface';
 import store from '../store';
 
   export default {
+    vh(v) {
+        const h = window.outerHeight;
+        return (v * h) / 100 - (window.outerHeight - window.innerHeight);
+    },
 
+    vw(v) {
+        const w = window.outerWidth;
+        return ((v * w) / 100) - (window.outerHeight - window.innerHeight);
+    },
+
+    vmin(v) {
+        return Math.min(this.vh(v), this.vw(v));
+    },
+
+    vmax(v) {
+        return Math.max(this.vh(v), this.vw(v));
+    },
     joinPrivate(name: string): void {
         store.state.socket.emit('joinPrivate', name);
       },

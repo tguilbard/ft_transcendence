@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import store from '../store/index'
+import store from '@/store/index'
+import shared from '@/mixins/Mixins'
 
 const routes: Array<RouteRecordRaw> = [
 	{
@@ -58,23 +59,21 @@ const router = createRouter({
 	linkExactActiveClass: "exact-active",
 })
 
-router.beforeEach((to, from, next) => {
-
-	// if (!to.name || (from.name == undefined && to.name != 'ok'))
-	// {
-	//   from.name = '/';
-	//   next({name: 'Login'});
-	// }
-	// else
+router.beforeEach(async(to, from, next) => {
+	const user = await shared.getMyUser();
+	if (user && user.username && from.name)
+	{
+		if (!store.state.sock_init) await store.commit("SET_SOCKET");
+		if (user.state == 'in match' && from.name == 'Game' && to.name != 'Game')
+			return;
+	}
 	next();
 })
 
 
 router.afterEach((to, from) => {
-
-	if (from.name === "Game" && !store.getters.GET_DUEL) {
+	if (from.name === "Game" && to.name != "Game" && !store.getters.GET_DUEL) {
 		const check = document.getElementById("PongBorder");
-
 		if (check !== null)
 			check.style.display = "none";
 	}

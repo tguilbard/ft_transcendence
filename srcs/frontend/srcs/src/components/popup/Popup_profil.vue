@@ -1,6 +1,6 @@
 <template>
   <div v-if="GET_POPUP == 'modify_profil' || GET_SAVE_POPUP == 'modify_profil'">
-    <div @click="back" class="container_popup"></div>
+    <div v-if="GET_POPUP == 'modify_profil'" @click="back" class="container_popup"></div>
     <div id="block_popup">
       <div class="content_popup">
         <h1>MODIFY PROFILE</h1>
@@ -40,7 +40,10 @@
                   placeholder="Entre ton pseudo"
                   v-model="username"
                   required
+                  minlength="3"
+                  maxlength="7"
                   :disabled="desable ? '' : disabled"
+
                 />
                 <div v-if="myerror && myerror.message">
                   <div v-for="msg in myerror.message" :key="msg">
@@ -53,7 +56,7 @@
                 <button v-else @click="submit">SAVE</button>
               </div>
               <h1>MODIFY YOUR DOUBLE AUTHENTIFICATION</h1>
-              <div class="block_user" style="height: 25vmax">
+              <div class="block_user" style="height: 25vw">
                 <div v-if="isCheck">
                   <button @click="switchCheck">DESACTIVATE TFA</button>
                 </div>
@@ -67,6 +70,9 @@
                     type="text"
                     name="code"
                     placeholder="Entre le code recus"
+                    maxlength="6"
+                    minlength="6"
+                    required
                     v-model="code"
                   />
                   <div v-if="myerror && myerror.message">
@@ -94,7 +100,7 @@
       GET_POPUP == 'duel'
     "
   >
-    <div @click="back" class="container_popup" />
+    <div v-if="GET_POPUP == 'profil'" @click="back" class="container_popup" />
     <div id="block_popup">
       <div class="content_popup">
         <h1>PROFILE</h1>
@@ -171,10 +177,8 @@
             </div>
           </div>
           <div id="c">
-            <div class="content_popup_profil">
-              <div v-if="GET_IMG_TARGET">
-                <img id="avatar" v-bind:src="GET_IMG_TARGET" />
-              </div>
+            <div v-if="GET_IMG_TARGET" class="content_popup_profil">
+              <img class="avatar" v-bind:src="GET_IMG_TARGET" />
             </div>
           </div>
           <div id="d">
@@ -278,7 +282,7 @@ export default defineComponent({
       save_username: "",
       check: "",
       qrCode: "",
-      code: 0,
+      code: '',
     };
   },
   computed: {
@@ -305,6 +309,14 @@ export default defineComponent({
         (e) => e == store.getters.GET_USER_TARGET.username
       );
     },
+    get_hh() {
+			const h = shared.vw(30.4);
+			return 'height: ' + 45 + 'px';
+		},
+		get_hh2() {
+			const h = shared.vw(25);
+			return 'min-height: ' + h + 'px';
+		}
   },
   methods: {
     back() {
@@ -552,44 +564,11 @@ export default defineComponent({
         store.getters.GET_USER_TARGET.username
       );
     },
-    // myEventHandler() {
-    //   let block_height = document.getElementById("block_popup").offsetHeight;
-    //   let top = window.innerHeight - Number(block_height);
-    //   if (top <= 0) {
-    //     document.getElementById("block_popup").style.top = "0px";
-    //     document.getElementById("block_popup").style.transform =
-    //       "translate(-50%, 0%)";
-    //   } else {
-    //     document.getElementById("block_popup").style.top = "50%";
-    //     document.getElementById("block_popup").style.transform =
-    //       "translate(-50%, -50%)";
-    //   }
-    // },
   },
   async created() {
-    // window.addEventListener("resize", this.myEventHandler);
     this.username = store.getters.GET_USER.username;
     this.check = (await shared.getMyUser()).tfaActivated;
   },
-  // updated() {
-  //   if (store.getters.GET_POPUP) {
-  //     let block_height = document.getElementById("block_popup").offsetHeight;
-  //     let top = window.innerHeight - Number(block_height);
-
-  //     if (top <= 0) {
-  //       document.getElementById("block_popup").style.top = "0px";
-  //       document.getElementById("block_popup").style.transform =
-  //         "translate(-50%, 0%)";
-  //     } else {
-  //       document.getElementById("block_popup").style.top = "50%";
-  //       document.getElementById("block_popup").style.transform =
-  //         "translate(-50%, -50%)";
-  //     }
-  //   }
-  // },
-  // unmounted() {
-  //   window.removeEventListener("resize", this.myEventHandler);
-  // },
 });
 </script>
 
@@ -603,7 +582,7 @@ h1 {
 #block_popup {
   display: block;
   position: absolute;
-  border-radius: 0.25vmax 0.25vmax 0.25vmax 0.25vmax;
+  border-radius: 0.25vw 0.25vw 0.25vw 0.25vw;
   background-color: #fff12c;
   border: 2px solid #8f8f8f;
   padding: 1px;
@@ -618,7 +597,7 @@ h1 {
 }
 
 #block_popup h1 {
-  border-radius: 0.25vmax 0.25vmax 0px 0px;
+  border-radius: 0.25vw 0.25vw 0px 0px;
 
   text-align: center;
   background-color: grey;
@@ -628,7 +607,7 @@ h1 {
   -webkit-text-stroke-color: rgb(0, 0, 0);
   font-family: futura;
   font-weight: 900;
-  font-size: 1.5vmax;
+  font-size: 1.5vw;
   border: 1px solid black;
   display: block;
   white-space: nowrap;
@@ -652,14 +631,13 @@ h1 {
 }
 
 .content_popup {
-  border-radius: 0.25vmax 0.25vmax 0.25vmax 0.25vmax;
+  border-radius: 0.25vw 0.25vw 0.25vw 0.25vw;
   background-color: #b8b8b8;
   border: 2px solid #a8a8a8;
   height: 100%;
   text-align: left;
-  z-index: 20;
   font-weight: 900;
-  font-size: 1.2vmax;
+  font-size: 1.2vw;
 }
 
 .content_popup p,
@@ -669,43 +647,38 @@ label {
 }
 
 .content_popup_profil {
-  display: block;
-  width: 100%;
+  height: 15vw;
+  background-color: rgb(61, 61, 61);
+  border-radius: 0px 0px 0.25vw 0.25vw;
 }
 
 .content_popup_profil p {
   margin-top: 2px;
 }
 
-.content_popup_profil img {
+/* .content_popup_profil img {
   margin: 0px;
   text-align: center;
   max-width: 100%;
-  max-height: 16vmax;
+  max-height: 100%;
   display: block;
   margin-left: auto;
   margin-right: auto;
-}
+} */
 
 .content_popup_profil input {
   position: relative;
 }
 
-.content_popup_profil p {
-  overflow-y: auto;
-  scrollbar-color: rebeccapurple green;
-  scrollbar-width: thin;
-}
-
 .grid_popup_profil {
   display: grid;
   grid-template-rows: repeat(2, minmax(min-content, 0));
-  grid-template-columns: auto 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr;
   grid-template-areas:
     "a b c"
     "a d d";
   margin: 1vh;
-  gap: 0.2vmax;
+  gap: 0.2vw;
   align-items: start;
 }
 
@@ -727,15 +700,15 @@ label {
 
 .elo {
   display: block;
-  font-size: 10vmax;
+  font-size: 10vw;
   text-align: center;
 }
 
 .block_profil p {
   display: block;
-  margin: 0.2vmax;
+  margin: 0.2vw;
   text-align: center;
-  font-size: 5vmax;
+  font-size: 5vw;
 }
 
 .mod {
@@ -750,12 +723,12 @@ label {
 
 .btn_select input,
 .btn_select button {
-  padding: 0.5vmax;
+  padding: 0.5vw;
   text-align: center;
-  margin: 0.5vmax;
-  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
+  margin: 0.5vw;
+  border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
   font-family: futura;
-  font-size: 1vmax;
+  font-size: 1vw;
   font-weight: bold;
 }
 
@@ -765,7 +738,7 @@ label {
   cursor: grabbing;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-size: 1.05vmax;
+  font-size: 1.05vw;
   border-color: #fff12c;
 }
 
@@ -782,26 +755,26 @@ label {
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
   font-family: futura;
-  font-size: 2vmax;
-  margin: 0.2vmax;
-  padding: 0.2vmax;
+  font-size: 2vw;
+  margin: 0.2vw;
+  padding: 0.2vw;
   display: inline;
 }
 
 .btn_chan_profil img {
   display: block;
   border: none;
-  margin: 0.2vmax;
-  padding: 0.2vmax;
-  width: 1.5vmax;
-  height: 1.5vmax;
+  margin: 0.2vw;
+  padding: 0.2vw;
+  width: 1.5vw;
+  height: 1.5vw;
 }
 
 .grid_modify {
   display: grid;
   grid-template-columns: repeat(2, minmax(min-content, max-content));
-  gap: 1vmax;
-  margin: 1vmax;
+  gap: 1vw;
+  margin: 1vw;
   justify-content: center;
 }
 
@@ -816,16 +789,16 @@ label {
 }
 
 .block_avatar {
-  height: 20vmax;
+  height: 20vw;
   background-color: rgb(61, 61, 61);
-  border-radius: 0px 0px 0.25vmax 0.25vmax;
+  border-radius: 0px 0px 0.25vw 0.25vw;
 }
 
 .block_user {
   background-color: rgb(61, 61, 61);
-  padding: 1vmax;
-  margin-bottom: 1vmax;
-  border-radius: 0px 0px 0.25vmax 0.25vmax;
+  padding: 1vw;
+  margin-bottom: 1vw;
+  border-radius: 0px 0px 0.25vw 0.25vw;
 }
 
 .grid_modify input,
@@ -841,14 +814,14 @@ label {
 
 .grid_modify button,
 .btn {
-  padding: 0.5vmax;
+  padding: 0.5vw;
   text-align: center;
-  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
+  border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
   font-family: futura;
-  font-size: 1vmax;
+  font-size: 1vw;
   font-weight: bold;
-  margin-top: 0.5vmax;
-  margin-bottom: 0.5vmax;
+  margin-top: 0.5vw;
+  margin-bottom: 0.5vw;
 }
 
 .grid_modify button:hover,
@@ -857,22 +830,22 @@ label {
   cursor: grabbing;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-size: 1.05vmax;
+  font-size: 1.05vw;
 }
 
 .block_avatar_inf label {
-  top: 1vmax;
-  font-size: 1vmax;
+  top: 1vw;
+  font-size: 1vw;
   text-align: center;
 }
 
 .right {
-  border-left: solid 0.5vmax rgb(0, 0, 0);
+  border-left: solid 0.5vw rgb(0, 0, 0);
 }
 
 .container_right {
-  margin-left: 1vmax;
-  margin-bottom: 1vmax;
+  margin-left: 1vw;
+  margin-bottom: 1vw;
 }
 
 .link:hover {
@@ -890,13 +863,13 @@ label {
   color: darkblue;
   background-color: #f6ecd2;
   overflow-y: scroll;
-  height: 24.7vmax;
-  border-radius: 0vmax 0vmax 0.5vmax 0.5vmax;
-  scroll-margin-bottom: 0.5vmax;
-  scroll-margin-block-end: 1vmax;
+  height: 23.6vw;
+  border-radius: 0vw 0vw 0.5vw 0.5vw;
+  scroll-margin-bottom: 0.5vw;
+  scroll-margin-block-end: 1vw;
   scroll-snap-type: proximity;
   border: 2px solid darkblue;
-  padding: 0.2vmax;
+  padding: 0.2vw;
 }
 
 .grid_history {
@@ -919,11 +892,11 @@ label {
 }
 
 .grid_history span {
-  padding: 0.2vmax;
+  padding: 0.2vw;
   font-family: futura;
   font-weight: 900;
-  font-size: 1.5vmax;
-  top: 0.5vmax;
+  font-size: 1.5vw;
+  top: 0.5vw;
   margin: auto;
 }
 
@@ -937,7 +910,7 @@ label {
 
 .block_container {
   display: block;
-  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
+  border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
   background-color: #fff12c;
   border: 2px solid #8f8f8f;
   padding: 1px;
@@ -948,7 +921,7 @@ label {
 }
 
 .block_container h1 {
-  border-radius: 0.5vmax 0.5vmax 0px 0px;
+  border-radius: 0.5vw 0.5vw 0px 0px;
   text-align: center;
   background-color: grey;
   color: #fff12c;
@@ -957,7 +930,7 @@ label {
   -webkit-text-stroke-color: rgb(0, 0, 0);
   font-family: futura;
   font-weight: 900;
-  font-size: 1.5vmax;
+  font-size: 1.5vw;
   border: 1px solid black;
   display: block;
 }
@@ -969,8 +942,8 @@ label {
 }
 
 .qrcode {
-  width: 14vmax;
-  height: 14vmax;
+  width: 14vw;
+  height: 14vw;
   display: block;
   position: relative;
   box-sizing: border-box;

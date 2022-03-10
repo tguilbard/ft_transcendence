@@ -181,9 +181,14 @@ import store from "@/store";
 			"GET_USER",
 			"GET_POPUP",
 		]),
-		getRoute() {
-			return this.$route.name;
+		get_hh() {
+			const h = shared.vw(45.4);
+			return 'height: ' + h + 'px';
 		},
+		get_hh2() {
+			const h = shared.vw(41);
+			return 'height: ' + h + 'px';
+		}
 	},
 	methods: {
 		setPopup(value: string): void {

@@ -1,10 +1,10 @@
 <template>
-  <div class="sup">
-    <p class="pong">PONG</p>
-  </div>
-  <button class="button_login" v-on:click="login">42connect</button>
-  <button class="button_guest" v-on:click="add_guest">GUEST</button>
-  <div :style="inf"></div>
+    <div class="sup">
+      <p class="pong">PONG</p>
+    </div>
+    <button class="button_login" v-on:click="login">42connect</button>
+    <button class="button_guest" v-on:click="add_guest">GUEST</button>
+    <div :style="inf"></div>
 </template>
 
 <script lang="ts">
@@ -72,9 +72,6 @@ import store from "../store/index";
       window.location.href =
         "https://api.intra.42.fr/oauth/authorize?client_id=61094fffbf3140a13c461779c220cbc96dfbad643921a60e345ff8a99928a7a2&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fok&response_type=code";
     },
-  },
-  async created() {
-    if (await shared.isLogin()) this.log = true;
   },
 })
 export default class Register extends Vue {}

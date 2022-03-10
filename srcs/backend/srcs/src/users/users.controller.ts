@@ -45,7 +45,9 @@ export class UsersController {
 	}
 
 	@Get('MyUser')
-	async GetMyUser(@Req() req: Request): Promise<UserEntity> {
+	async GetMyUser(@Req() req: Request): Promise<UserEntity>{
+		if (!req.User || !req.User.id)
+			return await this.usersService.FindUserById(0);
 		const user = await this.usersService.FindUserById(req.User.id);
 		return user;
 	}
