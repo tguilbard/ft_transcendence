@@ -3,7 +3,7 @@ FROM node:lts-alpine3.15
 #BACK
 WORKDIR /usr/src/app/
 
-COPY srcs/package*.json .
+COPY backend/srcs/package*.json .
 
 #dependencies
 RUN apk add python3 build-base pango-dev
@@ -12,9 +12,9 @@ RUN npm update \
 && npm install
 #&& npm i -g rimraf
 
-COPY srcs .
+COPY backend/srcs .
 
-#RUN npm run build
+RUN npm run build
 
 #RUN rm -rf srcs
 
@@ -35,5 +35,6 @@ COPY srcs .
 # #RUN rm -rf srcs
 # RUN mv dist ../back/app
 
+CMD ["node", "dist/main"]
 #CMD ["npm", "run", "start"]
-CMD "sh"
+#CMD "sh"

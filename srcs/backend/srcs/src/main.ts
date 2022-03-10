@@ -6,8 +6,11 @@ import * as session from 'express-session';
 import * as cookieParser from 'cookie-parser';
 import { UsersService } from './users/users.service'
 
+import { join } from 'path';
+import { NestExpressApplication } from '@nestjs/platform-express';
+
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
   const usersService = app.get(UsersService);
 
@@ -22,6 +25,11 @@ async function bootstrap() {
   
   app.use(cookieParser());
   
+
+  app.useStaticAssets(join(__dirname, '..', 'dist'));
+ // app.setBaseViewsDir(join(__dirname, '..', 'views'));
+ // app.setViewEngine('hbs');
+
   app.enableCors({
     origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',

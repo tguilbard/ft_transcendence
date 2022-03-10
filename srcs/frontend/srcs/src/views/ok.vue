@@ -13,7 +13,8 @@ import store from "../store/index";
   },
   methods: {
     async login(code: string) {
-      var response = await fetch(`http://${process.env.VUE_APP_BACK}/users/login`, {
+      alert("ip: " + process.env.VUE_APP_BACK)
+      var response = await fetch(`http://backend:3000/users/login`, {
         method: "POST",
         mode: "cors",
         credentials: "include",
@@ -27,7 +28,9 @@ import store from "../store/index";
           code: code,
         }),
       });
+      alert("passed")
       const data = await response.json();
+      alert("data = "+ data.login);
       await sessionStorage.setItem("login", await JSON.stringify(data.login));
       await sessionStorage.setItem("src", await JSON.stringify(data.src));
       store.dispatch("SET_USERNAME", await JSON.stringify(data.username));
@@ -43,6 +46,7 @@ import store from "../store/index";
   },
   async created() {
     const code = await shared.GetQueryStringVal("code");
+	alert("code = " + code)
     if (!code) {
       window.location.href = "";
     }

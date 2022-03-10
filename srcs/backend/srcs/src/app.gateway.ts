@@ -139,11 +139,10 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 
 	async afterInit(server: Server) {
-		try {
+		if (!await this.chatService.GetChannel("General"))
+		{
 			const general = await this.chatService.CreateChannels("General", ChannelType.public, undefined);
 			this.logger.log(`Initialisation done, ${general.name} created`);
-		}
-		catch (a) {
 		}
 	}
 

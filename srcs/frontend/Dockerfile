@@ -1,8 +1,8 @@
 # Choose the Image which has Node installed already
-FROM node:lts-alpine
+FROM node:lts-alpine3.15
 
 # install simple http server for serving static content
-RUN npm install -g http-server
+#RUN npm install -g http-server
 
 # make the 'app' folder the current working directory
 WORKDIR /app
@@ -19,5 +19,6 @@ COPY srcs .
 
 # build app for production with minification
 RUN npm run build
+RUN rm -rf srcs
 
 CMD [ "npm", "run", "serve", "--", "--mode", "production" ]
