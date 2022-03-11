@@ -1,16 +1,11 @@
-import { IsNotEmpty, IsString, IsPositive } from "class-validator";
+import { IsNotEmpty, IsString, IsPositive, IsNumber, IsNumberString, isNumber, isNumberString, IS_NUMBER_STRING } from "class-validator";
 import { Type } from "class-transformer";
 
 
 export class TfaCodeDTO {
 
-    @IsString({
-        message: "$property dois etre une string"
-    })
-    @IsNotEmpty(
-        {
-            message: "$property ne dois pas etre vide"
-        }
-    )
+    @IsNumberString()
+  
+    @IsNotEmpty()
     code: string;
 }

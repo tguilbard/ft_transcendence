@@ -1,31 +1,16 @@
-import { IsNotEmpty, IsString, IsPositive } from "class-validator";
+import { IsNotEmpty, IsString, IsPositive, maxLength, MaxLength } from "class-validator";
 import { Type } from "class-transformer";
 
 
 export class GenerateTfaDTO {
 
-    @IsString(
-        {
-            message: "$property dois etre une string"
-        }
-    )
-    @IsNotEmpty(
-        {
-            message: "$property ne dois pas etre vide"
-        }
-    )
+    @IsString()
+    @IsNotEmpty()
+    @MaxLength(20)
     login: string;
 
-    @IsPositive(
-        {
-            message: "$property dois etre positif"
-        }
-    )
-    @IsNotEmpty(
-        {
-            message: "$property ne dois pas etre vide"
-        }
-    )
+    @IsPositive()
+    @IsNotEmpty()
     @Type(()=> Number)
     id: number;
 }

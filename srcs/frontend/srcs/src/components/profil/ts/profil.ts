@@ -161,6 +161,20 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 			store.dispatch("SET_POPUP", 'alert' + store.getters.GET_POPUP);
 		});
 
+		store.state.socket.off('goMsg').on('goMsg', async (channel: ChannelEntity) => {
+			channel.realname = channel.name;
+			channel.name = '';
+			store.dispatch("SET_ROOM", false);
+			channel.name = channel.realname.substring(channel.realname.indexOf('-') + 2);
+			if (channel.name == store.getters.GET_USER.username)
+				channel.name = channel.realname.substring(0, channel.realname.indexOf('-') - 1);
+			store.dispatch("SET_CHAN_PRIVATE", channel);
+			store.dispatch("SET_CHAN_CURRENT", channel);
+			store.dispatch("SET_POPUP", '');
+			store.dispatch("SET_SAVE_POPUP");
+			return this.$router.push("/chat");
+		});
+
 		store.state.socket.off('refresh_friends').on('refresh_friends', async () => {
 			store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
 			store.dispatch("SET_FRIENDS", await this.getListFriends());

@@ -196,7 +196,6 @@ span {
 .content_leaderboard {
   overflow: auto;
   min-height: 69vh;
-  /* height: 38vmax; */
   border-radius: 0vmax 0vmax 0.5vmax 0.5vmax;
 }
 

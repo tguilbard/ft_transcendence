@@ -410,7 +410,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage("joinPrivateMessage")
 	async joinPrivateMessage(client: Socket, username: string) {
-
 		let userTarget = await this.userService.FindUserByUsername(username);
 		if (!userTarget) {
 			this.server.to(client.id).emit('alertMessage', "User not found");
@@ -422,12 +421,13 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			chanName = userGeneral.username + " - " + userTarget.username;
 		else
 			chanName = userTarget.username + " - " + userGeneral.username;
-		if (await this.chatService.GetChannel(chanName))
+		let targetChan = await this.chatService.GetChannel(chanName);
+		if (targetChan)
 		{
-			this.server.to(client.id).emit('goMsg', await this.chatService.GetChannel(chanName));
+			this.server.to(client.id).emit('goMsg', targetChan);
 			return;
 		}
-		let targetChan = await this.chatService.CreateChannels(chanName, ChannelType.privateMessage, undefined);
+		targetChan = await this.chatService.CreateChannels(chanName, ChannelType.privateMessage, undefined);
 		await this.chatService.AddMember(userGeneral, targetChan.id, 0);
 		await this.chatService.AddMember(userTarget, targetChan.id, 0);
 		this.server.to(client.id).emit('chanToClientPrivate', 0, targetChan);

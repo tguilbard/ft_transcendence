@@ -122,6 +122,8 @@ export class UsersService {
 				guest: req.User.guest
 			}
 			const user = await this.AddUser(newUser);
+			if (user && body.unlock == 'true')
+				this.achievementService.UnlockFashion(user);
 			return user;
 	}
 
@@ -402,7 +404,7 @@ export class UsersService {
 		if (Achievement.mask == (achievement & Achievement.mask))
 			achievement = achievement | Achievement.perfectionnist;
 		const value = await this.usersRepositories.update({id: user.id}, {achievementUnlock: achievement});
-		if (value)
+		if (value && global.server)
 			global.server.emit("refreshAcheivements", user.username);
 		return value;
 	}

@@ -1,6 +1,10 @@
 <template>
   <div v-if="GET_POPUP == 'modify_profil' || GET_SAVE_POPUP == 'modify_profil'">
-    <div v-if="GET_POPUP == 'modify_profil'" @click="back" class="container_popup"></div>
+    <div
+      v-if="GET_POPUP == 'modify_profil'"
+      @click="back"
+      class="container_popup"
+    ></div>
     <div id="block_popup">
       <div class="content_popup">
         <h1>MODIFY PROFILE</h1>
@@ -34,26 +38,27 @@
               <h1>MODIFY YOUR USERNAME</h1>
               <div class="block_user">
                 <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
-                <input
-                  type="pseudo"
-                  name="pseudo"
-                  placeholder="Entre ton pseudo"
-                  v-model="username"
-                  required
-                  minlength="3"
-                  maxlength="7"
-                  :disabled="desable ? '' : disabled"
-
-                />
-                <div v-if="myerror && myerror.message">
-                  <div v-for="msg in myerror.message" :key="msg">
-                    <p style="color: red" v-if="msg.username">
-                      {{ msg.username }}
-                    </p>
+                <form @submit.prevent="submit">
+                  <input
+                    type="pseudo"
+                    name="pseudo"
+                    placeholder="Entre ton pseudo"
+                    v-model="username"
+                    required
+                    minlength="3"
+                    maxlength="7"
+                    :disabled="desable ? '' : disabled"
+                  />
+                  <div v-if="myerror && myerror.message">
+                    <div class="block_error" v-for="msg in myerror.message" :key="msg">
+                      <p style="color: red" v-if="msg.username">
+                        {{ msg.username }}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <button v-if="desable" @click="toggle">MODIFY</button>
-                <button v-else @click="submit">SAVE</button>
+                  <button v-if="desable" @click="toggle">MODIFY</button>
+                  <input v-else type="submit" value="SAVE" />
+                </form>
               </div>
               <h1>MODIFY YOUR DOUBLE AUTHENTIFICATION</h1>
               <div class="block_user" style="height: 25vw">
@@ -66,21 +71,23 @@
 
                 <div v-if="isQrCode">
                   <img :src="qrCode" class="qrcode" alt="qrcode" />
-                  <input
-                    type="text"
-                    name="code"
-                    placeholder="Entre le code recus"
-                    maxlength="6"
-                    minlength="6"
-                    required
-                    v-model="code"
-                  />
-                  <div v-if="myerror && myerror.message">
-                    <div v-for="msg in myerror.message" :key="msg">
-                      <p style="color: red" v-if="msg.code">{{ msg.code }}</p>
+                  <form @submit.prevent="submit_code">
+                    <input
+                      type="text"
+                      name="code"
+                      placeholder="Entre le code recus"
+                      maxlength="6"
+                      minlength="6"
+                      required
+                      v-model="code"
+                    />
+                    <div class="block_error" v-if="myerror && myerror.message">
+                      <div v-for="msg in myerror.message" :key="msg">
+                        <p style="color: red" v-if="msg.code">{{ msg.code }}</p>
+                      </div>
                     </div>
-                  </div>
-                  <button @click="submit_code">DONE</button>
+                    <input type="submit" value="DONE" />
+                  </form>
                 </div>
               </div>
             </div>
@@ -282,7 +289,7 @@ export default defineComponent({
       save_username: "",
       check: "",
       qrCode: "",
-      code: '',
+      code: "",
     };
   },
   computed: {
@@ -309,18 +316,10 @@ export default defineComponent({
         (e) => e == store.getters.GET_USER_TARGET.username
       );
     },
-    get_hh() {
-			const h = shared.vw(30.4);
-			return 'height: ' + 45 + 'px';
-		},
-		get_hh2() {
-			const h = shared.vw(25);
-			return 'min-height: ' + h + 'px';
-		}
   },
   methods: {
     back() {
-      this.setPopup('');
+      this.setPopup("");
       store.dispatch("SET_SAVE_POPUP");
     },
 
@@ -511,7 +510,7 @@ export default defineComponent({
         });
     },
     async submit() {
-      let response = await fetch("http://localhost:3000/users/update", {
+      return await fetch("http://localhost:3000/users/update", {
         method: "PATCH",
         mode: "cors",
         credentials: "include",
@@ -524,19 +523,24 @@ export default defineComponent({
         body: JSON.stringify({
           username: this.username,
         }),
-      });
-      if (response.ok) {
-        this.desable = true;
-        const user = await shared.getMyUser();
-        store.state.socket.emit(
-          "changeUsername",
-          user,
-          store.getters.GET_USER.username
-        );
-        store.dispatch("SET_USER", user);
-        return null;
-      }
-      return await response.json();
+      })
+        .then(async (response) => {
+          this.desable = true;
+          const user = await shared.getMyUser();
+          store.state.socket.emit(
+            "changeUsername",
+            user,
+            store.getters.GET_USER.username
+          );
+          store.dispatch("SET_USER", user);
+          return await response.json();
+        })
+        .then((responseJson) => {
+          throw responseJson;
+        })
+        .catch((error) => {
+          this.myerror = error;
+        });
     },
     getImg(event: { target: { files: File[] } }) {
       this.file = event.target.files[0];
@@ -655,16 +659,6 @@ label {
 .content_popup_profil p {
   margin-top: 2px;
 }
-
-/* .content_popup_profil img {
-  margin: 0px;
-  text-align: center;
-  max-width: 100%;
-  max-height: 100%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-} */
 
 .content_popup_profil input {
   position: relative;
@@ -810,10 +804,6 @@ label {
   width: 75%;
   left: 50%;
   transform: translateX(-50%);
-}
-
-.grid_modify button,
-.btn {
   padding: 0.5vw;
   text-align: center;
   border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
@@ -822,6 +812,10 @@ label {
   font-weight: bold;
   margin-top: 0.5vw;
   margin-bottom: 0.5vw;
+}
+
+.grid_modify input:disabled {
+  color: rgb(195, 195, 195);
 }
 
 .grid_modify button:hover,
@@ -950,4 +944,18 @@ label {
   left: 50%;
   transform: translateX(-50%);
 }
+
+.block_error p{
+  position: relative;
+  width: min-content;
+  white-space: nowrap;
+  padding: 0.2vw;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff12c;
+  border-radius: 0.5vh;
+  font-family: futura-pt;
+  font-size: 2vh;
+}
+
 </style> >

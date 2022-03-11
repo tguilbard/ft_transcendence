@@ -107,6 +107,7 @@ export class UsersController {
 
 	@Post('guest')
 	async add_guest(@Res() response: Response, @Req() request: Request) {
+		"je suis dans add gest"
 		return await this.usersService.add_guest(response, request);
 	}
 

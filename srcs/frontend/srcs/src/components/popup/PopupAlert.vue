@@ -94,7 +94,6 @@ export default defineComponent({
   border-radius: 7px 7px 7px 7px;
   background-color: #b8b8b8;
   border: 2px solid #a8a8a8;
-  /* height: stretch; */
   text-align: left;
   overflow: auto;
   font-weight: 900;

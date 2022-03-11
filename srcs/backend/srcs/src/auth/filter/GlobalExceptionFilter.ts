@@ -11,8 +11,6 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         const request = ctx.getRequest<Request>();
         let message = (exception as any).message.message;
         let code = 'HttpException';
-        
-       // Logger.error(message, (exception as any).stack, `${request.method} ${request.url}`);
         let status = HttpStatus.INTERNAL_SERVER_ERROR;
         
         switch (exception.constructor) {
