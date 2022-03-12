@@ -4,7 +4,8 @@
     </div>
     <button class="button_login" v-on:click="login">42connect</button>
     <button class="button_guest" v-on:click="add_guest">GUEST</button>
-    <div :style="inf"></div>
+    <img class="background_pong" v-bind:src="require('../assets/background_pong.gif')"/>
+
 </template>
 
 <script lang="ts">
@@ -16,22 +17,8 @@ import store from "../store/index";
   data() {
     return {
       log: false,
+      pong: 'background_pong.gif'
     };
-  },
-  computed: {
-    inf() {
-      return {
-        width: "100%",
-        left: "0",
-        overflow: "hidden",
-        "z-index": "-1",
-        position: "absolute",
-        height: "50%",
-        top: "50%",
-        "background-image": `url(https://profgra.org/lycee/img/pong.gif)`,
-        "background-size": "100% 100%",
-      };
-    },
   },
   methods: {
     async add_guest() {
@@ -77,6 +64,17 @@ export default class Register extends Vue {}
 </script>
 
 <style scoped>
+
+.background_pong {
+   position: absolute;
+    display: block;
+    width: 100%;
+    left: 0;
+    z-index: -1;
+    height: 50%;
+    top: 50%;
+  }
+
 button:hover {
   color: #fff12c;
   border-color: #fff12c;

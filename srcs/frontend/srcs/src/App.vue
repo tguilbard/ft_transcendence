@@ -6,15 +6,15 @@
 import { Options, Vue } from "vue-class-component";
 
 @Options({
-  computed: {
-    styles() {
-      return {
-        "background-image": `url(https://i.giphy.com/media/9bTjZrytydVRK/giphy.webp)`,
-        "background-repeat": "repeat",
-        "background-size": "100% 100%",
-      };
-    },
-  },
+  // computed: {
+  //   styles() {
+  //     return {
+  //       "background-image": `url(https://i.giphy.com/media/9bTjZrytydVRK/giphy.webp)`,
+  //       "background-repeat": "repeat",
+  //       "background-size": "100% 100%",
+  //     };
+  //   },
+  // },
 })
 export default class App extends Vue {}
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :style="styles" class="back"></div>
+    <!-- <div :style="styles" class="back"></div> -->
     <div class="sup"><p class="pong">PONG</p></div>
     <div class="menu" @mouseover="hover = true" @mouseleave="hover = false">
       <div v-if="hover" id="nav_hover">
@@ -19,6 +19,8 @@
       </div>
     </div>
   </div>
+    <img class="background_star" v-bind:src="getBackground"/>
+
 </template>
 
 <script lang="ts">
@@ -32,12 +34,9 @@ import { Options, Vue } from "vue-class-component";
     };
   },
   computed: {
-    styles() {
-      return {
-        "background-image": `url(https://i.giphy.com/media/9bTjZrytydVRK/giphy.webp)`,
-        "background-repeat": "repeat",
-        "background-size": "100% 100%",
-      };
+    getBackground()
+    {
+      return require('@/assets/background.gif');
     },
     btn_game() {
       if (this.page == "game") {
@@ -75,6 +74,17 @@ export default class Menu extends Vue {}
 </script>
 
 <style scoped lang="css">
+
+.background_star {
+   position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+  }
+
 .sup {
   display: block;
   background-color: #fff12c;
@@ -122,9 +132,10 @@ export default class Menu extends Vue {}
   color: gray;
   text-decoration: none;
   font-family: futura;
+  border: 3px solid #9b9b9b;
   border-bottom: 3px solid #8f8f8f;
   box-shadow: 0px 1px 1px 0px #fff12c;
-  border-inline: 5px solid #9b9b9b;
+  border-top: none;
   -webkit-text-stroke: 2px;
   -webkit-text-stroke-color: black;
 }

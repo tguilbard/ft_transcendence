@@ -137,12 +137,15 @@ span {
   font-size: 1.2vmax;
 }
 
-.block_leaderboard {
+.grid_leaderboard {
+  display: grid;
+  grid-template-rows: minmax(min-content, max-content) auto;
   border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
   box-sizing: border-box;
   height: 100%;
   width: 100%;
   background-color: #f6ecd2;
+  align-items: flex-start;
 }
 
 .logo_connection {
@@ -186,18 +189,21 @@ span {
   font-family: futura;
 }
 
-.grid_leaderboard {
+.grid_score {
   display: grid;
   grid-template-columns: 4fr 10fr;
+  box-sizing: border-box;
   width: 100%;
+  height: 100%;
   justify-content: space-between;
 }
 
 .content_leaderboard {
+  box-sizing: border-box;
+  height: 1vh;
+  min-height: 100%;
   overflow: auto;
-  min-height: 69vh;
   border-radius: 0vmax 0vmax 0.5vmax 0.5vmax;
-  height: 69vh;
 }
 
 .block_text, .block_text img {

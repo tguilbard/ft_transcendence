@@ -1502,7 +1502,7 @@ label {
   box-sizing: border-box;
   height: 100%;
   max-height: 100%;
-  width: 100%;
+  /* width: 100%; */
 }
 
 #aa {
@@ -1514,13 +1514,12 @@ label {
   grid-area: ab;
   width: 100%;
   height: 100%;
-  max-height: 100%;
 }
 
 #ac {
   grid-area: ac;
   width: 100%;
-  height: stretch;
+  /* height: stretch; */
   align-items: end;
 }
 
@@ -1604,11 +1603,12 @@ label {
 
 #c {
   grid-area: c;
-  padding-right: 0.5vw;
+  /* padding-right: 0.5vw;
   padding-top: 0.5vw;
   align-items: stretch;
-  box-sizing: border-box;
+  box-sizing: border-box; */
   height: 100%;
+  width: 100%;
 }
 
 #d {
@@ -1696,23 +1696,26 @@ label {
 }
 
 .avatar {
-  display: block;
+  /* display: block; */
   position: relative;
   border: none;
   box-sizing: border-box;
   max-width: 100%;
   max-height: 100%;
   margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .content_popup_profil {
-  height: 1vh;
-  min-height: 100%;
+  height: 1vw;
+  min-height: inherit;
+  width: inherit;
   border-radius: 0px 0px 0.25vw 0.25vw;
 }
 
 .block_avatar {
-  height: 1vh;
+  height: 1vw;
   min-height: 100%;
   background-color: rgb(61, 61, 61);
   border-radius: 0px 0px 0.25vw 0.25vw;
