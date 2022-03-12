@@ -13,9 +13,14 @@ import { AchievementModule } from './achievement/achievement.module';
 import { GameHistoryModule } from './game-history/game-history.module';
 import { PongGateway } from './pong.gateway';
 import { ChatModule } from './chat/chat.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
+	ServeStaticModule.forRoot({
+		rootPath: join(__dirname, '..', 'app'),
+	}),
     ConfigModule.forRoot({
       isGlobal: true,
       ignoreEnvFile: false, //any .env file

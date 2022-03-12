@@ -224,7 +224,7 @@ export class UsersService {
 				grant_type: 'authorization_code',
 				client_id: '61094fffbf3140a13c461779c220cbc96dfbad643921a60e345ff8a99928a7a2',
 				client_secret: 'ca81f062eb8d1c29f73449afed67fd1b2e462cdf0899e89953d740086fa4186d',
-				redirect_uri: `http://localhost:8080/ok`,
+				redirect_uri: `http://localhost:3000/ok`,
 				code: code
 			}
 			var result;

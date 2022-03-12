@@ -52,7 +52,7 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
       })
         .then((response) => {
           if (response.ok) {
-            window.location.href = "http://localhost:8080/login";
+            window.location.href = "http://localhost:3000/login";
           } else {
             return response.json();
           }

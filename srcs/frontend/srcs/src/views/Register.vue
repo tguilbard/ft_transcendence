@@ -85,7 +85,7 @@ import store from "../store/index";
         .then((response) => {
           if (response.ok) {
             store.dispatch("SET_USERNAME", this.username);
-            return router.push("http://127.0.0.1:8080/auth");
+            return router.push("http://127.0.0.1:3000/auth");
           } else {
             return response.json();
           }

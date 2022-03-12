@@ -68,7 +68,7 @@ import store from "../store/index";
       })
         .then((response) => {
           if (response.ok) {
-            window.location.href = "http://127.0.0.1:8080";
+            window.location.href = "http://127.0.0.1:3000";
           } else {
             return response.json();
           }
