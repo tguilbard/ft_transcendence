@@ -26,8 +26,10 @@
         required
       />
       <p>{{ username }}</p>
-      <div v-for="msg in myerror.message" :key="msg">
-        <p style="color: red" v-if="msg.username">{{ msg.username }}</p>
+      <div v-if="myerror && myerror.message">
+        <div v-for="msg in myerror.message" :key="msg">
+          <p style="color: red" v-if="msg.username">{{ msg.username }}</p>
+        </div>
       </div>
       <input class="valider" type="submit" value="ENREGISTRER" />
     </form>

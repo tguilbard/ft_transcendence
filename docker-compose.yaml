@@ -54,26 +54,26 @@ services:
       VUE_APP_BACK: ${BACK_HOST}:${BACK_PORT}
       VUE_APP_NODE_ENV: ${NODE_ENV}
 
-  # pgadmin:
-  #   container_name: pgadmin_container
-  #   build:
-  #     context: srcs/pgadmin4
-  #     dockerfile: Dockerfile
-  #     args:
-  #       - JSON_FILE=${PGADMIN_SERVER_JSON_FILE}
-  #   restart: always
-  #   ports:
-  #     - ${PGADMIN_HOST}:${PGADMIN_LISTEN_PORT}:${PGADMIN_LISTEN_PORT}
-  #   links: 
-  #     - "database:${DATABASE_LINK}"
-  #   depends_on:
-  #     database:
-  #       condition: service_healthy
-  #   environment:
-  #     - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
-  #     - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
-  #     - PGADMIN_LISTEN_PORT=${PGADMIN_LISTEN_PORT}
-  #     - PGADMIN_SERVER_JSON_FILE=${PGADMIN_SERVER_JSON_FILE}
+  pgadmin:
+    container_name: pgadmin_container
+    build:
+      context: srcs/pgadmin4
+      dockerfile: Dockerfile
+      args:
+        - JSON_FILE=${PGADMIN_SERVER_JSON_FILE}
+    restart: always
+    ports:
+      - ${PGADMIN_HOST}:${PGADMIN_LISTEN_PORT}:${PGADMIN_LISTEN_PORT}
+    links: 
+      - "database:${DATABASE_LINK}"
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+      - PGADMIN_LISTEN_PORT=${PGADMIN_LISTEN_PORT}
+      - PGADMIN_SERVER_JSON_FILE=${PGADMIN_SERVER_JSON_FILE}
 
   # backend:
   #   build: 

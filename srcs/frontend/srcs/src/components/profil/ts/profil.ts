@@ -122,101 +122,120 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
         this.setPopup("inv_game");
       });
 
-    store.state.socket.off('refresh_user').on('refresh_user', async (chanName: string) => {
-      if (chanName == "all" || store.getters.GET_CHAN_CURRENT.realname == chanName)
-    {
-      store.dispatch("SET_USER_TARGET", await shared.getUserByUsername(store.getters.GET_USER_TARGET.username));
-      store.dispatch("SET_FRIENDS", await this.getListFriends());
-      if (store.getters.GET_POPUP)
-        store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(store.getters.GET_USER_TARGET.username));
-      else
-        store.dispatch("SET_LIST_MATCH", await shared.getListMatchs(store.getters.GET_USER.username));
-    }
-  });
+		store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity, game: string) => {
+			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
+				return;
+			store.dispatch("SET_SAVE_POPUP");
+			store.dispatch("SET_USER_TARGET", user_target);
+			store.dispatch("SET_GAME", game);
+			store.dispatch("SET_INV", false);
+			store.dispatch("SET_POPUP", store.getters.GET_POPUP);
+			this.setPopup('inv_game')
+		});
 
-  store.state.socket.off('alertMessage').on('alertMessage', async (msg: string) => {
-    store.dispatch("SET_MSG_ALERT", msg);
-    store.dispatch("SET_POPUP", 'alert');
-  });
+		store.state.socket.off('refresh_user').on('refresh_user', async (chanName: string) => {
+			if (chanName == "all" || store.getters.GET_CHAN_CURRENT.realname == chanName) {
+				store.dispatch("SET_USER_TARGET", await shared.getUserByUsername(store.getters.GET_USER_TARGET.username));
+				store.dispatch("SET_FRIENDS", await this.getListFriends());
+				if (store.getters.GET_POPUP)
+					store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(store.getters.GET_USER_TARGET.username));
+				else
+					store.dispatch("SET_LIST_MATCH", await shared.getListMatchs(store.getters.GET_USER.username));
+			}
+		});
 
- store.state.socket.off('refresh_friends').on('refresh_friends', async () => {
-    store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
-      store.dispatch("SET_FRIENDS", await this.getListFriends());
-  }); 
+		store.state.socket.off('alertMessage').on('alertMessage', async (msg: string) => {
+			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
+				return;
+			store.dispatch("SET_SAVE_POPUP");
+			store.dispatch("SET_MSG_ALERT", msg);
+			store.dispatch("SET_POPUP", 'alert' + store.getters.GET_POPUP);
+		});
 
-    store.state.socket.off('refreshAvatar').on('refreshAvatar', async (username: string) => {
-    if (store.getters.GET_USER_TARGET.username == username)
-      store.dispatch("SET_IMG_TARGET", await shared.get_avatar(username));
-    if (store.getters.GET_USER.username == username)
-      store.dispatch("SET_IMG", await shared.get_avatar(username));
-    });
+		store.state.socket.off('refresh_friends').on('refresh_friends', async () => {
+			store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
+			store.dispatch("SET_FRIENDS", await this.getListFriends());
+		});
 
-     store.state.socket.off('changeUsername').on("changeUsername",
-    async (payload: [{ oldname: string, newname: string, oldchan: string, newchan: string }]) => {
-      payload.forEach(e => {
-        let chan_tmp = store.getters.GET_CHAN_CURRENT;
-        if (chan_tmp.realname == e.oldchan)
-        {
-          chan_tmp.realname = e.newchan;
-          if (store.getters.GET_USER.username != e.newname)
-            chan_tmp.name = e.newname;
-            store.dispatch("SET_CHAN_CURRENT", chan_tmp);
-        }
-        chan_tmp = store.getters.GET_CHAN_PRIVATE;
-        if (chan_tmp.realname == e.oldchan) {
-          chan_tmp.realname = e.newchan;
-          if (store.getters.GET_USER.username != e.newname)
-            chan_tmp.name = e.newname;
-        }
-      })
-        const user = await shared.getMyUser();
-       store.dispatch("SET_USER", user);
-      store.dispatch("SET_CHECK", user.tfaActivated);
-      store.dispatch("SET_IMG", await shared.get_avatar(user.username));
-      store.dispatch("SET_FRIENDS", await this.getListFriends());
-      store.dispatch("SET_LIST_MATCH", await shared.getListMatchs(user.username));
-      store.dispatch(
-        "SET_LIST_ACHIEVEMENTS",
-        await shared.getAchievements(store.getters.GET_USER.username)
-      );
-     
-      let user_target = store.getters.GET_USER_TARGET;
-      if (user_target && user_target.username == payload[0].oldname)
-      {
-        user_target = await shared.getUserByUsername(payload[0].newname)
-        store.dispatch("SET_USER_TARGET", user_target);
-        await store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
-        store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(user_target.username));
-        await store.dispatch(
-          "SET_IMG_TARGET",
-          await shared.get_avatar(user_target.username)
-        );
-      }
-    });
+		store.state.socket.off('refreshAvatar').on('refreshAvatar', async (username: string) => {
+			if (store.getters.GET_USER_TARGET.username == username)
+				store.dispatch("SET_IMG_TARGET", await shared.get_avatar(username));
+			if (store.getters.GET_USER.username == username)
+				store.dispatch("SET_IMG", await shared.get_avatar(username));
+		});
 
-     store.state.socket.off('msgToClientPrivate').on('msgToClientPrivate', (newMsg: Message, channel: ChannelEntity) => {
-          store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
-           store.dispatch("SET_POPUP", 'alert');
-  });
+		store.state.socket.off('changeUsername').on("changeUsername",
+			async (payload: [{ oldname: string, newname: string, oldchan: string, newchan: string }]) => {
+				payload.forEach(e => {
+					let chan_tmp = store.getters.GET_CHAN_CURRENT;
+					if (chan_tmp.realname == e.oldchan) {
+						chan_tmp.realname = e.newchan;
+						if (store.getters.GET_USER.username != e.newname)
+							chan_tmp.name = e.newname;
+						store.dispatch("SET_CHAN_CURRENT", chan_tmp);
+					}
+					chan_tmp = store.getters.GET_CHAN_PRIVATE;
+					if (chan_tmp.realname == e.oldchan) {
+						chan_tmp.realname = e.newchan;
+						if (store.getters.GET_USER.username != e.newname)
+							chan_tmp.name = e.newname;
+					}
+				})
+				const user = await shared.getMyUser();
+				store.dispatch("SET_USER", user);
+				store.dispatch("SET_IMG", await shared.get_avatar(user.username));
+				store.dispatch("SET_FRIENDS", await this.getListFriends());
+				store.dispatch("SET_LIST_MATCH", await shared.getListMatchs(user.username));
+				store.dispatch(
+					"SET_LIST_ACHIEVEMENTS",
+					await shared.getAchievements(store.getters.GET_USER.username)
+				);
 
-   store.state.socket.off("refreshAcheivements").on("refreshAcheivements", async(username: string) => {
-      if (store.getters.GET_USER_TARGET.username == username)
-      {
-        store.dispatch(
-        "SET_LIST_ACHIEVEMENTS_TARGET",
-        await shared.getAchievements(username)
-        );
-      }
-      if (store.getters.GET_USER.username == username)
-      {
-        store.dispatch(
-        "SET_LIST_ACHIEVEMENTS",
-        await shared.getAchievements(username)
-        );
-      }
-    });
-      
-    this.log = true;
-  },
+				let user_target = store.getters.GET_USER_TARGET;
+				if (user_target && user_target.username == payload[0].oldname) {
+					user_target = await shared.getUserByUsername(payload[0].newname)
+					store.dispatch("SET_USER_TARGET", user_target);
+					await store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
+					store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(user_target.username));
+					await store.dispatch(
+						"SET_IMG_TARGET",
+						await shared.get_avatar(user_target.username)
+					);
+				}
+			});
+
+		store.state.socket.off('msgToClientPrivate').on('msgToClientPrivate', (newMsg: Message, channel: ChannelEntity) => {
+			store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
+			store.dispatch("SET_POPUP", 'alert');
+		});
+
+		store.state.socket.off("refreshAcheivements").on("refreshAcheivements", async (username: string) => {
+			if (store.getters.GET_USER_TARGET.username == username) {
+				store.dispatch(
+					"SET_LIST_ACHIEVEMENTS_TARGET",
+					await shared.getAchievements(username)
+				);
+			}
+			if (store.getters.GET_USER.username == username) {
+				store.dispatch(
+					"SET_LIST_ACHIEVEMENTS",
+					await shared.getAchievements(username)
+				);
+			}
+		});
+
+		store.state.socket.off('rcvInvite').on('rcvInvite', (channel_target: ChannelEntity, user_target: UserEntity) => {
+			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
+				return;
+			store.dispatch("SET_CHANNEL_TARGET", channel_target);
+			store.dispatch("SET_USER_TARGET", user_target);
+			if (typeof channel_target !== 'undefined') {
+				store.dispatch("SET_SAVE_POPUP");
+				store.dispatch("SET_POPUP", 'inv');
+			}
+		});
+
+		this.log = true;
+	},
 })
-export default class Profil extends Vue {}
+export default class Profil extends Vue { }

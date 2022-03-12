@@ -13,17 +13,17 @@
             <div class="block_channel">
                 <div>
                     <div class="channel" id="channel">
-                        <ChanBut v-if="GET_ROOM" v-for="button in GET_LIST_CHAN_PUBLIC" :mod="button.mode == 5" :name="button.realname"
+                        <ChanBut v-if="GET_ROOM && GET_LIST_CHAN_PUBLIC" v-for="button in GET_LIST_CHAN_PUBLIC" :mod="button.mode == 5" :name="button.realname"
                             :state="button.realname == GET_CHAN.realname" @click="changeChannel(button)">
                         </ChanBut>
-                        <ChanBut v-else v-for="button in GET_LIST_CHAN_PRIVATE" :name="(button.name? button.name: button.realname)"
+                        <ChanBut v-else-if="GET_LIST_CHAN_PRIVATE" v-for="button in GET_LIST_CHAN_PRIVATE" :name="(button.name? button.name: button.realname)"
                             :state="button.realname == GET_CHAN_CURRENT.realname"
                             @click="changeChannel(button)">
                         </ChanBut>
                     </div>
                 </div>
                 <div class="list_user">
-                    <div v-if="GET_ROOM || GET_LIST_CHAN_PRIVATE.length" v-for="item in GET_LIST_USER_CURRENT">
+                    <div v-if="(GET_ROOM || GET_LIST_CHAN_PRIVATE.length) && GET_LIST_USER_CURRENT" v-for="item in GET_LIST_USER_CURRENT">
                         <div class="logo_connection">
                             <div>
                                 <div v-if="(item.username == GET_USER.username)">
@@ -68,16 +68,16 @@
             </div>
             <div class="logo">
                 <div v-if="GET_ROOM">
-                    <button class="of button" @click="active_pop_add">ADD SALON</button>
+                    <button class="of button" @click="active_pop_add">ADD ROOM</button>
                 </div>
-                <div v-else-if="GET_LIST_CHAN_PRIVATE.length">
+                <div v-else-if="GET_LIST_CHAN_PRIVATE && GET_LIST_CHAN_PRIVATE.length && (GET_CHAN_CURRENT).mode == 2">
                     <button class="of button" @click="active_pop_add">INVITE USER</button>
                 </div>
                 <div v-else>
                     <button class="of button_disabled" @click="active_pop_add" disabled>INVITE USER</button>
                 </div>
                 <div>
-                    <button class="of button" @click="setPopup('create')">CREATE SALON</button>
+                    <button class="of button" @click="active_pop_create">CREATE ROOM</button>
                 </div>
             </div>
         </div>
@@ -92,28 +92,25 @@
                     <div class="mod" v-if="modeIsSet(GET_MY_MODE, 'mute') && !modeIsSet(GET_MY_MODE, 'ban')">
                         <img class="link" src="../../../assets/mute3.png" alt="BAN">
                     </div>
-                    <div class="mod" v-if="my_block">
-                        <img class="link" src="../../../assets/block3.png" alt="BAN">
-                    </div>
                     <div class="mod" v-if="modeIsSet(GET_MY_MODE, 'ban')">
                         <img class="link" src="../../../assets/ban3.png" alt="BAN">
                     </div>
                     <div class="mod" v-if="modeIsSet(GET_MY_MODE, 'owner')">
-                        <img class="link" @click="setPopup('pass')" src="../../../assets/owner.png" alt="BAN">
-                        <img v-if="GET_ROOM" class="link" @click="setPopup('pass')" src="../../../assets/engrenage.png" alt="BAN">
+                        <img src="../../../assets/owner.png" alt="BAN">
+                        <img v-if="GET_ROOM" class="link" @click="active_pop_pass" src="../../../assets/engrenage.png" alt="BAN">
                     </div>
                     <div class="mod" v-else-if="modeIsSet(GET_MY_MODE, 'admin')">
                         <img class="link" src="../../../assets/admin3.png" alt="BAN">
                     </div>
 
-                    <div v-if="GET_CHAN_CURRENT.realname != 'General'" class="mod">
+                    <div v-if="(GET_CHAN_CURRENT).mode != 8 && GET_CHAN_CURRENT.realname != 'General'" class="mod">
                         <img class="link" @click="quit_channel" src="../../../assets/close2.png" alt="leave">
                     </div>
                 </div>
             </div>
             <div class="chatbox">
                 <div class="chat" id="chat">
-                    <div v-for="item in GET_LIST_MESSAGES">
+                    <div v-if="GET_LIST_MESSAGES" v-for="item in GET_LIST_MESSAGES">
                         <div v-if="item.colored" class="message color">
                             <p class="time">{{ item.time }}</p><br>
                             <span class="span_color link" @click="active_pop_profil_mode({username: item.username, state: ''})">{{ item.username }}

@@ -64,18 +64,6 @@ export class UsersService {
 		return await this.usersRepositories.update({id: id}, {...userModification});
 	}
 
-	// async UpdateUser(id: number, userMofidication: UpdateUserDTO): Promise<any> {
-	// 	const saveUser = (await this.FindUserById(id)).username;
-	// 	const userChanged = await this.usersRepositories.preload({
-	// 		id: id,
-	// 		...userMofidication
-	// 	});
-	// 	let newUser = await this.usersRepositories.save(userChanged);
-	// 	if (newUser)
-	// 		return await this.chatService.RenameUserInChannelPrivateMessage(id, saveUser, userMofidication.username);
-	// 	return null;
-	// }
-
 	async RemoveUser(id: number) {
 		const userToRemove = await this.FindUserById(id);
 		return await this.usersRepositories.remove(userToRemove);
@@ -142,7 +130,9 @@ export class UsersService {
 		{
 			try {
 				if (await this.FindUserById(req.User.id))
+				{
 					return { log: true };
+				}
 			}
 			catch{}
 		}
@@ -267,7 +257,7 @@ export class UsersService {
 				);
 				res.cookie('access_token', accessToken, {
 					httpOnly: true,
-					secure: true
+					secure: false
 				});
 
 				res.json({

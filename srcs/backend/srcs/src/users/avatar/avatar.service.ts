@@ -16,14 +16,14 @@ export class AvatarService {
 		private usersRepositories: Repository<UserEntity>
   ) {}
  
-  async uploadDatabaseFile(dataBuffer: Buffer, filename: string) {
-    const newFile = await this.databaseFilesRepository.create({
+  async uploadDatabaseFile(dataBuffer: Buffer, filename: string, avatarId: number) {
+    
+    const avatar = {
       filename,
-      data: dataBuffer
-    })
-   
-    await this.databaseFilesRepository.save<any>(newFile);
-    return newFile;
+      data: dataBuffer,
+      id: avatarId
+    }
+    return await this.databaseFilesRepository.save(avatar)
   }
  
   async getFileById(fileId: number) {
@@ -40,8 +40,10 @@ export class AvatarService {
 	}
 
   async addAvatar(imageBuffer: Buffer, filename: string, req) {
-		const avatar = await this.uploadDatabaseFile(imageBuffer, filename);
-		const user = await this.usersService.FindUserByLogin(req.User.login);
+    const user = await this.usersService.FindUserByLogin(req.User.login);
+    if (!user)
+      return null;
+		const avatar = await this.uploadDatabaseFile(imageBuffer, filename, user.avatarId);
 		await this.usersRepositories.update(user.id, {
 			avatarId: avatar.id
 		});

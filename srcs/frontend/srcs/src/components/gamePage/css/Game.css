@@ -82,6 +82,7 @@ span {
 
 #b .content_container {
   grid-area: b;
+  background-color: rgb(36, 36, 36);
   background-color: rgb(0, 0, 0);
   color: yellow;
 }
@@ -197,4 +198,9 @@ span {
   min-height: 69vh;
   height: 38vmax;
   border-radius: 0vmax 0vmax 0.5vmax 0.5vmax;
+}
+
+.block_text, .block_text img {
+  max-width: 100%;
+  height: auto;
 }

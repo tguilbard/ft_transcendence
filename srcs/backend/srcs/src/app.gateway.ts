@@ -34,7 +34,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	) { }
 
 	async handleConnection(client: Socket, ...args: any[]) {
-
 		global.server = this.server;
 		try {
 			var user = await this.userService.FindUserBySocket(client);
@@ -48,6 +47,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		this.logger.log(`User ${user.username} is connected`)
 		if (user.state == "logout")
 			await this.userService.UpdateState(user, "login");
+		
 		let chanList = await this.chatService.GetChannelsOfUser(user.id);
 		let general = await this.chatService.GetChannel("General");
 
@@ -147,15 +147,18 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	}
 
 	@SubscribeMessage("leaveChanServer")
-	async leaveChan(client, chanName: string) {
+	async leaveChan(client: Socket, chanName: string) {
 
 		let user = await this.userService.FindUserBySocket(client);
 		let chan = await this.chatService.GetChannel(chanName);
+		if (!chan)
+			return;
 		let member = await this.chatService.GetMemberByUserIdAndChannelId(user.id, chan.id);
 		if (member && chan.name !== "General") {
 			await this.chatService.SoftDeleteMember(member.id);
 			this.server.in(chanName).emit('refresh_user', chanName);
-			client.emit('leave_channel', chanName);
+			client.leave(chanName);
+			client.emit('leave_channel', chan);
 		}
 		member = null;
 		member = await this.chatService.GetMemberByUserIdAndChannelId(user.id, chan.id);
@@ -295,8 +298,8 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		}
 	}
 
-	@SubscribeMessage("joinPublic")
-	async joinPublic(client: Socket, payload: string[]) {
+	@SubscribeMessage("createPublic")
+	async createPublic(client: Socket, payload: string[]) {
 		
 		let chanName: string = payload[0];
 		let password: string = payload[1] ? payload[1] : null;
@@ -309,7 +312,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		let userMode = this.modeService.setMode(0, MemberType.owner | MemberType.admin);
 		if (!targetChan) {
 			if (chanName.length === 19 && chanName.substring(8, 11) === " - ") {
-				this.server.to(client.id).emit('alertMessage', chanName + ": Invalid channel name");
+				this.server.to(client.id).emit('alertMessage', chanName + " is a invalid channel name");
 				return;
 			}
 			let newChannel = await this.chatService.CreateChannels(chanName, chanMode, password);
@@ -320,9 +323,29 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			this.server.in(chanName).emit('refresh_user', chanName);
 		}
 		else {
+			this.server.to(client.id).emit('alertMessage', targetChan.name + " already exist");
+		}
+	}
+
+	@SubscribeMessage("joinPublic")
+	async joinPublic(client: Socket, payload: string[]) {
+		let chanName: string = payload[0];
+		let password: string = payload[1] ? payload[1] : null;
+		
+		let targetChan = await this.chatService.GetChannel(chanName);
+		let userGeneral = await this.userService.FindUserBySocket(client);
+
+		if (!targetChan) {
+			this.server.to(client.id).emit('alertMessage', chanName + " is not exist");
+			return;
+		}
+		else {
 			let member = await this.chatService.GetMemberByUserIdAndChannelId(userGeneral.id, targetChan.id);
 			if (member)
-				this.server.to(client.id).emit('alertMessage', targetChan.name + ": You are already logged");
+			{
+				this.server.to(client.id).emit('alertMessage', "Your are already logged on " + targetChan.name);
+				return;
+			}
 			try {
 				await this.chatService.AddMember(userGeneral, targetChan.id, 0, password);
 				let socket = ChatGateway.findSocketInUserSocketObject(userGeneral.id);
@@ -332,12 +355,33 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 			}
 			catch (e) {
 				if (e == "HttpException: UNAUTHORIZED")
-					this.server.to(client.id).emit('alertMessage', chanName + ": You are password is bad" );
+					this.server.to(client.id).emit('alertMessage', "You password is bad for join " + chanName);
 				else {
-					this.server.to(client.id).emit('alertMessage', chanName + ": There was a problem" );
+					this.server.to(client.id).emit('alertMessage', "There was a problem for join " +  chanName);
 				}
 			}
 		}
+	}
+
+	@SubscribeMessage("createPrivate")
+	async createPrivate(client: Socket, chanName: string) {
+		
+		let targetChan = await this.chatService.GetChannel(chanName)
+		let userGeneral = await this.userService.FindUserBySocket(client)
+		
+		if (targetChan) {
+			this.server.to(client.id).emit('alertMessage', targetChan.name + " already exist");
+			return;
+		}
+		if (chanName.length === 19 && chanName.substring(8, 11) === " - ") {
+			this.server.to(client.id).emit('alertMessage', chanName + " is a invalid channel name");
+			return;
+		}
+		let newChannel = await this.chatService.CreateChannels(chanName, ChannelType.private);
+		await this.chatService.AddMember(userGeneral, newChannel.id, MemberType.owner | MemberType.admin);
+		this.server.to(client.id).emit('chanToClientPrivate', MemberType.owner, newChannel);
+		client.join(chanName);
+		this.server.in(chanName).emit('refresh_user', chanName);
 	}
 
 	@SubscribeMessage("joinPrivate")
@@ -346,12 +390,14 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		let targetChan = await this.chatService.GetChannel(chanName)
 		let userGeneral = await this.userService.FindUserBySocket(client)
 		
-		if (targetChan) {
-			this.server.to(client.id).emit('alertMessage', chanName + " already exist");
+		if (!targetChan) {
+			this.server.to(client.id).emit('alertMessage', chanName + " is not exist");
 			return;
 		}
-		if (chanName.length === 19 && chanName.substring(8, 11) === " - ") {
-			this.server.to(client.id).emit('alertMessage', chanName + ": Invalid channel name");
+		let member = await this.chatService.GetMemberByUserIdAndChannelId(userGeneral.id, targetChan.id);
+		if (member)
+		{
+			this.server.to(client.id).emit('alertMessage', "Your are already logged on " + targetChan.name);
 			return;
 		}
 		let newChannel = await this.chatService.CreateChannels(chanName, ChannelType.private);
@@ -388,7 +434,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		let socket = ChatGateway.findSocketInUserSocketObject(userTarget.id);
 		if (socket)
 			socket.join(chanName);
-		console.log("emit de goMsg")
 		this.server.to(client.id).emit('goMsg', targetChan);
 	}
 
@@ -402,8 +447,8 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		let memberSocket = await this.chatService.GetMemberByUserIdAndChannelId(userSocket.id, chan.id);
 		let userTarget = await this.userService.FindUserByUsername(userTargetName);
 		try {
-			if (await this.chatService.GetMemberByUserIdAndChannelId(userTarget.id, chan.id)) {
-				this.server.to(client.id).emit('alertMessage', "user already exist");
+			if (await this.chatService.GetMemberByUserIdAndChannelId(userTarget.id, chan.id) ){
+				this.server.to(client.id).emit('alertMessage', userTarget.username + " already exist");
 				return;
 			}
 		}
@@ -431,7 +476,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage("valInvite")
 	async valInvite(client: Socket, payload: any[]) {
-
 		let ret: boolean = payload[0];
 		let chanName = payload[1];
 		let chan = await this.chatService.GetChannel(chanName);
@@ -587,7 +631,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage("displayMods")
 	async displayMods(client: Socket, payload: string[]) {
- 		console.log("displayMods");
 		let userName = payload[0];
 		let chanName = payload[1];
 		let chan = await this.chatService.GetChannel(chanName);

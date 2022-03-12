@@ -1,25 +1,24 @@
 <template>
   <h1>ACHIEVEMENTS</h1>
   <div class="list_acheivements">
+    <div v-if="GET_LIST_ACHIEVEMENTS_TARGET">
     <div class="container_block_acheivements">
-      <div
-        class="block_acheivements"
-        v-for="item in GET_LIST_ACHIEVEMENTS_TARGET"
-        :key="item"
-      >
-        <div @click="setAchievement(item)" class="color1">
-          <div>
-            <div v-if="item.lock">
-              <img
-                v-bind:src="require('../../assets/lock/' + item.imageLockName)"
-              />
-            </div>
-            <div v-else>
-              <img
-                v-bind:src="
-                  require('../../assets/unlock/' + item.imageUnlockName)
-                "
-              />
+        <div class="block_acheivements" v-for="item in GET_LIST_ACHIEVEMENTS_TARGET" :key="item"
+        >
+          <div @click="setAchievement(item)" class="color1">
+            <div>
+              <div v-if="item.lock">
+                <img
+                  v-bind:src="require('../../assets/lock/' + item.imageLockName)"
+                />
+              </div>
+              <div v-else>
+                <img
+                  v-bind:src="
+                    require('../../assets/unlock/' + item.imageUnlockName)
+                  "
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -49,6 +48,7 @@ export default defineComponent({
     },
     setAchievement(value: Achievements): void {
       store.dispatch("SET_ACHIEVEMENT", value);
+      store.dispatch("SET_SAVE_POPUP");
       this.setPopup("description");
     },
   },
