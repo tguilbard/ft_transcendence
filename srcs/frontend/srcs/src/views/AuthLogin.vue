@@ -54,7 +54,7 @@ import store from "../store/index";
   methods: {
     async submit() {
       // Création d'un formData obligatoire pour submit de l'image
-      await fetch(`http://${process.env.VUE_APP_BACK}/2fa/activate`, {
+      await fetch(`http://localhost:3000/2fa/activate`, {
         method: "POST",
         mode: "cors",
         credentials: "include",
@@ -68,7 +68,7 @@ import store from "../store/index";
       })
         .then((response) => {
           if (response.ok) {
-            window.location.href = "http://127.0.0.1:3000";
+            window.location.href = "http://localhost:3000";
           } else {
             return response.json();
           }
@@ -81,7 +81,7 @@ import store from "../store/index";
         });
     },
     async get_img() {
-      let response = await fetch(`http://${process.env.VUE_APP_BACK}/avatar`, {
+      let response = await fetch(`http://localhost:3000/avatar`, {
         method: "GET",
         mode: "cors",
         credentials: "include",

@@ -37,7 +37,7 @@ import store from "../store/index";
   methods: {
     async add_guest() {
       //alert(process.env.VUE_APP_BACK)
-      const response = await fetch(`http://${process.env.VUE_APP_BACK}/users/guest`, {
+      const response = await fetch(`http://localhost:3000/users/guest`, {
         method: "POST",
         mode: "cors",
         credentials: "include",

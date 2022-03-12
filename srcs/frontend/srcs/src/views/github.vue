@@ -15,7 +15,7 @@ import store from "../store/index";
   },
   methods: {
     async follow(code: string) {
-      await fetch(`http://${process.env.VUE_APP_BACK}/achievements/follow`, {
+      await fetch(`http://localhost:3000/achievements/follow`, {
         method: "POST",
         mode: "cors",
         credentials: "include",
@@ -31,7 +31,7 @@ import store from "../store/index";
       });
     },
     async star(code: string) {
-      await fetch(`http://${process.env.VUE_APP_BACK}/achievements/star`, {
+      await fetch(`http://localhost:3000/achievements/star`, {
         method: "POST",
         mode: "cors",
         credentials: "include",

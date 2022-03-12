@@ -72,7 +72,7 @@ import store from "../store/index";
       this.srcImg = URL.createObjectURL(this.file);
     },
     addUser(formData: FormData) {
-      fetch(`http://${process.env.VUE_APP_BACK}/users/register`, {
+      fetch(`http://localhost:3000/users/register`, {
         method: "POST",
         mode: "cors",
         credentials: "include",
@@ -85,7 +85,7 @@ import store from "../store/index";
         .then((response) => {
           if (response.ok) {
             store.dispatch("SET_USERNAME", this.username);
-            return router.push("http://127.0.0.1:3000/auth");
+            return router.push("http://localhost:3000/auth");
           } else {
             return response.json();
           }

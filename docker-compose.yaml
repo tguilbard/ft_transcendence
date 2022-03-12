@@ -48,6 +48,12 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
 
+      VUE_APP_PORT: ${FRONT_PORT}
+      VUE_APP_HOST: ${FRONT_HOST}
+      VUE_APP_ADDRESS: ${FRONT_HOST}:${FRONT_PORT}
+      VUE_APP_BACK: ${BACK_HOST}:${BACK_PORT}
+      VUE_APP_NODE_ENV: ${NODE_ENV}
+
   # pgadmin:
   #   container_name: pgadmin_container
   #   build:

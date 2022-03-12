@@ -11,7 +11,7 @@ export class AuthMiddleware implements NestMiddleware {
 	){}
   use(req: Request, res: Response, next: () => void) {
     const path = req.path;
-    // console.log("path = ", path);
+	console.log("path = ", path);
     if (path != '/users/login') {
       try {
         const { cookies } = req;
