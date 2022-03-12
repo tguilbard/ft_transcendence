@@ -11,9 +11,9 @@ p, label, input, span {
 .grid_container {
   position: relative;
   display: grid;
-  grid-template-rows: minmax(min-content, 0) minmax(min-content, 0) minmax(
+  grid-template-rows: auto minmax(min-content, max-content) minmax(
       min-content,
-      0
+      max-content
     ) minmax(min-content, max-content);
   grid-template-columns: 2fr 2fr 2fr 1.1fr;
   grid-template-areas:
@@ -21,8 +21,9 @@ p, label, input, span {
     "a c f b"
     "a h g b"
     "a d d b";
-  width: 90vw;
-  min-height: 75vh;
+    width: 90vw;
+    height: 40vw;
+    min-height: 40vw;
   margin: auto;
   margin-top: 1vw;
   gap: 0.2vw;
@@ -58,6 +59,7 @@ p, label, input, span {
 
 #h {
   grid-area: h;
+  align-items: flex-start;
 }
 
 .block_container {
@@ -265,7 +267,8 @@ p, label, input, span {
 
 .block_avatar {
   border-radius: 0px 0px 0.25vw 0.25vw;
-  height:33vh;
+  height:1vh;
+  min-height: 100%;
   width: auto;
 }
 

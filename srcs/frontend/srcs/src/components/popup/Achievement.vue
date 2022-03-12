@@ -103,7 +103,7 @@ h1 {
   max-height: 100%;
   border: none;
   margin: auto;
-  padding: 0.2vh;
+  padding: 0.5vw;
 }
 
 .block_acheivements:hover {

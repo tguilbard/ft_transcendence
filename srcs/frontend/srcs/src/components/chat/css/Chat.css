@@ -58,7 +58,6 @@
     display: grid;
     grid-template-columns: minmax(min-content, max-content) minmax(min-content, auto); 
     grid-gap: 1px;
-
     margin-left: auto;
     margin-right: auto;
     width: 90vw;

@@ -1709,8 +1709,7 @@ label {
 
 .content_popup_profil {
   height: 1vw;
-  min-height: inherit;
-  width: inherit;
+  min-height: 100%;
   border-radius: 0px 0px 0.25vw 0.25vw;
 }
 
