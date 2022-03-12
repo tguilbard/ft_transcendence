@@ -212,8 +212,8 @@ export class UsersService {
 			const url = 'https://api.intra.42.fr/oauth/token';
 			const postData = {
 				grant_type: 'authorization_code',
-				client_id: '61094fffbf3140a13c461779c220cbc96dfbad643921a60e345ff8a99928a7a2',
-				client_secret: 'ca81f062eb8d1c29f73449afed67fd1b2e462cdf0899e89953d740086fa4186d',
+				client_id: process.env.API_42_ID,
+				client_secret: process.env.API_42_SECRET,
 				redirect_uri: `http://localhost:3000/ok`,
 				code: code
 			}
