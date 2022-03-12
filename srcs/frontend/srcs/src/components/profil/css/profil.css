@@ -4,6 +4,10 @@ h1 {
   cursor: default;
 }
 
+p, label, input, span {
+  white-space: nowrap
+}
+
 .grid_container {
   position: relative;
   display: grid;
@@ -11,7 +15,7 @@ h1 {
       min-content,
       0
     ) minmax(min-content, max-content);
-  grid-template-columns: 2fr 2fr 2fr 1.2fr;
+  grid-template-columns: 2fr 2fr 2fr 1.1fr;
   grid-template-areas:
     "a c e b"
     "a c f b"
@@ -21,7 +25,6 @@ h1 {
   min-height: 75vh;
   margin: auto;
   margin-top: 1vw;
- 
   gap: 0.2vw;
 }
 
@@ -249,6 +252,8 @@ h1 {
 }
 
 .avatar {
+  top: 50%;
+  transform: translateY(-50%);
   display: block;
   position: relative;
   border: none;
@@ -259,8 +264,9 @@ h1 {
 }
 
 .block_avatar {
-  background-color: rgb(61, 61, 61);
   border-radius: 0px 0px 0.25vw 0.25vw;
+  height:33vh;
+  width: auto;
 }
 
 .block_avatar_inf label {

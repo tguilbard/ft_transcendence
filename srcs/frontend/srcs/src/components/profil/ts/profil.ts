@@ -27,14 +27,6 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 			"GET_FRIENDS",
 			"GET_SAVE_POPUP"
 		]),
-		get_hh() {
-			const h = shared.vw(26);
-			return 'height: ' + h + 'px';
-		},
-		get_hh2() {
-			const h = shared.vh(41);
-			return 'max-height: ' + h + 'px';
-		}
 	},
 	methods: {
 		setAchievement(value: Achievements): void {

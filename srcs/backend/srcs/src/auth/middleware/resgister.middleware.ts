@@ -17,7 +17,8 @@ export class AuthMiddleware implements NestMiddleware {
         if (!cookies || !cookies.access_token) {
           if (path == '/users/isLogin')
           {
-            return res.send({ log: false });
+            return res.send({ log: false });   
+            
           }
           else if (path == '/users/guest' && req.method == "POST" )
             return next();
@@ -32,10 +33,10 @@ export class AuthMiddleware implements NestMiddleware {
           });
 
           const session = decodedToken['ses'];
-          if (session != req.sessionID && path != '/users/isRegister') {
-            res.clearCookie("access_token");
-            return res.status(401).json({ message: 'Problem de session' });
-          }
+          // if (session != req.sessionID && path != '/users/isRegister') {
+          //   res.clearCookie("access_token");
+          //   return res.status(401).json({ message: 'Problem de session' });
+          // }
 
           const state = decodedToken['state'];
           const login = decodedToken['login'];

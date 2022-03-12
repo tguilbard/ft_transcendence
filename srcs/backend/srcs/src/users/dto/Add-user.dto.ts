@@ -11,7 +11,7 @@ export class AddUserDTO {
 	@IsString()
 	@IsNotEmpty()
 	@MinLength(3)
-	@MaxLength(7)
+	@MaxLength(10)
     username: string;
 
 	@IsBoolean()

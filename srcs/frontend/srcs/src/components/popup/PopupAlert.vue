@@ -1,14 +1,16 @@
 <template>
-  <div @click="leave" class="container_popup3"></div>
-  <div class="block_popup2">
-    <div class="content_popup">
-      <h1>ALERT</h1>
-      <div class="grid_popup_inv">
-        <div>
-          <p>{{ GET_MSG_ALERT }}</p>
-        </div>
-        <div class="btn_select">
-          <button @click="leave">BACK</button>
+  <div class="container_popup3"></div>
+  <div class="background" @click.self="leave">
+    <div class="block_popup2">
+      <div class="content_popup">
+        <h1>ALERT</h1>
+        <div class="grid_popup_inv">
+          <div>
+            <p>{{ GET_MSG_ALERT }}</p>
+          </div>
+          <div class="btn_select">
+            <button @click="leave">BACK</button>
+          </div>
         </div>
       </div>
     </div>
@@ -73,6 +75,18 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+.background {
+  display: grid;
+  position: absolute;
+  grid-template-rows: 1;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  margin: auto;
+  justify-items: center;
+}
+
 .container_popup3 {
   display: block;
   position: fixed;
@@ -122,15 +136,18 @@ label {
 
 .block_popup2 {
   display: block;
-  position: absolute;
-  z-index: 1000;
+  /* position: absolute; */
+  /* z-index: 1000; */
   border-radius: 7px 7px 7px 7px;
   background-color: #fff12c;
   border: 2px solid #8f8f8f;
   padding: 1px;
-  left: 50%;
+  margin: auto;
+  width: max-content;
+  height: max-content;
+  /* left: 50%;
   top: 40%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); */
   text-align: center;
   color: rgb(255, 255, 255);
 }

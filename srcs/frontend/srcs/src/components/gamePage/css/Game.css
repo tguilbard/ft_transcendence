@@ -197,6 +197,7 @@ span {
   overflow: auto;
   min-height: 69vh;
   border-radius: 0vmax 0vmax 0.5vmax 0.5vmax;
+  height: 69vh;
 }
 
 .block_text, .block_text img {

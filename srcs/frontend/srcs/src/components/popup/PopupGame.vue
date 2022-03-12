@@ -1,37 +1,39 @@
 <template>
-    <div @click="cancelInv" class="container_popup3"></div>
-    <div class="block_popup2">
-      <div class="content_popup">
-        <h1>CREATE PARTY</h1>
-        <div class="grid_popup">
-          <div>
-            <p>{{ GET_USER.username }} VS {{ GET_USER_TARGET.username }}</p>
-          </div>
-          <div>
-            <button
-              :class="[selected == 'pong' ? 'on' : '']"
-              @click="selected = 'pong'"
-            >
-              PONG
-            </button>
-          </div>
-          <div>
-            <button
-              :class="[selected == 'star' ? 'on' : '']"
-              @click="selected = 'star'"
-            >
-              ASTRO PONG
-            </button>
-          </div>
-          <div class="btn_select">
+    <div class="container_popup3"></div>
+    <div class="background" @click.self="cancelInv">
+      <div class="block_popup2">
+        <div class="content_popup">
+          <h1>CREATE PARTY</h1>
+          <div class="grid_popup">
             <div>
-              <button @click="cancelInv">Cancel</button>
+              <p>{{ GET_USER.username }} VS {{ GET_USER_TARGET.username }}</p>
             </div>
-            <div v-if="GET_INV">
-              <button>Wait ...</button>
+            <div>
+              <button
+                :class="[selected == 'pong' ? 'on' : '']"
+                @click="selected = 'pong'"
+              >
+                PONG
+              </button>
             </div>
-            <div v-else>
-              <button @click="sendInv">Send invitation</button>
+            <div>
+              <button
+                :class="[selected == 'star' ? 'on' : '']"
+                @click="selected = 'star'"
+              >
+                ASTRO PONG
+              </button>
+            </div>
+            <div class="btn_select">
+              <div>
+                <button @click="cancelInv">Cancel</button>
+              </div>
+              <div v-if="GET_INV">
+                <button>Wait ...</button>
+              </div>
+              <div v-else>
+                <button @click="sendInv">Send invitation</button>
+              </div>
             </div>
           </div>
         </div>
@@ -99,6 +101,17 @@ export default defineComponent({
 
 <style scoped>
 
+.background {
+  display: grid;
+  position: absolute;
+  grid-template-rows: 1;
+  width: 100%;
+  height: 100%;
+  z-index: 111;
+  margin: auto;
+  justify-items: center;
+}
+
 .grid_popup {
     display: grid;
     grid-template-rows: minmax(min-content, auto) minmax(min-content, max-content) minmax(min-content, max-content);
@@ -108,7 +121,7 @@ export default defineComponent({
 
 .container_popup3 {
   display: block;
-  position: absolute;
+  position: fixed;
   height: 100vh;
   width: 100vw;
   text-align: center;
@@ -154,17 +167,17 @@ label {
 }
 
 .block_popup2 {
-  display: block;
-  position: absolute;
+  /* display: block; */
+  /* position: absolute; */
   border-radius: 7px 7px 7px 7px;
   background-color: #fff12c;
   border: 2px solid #8f8f8f;
   padding: 1px;
-  left: 50%;
-  top: 40%;
-  transform: translate(-50%, -50%);
+  margin: auto;
+  width: max-content;
+  height: max-content;
   text-align: center;
-  z-index: 110;
+  /* z-index: 110; */
   color: rgb(255, 255, 255);
 }
 

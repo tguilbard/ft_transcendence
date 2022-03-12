@@ -31,14 +31,6 @@ import { MemberType } from "@/enums/enums";
 			'GET_MY_MODE',
 			'GET_IS_FRIEND',
 		]),
-		get_hh() {
-			const h = shared.vw(40.2);
-			return 'height: ' + h + 'px';
-		},
-		get_hh2() {
-			const h = shared.vw(41);
-			return 'height: ' + h + 'px';
-		}
 	}
 })
 export default class Chat extends Vue {

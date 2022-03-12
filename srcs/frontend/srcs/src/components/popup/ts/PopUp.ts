@@ -15,7 +15,7 @@ export default defineComponent({
 	components: {
 		PopupProfil,
 		Datepicker,
-		PopupAlert
+		PopupAlert,
 	},
 	data: () => {
 		return {

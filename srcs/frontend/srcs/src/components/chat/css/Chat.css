@@ -76,6 +76,7 @@
     background-color: #000000;
     background-color: #f6ecd2;
     overflow: auto;
+    height: 60vh;
 }
 
 .list_user p {
@@ -144,6 +145,7 @@
 }
 
 .channel {
+    height: 60vh;
     padding: 0.2vmax;
     text-align: center;
     overflow: auto;
@@ -181,6 +183,7 @@ hr {
     border-radius: none;
     background-color: #ffffffe1;
     max-height: 100%;
+    height: 61vh;
 }
 
 .post {
