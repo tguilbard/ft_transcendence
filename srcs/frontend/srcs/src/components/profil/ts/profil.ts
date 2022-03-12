@@ -7,120 +7,121 @@ import { mapGetters } from "vuex";
 import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/interface";
 
 @Options({
-  components: {
-    Menu,
-    Popup,
-  },
-  data() {
-    return {
-      log: false,
-    };
-  },
-  computed: {
-    ...mapGetters([
-      "GET_USER",
-      "GET_POPUP",
-      "GET_USER_TARGET",
-      "GET_IMG",
-      "GET_LIST_ACHIEVEMENTS",
-      "GET_LIST_MATCH",
-      "GET_FRIENDS"
-    ]),
-  },
-  methods: {
-    setAchievement(value: Achievements): void {
-      store.dispatch("SET_ACHIEVEMENT", value);
-      this.setPopup("description2");
-    },
-    setPopup(value: string): void {
-      store.dispatch("SET_POPUP", value);
-    },
-    setUserTarget(value: UserEntity): void {
-      store.dispatch("SET_USER_TARGET", value);
-    },
-    async logout() {
-      await fetch("http://localhost:3000/users/logout", {
-        method: "POST",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Max-Age": "600",
-          "Cache-Control": "no-cache",
-        },
-      })
-        .then((response) => {
-          if (response.ok) {
-            window.location.href = "http://localhost:3000/login";
-          } else {
-            return response.json();
-          }
-        })
-        .then((responseJson) => {
-          throw responseJson;
-        });
-    },
-    getImg(event: { target: { files: File[] } }) {
-      this.file = event.target.files[0];
-      store.dispatch("SET_IMG", URL.createObjectURL(this.file));
-    },
-    async getListFriends(): Promise<UserEntity[]> {
-      const response = await fetch("http://localhost:3000/users/friends", {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Access-Control-Max-Age": "600",
-          "Cache-Control": "no-cache",
-        },
-      });
-      if (response.ok) return await response.json();
-      return [];
-    },
-    async active_pop_profil(user: UserEntity): Promise<void> {
-      if (user.state == "") {
-        const myUser = await shared.getUserByUsername(user.username);
-        if (myUser.state) user.state = myUser.state;
-      }
-      store.dispatch("SET_USER_TARGET", user);
-      await store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
-      store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(user.username));
-      await store.dispatch(
-        "SET_IMG_TARGET",
-        await shared.get_avatar(user.username)
-      );
-      store.dispatch("SET_LIST_ACHIEVEMENTS_TARGET", await shared.getAchievements(user.username));
-      store.commit("SET_POPUP", "profil");
-    },
-  },
-  async created() {
-    if (!(await shared.isLogin())) return this.$router.push("/login");
-    if (!store.state.sock_init) store.commit("SET_SOCKET");
-    this.user = await shared.getMyUser();
-    store.dispatch("SET_USER", this.user);
-    store.dispatch("SET_CHECK", this.user.tfaActivated);
-    store.dispatch("SET_IMG", await shared.get_avatar(this.user.username));
-    store.dispatch("SET_FRIENDS", await this.getListFriends());
-    store.dispatch("SET_LIST_MATCH", await shared.getListMatchs(this.user.username));
-    store.dispatch(
-      "SET_LIST_ACHIEVEMENTS",
-      await shared.getAchievements(store.getters.GET_USER.username)
-    );
-    store.state.socket.off("start_game").on("start_game", () => {
-      store.dispatch("SET_DUEL", true);
-      this.$router.push("/");
-    });
-    store.state.socket
-      .off("rcv_inv_game")
-      .on("rcv_inv_game", (user_target: UserEntity) => {
-        store.dispatch("SET_USER_TARGET", {
-          username: user_target.username,
-          state: user_target.state,
-        });
-        this.setPopup("inv_game");
-      });
+	components: {
+		Menu,
+		Popup,
+	},
+	data() {
+		return {
+			log: false,
+		};
+	},
+	computed: {
+		...mapGetters([
+			"GET_USER",
+			"GET_POPUP",
+			"GET_USER_TARGET",
+			"GET_IMG",
+			"GET_LIST_ACHIEVEMENTS",
+			"GET_LIST_MATCH",
+			"GET_FRIENDS",
+			"GET_SAVE_POPUP"
+		]),
+	},
+	methods: {
+		setAchievement(value: Achievements): void {
+			store.dispatch("SET_ACHIEVEMENT", value);
+			store.dispatch("SET_SAVE_POPUP");
+			this.setPopup("description2");
+		},
+		setPopup(value: string): void {
+			store.dispatch("SET_POPUP", value);
+		},
+		setUserTarget(value: UserEntity): void {
+			store.dispatch("SET_USER_TARGET", value);
+		},
+		async logout() {
+			await fetch("http://localhost:3000/users/logout", {
+				method: "POST",
+				mode: "cors",
+				credentials: "include",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+					"Access-Control-Max-Age": "600",
+					"Cache-Control": "no-cache",
+				},
+			})
+				.then((response) => {
+					if (response.ok) {
+						window.location.href = "http://localhost:8080/login";
+					} else {
+						return response.json();
+					}
+				})
+				.then((responseJson) => {
+					throw responseJson;
+				});
+		},
+		getImg(event: { target: { files: File[] } }) {
+			this.file = event.target.files[0];
+			store.dispatch("SET_IMG", URL.createObjectURL(this.file));
+		},
+		async getListFriends(): Promise<UserEntity[]> {
+			const response = await fetch("http://localhost:3000/users/friends", {
+				method: "GET",
+				mode: "cors",
+				credentials: "include",
+				headers: {
+					Accept: "application/json",
+					"Access-Control-Max-Age": "600",
+					"Cache-Control": "no-cache",
+				},
+			});
+			if (response.ok) return await response.json();
+			return [];
+		},
+		async active_pop_profil(user: UserEntity): Promise<void> {
+			if (user.state == "") {
+				const myUser = await shared.getUserByUsername(user.username);
+				if (myUser.state) user.state = myUser.state;
+			}
+			store.dispatch("SET_USER_TARGET", user);
+			await store.dispatch("SET_IS_FRIEND", await shared.isFriendByUsername());
+			store.dispatch("SET_LIST_MATCH_TARGET", await shared.getListMatchs(user.username));
+			await store.dispatch(
+				"SET_IMG_TARGET",
+				await shared.get_avatar(user.username)
+			);
+			store.dispatch("SET_LIST_ACHIEVEMENTS_TARGET", await shared.getAchievements(user.username));
+			this.setPopup('profil')
+			store.dispatch("SET_SAVE_POPUP");
+		},
+		active_modify_profil(): void{
+			this.setPopup('modify_profil')
+			store.dispatch("SET_SAVE_POPUP");
+		},
+	},
+	async created() {
+		if (!await shared.isLogin())
+			return this.$router.push("login");
+		if (!store.state.sock_init) await store.commit("SET_SOCKET");
+		this.user = await shared.getMyUser();
+		if (this.user.state == 'logout')
+			this.user.state = 'login';
+		store.dispatch("SET_USER", this.user);
+		store.dispatch("SET_IMG", await shared.get_avatar(this.user.username));
+		store.dispatch("SET_FRIENDS", await this.getListFriends());
+		store.dispatch("SET_LIST_MATCH", await shared.getListMatchs(this.user.username));
+		store.dispatch(
+			"SET_LIST_ACHIEVEMENTS",
+			await shared.getAchievements(store.getters.GET_USER.username)
+		);
+		store.state.socket.off("start_game").on("start_game", () => {
+			store.dispatch("SET_DUEL", true);
+			this.setPopup('');
+			this.$router.push("/");
+		});
 
 		store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity, game: string) => {
 			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
