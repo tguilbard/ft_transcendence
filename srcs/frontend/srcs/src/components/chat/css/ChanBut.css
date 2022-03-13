@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: auto auto;
     grid-gap: 0px;
-    
+    width: 100%;
 }
 
 .chanButton {

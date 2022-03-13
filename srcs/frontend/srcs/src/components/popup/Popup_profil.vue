@@ -24,7 +24,7 @@
                 <div id="ac">
                   <div class="block_avatar_inf">
                     <label for="avatar" class="btn"
-                      ><h2 style="ground: #f5ba1a">Change avatar</h2></label
+                      ><h1 style="ground: #f5ba1a">Change avatar</h1></label
                     >
                     <input
                       type="file"
@@ -1400,10 +1400,6 @@ export default defineComponent({
 
 <style scoped>
 
-html {
-  font-weight: 900;
-}
-
 p,
 span,
 h1 {
@@ -1418,7 +1414,6 @@ h1 {
   height: 100%;
   z-index: 15;
   margin: auto;
-  /* justify-items: center; */
 }
 
 #block_popup {
@@ -1426,7 +1421,6 @@ h1 {
   background-color: #fff12c;
   border: 2px solid #8f8f8f;
   padding: 1px;
-  /* left: 50%; */
   width: 75vw;
   height: auto;
   margin: auto;
@@ -1443,8 +1437,6 @@ h1 {
   padding: 4px;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
-  font-size: 1.8vw;
   border: 1px solid black;
   display: block;
   white-space: nowrap;
@@ -1473,8 +1465,6 @@ h1 {
   border: 2px solid #a8a8a8;
   height: 100%;
   width: 100%;
-  /* text-align: left;
-  font-size: 1.5rem; */
 }
 
 .content_popup p,
@@ -1497,17 +1487,13 @@ label {
     "aa"
     "ab"
     "ac";
-  /* gap: 0.2vw; */
-  /* align-items: center; */
   box-sizing: border-box;
   height: 100%;
   max-height: 100%;
-  /* width: 100%; */
 }
 
 #aa {
   grid-area: aa;
-  /* width: 100%; */
 }
 
 #ab {
@@ -1519,7 +1505,6 @@ label {
 #ac {
   grid-area: ac;
   width: 100%;
-  /* height: stretch; */
   align-items: end;
 }
 
@@ -1556,8 +1541,6 @@ label {
 #mc {
   grid-area: mc;
   padding: 0.5vw;
-
-  /* width: 100%; */
 }
 
 #md {
@@ -1574,7 +1557,6 @@ label {
     "a b c"
     "a d d"
     "e e e";
-  /* padding: 0.5vw; */
   gap: 0.2vw;
   align-items: end;
   box-sizing: border-box;
@@ -1603,10 +1585,6 @@ label {
 
 #c {
   grid-area: c;
-  /* padding-right: 0.5vw;
-  padding-top: 0.5vw;
-  align-items: stretch;
-  box-sizing: border-box; */
   height: 100%;
   width: 100%;
 }
@@ -1633,7 +1611,6 @@ label {
   display: block;
   margin: 0.2vw;
   text-align: center;
-  /* font-size: 0.5vw; */
 }
 
 .mod {
@@ -1652,9 +1629,7 @@ label {
   text-align: center;
   margin: 0.5vw;
   border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
-  font-family: futura;
-  font-size: 1.5vw;
-  font-weight: bold;
+  font-size: 2vw;
 }
 
 .btn_select input:hover,
@@ -1663,7 +1638,6 @@ label {
   cursor: grabbing;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  /* font-size: 1.5rem; */
   border-color: #fff12c;
 }
 
@@ -1679,8 +1653,7 @@ label {
   cursor: grabbing;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
-  font-size: 3vw;
+  font-size: 5vw;
   margin: 0.2vw;
   padding: 0.2vw;
   display: inline;
@@ -1696,7 +1669,6 @@ label {
 }
 
 .avatar {
-  /* display: block; */
   position: relative;
   border: none;
   box-sizing: border-box;
@@ -1747,9 +1719,6 @@ label {
   padding: 0.5vw;
   text-align: center;
   border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
-  font-family: futura;
-  font-size: 1.5vw;
-  font-weight: bold;
   margin-top: 0.5vw;
   margin-bottom: 0.5vw;
 }
@@ -1764,12 +1733,10 @@ label {
   cursor: grabbing;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  /* font-size: 1.5rem; */
 }
 
 .block_avatar_inf label {
   top: 1vw;
-  font-size: 1.5vw;
   text-align: center;
 }
 
@@ -1786,7 +1753,6 @@ label {
   cursor: grabbing;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
 }
 
 .list_history {
@@ -1828,8 +1794,6 @@ label {
 
 .grid_history span {
   padding: 0.2vw;
-  font-family: futura;
-  font-size: 1.5vw;
   top: 0.5vw;
   margin: auto;
 }
@@ -1862,8 +1826,6 @@ label {
   padding: 4px;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
-  font-size: 3vw;
   border: 1px solid black;
   display: block;
 }
@@ -1894,8 +1856,28 @@ label {
   transform: translateX(-50%);
   background-color: #fff12c;
   border-radius: 0.5vh;
-  font-family: futura-pt;
-  font-size: 1.5vw;
+}
+
+
+
+@media (max-width: 700px) {
+    .grid_popup_profil {
+    display: grid;
+    grid-template-rows: minmax(min-content, max-content) minmax(150px, max-content) minmax(min-content, max-content) minmax(200px, max-content) minmax(min-content, max-content);
+    grid-template-columns: auto;
+    grid-template-areas:
+      "t t"
+      "b c"
+      "d d"
+      "a a"
+      "e e";
+    gap: 0.2vw;
+    align-items: center;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+  }
+  
 }
 
 </style> >

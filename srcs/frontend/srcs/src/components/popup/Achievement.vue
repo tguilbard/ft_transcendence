@@ -57,10 +57,6 @@ export default defineComponent({
 
 <style scoped>
 
-html {
-	font-size: 62.5%;
-  font-weight: 900;
-}
 
 h1 {
   border-radius: 0.5vh 0.5vh 0px 0px;
@@ -70,8 +66,6 @@ h1 {
   padding: 0.5vh;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
-  font-size: 1.8vw;
   border: 1px solid black;
   display: block;
 }

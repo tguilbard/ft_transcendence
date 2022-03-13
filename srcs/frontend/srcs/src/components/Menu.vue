@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <div :style="styles" class="back"></div> -->
     <div class="sup"><p class="pong">PONG</p></div>
     <div class="menu" @mouseover="hover = true" @mouseleave="hover = false">
       <div v-if="hover" id="nav_hover">
@@ -23,7 +22,7 @@
 
 </template>
 
-<script lang="ts">
+<script lang="ts" scoped>
 import { Options, Vue } from "vue-class-component";
 
 @Options({

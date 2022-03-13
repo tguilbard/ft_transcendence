@@ -56,9 +56,6 @@ p, label, input, span {
     padding: 4px;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-family: futura;
-    font-weight: 900;
-    font-size: 1.5vw;
     border: 1px solid black;
 }
 
@@ -72,9 +69,6 @@ p, label, input, span {
     border: 2px solid #a8a8a8;
     text-align: left;
     overflow: auto;
-    /* z-index: 20; */
-    font-weight: 900;
-    font-size: 1.2vw;
 }
 
 .content_popup p, label{
@@ -106,9 +100,6 @@ p, label, input, span {
     text-align: center;
     margin: 0.5vw;
     border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
-    font-family: futura;
-    font-size: 1vw;
-    font-weight: bold;
 }
 
 .btn_select input:hover, .btn_select button:hover {
@@ -116,7 +107,6 @@ p, label, input, span {
     cursor: grabbing;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-size: 1.05vw;
     border-color: #fff12c;
 }
 
@@ -162,7 +152,6 @@ p, label, input, span {
     cursor: grabbing;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-family: futura;
 }
 
 .list_chan_popup {
@@ -201,7 +190,6 @@ p, label, input, span {
     cursor: grabbing;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-size: 1.5vw;
     border-color: #fff12c;
 }
 

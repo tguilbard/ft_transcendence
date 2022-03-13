@@ -1,29 +1,18 @@
-p,
-span,
-h1 {
-  cursor: default;
-}
-
-p, label, input, span {
-  white-space: nowrap
-}
 
 .grid_container {
   position: relative;
   display: grid;
-  grid-template-rows: auto minmax(min-content, max-content) minmax(
-      min-content,
-      max-content
-    ) minmax(min-content, max-content);
-  grid-template-columns: 2fr 2fr 2fr 1.1fr;
+  grid-template-rows: minmax(200px, auto) minmax(min-content, max-content)  minmax(min-content, max-content) minmax(100px, auto) minmax(min-content, max-content);
+  grid-template-columns:  minmax(200px, auto) minmax(20vw, auto) auto;
   grid-template-areas:
-    "a c e b"
-    "a c f b"
-    "a h g b"
-    "a d d b";
+    "c e a"
+    "c f a"
+    "h g a"
+    "b b a"
+    "b b d";
     width: 90vw;
-    height: 40vw;
-    min-height: 40vw;
+    height: auto;
+    min-height: 75vh;
   margin: auto;
   margin-top: 1vw;
   gap: 0.2vw;
@@ -80,9 +69,6 @@ p, label, input, span {
   padding: 4px;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
-  font-weight: 900;
-  font-size: 1.5vw;
   border: 1px solid black;
   display: block;
 }
@@ -94,8 +80,7 @@ p, label, input, span {
   box-sizing: border-box;
   height: 100%;
   text-align: left;
-  font-weight: 900;
-  font-size: 1.2vw;
+
 }
 
 .friends_content {
@@ -118,7 +103,6 @@ p, label, input, span {
   margin: 0.2vw;
   padding: 0.4vw;
   width: auto;
-  font-size: 1.5vw;
   border-radius: 0px 0px 0.5vw 0.5vw;
 }
 
@@ -131,8 +115,8 @@ p, label, input, span {
 }
 
 .logo_connection img {
-  width: 1.5vw;
-  height: 1.5vw;
+  width:1em;
+  height: 1em;
   transform: translateY(0.25vw);
 }
 
@@ -146,17 +130,19 @@ p, label, input, span {
   align-items: center;
   height: 100%;
   gap: 1vw;
-  font-size: 3vw;
+}
+
+.logo_user p {
+  font-size: 3vmax;
   font-weight: bold;
   color: #fff12c;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
 }
 
 .logo_user img {
-  width: 1.5vw;
-  height: 1.5vw;
+  width: 3vmax;
+  height: 3vmax;
   transform: translateY(0.25vw);
 }
 
@@ -228,9 +214,6 @@ p, label, input, span {
   padding: 4px;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
-  font-weight: 900;
-  font-size: 1.5vw;
   border: 1px solid black;
   display: block;
 }
@@ -238,17 +221,15 @@ p, label, input, span {
 .my_elo {
   display: block;
   position: relative;
-  font-family: futura;
-  font-weight: 900;
-  font-size: 5vw;
   text-align: center;
-  color: #05348d;
   height: 100%;
 }
 
 .my_elo p {
   display: block;
   position: relative;
+  font-size: 5vmax;
+  color: #05348d;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -273,7 +254,6 @@ p, label, input, span {
 }
 
 .block_avatar_inf label {
-  font-size: 1vw;
   text-align: center;
 }
 
@@ -281,7 +261,6 @@ p, label, input, span {
   display: block;
   text-align: center;
   margin: auto;
-  font-size: 1vw;
   width: 90%;
   height: 100%;
   padding: 0.2vh;
@@ -289,18 +268,14 @@ p, label, input, span {
 
 .user_list_selected {
   cursor: grabbing;
-  font-size: 1.5vw;
-  font-weight: bold;
   color: none;
 }
 
 .user_list_selected:hover {
-  font-weight: bold;
   color: #fff12c;
   cursor: pointer;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
 }
 
 .btn_logout {
@@ -308,8 +283,6 @@ p, label, input, span {
   top: 50%;
   transform: translateY(-50%);
   display: block;
-  font-family: futura;
-  font-size: 1.5vw;
   padding: 0.5vw;
   margin: auto;
   letter-spacing: 0.2vw;
@@ -339,7 +312,6 @@ p, label, input, span {
   cursor: grabbing;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
 }
 
 .list_history {
@@ -371,9 +343,6 @@ p, label, input, span {
 
 .grid_history span {
   padding: 0.2vw;
-  font-family: futura;
-  font-weight: 900;
-  font-size: 1.5vw;
   top: 0.5vw;
   margin: auto;
 }
@@ -384,4 +353,26 @@ p, label, input, span {
 
 .color2 {
   color: rgb(11, 133, 32);
+}
+
+@media screen and (orientation: portrait), screen and (max-width: 700px) {
+
+  .grid_container {
+    position: relative;
+    display: grid;
+    grid-template-rows: minmax(max-content, 200px) minmax(min-content, max-content) minmax(min-content, max-content) minmax(min-content, max-content) minmax(200px, auto);
+    grid-template-columns:  minmax(auto, max-content) minmax(0, max-content) minmax(min-content, max-content);
+    grid-template-areas:
+      "c e e"
+      "c f f"
+      "h g g"
+      "d d b"
+      "a a b";
+      width: 90vw;
+      height: auto;
+      min-height: 85vh;
+    margin: auto;
+    margin-top: 1vw;
+    gap: 0.2vw;
+  }
 }

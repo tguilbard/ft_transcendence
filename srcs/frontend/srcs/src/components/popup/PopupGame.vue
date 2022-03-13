@@ -142,8 +142,6 @@ export default defineComponent({
   border: 2px solid #a8a8a8;
   text-align: left;
   overflow: auto;
-  font-weight: 900;
-  font-size: 1.2vw;
 }
 
 .content_popup p,
@@ -162,13 +160,10 @@ label {
   display: block;
   margin: 0.2vw;
   text-align: center;
-  font-size: 1.5vw;
   padding: 2vw;
 }
 
 .block_popup2 {
-  /* display: block; */
-  /* position: absolute; */
   border-radius: 7px 7px 7px 7px;
   background-color: #fff12c;
   border: 2px solid #8f8f8f;
@@ -177,7 +172,6 @@ label {
   width: max-content;
   height: max-content;
   text-align: center;
-  /* z-index: 110; */
   color: rgb(255, 255, 255);
 }
 
@@ -190,9 +184,6 @@ label {
   padding: 4px;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
-  font-weight: 900;
-  font-size: 1.5vw;
   border: 1px solid black;
   display: block;
 }
@@ -207,9 +198,6 @@ button {
   text-align: center;
   margin: 0.5vw;
   border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
-  font-family: futura;
-  font-size: 1vw;
-  font-weight: bold;
 }
 
 button:hover,
@@ -218,7 +206,6 @@ button:hover,
   cursor: grabbing;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-size: 1.05vw;
   border-color: #fff12c;
 }
 </style> >

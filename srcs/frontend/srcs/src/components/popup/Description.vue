@@ -137,13 +137,11 @@ export default defineComponent({
 }
 
 .content_popup {
-  border-radius: 7px 7px 7px 7px;
+  border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
   background-color: #b8b8b8;
   border: 2px solid #a8a8a8;
   text-align: left;
   overflow: auto;
-  font-weight: 900;
-  font-size: 1.2vw;
 }
 
 .content_popup p,
@@ -169,13 +167,10 @@ label {
   display: block;
   margin: 0.2vw;
   text-align: center;
-  font-size: 1.5vw;
   padding: 2vw;
 }
 
 .block_popup2 {
-  /* display: block; */
-  /* position: absolute; */
   border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
   background-color: #fff12c;
   border: 2px solid #8f8f8f;
@@ -183,22 +178,17 @@ label {
   margin: auto;
   height: max-content;
   text-align: center;
-  /* z-index: 110; */
   color: rgb(255, 255, 255);
 }
 
 .block_popup2 h1 {
-  border-radius: 7px 7px 0px 0px;
-
+  border-radius: 0.5vw 0.5vw 0px 0px;
   text-align: center;
   background-color: grey;
   color: #fff12c;
   padding: 4px;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
-  font-weight: 900;
-  font-size: 1.5vw;
   border: 1px solid black;
   display: block;
 }
