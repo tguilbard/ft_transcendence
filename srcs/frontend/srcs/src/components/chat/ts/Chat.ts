@@ -30,18 +30,38 @@ import { MemberType } from "@/enums/enums";
 			'GET_LIST_MESSAGES',
 			'GET_MY_MODE',
 			'GET_IS_FRIEND',
-		])
+		]),
 	}
 })
 export default class Chat extends Vue {
 	private inputMsg = '';
 	private colored = false;
 	private log = false;
+	private listUsers = false;
+	private size = 0;
+
+	get getUserBtn() {
+		if (this.size <= 700)
+			return true;
+		return false;
+	}
+
+	get getListUsers() {
+		return this.listUsers;
+	}
+
+	private setSize()
+	{
+		this.size = window.innerWidth;
+	}
 
 	async created(): Promise<void | NavigationFailure> {
 		if (!await shared.isLogin())
-			return this.$router.push("login");
+			return this.$router.push("/login");
 		if (!store.state.sock_init) await store.commit("SET_SOCKET");
+		this.setSize();
+		window.addEventListener(
+      'resize', this.setSize);
 		const user = await shared.getMyUser();
 		if (user.state == 'logout')
 			user.state = 'login';
@@ -232,7 +252,7 @@ export default class Chat extends Vue {
 	}
 
 	updated(): void {
-		const container = this.$el.querySelector(".chat");
+		const container = this.$el.querySelector(".chatbox");
 		container.scrollTop = container.scrollHeight;
 	}
 

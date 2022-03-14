@@ -127,9 +127,6 @@ export class AchievementService {
 		const headerRequest = {
 			'Accept': 'application/json',
 		};
-	
-		console.log("api github id: ", process.env.API_GITHUB_ID);
-		console.log("api github secret: ", process.env.API_GITHUB_SECRET);
 		const githubReturn = await lastValueFrom(this.httpService.post('https://github.com/login/oauth/access_token', {
 										client_id: process.env.API_GITHUB_ID,
 										client_secret: process.env.API_GITHUB_SECRET,

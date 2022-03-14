@@ -41,27 +41,10 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 			store.dispatch("SET_USER_TARGET", value);
 		},
 		async logout() {
-			await fetch("http://localhost:3000/users/logout", {
-				method: "POST",
-				mode: "cors",
-				credentials: "include",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-					"Access-Control-Max-Age": "600",
-					"Cache-Control": "no-cache",
-				},
-			})
-				.then((response) => {
-					if (response.ok) {
-						window.location.href = "http://localhost:8080/login";
-					} else {
-						return response.json();
-					}
-				})
-				.then((responseJson) => {
-					throw responseJson;
-				});
+			store.state.socket.close();
+			store.state.sock_init = false;
+			store.dispatch("SET_POPUP", '');
+			return this.$router.push("/login");
 		},
 		getImg(event: { target: { files: File[] } }) {
 			this.file = event.target.files[0];
@@ -97,14 +80,14 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 			this.setPopup('profil')
 			store.dispatch("SET_SAVE_POPUP");
 		},
-		active_modify_profil(): void{
+		active_modify_profil(): void {
 			this.setPopup('modify_profil')
 			store.dispatch("SET_SAVE_POPUP");
 		},
 	},
 	async created() {
 		if (!await shared.isLogin())
-			return this.$router.push("login");
+			return this.$router.push("/login");
 		if (!store.state.sock_init) await store.commit("SET_SOCKET");
 		this.user = await shared.getMyUser();
 		if (this.user.state == 'logout')
@@ -124,7 +107,7 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 		});
 
 		store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity, game: string) => {
-			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
+			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game")
 				return;
 			store.dispatch("SET_SAVE_POPUP");
 			store.dispatch("SET_USER_TARGET", user_target);
@@ -146,11 +129,25 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 		});
 
 		store.state.socket.off('alertMessage').on('alertMessage', async (msg: string) => {
-			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
+			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game")
 				return;
 			store.dispatch("SET_SAVE_POPUP");
 			store.dispatch("SET_MSG_ALERT", msg);
 			store.dispatch("SET_POPUP", 'alert' + store.getters.GET_POPUP);
+		});
+
+		store.state.socket.off('goMsg').on('goMsg', async (channel: ChannelEntity) => {
+			channel.realname = channel.name;
+			channel.name = '';
+			store.dispatch("SET_ROOM", false);
+			channel.name = channel.realname.substring(channel.realname.indexOf('-') + 2);
+			if (channel.name == store.getters.GET_USER.username)
+				channel.name = channel.realname.substring(0, channel.realname.indexOf('-') - 1);
+			store.dispatch("SET_CHAN_PRIVATE", channel);
+			store.dispatch("SET_CHAN_CURRENT", channel);
+			store.dispatch("SET_POPUP", '');
+			store.dispatch("SET_SAVE_POPUP");
+			return this.$router.push("/chat");
 		});
 
 		store.state.socket.off('refresh_friends').on('refresh_friends', async () => {
@@ -226,7 +223,7 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 		});
 
 		store.state.socket.off('rcvInvite').on('rcvInvite', (channel_target: ChannelEntity, user_target: UserEntity) => {
-			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
+			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game")
 				return;
 			store.dispatch("SET_CHANNEL_TARGET", channel_target);
 			store.dispatch("SET_USER_TARGET", user_target);

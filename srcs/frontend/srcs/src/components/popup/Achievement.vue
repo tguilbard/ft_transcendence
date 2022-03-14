@@ -56,17 +56,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+
 h1 {
-  border-radius: 0.5vmax 0.5vmax 0px 0px;
+  border-radius: 0.5vh 0.5vh 0px 0px;
   text-align: center;
   background-color: grey;
   color: #fff12c;
-  padding: 0.2vmax;
+  padding: 0.5vh;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
-  font-weight: 900;
-  font-size: 1.5vmax;
   border: 1px solid black;
   display: block;
 }
@@ -74,19 +73,18 @@ h1 {
 .container_block_acheivements {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 0.2vmax;
-  margin: 0.3vmax;
-  overflow: auto;
+  gap: 0.5vh;
+  margin: 0.5vh;
 }
 
 .block_acheivements {
   display: block;
   box-sizing: border-box;
   background-color: rgb(184, 184, 184);
-  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
+  border-radius: 0.5vh 0.5vh 0.5vh 0.5vh;
   border: 2px solid #8f8f8f;
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .block_acheivements img {
@@ -99,21 +97,21 @@ h1 {
   max-height: 100%;
   border: none;
   margin: auto;
-  padding: 0.2vmax;
+  padding: 0.5vw;
 }
 
 .block_acheivements:hover {
   box-sizing: border-box;
   cursor: pointer;
   border: 4px solid darkblue;
-  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
+  border-radius: 0.5vh 0.5vh 0.5vh 0.5vh;
 }
 
 .list_acheivements {
-  margin-top: 0vmax;
+  margin-top: 0px;
   box-sizing: border-box;
   color: darkblue;
-  border-radius: 0vmax 0vmax 0.5vmax 0.5vmax;
+  border-radius: 0vh 0vh 0.5vh 0.5vh;
   border: 2px solid darkblue;
   background-color: rgb(170, 240, 149);
   height: 100%;

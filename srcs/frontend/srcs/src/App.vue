@@ -1,5 +1,6 @@
 <template>
   <router-view />
+  <img class="background_star" v-bind:src="getBackground"/>
 </template>
 
 <script lang="ts">
@@ -7,14 +8,11 @@ import { Options, Vue } from "vue-class-component";
 
 @Options({
   computed: {
-    styles() {
-      return {
-        "background-image": `url(https://i.giphy.com/media/9bTjZrytydVRK/giphy.webp)`,
-        "background-repeat": "repeat",
-        "background-size": "100% 100%",
-      };
+    getBackground()
+    {
+      return require('@/assets/background.gif');
     },
-  },
+  }
 })
 export default class App extends Vue {}
 </script>
@@ -25,6 +23,37 @@ export default class App extends Vue {}
   padding: 0px;
   top: 0px;
   left: 0px;
+}
+
+.background_star {
+   position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+  }
+
+.html {
+  font-family: futura;
+  font-size: large;
+  cursor: default;
+}
+
+h1 {
+  font-size: xx-large;
+  font-weight: bold;
+}
+
+button {
+    font-weight: bold;
+}
+
+p, label, input, span, button {
+  white-space: nowrap;
+  font-family: futura;
+  font-size: x-large;
 }
 
 .back {
@@ -57,4 +86,35 @@ export default class App extends Vue {}
     }
   }
 }
+
+@media (max-width: 1000px) {
+  h1 {
+    font-size: x-large;
+  }
+  p, label, input, span, button  {
+    font-size: large;
+}
+
+}
+
+@media (max-width: 700px) {
+  h1 {
+    font-size: large;
+  }
+  p, label, input, span, button {
+  font-size: medium;
+}
+
+}
+
+@media (max-width: 500px) {
+  h1 {
+    font-size: medium;
+  }
+  p, label, input, span, button {
+  font-size: small;
+}
+}
+
+
 </style>

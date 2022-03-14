@@ -1,14 +1,16 @@
 <template>
-  <div @click="leave" class="container_popup3"></div>
-  <div class="block_popup2">
-    <div class="content_popup">
-      <h1>ALERT</h1>
-      <div class="grid_popup_inv">
-        <div>
-          <p>{{ GET_MSG_ALERT }}</p>
-        </div>
-        <div class="btn_select">
-          <button @click="leave">BACK</button>
+  <div class="container_popup3"></div>
+  <div class="background" @click.self="leave">
+    <div class="block_popup2">
+      <div class="content_popup">
+        <h1>ALERT</h1>
+        <div class="grid_popup_inv">
+          <div>
+            <p>{{ GET_MSG_ALERT }}</p>
+          </div>
+          <div class="btn_select">
+            <button @click="leave">BACK</button>
+          </div>
         </div>
       </div>
     </div>
@@ -73,9 +75,21 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+.background {
+  display: grid;
+  position: absolute;
+  grid-template-rows: 1;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  margin: auto;
+  justify-items: center;
+}
+
 .container_popup3 {
   display: block;
-  position: absolute;
+  position: fixed;
   height: 100vh;
   width: 100vw;
   text-align: center;
@@ -94,11 +108,8 @@ export default defineComponent({
   border-radius: 7px 7px 7px 7px;
   background-color: #b8b8b8;
   border: 2px solid #a8a8a8;
-  height: stretch;
   text-align: left;
   overflow: auto;
-  font-weight: 900;
-  font-size: 1.2vmax;
 }
 
 .content_popup p,
@@ -110,28 +121,25 @@ label {
 .content_popup_profil {
   display: block;
   width: auto;
-  margin: 0.5vmax;
+  margin: 0.5vw;
 }
 
 .block_description {
   display: block;
-  margin: 0.2vmax;
+  margin: 0.2vw;
   text-align: center;
-  font-size: 1.5vmax;
-  padding: 2vmax;
+  padding: 2vw;
 }
 
 .block_popup2 {
   display: block;
-  position: absolute;
-  z-index: 1000;
   border-radius: 7px 7px 7px 7px;
   background-color: #fff12c;
   border: 2px solid #8f8f8f;
   padding: 1px;
-  left: 50%;
-  top: 40%;
-  transform: translate(-50%, -50%);
+  margin: auto;
+  width: max-content;
+  height: max-content;
   text-align: center;
   color: rgb(255, 255, 255);
 }
@@ -145,9 +153,6 @@ label {
   padding: 4px;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
-  font-weight: 900;
-  font-size: 1.5vmax;
   border: 1px solid black;
   display: block;
 }
@@ -158,13 +163,10 @@ label {
 }
 
 button {
-  padding: 0.5vmax;
+  padding: 0.5vw;
   text-align: center;
-  margin: 0.5vmax;
-  border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
-  font-family: futura;
-  font-size: 1vmax;
-  font-weight: bold;
+  margin: 0.5vw;
+  border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
 }
 
 button:hover,
@@ -173,7 +175,6 @@ button:hover,
   cursor: grabbing;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-size: 1.05vmax;
   border-color: #fff12c;
 }
 </style> >

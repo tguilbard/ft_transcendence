@@ -1,9 +1,23 @@
+p, label, input, span {
+    white-space: nowrap
+  }
+
+.background {
+    display: grid;
+    position: absolute;
+    grid-row: 1;
+    width: 100%;
+    height: 100%;
+    z-index: 11;
+    margin: auto;
+    justify-items: center;
+  }
+
 .container_popup, .container_popup_alert {
-    position: fixed;
     display: block;
     position: absolute;
     height: 100vh;
-    width: 100vmax;
+    width: 100vw;
     text-align: center;
     z-index: 10;
     visibility: hidden;
@@ -12,6 +26,7 @@
 }
 
 .container_popup, .container_popup_alert{
+    position: fixed;
     z-index: 10;
     background-color: rgba(0, 0, 0, 0.8);
     visibility: visible;
@@ -22,17 +37,14 @@
 }
 
 .block_popup, .block_popup_alert {
-    display: block;
-    position: absolute;
     border-radius: 7px 7px 7px 7px;
     background-color: #fff12c;
     border: 2px solid #8f8f8f;
     padding: 1px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    width: max-content;
+    height: max-content;
+    margin: auto;
     text-align: center;
-    z-index: 15;
     color: rgb(255, 255, 255);
 }
 
@@ -44,9 +56,6 @@
     padding: 4px;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-family: futura;
-    font-weight: 900;
-    font-size: 1.5vmax;
     border: 1px solid black;
 }
 
@@ -58,12 +67,8 @@
     border-radius: 7px 7px 7px 7px;
     background-color: #B8B8B8;
     border: 2px solid #a8a8a8;
-    height: stretch;
     text-align: left;
     overflow: auto;
-    z-index: 20;
-    font-weight: 900;
-    font-size: 1.2vmax;
 }
 
 .content_popup p, label{
@@ -91,13 +96,10 @@
 }
 
 .btn_select input, .btn_select button {
-    padding: 0.5vmax;
+    padding: 0.5vw;
     text-align: center;
-    margin: 0.5vmax;
-    border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
-    font-family: futura;
-    font-size: 1vmax;
-    font-weight: bold;
+    margin: 0.5vw;
+    border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
 }
 
 .btn_select input:hover, .btn_select button:hover {
@@ -105,44 +107,44 @@
     cursor: grabbing;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-size: 1.05vmax;
     border-color: #fff12c;
 }
 
 .grid_popup_inv {
     display: grid;
     grid-template-rows: auto;
-    gap: 1vmax;
+    gap: 1vw;
     justify-items: center;
     align-items: center;
 }
 
 .grid_popup_inv p {
-    padding: 2vmax;
+    padding: 2vw;
     text-align: center;
 }
 
 .grid_popup_mode {
     display: grid;
     grid-template-rows: auto;
-    gap: 1vmax;
+    /* gap: 1vw; */
     justify-items: center;
     align-items: center;
 }
 
 .grid_popup_mode p {
-    padding: 2vmax;
+    padding: 2vw;
     text-align: center;
 }
 
 .grid_popup_mode img {
-    width: 4vmax;
-    height: auto;
+    /* width: 4vw; */
+    height: 1.2vmax;
+    width: 1.2vmax;
 }
 
 .mod, .mod div {
     display: inline;
-    margin: 1px;
+    /* margin: 1px; */
 }
 
 .link:hover
@@ -151,38 +153,37 @@
     cursor: grabbing;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-family: futura;
 }
 
 .list_chan_popup {
-    margin: 0.5vmax;
-    margin-top: 1vmax;
-    margin-bottom: 1vmax;
-    padding: 1vmax;
+    margin: 0.5vw;
+    margin-top: 1vw;
+    margin-bottom: 1vw;
+    padding: 1vw;
     background-color: #000000;
     background-color: #f6ecd2;
     overflow: auto;
     color: darkblue;
-    height: 40vh;
+    height: 15vw;
     border-radius: 7px 7px 7px 7px;
     border: 2px solid #8f8f8f;
 }
 
 .list_chan_popup p {
-    margin: 0.2vmax;
-    padding: 0.4vmax;
+    margin: 0.2vw;
+    padding: 0.4vw;
 }
 
 .list_chan_popup img {
-    margin: 0.2vmax;
-    padding: 0.4vmax;
-    width: 2vmax;
+    margin: 0.2vw;
+    padding: 0.4vw;
+    width: 2vw;
     height: auto;
 }
 
 .user_list_selected {
     background-color: rgb(163, 85, 13);
-    border-radius: 0.5vmax;
+    border-radius: 0.5vw;
 }
 
 .user_list_selected p {
@@ -190,7 +191,6 @@
     cursor: grabbing;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-size: 1.5vmax;
     border-color: #fff12c;
 }
 
@@ -202,11 +202,12 @@
 .logo_connection {
     display: grid;
     grid-template-columns: minmax(min-content, auto) minmax(min-content, max-content);
+    align-items: center;
 }
 
 .logo_connection img {
-    width: 1vmax;
-    height: 1vmax;
+    width: 1.2vmax;
+    height: 1.2vmax;
 }
 
 .inv {

@@ -45,7 +45,9 @@ export class UsersController {
 	}
 
 	@Get('MyUser')
-	async GetMyUser(@Req() req: Request): Promise<UserEntity> {
+	async GetMyUser(@Req() req: Request): Promise<UserEntity>{
+		if (!req.User || !req.User.id)
+			return await this.usersService.FindUserById(0);
 		const user = await this.usersService.FindUserById(req.User.id);
 		return user;
 	}
@@ -78,11 +80,6 @@ export class UsersController {
 		return await this.usersService.isLogin(req);
 	}
 
-	@Post('logout')
-	async logout(@Res() res: Response, @Req() req: Request) {
-		res.send('ok');
-	}
-
 	@Get('isGuest/:username')
 	async isGuest(@Param("username") username: string) {
 		const user = await this.usersService.FindUserByUsername(username);
@@ -105,6 +102,7 @@ export class UsersController {
 
 	@Post('guest')
 	async add_guest(@Res() response: Response, @Req() request: Request) {
+		"je suis dans add gest"
 		return await this.usersService.add_guest(response, request);
 	}
 

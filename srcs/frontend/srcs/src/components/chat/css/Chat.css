@@ -13,17 +13,23 @@
     cursor: grabbing;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-family: futura;
 }
 
 .logo_connection {
     display: grid;
     grid-template-columns: minmax(min-content, auto) minmax(min-content, max-content);
+    grid-template-rows: minmax(min-content, max-content);
+    align-items: flex-end;
 }
 
 .logo_connection img {
-    width: 1vmax;
-    height: 1vmax;
+    width: 1.2vmax;
+    height: 1.2vmax;
+    align-self: center;
+}
+
+.logo_connection p {
+    align-self: center;
 }
 
 .chanButton p, .button_disabled p{
@@ -40,9 +46,6 @@
     text-align: center;
     margin: 0.5vmax;
     border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
-    font-family: futura;
-    font-size: 1vmax;
-    font-weight: bold;
 }
 
 .btn_select input:hover, .btn_select button:hover {
@@ -50,7 +53,6 @@
     cursor: grabbing;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-size: 1.05vmax;
     border-color: #fff12c;
 }
 
@@ -58,11 +60,11 @@
     display: grid;
     grid-template-columns: minmax(min-content, max-content) minmax(min-content, auto); 
     grid-gap: 1px;
-
     margin-left: auto;
     margin-right: auto;
     width: 90vw;
     height: auto;
+    min-height: 75vh;
     margin-top: 1vh;
     border-radius: 7px 7px 7px 7px;
     background-color: #fff12c;
@@ -71,18 +73,26 @@
 }
 
 .list_user {
-    margin-left: 0.2vmax;
+    display: block;
+    height: 1vh;
     padding: 0.2vmax;
-    background-color: #000000;
+    text-align: center;
+    box-sizing: border-box;
+    height: 100%;
+    overflow-x:hidden;
+}
+
+.block_list_user {
+    display: block;
+    height: 1vh;
+    box-sizing: border-box;
+    min-height: 100%;
+    width: 100%;
     background-color: #f6ecd2;
-    height: 60vh;
-    overflow: auto;
 }
 
 .list_user p {
     color: rgb(71, 71, 71);
-    font-style: bold;
-    font-size: 1.5vmax;
     text-decoration: none;
 }
 
@@ -91,7 +101,6 @@
     cursor: grabbing;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-family: futura;
 }
 
 .link:hover
@@ -100,17 +109,19 @@
     cursor: grabbing;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-family: futura;
 }
 
 .block_channel {
-    margin: 0.2vmax;
     display: grid;
     grid-template-columns: auto auto;
     grid-gap: 0.1vmax;
     background-color: rgb(163, 162, 162);
-    height: 61vh;
     border: 2px solid rgb(129, 129, 129);
+    padding: 5px;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    overflow-x:hidden;
 }
 
 @font-face {
@@ -120,34 +131,59 @@
 }
 
 .left {
+    display: grid;
+    grid-template-columns: max-content;
+    grid-template-rows: minmax(min-content, max-content) minmax(min-content, max-content) minmax(min-content, auto) minmax(min-content, max-content) minmax(min-content, max-content);
+    height: 100%;
     border-radius: 7px 0px 0px 7px;
     background-color: #B8B8B8;
     border: 2px solid #a8a8a8;
+    box-sizing: border-box;
+    align-items: stretch;
 }
 
 .right {
     display: grid;
     grid-template-rows: minmax(min-content, max-content) minmax(min-content, auto) minmax(min-content, max-content);
+    box-sizing: border-box;
     height: 100%;
+    background-color: #ffffffe1;
 }
 
 .logo {
     display: grid;
     grid-template-columns: auto auto;
-    gap: 0.1em;
-    margin: 0.1em;
+    gap: 0.1vmax;
+    margin: 0.1vmax;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+button {
+    width: 100%;
 }
 
 .mod {
     display: inline;
-    margin: 1px;
 }
 
 .channel {
+    display: block;
+    height: 1vh;
     padding: 0.2vmax;
     text-align: center;
-    overflow: auto;
-    height: 60vh;
+    box-sizing: border-box;
+    height: 100%;
+    overflow-x:hidden;
+}
+
+.block_list_channel {
+    display: block;
+    height: 1vh;
+    padding: 5px;
+    box-sizing: border-box;
+    min-height: 100%;
+    width: 100%;
 }
 
 .banner img {
@@ -163,35 +199,46 @@
     border: 2px solid #8f8f8f;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-family: futura;
-    font-weight: 900;
-    font-size: 2vmax;
     background-color: grey;
     color: #fff12c;
     text-shadow: 0px -2px 100px rgb(0, 0, 0);
     letter-spacing: 0.2vmax;
 }
 
-hr {
+.sep {
     height: 1vmax;
     background-color: #dbdbdb;
+    margin: 1vh;
 }
 
 .chatbox {
     position: relative;
-    border-radius: 0px 0px 7px 0px;
+    border-radius: none;
     background-color: #ffffffe1;
-    border: 2px solid #8f8f8f;
+    overflow-x:hidden;
+    overflow-y: scroll;
+    height: 1vh;
+    min-height: 100%;
+    box-sizing: border-box;
+    width: 100%;
+
+}
+
+.post {
+    background-color: #ffffffe1;
+    padding: 0.5vw;
 }
 
 .chat {
-    background-color: #fbfaeec5;
     position: relative;
     display: block;
     margin-top: 1px;
     margin-bottom: 0px;
-    overflow: auto;
-    height: 61vh;
+    height: 100%;
+}
+
+.chat p {
+  white-space: normal;
 }
 
 .input {
@@ -200,7 +247,6 @@ hr {
     margin-left : 0.4vmax;
     display: block;
     border-radius: 7px 7px 7px 7px;
-    font-size: 1.5vmax;
     box-sizing: border-box;
     padding: 1%;
     min-width: calc(100% - 0.8vw);
@@ -212,8 +258,6 @@ hr {
     width: 100%;
     padding: 5px;
     overflow-wrap: break-all;
-    font-size: 1.3vmax;
-    font-weight: bold;
     color: rgb(0, 0, 255);
     text-align: left;
 }
@@ -235,8 +279,6 @@ hr {
     color: rgb(188, 87, 255);
     color: rgb(0, 207, 62);
     color: rgb(0, 0, 255);
-    font-family: futura;
-    font-size: 1.1vmax;
 }
 
 .span_color {
@@ -251,32 +293,27 @@ hr {
     color: rgb(3, 199, 62);
     color: rgb(0, 0, 255);
     color: rgb(153, 0, 255);
-    font-weight: 900;
-    font-family: futura;
-    font-size: 1.1vmax;
 }
 
 .time {
     position: relative;
     display: block;
-    font-size: 0.8vmax;
-    font-family: futura;
     color: rgb(168, 76, 1);
+    font-size: small;
 }
 
 .color {
     color: rgb(153, 0, 255);
-    font-weight: 900;
 }
 
 .button, .button_disabled {
+    white-space: nowrap;
+    font-family: futura;
+    font-size: x-large;
     overflow-wrap: normal;
     border-radius: 0.3vmax 0.3vmax 0.3vmax 0.3vmax;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-family: futura;
-    font-weight: 900;
-    font-size: 1.5vmax;
     background-color: grey;
     color: white;
     padding: 0.2vmax;
@@ -289,7 +326,6 @@ hr {
 .button:hover {
     color: #fff12c;
     cursor: grabbing;
-    font-size: 1.55vmax;
     border-color: #fff12c;
 }
 
@@ -328,11 +364,67 @@ hr {
     cursor: grabbing;
     -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
-    font-size: 1.5vmax;
     border-color: #fff12c;
 }
 
 .test {
     color: #fff12c;
-    font-size: 5vmax;
+}
+
+@media (orientation: portrait)
+{
+    .global {
+        min-height: 85vh;
+    }
+}
+
+@media (max-width: 1000px) {
+    h1 {
+      font-size: x-large;
+    }
+   .button, .button_disabled {
+      font-size: large;
+  }
+  
+}
+
+@media (max-width: 700px) {
+
+    .block_channel {
+        display: grid;
+        grid-template-columns: none;
+        grid-template-columns: minmax(min-content, auto);
+        grid-gap: none;
+        background-color: rgb(163, 162, 162);
+        border: none;
+        height: 100%;
+        width: 100%;
+        overflow-x:hidden;
+    }
+
+    .logo {
+        grid-template-columns: none;
+        grid-template-rows: auto auto;
+        width: 100%;
+    }
+}
+
+  
+  @media (max-width: 700px) {
+    h1 {
+      font-size: large;
+    }
+    .button, .button_disabled {
+    font-size: medium;
+  }
+  
+}
+  
+  @media (max-width: 500px) {
+    h1 {
+      font-size: medium;
+    }
+    .button, .button_disabled {
+    font-size: small;
+  }
 }

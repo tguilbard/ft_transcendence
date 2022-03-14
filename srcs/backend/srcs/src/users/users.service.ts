@@ -122,6 +122,8 @@ export class UsersService {
 				guest: req.User.guest
 			}
 			const user = await this.AddUser(newUser);
+			if (user && body.unlock == 'true')
+				this.achievementService.UnlockFashion(user);
 			return user;
 	}
 
@@ -177,7 +179,7 @@ export class UsersService {
 		);
 		res.cookie('access_token', accessToken, {
 			httpOnly: true,
-			secure: true
+			secure: false
 		});
 
 		res.json({
@@ -205,9 +207,7 @@ export class UsersService {
 	}
 
 	async login(res: Response, request: Request) {
-		console.log("coucou");
 		if (!(await this.isLogin(request)).log) {
-			console.log("if");
 			const code = request.body['code'];
 			const url = 'https://api.intra.42.fr/oauth/token';
 			const postData = {
@@ -272,7 +272,6 @@ export class UsersService {
 			}
 		}
 		else {
-			console.log("else");
 			res.redirect(`frontend`)
 		}
 	}
@@ -405,7 +404,7 @@ export class UsersService {
 		if (Achievement.mask == (achievement & Achievement.mask))
 			achievement = achievement | Achievement.perfectionnist;
 		const value = await this.usersRepositories.update({id: user.id}, {achievementUnlock: achievement});
-		if (value)
+		if (value && global.server)
 			global.server.emit("refreshAcheivements", user.username);
 		return value;
 	}

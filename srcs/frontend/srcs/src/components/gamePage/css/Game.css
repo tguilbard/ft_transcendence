@@ -12,9 +12,6 @@ h1 {
   padding: 4px;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
-  font-weight: 900;
-  font-size: 1.5vmax;
   border: 1px solid black;
   display: block;
 }
@@ -46,24 +43,15 @@ h1 {
 
 p {
   text-align: justify;
-  font-family: futura;
-  font-weight: 900;
-  font-size: 1.5vmax;
   padding: 1vmax;
 }
 
 h2 {
   text-align: center;
-  font-family: futura;
-  font-weight: 900;
-  font-size: 1.5vmax;
 }
 
 span {
   text-align: center;
-  font-family: futura;
-  font-weight: 900;
-  font-size: 1.5vmax;
   padding: 1vmax;
 }
 
@@ -94,7 +82,6 @@ span {
   box-sizing: border-box;
   top: 50%;
   transform: translateY(-50%);
-  font-weight: normal;
 }
 
 #c {
@@ -103,7 +90,7 @@ span {
 
 #grid {
   display: grid;
-  grid-template-rows: minmax(min-content, 0) minmax(min-content, auto);
+  grid-template-rows: minmax(min-content, 0) minmax(400px, auto);
   grid-template-columns: 2fr 1fr;
   grid-template-areas:
     "a c"
@@ -133,16 +120,17 @@ span {
   box-sizing: border-box;
   height: 100%;
   text-align: left;
-  font-weight: 900;
-  font-size: 1.2vmax;
 }
 
-.block_leaderboard {
+.grid_leaderboard {
+  display: grid;
+  grid-template-rows: minmax(min-content, max-content) auto;
   border-radius: 0.5vmax 0.5vmax 0.5vmax 0.5vmax;
   box-sizing: border-box;
   height: 100%;
   width: 100%;
   background-color: #f6ecd2;
+  align-items: flex-start;
 }
 
 .logo_connection {
@@ -152,18 +140,13 @@ span {
     minmax(min-content, max-content) minmax(min-content, max-content)
     minmax(min-content, max-content);
   justify-content: end;
-  width: 100%;
+  background-color:rgb(192, 151, 118);
+  align-items: center;
 }
 
 .logo_connection img {
-  width: 1.5vmax;
-  height: 1.5vmax;
-  transform: translateY(0.25vmax);
-  margin: 0.2vmax;
-  padding: 0.4vmax;
-  width: auto;
-  font-size: 1.5vmax;
-  border-radius: 0px 0px 0.5vmax 0.5vmax;
+  height: 1.2vmax;
+  width: 1.2vmax;
 }
 
 #a .content_container:hover,
@@ -183,24 +166,42 @@ span {
   cursor: grabbing;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
-  font-family: futura;
 }
 
-.grid_leaderboard {
+.grid_score {
   display: grid;
   grid-template-columns: 4fr 10fr;
+  box-sizing: border-box;
   width: 100%;
-  justify-content: space-between;
+  height: 100%;
 }
 
 .content_leaderboard {
+  box-sizing: border-box;
+  height: 1vh;
+  min-height: 100%;
   overflow: auto;
-  min-height: 69vh;
-  height: 38vmax;
   border-radius: 0vmax 0vmax 0.5vmax 0.5vmax;
 }
 
 .block_text, .block_text img {
   max-width: 100%;
   height: auto;
+}
+
+@media screen and (max-width: 700px), screen and (orientation: portrait) {
+  #grid {
+    display: grid;
+    grid-template-rows: minmax(min-content, max-content) minmax(min-content, max-content) minmax(350px, auto);
+    grid-template-columns: minmax(min-content, max-content);
+    grid-template-areas:
+      "a"
+      "b"
+      "c";
+    width: 90vw;
+    min-height: 85vh;
+    margin: auto;
+    margin-top: 1vh;
+    gap: 0.2vmax;
+  }
 }

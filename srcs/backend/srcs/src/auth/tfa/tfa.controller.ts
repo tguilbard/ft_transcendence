@@ -4,8 +4,8 @@ import { TfaCodeDTO } from './dto/Tfa-code.dto';
 import { UsersService } from 'src/users/users.service';
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken'
+
 import { UpdateUserDTO } from 'src/users/dto/Update-user.dto';
-import { UserEntity } from 'src/users/entities/users.entity';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 
 @Controller('2fa')
@@ -27,7 +27,7 @@ export class TfaController {
     async ActivateTfa(@Body() tfaCodeDTO: TfaCodeDTO, @Req() req: Request, @Res() res: Response) {
         const user = await this.usersService.FindUserByLogin(req.User.login);
         if (!this.tfaService.IsTfaCodeValid(tfaCodeDTO.code, user.tfaSecret)) {
-            throw new BadRequestException(["code invalide"]);
+            throw new BadRequestException(["code is not valid"]);
         }
         else {
             await this.usersService.ActivateTfa(user.id);

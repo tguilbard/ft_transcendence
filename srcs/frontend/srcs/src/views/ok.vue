@@ -13,8 +13,7 @@ import store from "../store/index";
   },
   methods: {
     async login(code: string) {
-      alert("ip: " + process.env.VUE_APP_BACK)
-      var response = await fetch(`http://backend:3000/users/login`, {
+      var response = await fetch("http://localhost:3000/users/login", {
         method: "POST",
         mode: "cors",
         credentials: "include",
@@ -28,9 +27,7 @@ import store from "../store/index";
           code: code,
         }),
       });
-      alert("passed")
       const data = await response.json();
-      alert("data = "+ data.login);
       await sessionStorage.setItem("login", await JSON.stringify(data.login));
       await sessionStorage.setItem("src", await JSON.stringify(data.src));
       store.dispatch("SET_USERNAME", await JSON.stringify(data.username));
@@ -38,17 +35,16 @@ import store from "../store/index";
       if (data.state == "ok") {
         return this.$router.push("/");
       } else if (data.state == "register") {
-        return this.$router.push("register");
+        return this.$router.push("/register");
       } else if (data.state == "2fa") {
-        return this.$router.push("authLogin");
+        return this.$router.push("/authLogin");
       }
     },
   },
   async created() {
     const code = await shared.GetQueryStringVal("code");
-	alert("code = " + code)
     if (!code) {
-      window.location.href = "";
+      this.$router.push('/')
     }
     this.login(code);
   },
