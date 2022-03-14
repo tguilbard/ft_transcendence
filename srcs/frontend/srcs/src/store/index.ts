@@ -125,7 +125,7 @@ export default createStore({
 		},
 		SET_SOCKET(state) {
 			state.sock_init = true;
-			state.socket = io('', { transports: ['websocket', 'polling', 'flashsocket'] });
+			state.socket = io('http://localhost:3000', { transports: ['websocket', 'polling', 'flashsocket'] });
 		},
 		SET_LIST_USER_CURRENT(state, list: UserEntity[]) {
 			state.listUsersCurrent = list;

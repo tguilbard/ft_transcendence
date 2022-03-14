@@ -1,12 +1,18 @@
 <template>
   <router-view />
-  <img class="background_star" v-bind:src="require('@/assets/background.gif')"/>
+  <img class="background_star" v-bind:src="getBackground"/>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
 @Options({
+  computed: {
+    getBackground()
+    {
+      return require('@/assets/background.gif');
+    },
+  }
 })
 export default class App extends Vue {}
 </script>
