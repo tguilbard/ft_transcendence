@@ -8,6 +8,7 @@ import { Request, Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import AvatarService from './avatar/avatar.service';
 import { UpdateResult } from 'typeorm';
+import { Multer } from "multer";
 
 @Controller('users')
 export class UsersController {

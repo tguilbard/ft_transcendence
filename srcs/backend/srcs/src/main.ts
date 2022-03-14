@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
-import * as session from 'express-session';
+import * as session from 'cookie-session';
 import * as cookieParser from 'cookie-parser';
 import { UsersService } from './users/users.service'
 
@@ -17,6 +17,7 @@ async function bootstrap() {
   // app.useGlobalFilters(new GlobalExceptionFilter());
   app.useGlobalPipes(new ValidationPipe());
   
+  const session = require('cookie-session');
   app.use(session({
     secret: 'secret',
     resave: false,

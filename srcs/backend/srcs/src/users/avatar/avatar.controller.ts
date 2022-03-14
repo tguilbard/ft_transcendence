@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Patch, Req, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Request, Response } from 'express';
+import { Express, Request, Response } from 'express';
 import { UsersService } from '../users.service';
 import AvatarService from './avatar.service';
 

@@ -5,7 +5,6 @@ import { UsersService } from 'src/users/users.service';
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken'
 import { UpdateUserDTO } from 'src/users/dto/Update-user.dto';
-import { UserEntity } from 'src/users/entities/users.entity';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 
 @Controller('2fa')
@@ -31,13 +30,13 @@ export class TfaController {
         }
         else {
             await this.usersService.ActivateTfa(user.id);
-            const accessToken = await jwt.sign(
-                { login: req.User.login, 'ses': req.sessionID, state: 'ok', id: user.id, username: req.User.username, guest: req.User.guest },
-                'secret',
-                {
-                    algorithm: "HS256"
-                }
-            );
+            const accessToken = jwt.sign(
+				{ login: req.User.login, 'ses': req.sessionID, state: 'ok', id: user.id, username: req.User.username, guest: req.User.guest },
+				'secret',
+				{
+					algorithm: "HS256"
+				}
+			);
             res.status(204).cookie('access_token', accessToken, {
                 httpOnly: true,
                 secure: false
