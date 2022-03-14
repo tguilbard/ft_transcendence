@@ -261,6 +261,8 @@ class Pong extends Phaser.Scene {
                 store.dispatch("SET_DUEL", false);
                 let check = document.getElementById("grid");
                 if (check !== null) check.style.removeProperty("display");
+                check = document.getElementById("menu");
+                if (check !== null) check.style.removeProperty("display");
                 check = document.getElementById("PongBorder");
                 if (check !== null) check.style.setProperty("display", "none");
             })
@@ -347,6 +349,12 @@ class Pong extends Phaser.Scene {
                 background.setVisible(false);
                 backgroundC.setVisible(true);
                 star.setVisible(true);
+            }
+            else if (message === 0)
+            {
+                background.setVisible(true);
+                backgroundC.setVisible(false);
+                star.setVisible(false);
             }
             Start();
         });
@@ -437,6 +445,8 @@ async function End() {
     gameStarted = false;
     store.dispatch("SET_DUEL", false);
     let check = document.getElementById("grid");
+    if (check !== null) check.style.removeProperty("display");
+    check = document.getElementById("menu");
     if (check !== null) check.style.removeProperty("display");
     check = document.getElementById("PongBorder");
     if (check !== null) check.style.setProperty("display", "none");

@@ -1,5 +1,6 @@
 <template>
   <router-view />
+  <img class="background_star" v-bind:src="require('@/assets/background.gif')"/>
 </template>
 
 <script lang="ts">
@@ -17,6 +18,16 @@ export default class App extends Vue {}
   top: 0px;
   left: 0px;
 }
+
+.background_star {
+   position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+  }
 
 .html {
   font-family: futura;

@@ -46,6 +46,7 @@ class Game {
             this.users[1].socket = user;
             user.join(this.socketRoomName);
         }
+        this.server.to(user.id).emit("openText", 0, this.GameFlag);
     }
 
     sendMessage(msg: any[]) {
@@ -61,7 +62,7 @@ class Game {
     addToSpec(user: SocketUser) {
         user.socket.to(this.phaserServer.id).emit("initScore");
         this.server.to(user.socket.id).emit("START", this.GameFlag);
-        this.server.to(user.socket.id).emit("openText", 0);
+        this.server.to(user.socket.id).emit("openText", 0, this.GameFlag);
         this.spectators.push(user);
         user.socket.join(this.socketRoomName);
         this.server.to(user.socket.id).emit("start_game");
@@ -239,7 +240,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 
     @SubscribeMessage("duel")
     async duel(client: Socket, payload: any[]){
-        if (!payload || !payload[1] || !payload[2] || !payload[3])
+        if (!payload || !payload[1] || !payload[2])
         return;
         const gduel = this.initDuel.find(e => e.user1.id == payload[1].id && e.user2.id == payload[2].id)
         let socket = global.socketUserList.find(elem => elem.user.id === payload[1].id).socket;
@@ -344,10 +345,7 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         let scoreRight = payload[1];
         let playerLeft = payload[2];
         let playerRight = payload[3];
-
-        this.logger.log(scoreLeft, scoreRight);
         let history: any;
- 
         var userW: UserEntity;
         var userL: UserEntity;
 

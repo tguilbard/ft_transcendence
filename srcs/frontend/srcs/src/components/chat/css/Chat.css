@@ -18,11 +18,18 @@
 .logo_connection {
     display: grid;
     grid-template-columns: minmax(min-content, auto) minmax(min-content, max-content);
+    grid-template-rows: minmax(min-content, max-content);
+    align-items: flex-end;
 }
 
 .logo_connection img {
-    width: 1vmax;
-    height: 1vmax;
+    width: 1.2vmax;
+    height: 1.2vmax;
+    align-self: center;
+}
+
+.logo_connection p {
+    align-self: center;
 }
 
 .chanButton p, .button_disabled p{
@@ -146,8 +153,8 @@
 .logo {
     display: grid;
     grid-template-columns: auto auto;
-    gap: 0.1em;
-    margin: 0.1em;
+    gap: 0.1vmax;
+    margin: 0.1vmax;
     box-sizing: border-box;
     width: 100%;
 }
@@ -158,7 +165,6 @@ button {
 
 .mod {
     display: inline;
-    margin: 1px;
 }
 
 .channel {
@@ -199,7 +205,7 @@ button {
     letter-spacing: 0.2vmax;
 }
 
-hr {
+.sep {
     height: 1vmax;
     background-color: #dbdbdb;
     margin: 1vh;

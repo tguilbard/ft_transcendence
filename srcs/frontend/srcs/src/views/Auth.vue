@@ -26,6 +26,7 @@
       <button class="next" @click="passed">PASSER</button>
     </form>
   </div>
+  <img class="background_pong" v-bind:src="require('../assets/background_pong.gif')"/>
 </template>
 
 <script lang="ts">
@@ -73,7 +74,7 @@ import shared from "../mixins/Mixins";
       })
         .then((response) => {
           if (response.ok) {
-            window.location.href = "http://localhost:8080";
+            return this.$router.push("/");
           } else {
             return response.json();
           }
@@ -86,7 +87,7 @@ import shared from "../mixins/Mixins";
         });
     },
     passed() {
-      window.location.href = "http://localhost:8080/login";
+      return this.$router.push("/login");
     },
   },
   async created() {
@@ -102,6 +103,15 @@ export default class Register extends Vue {}
 *:focus {
   outline: none;
 }
+
+.background_pong {
+   position: absolute;
+    display: block;
+    width: 100%;
+    left: 0;
+    height: 50%;
+    top: 50%;
+  }
 
 .sup {
   background-color: #fff12c;

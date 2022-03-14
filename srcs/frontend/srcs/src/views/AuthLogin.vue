@@ -25,6 +25,7 @@
       <input class="valider" type="submit" value="VALIDEZ" />
     </form>
   </div>
+  <img class="background_pong" v-bind:src="require('../assets/background_pong.gif')"/>
 </template>
 
 <script lang="ts">
@@ -73,7 +74,7 @@ import store from "../store/index";
       })
         .then((response) => {
           if (response.ok) {
-            window.location.href = "http://localhost:8080";
+            return this.$router.push("/");
           } else {
             return response.json();
           }
@@ -121,6 +122,15 @@ export default class Register extends Vue {}
 *:focus {
   outline: none;
 }
+
+.background_pong {
+   position: absolute;
+    display: block;
+    width: 100%;
+    left: 0;
+    height: 50%;
+    top: 50%;
+  }
 
 .sup {
   background-color: #fff12c;

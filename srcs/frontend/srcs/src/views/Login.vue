@@ -17,7 +17,6 @@ import store from "../store/index";
   data() {
     return {
       log: false,
-      pong: 'background_pong.gif'
     };
   },
   methods: {
@@ -70,7 +69,7 @@ export default class Register extends Vue {}
     display: block;
     width: 100%;
     left: 0;
-    z-index: -1;
+    /* z-index: 0; */
     height: 50%;
     top: 50%;
   }

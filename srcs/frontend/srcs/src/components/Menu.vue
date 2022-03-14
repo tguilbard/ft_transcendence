@@ -18,7 +18,6 @@
       </div>
     </div>
   </div>
-    <img class="background_star" v-bind:src="getBackground"/>
 
 </template>
 
@@ -33,10 +32,6 @@ import { Options, Vue } from "vue-class-component";
     };
   },
   computed: {
-    getBackground()
-    {
-      return require('@/assets/background.gif');
-    },
     btn_game() {
       if (this.page == "game") {
         return {
@@ -73,16 +68,6 @@ export default class Menu extends Vue {}
 </script>
 
 <style scoped lang="css">
-
-.background_star {
-   position: fixed;
-    display: block;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    height: 100%;
-    width: 100%;
-  }
 
 .sup {
   display: block;

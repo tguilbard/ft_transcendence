@@ -54,7 +54,7 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 			})
 				.then((response) => {
 					if (response.ok) {
-						window.location.href = "http://localhost:8080/login";
+						return this.$router.push("/login");
 					} else {
 						return response.json();
 					}

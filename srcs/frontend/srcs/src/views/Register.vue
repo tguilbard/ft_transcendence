@@ -43,6 +43,7 @@
       </div>
     </form>
   </div>
+  <img class="background_pong" v-bind:src="require('../assets/background_pong.gif')"/>
 </template>
 
 <script lang="ts">
@@ -63,21 +64,22 @@ import store from "../store/index";
     };
   },
   computed: {
-    inf() {
-      return {
-        width: "100%",
-        left: "0",
-        overflow: "hidden",
-        "z-index": "-1",
-        position: "absolute",
-        height: "50%",
-        top: "50%",
-        "background-image": `url(https://profgra.org/lycee/img/pong.gif)`,
-        "background-size": "100% 100%",
-      };
-    },
+    // inf() {
+    //   return {
+    //     width: "100%",
+    //     left: "0",
+    //     overflow: "hidden",
+    //     "z-index": "-1",
+    //     position: "absolute",
+    //     height: "50%",
+    //     top: "50%",
+    //     "background-image": `url(https://profgra.org/lycee/img/pong.gif)`,
+    //     "background-size": "100% 100%",
+    //   };
+    // },
   },
   methods: {
+    
     getImg(event: { target: { files: File[] } }) {
       this.file = event.target.files[0];
       this.srcImg = URL.createObjectURL(this.file);
@@ -96,7 +98,7 @@ import store from "../store/index";
         .then((response) => {
           if (response.ok) {
             store.dispatch("SET_USERNAME", this.username);
-            return router.push("http://localhost:8080/auth");
+            return router.push("/auth");
           } else {
             return response.json();
           }
@@ -152,6 +154,15 @@ export default class Register extends Vue {}
 *:focus {
   outline: none;
 }
+
+.background_pong {
+   position: absolute;
+    display: block;
+    width: 100%;
+    left: 0;
+    height: 50%;
+    top: 50%;
+  }
 
 .btn_avatar {
   display: block;

@@ -14,7 +14,7 @@
             <div id="mb">
               <div class="grid_avatar">
                 <div>
-                  <h1 id="aa">MODIFY YOUR AVATAR</h1>
+                  <h1 id="aa">AVATAR</h1>
                 </div>
                 <div id="ab">
                   <div v-if="GET_IMG" class="block_avatar">
@@ -23,9 +23,7 @@
                 </div>
                 <div id="ac">
                   <div class="block_avatar_inf">
-                    <label for="avatar" class="btn"
-                      ><h1 style="ground: #f5ba1a">Change avatar</h1></label
-                    >
+                    <label for="avatar">Change</label>
                     <input
                       type="file"
                       id="avatar"
@@ -36,7 +34,7 @@
                       placeholder="Choississez un avatar"
                     />
                     <div>
-                      <button v-on:click="sendAvatar">SAVE AVATAR</button>
+                      <button v-on:click="sendAvatar">SAVE</button>
                     </div>
                   </div>
                 </div>
@@ -45,7 +43,7 @@
 
             <div id="mc" class="right">
               <div class="container_right">
-                <h1>MODIFY YOUR USERNAME</h1>
+                <h1>USERNAME</h1>
                 <div class="block_user">
                   <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
                   <form @submit.prevent="submit">
@@ -70,7 +68,7 @@
                     <input v-else type="submit" value="SAVE" />
                   </form>
                 </div>
-                <h1>MODIFY YOUR DOUBLE AUTHENTIFICATION</h1>
+                <h1>AUTHENTIFICATION</h1>
                 <div class="block_activate">
                   <div v-if="isCheck">
                     <button @click="switchCheck">DESACTIVATE TFA</button>
@@ -172,6 +170,7 @@
                           </span>
                         </div>
                       </div>
+                      <hr>
                     </div>
 
 
@@ -1147,7 +1146,7 @@ export default defineComponent({
 
     async blockUser() {
       const response = await fetch(
-        "http://localhost:3000/users/block/" +
+        "/users/block/" +
           store.getters.GET_USER.id +
           "/" +
           store.getters.GET_USER_TARGET.id,
@@ -1171,7 +1170,7 @@ export default defineComponent({
 
     async unBlockUser() {
       const response = await fetch(
-        "http://localhost:3000/users/unblock/" +
+        "/users/unblock/" +
           store.getters.GET_USER.id +
           "/" +
           store.getters.GET_USER_TARGET.id,
@@ -1277,7 +1276,7 @@ export default defineComponent({
     },
     async get_user() {
       var response = await fetch(
-        "http://localhost:3000/users/" + this.save_username,
+        "/users/" + this.save_username,
         {
           method: "GET",
           mode: "cors",
@@ -1421,7 +1420,8 @@ h1 {
   background-color: #fff12c;
   border: 2px solid #8f8f8f;
   padding: 1px;
-  width: 75vw;
+  width: min-content;
+  min-width: 75vw;
   height: auto;
   margin: auto;
   text-align: center;
@@ -1518,7 +1518,7 @@ label {
     "mb mc"
     "md md";
   gap: 0.2vw;
-  align-items: stretch;
+  align-items: auto;
   box-sizing: border-box;
   height: 100%;
   width: 100%;
@@ -1736,8 +1736,14 @@ label {
 }
 
 .block_avatar_inf label {
-  top: 1vw;
+  position: relative;
+  display: block;
+  margin-top: 2vw;
   text-align: center;
+  font-size: 2vw;
+  padding: 1vw;
+  background-color: rgb(61, 61, 61);
+  color: #fff12c;
 }
 
 .right {

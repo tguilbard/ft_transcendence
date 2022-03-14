@@ -59,16 +59,16 @@ const router = createRouter({
 	linkExactActiveClass: "exact-active",
 })
 
-router.beforeEach(async(to, from, next) => {
-	const user = await shared.getMyUser();
-	if (user && user.username && from.name)
-	{
-		if (!store.state.sock_init) await store.commit("SET_SOCKET");
-		if (user.state == 'in match' && from.name == 'Game' && to.name != 'Game')
-			return;
-	}
-	next();
-})
+// router.beforeEach(async(to, from, next) => {
+// 	const user = await shared.getMyUser();
+// 	if (user && user.username && from.name)
+// 	{
+// 		if (!store.state.sock_init) await store.commit("SET_SOCKET");
+// 		if (user.state == 'in match' && from.name == 'Game' && to.name != 'Game')
+// 			return;
+// 	}
+// 	next();
+// })
 
 
 router.afterEach((to, from) => {

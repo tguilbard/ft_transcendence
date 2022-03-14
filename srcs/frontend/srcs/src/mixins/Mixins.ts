@@ -51,6 +51,7 @@ import store from '../store';
       },
 
     async isLogin(): Promise<boolean> {
+        alert
         const response = await fetch("http://localhost:3000/users/isLogin", {
             method: "GET",
             mode: "cors",
@@ -191,7 +192,7 @@ import store from '../store';
 
     async getListMatchs(username: string): Promise<string[]> {
         const response = await fetch(
-          "http://localhost:3000/game-history/" + username,
+          "/game-history/" + username,
           {
             method: "GET",
             mode: "cors",

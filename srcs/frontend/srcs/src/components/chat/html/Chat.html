@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div>
-                <hr>
+                <hr class="sep">
             </div>
             <div class="block_channel">
                 <div v-if="!getUserBtn || (getUserBtn && !getListUsers)" class="block_list_channel">
@@ -217,8 +217,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <hr>
                         </div>
-
 
                         <div v-if="(GET_ROOM || GET_LIST_CHAN_PRIVATE.length) && GET_LIST_USER_CURRENT" v-for="item in GET_LIST_USER_CURRENT">
                             <div class="logo_connection">
@@ -516,7 +516,7 @@
             </div>
 
             <div>
-                <hr>
+                <hr class="sep">
             </div>
             <div class="logo">
                 <div>

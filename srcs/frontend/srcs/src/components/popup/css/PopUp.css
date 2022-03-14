@@ -126,7 +126,7 @@ p, label, input, span {
 .grid_popup_mode {
     display: grid;
     grid-template-rows: auto;
-    gap: 1vw;
+    /* gap: 1vw; */
     justify-items: center;
     align-items: center;
 }
@@ -137,13 +137,14 @@ p, label, input, span {
 }
 
 .grid_popup_mode img {
-    width: 4vw;
-    height: auto;
+    /* width: 4vw; */
+    height: 1.2vmax;
+    width: 1.2vmax;
 }
 
 .mod, .mod div {
     display: inline;
-    margin: 1px;
+    /* margin: 1px; */
 }
 
 .link:hover
@@ -201,11 +202,12 @@ p, label, input, span {
 .logo_connection {
     display: grid;
     grid-template-columns: minmax(min-content, auto) minmax(min-content, max-content);
+    align-items: center;
 }
 
 .logo_connection img {
-    width: 1vw;
-    height: 1vw;
+    width: 1.2vmax;
+    height: 1.2vmax;
 }
 
 .inv {

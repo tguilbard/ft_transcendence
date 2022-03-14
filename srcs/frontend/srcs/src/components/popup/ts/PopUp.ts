@@ -99,7 +99,7 @@ export default defineComponent({
 		response_inv_game(ret: boolean) {
 			store.dispatch("SET_POPUP", store.getters.GET_SAVE_POPUP);
 			if (store.getters.GET_GAME == 'pong')
-				store.state.socket.emit('duel', ret, store.getters.GET_USER_TARGET, store.getters.GET_USER, 2);
+				store.state.socket.emit('duel', ret, store.getters.GET_USER_TARGET, store.getters.GET_USER, 0);
 			else if (store.getters.GET_GAME == 'star')
 				store.state.socket.emit('duel', ret, store.getters.GET_USER_TARGET, store.getters.GET_USER, 1);
 		},

@@ -15,7 +15,6 @@ import store from "@/store";
 	},
 
 	async created() {
-
 		if (!await shared.isLogin())
 			return this.$router.push("login");
 		if (!store.state.sock_init) await store.commit("SET_SOCKET");
@@ -205,6 +204,8 @@ import store from "@/store";
 		},
 		active_game() {
 			let check = document.getElementById("grid");
+			if (check !== null) check.style.display = "none";
+			check = document.getElementById("menu");
 			if (check !== null) check.style.display = "none";
 			check = document.getElementById("PongBorder");
 			if (check !== null) check.style.setProperty("display", "block");

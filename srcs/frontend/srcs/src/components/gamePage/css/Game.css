@@ -140,17 +140,13 @@ span {
     minmax(min-content, max-content) minmax(min-content, max-content)
     minmax(min-content, max-content);
   justify-content: end;
-  width: 100%;
+  background-color:rgb(192, 151, 118);
+  align-items: center;
 }
 
 .logo_connection img {
-  width: 1.5vmax;
-  height: 1.5vmax;
-  transform: translateY(0.25vmax);
-  margin: 0.2vmax;
-  padding: 0.4vmax;
-  width: auto;
-  border-radius: 0px 0px 0.5vmax 0.5vmax;
+  height: 1.2vmax;
+  width: 1.2vmax;
 }
 
 #a .content_container:hover,
@@ -178,7 +174,6 @@ span {
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  justify-content: space-between;
 }
 
 .content_leaderboard {
