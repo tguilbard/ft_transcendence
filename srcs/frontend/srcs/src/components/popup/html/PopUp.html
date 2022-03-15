@@ -23,10 +23,10 @@
                             </div>
                             <div>
                                 <div>
-                                    <input type="text" id="mdp" name="mdp" v-model="mdp" maxlength="15">
+                                    <input type="password" id="mdp" name="mdp" v-model="mdp" maxlength="15">
                                 </div>
                                 <div>
-                                    <input type="text" id="mdp2" name="mdp2" v-model="mdp2" maxlength="15">
+                                    <input type="password" id="mdp2" name="mdp2" v-model="mdp2" maxlength="15">
                                 </div>
                             </div>
                         </div>
@@ -143,10 +143,10 @@
                                         v-model="GET_CHANNEL_TARGET.name">
                                 </div>
                                 <div v-if="GET_ROOM">
-                                    <input type="text" id="mdp" name="mdp" v-model="mdp" maxlength="15">
+                                    <input type="password" id="mdp" name="mdp" v-model="mdp" maxlength="15">
                                 </div>
                                 <div v-if="GET_ROOM">
-                                    <input type="text" id="mdp2" name="mdp2" v-model="mdp2" maxlength="15">
+                                    <input type="password" id="mdp2" name="mdp2" v-model="mdp2" maxlength="15">
                                 </div>
                             </div>
                         </div>
@@ -198,15 +198,15 @@
                                 </div>
                                 <div>
                                     <div>
-                                        <input type="text" id="mdp" name="mdp" v-model="mdp"
+                                        <input type="password" id="mdp" name="mdp" v-model="mdp"
                                             v-if="GET_CHANNEL_TARGET.mode != 5" disabled>
-                                        <input type="text" id="mdp" name="mdp" v-model="mdp"
+                                        <input type="password" id="mdp" name="mdp" v-model="mdp"
                                             v-if="GET_CHANNEL_TARGET.mode == 5" maxlength="15">
                                     </div>
                                     <div>
-                                        <input type="text" id="mdp2" name="mdp2" v-model="mdp2"
+                                        <input type="password" id="mdp2" name="mdp2" v-model="mdp2"
                                             v-if="GET_CHANNEL_TARGET.mode != 5" disabled>
-                                        <input type="text" id="mdp2" name="mdp2" v-model="mdp2"
+                                        <input type="password" id="mdp2" name="mdp2" v-model="mdp2"
                                             v-if="GET_CHANNEL_TARGET.mode == 5" maxlength="15">
                                     </div>
                                 </div>

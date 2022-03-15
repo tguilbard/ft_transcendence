@@ -44,11 +44,12 @@ const Grey = 0xb8b8b8;
 
 (async ()=>{
 
-if (!await shared.isLogin())
-    return router.push('login');
-if (!store.state.sock_init)
-    store.commit("SET_SOCKET");
-myUser = await shared.getMyUser();
+if (await shared.isLogin())
+{
+    if (!store.state.sock_init)
+        store.commit("SET_SOCKET");
+    myUser = await shared.getMyUser();
+}
 
 class Pong extends Phaser.Scene {
 
@@ -73,7 +74,6 @@ class Pong extends Phaser.Scene {
     }
    
     create() {
-          
             background = this.add.image(Width / 2, Height / 2, 'ground');
             backgroundC = this.add.image(Width / 2, Height / 2, 'groundC');
     
@@ -373,7 +373,7 @@ class Pong extends Phaser.Scene {
         });
 
 
-        if (myUser.state == 'in match')
+        if (myUser && myUser.state == 'in match')
         {
             player1.setVisible(true);
             player2.setVisible(true);
