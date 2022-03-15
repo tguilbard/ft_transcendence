@@ -356,7 +356,7 @@ export default defineComponent({
       );
       if (response.ok) {
         store.dispatch("SET_LIST_BLOCKED", await shared.getListBlocked());
-        return await response.json();
+        return response.json();
       }
       return [];
     },
@@ -380,7 +380,7 @@ export default defineComponent({
       );
       if (response.ok) {
         store.dispatch("SET_LIST_BLOCKED", await shared.getListBlocked());
-        return await response.json();
+        return response.json();
       }
       return [];
     },
@@ -482,7 +482,7 @@ export default defineComponent({
         }
       );
       if (response.ok) {
-        return await response.json();
+        return response.json();
       }
       return null;
     },
@@ -547,7 +547,7 @@ export default defineComponent({
             store.getters.GET_USER.username
           );
           store.dispatch("SET_USER", user);
-          return await response.json();
+          return response.json();
         })
         .then((responseJson) => {
           throw responseJson;

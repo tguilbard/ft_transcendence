@@ -2,7 +2,6 @@ import { forwardRef, Inject, Injectable, NotFoundException, Redirect, Req } from
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AddUserDTO } from './dto/Add-user.dto';
-import { UpdateUserDTO } from './dto/Update-user.dto';
 import { HttpService } from '@nestjs/axios';
 import { JwtService } from '@nestjs/jwt';
 import { lastValueFrom } from 'rxjs';

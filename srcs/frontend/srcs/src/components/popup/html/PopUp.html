@@ -10,7 +10,7 @@
         <div class="background" v-if="GET_POPUP == 'pass'" @click.self="back">
             <div class="block_popup">
                 <div class="content_popup">
-                    <h1>CONFIG OF ROOM</h1>
+                    <h1>ROOM CONFIG</h1>
                     <form @submit.prevent="set_pass">
                         <div class="tab_mdp">
                             <div>
@@ -32,10 +32,10 @@
                         </div>
                         <div class="btn_select">
                             <div>
-                                <button @click="back">Cancel</button>
+                                <button @click="back">CANCEL</button>
                             </div>
                             <div>
-                                <input type="submit" value="Modify" :disabled="mdp == mdp2? false: true">
+                                <button type="submit" :disabled="mdp == mdp2? false: true">MODIFY</button>
                             </div>
                         </div>
                     </form>
@@ -152,10 +152,10 @@
                         </div>
                         <div class="btn_select">
                             <div>
-                                <button @click="back">Cancel</button>
+                                <button @click="back">CANCEL</button>
                             </div>
                             <div>
-                                <input type="submit" value="Create" :disabled="(mdp == mdp2 && GET_CHANNEL_TARGET.name)? false: true">
+                                <button type="submit" :disabled="(mdp == mdp2 && GET_CHANNEL_TARGET.name)? false: true">CREATE</button>
                             </div>
                         </div>
                     </form>
@@ -193,7 +193,7 @@
                                         <label for="mdp">Room password: </label>
                                     </div>
                                     <div>
-                                        <label for="mdp2">Check of password: </label>
+                                        <label for="mdp2">Check password: </label>
                                     </div>
                                 </div>
                                 <div>
@@ -213,11 +213,11 @@
                             </div>
                             <div class="btn_select">
                                 <div>
-                                    <button @click="back">Cancel</button>
+                                    <button @click="back">CANCEL</button>
                                 </div>
                                 <div>
                                     <div>
-                                        <input type="submit" value="Add room" :disabled="(mdp == mdp2 && GET_CHANNEL_TARGET.name)? false: true">
+                                        <button type="submit" :disabled="(mdp == mdp2 && GET_CHANNEL_TARGET.name)? false: true">ADD ROOM</button>
                                     </div>
                                 </div>
                             </div>
@@ -253,7 +253,7 @@
                             <button @click="back">BACK</button>
                         </div>
                         <div>
-                            <button @click="addUser" :disabled="GET_USER_TARGET.username ? disabled : ''">Send invitation</button>
+                            <button @click="addUser" :disabled="GET_USER_TARGET.username ? disabled : ''">SEND INVITATION</button>
                         </div>
                     </div>
                 </div>
@@ -274,10 +274,10 @@
                             </div>
                             <div class="btn_select">
                                 <div>
-                                    <button @click="response_inv(false)">Declaimed</button>
+                                    <button @click="response_inv(false)">DECLAIMED</button>
                                 </div>
                                 <div>
-                                    <button @click="response_inv(true)">Accepted</button>
+                                    <button @click="response_inv(true)">ACCEPTED</button>
                                 </div>
                             </div>
                         </div>
@@ -299,10 +299,10 @@
                             </div>
                             <div class="btn_select">
                                 <div>
-                                    <button @click="response_inv_game(false)">Declaimed</button>
+                                    <button @click="response_inv_game(false)">DECLAIMED</button>
                                 </div>
                                 <div>
-                                    <button @click="response_inv_game(true)">Accepted</button>
+                                    <button @click="response_inv_game(true)">ACCEPTED</button>
                                 </div>
                             </div>
                         </div>

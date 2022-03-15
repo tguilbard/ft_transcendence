@@ -52,7 +52,7 @@ hr {
     display: block;
     top: 0;
     left: 0;
-    z-index: -1;
+    z-index: -2;
     height: 100%;
     width: 100%;
   }
@@ -67,16 +67,17 @@ h1 {
   // font-size: 2.5vw;
   font-size: max(20px, 2.5vw);
   font-weight:900;
-  
 }
 
 
-button, label input{
+button, label, input{
   white-space: nowrap;
   font-family: futura;
   font-weight:900;
   font-size: max(12px, 1.3vw);
 }
+
+// input[type=submit]
 
 p, span {
   white-space: nowrap;

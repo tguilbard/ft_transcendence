@@ -4,14 +4,16 @@ import { Achievements, ChannelEntity, Match, Message, MessagesList, UserEntity }
 
 export default createStore({
 	state: {
-		socket: io('http://0.0.0.1:2000', { transports: ['websocket', 'polling', 'flashsocket'] }),
+		// socket: io('http://0.0.0.1:2000', { transports: ['websocket', 'polling', 'flashsocket'] }),
+
+		socket: io() as any,
 		sock_init: false,
 		listUsersCurrent: [{} as UserEntity],
 		user: {} as UserEntity,
 		channel: {} as ChannelEntity,
 		channelPrivate: {} as ChannelEntity,
 		channelCurrent: { name: '', realname: 'General' } as ChannelEntity,
-		channelList: { "General": [] },
+		channelList: { "General": [''] },
 		room: true,
 		popup: '',
 		user_target: {} as UserEntity,

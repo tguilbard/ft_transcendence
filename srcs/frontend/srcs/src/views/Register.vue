@@ -158,6 +158,7 @@ export default class Register extends Vue {}
 .background_pong {
    position: absolute;
     display: block;
+    z-index: -1;
     width: 100%;
     left: 0;
     height: 50%;

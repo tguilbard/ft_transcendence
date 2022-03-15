@@ -179,6 +179,7 @@ import store from "@/store";
 			"GET_LEADER_BOARD",
 			"GET_USER",
 			"GET_POPUP",
+			"GET_DUEL"
 		]),
 	},
 	methods: {

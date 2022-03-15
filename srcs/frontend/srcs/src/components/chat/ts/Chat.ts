@@ -269,12 +269,14 @@ export default class Chat extends Vue {
 		const tab_message = store.getters.GET_LIST_MESSAGES_BY_CHAN[channel.realname];
 
 		if (tab_message && tab_message.length)
+		{
 			this.colored = tab_message[tab_message.length - 1].colored;
-		if (tab_message.length && tab_message[tab_message.length - 1].username != message.username) {
-			if (this.colored)
-				this.colored = false;
-			else
-				this.colored = true;
+			if (tab_message[tab_message.length - 1].username != message.username) {
+				if (this.colored)
+					this.colored = false;
+				else
+					this.colored = true;
+			}
 		}
 		message.colored = this.colored;
 		tab_message.push(message);
@@ -359,7 +361,7 @@ export default class Chat extends Vue {
 			},
 		});
 		if (response.ok)
-			return await response.json();
+			return response.json();
 		return false;
 	}
 
@@ -378,7 +380,7 @@ export default class Chat extends Vue {
 			},
 		});
 		if (response.ok)
-			return await response.json();
+			return response.json();
 		return false;
 	}
 
@@ -394,7 +396,7 @@ export default class Chat extends Vue {
 			},
 		});
 		if (response.ok)
-			return await response.json();
+			return response.json();
 		return [];
 	}
 
@@ -430,7 +432,7 @@ export default class Chat extends Vue {
 			},
 		});
 		if (response.ok)
-			return await response.json();
+			return response.json();
 		return [];
 	}
 

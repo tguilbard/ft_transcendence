@@ -46,7 +46,7 @@ import store from '../store';
             "Cache-Control": "no-cache",
           },
         });
-        if (response.ok) return await response.json();
+        if (response.ok) return response.json();
         return [];
       },
 
@@ -79,7 +79,7 @@ import store from '../store';
             },
         });
         if (response.ok)
-            return await response.json()
+            return response.json()
         return [];
     },
 
@@ -95,7 +95,7 @@ import store from '../store';
             },
         });
         if (response.ok)
-            return await response.json()
+            return response.json()
         return [{}];
     },
 
@@ -128,7 +128,7 @@ import store from '../store';
             },
         });
         if (response.ok)
-            return await response.json();
+            return response.json();
         return false;
     },
     async myGuest(): Promise<boolean> {
@@ -143,7 +143,7 @@ import store from '../store';
             },
         });
         if (response.ok)
-            return await response.json();
+            return response.json();
         return false;
     },
 
@@ -204,7 +204,7 @@ import store from '../store';
             },
           }
         );
-        if (response.ok) return await response.json();
+        if (response.ok) return response.json();
         return [];
       },
 
@@ -237,7 +237,7 @@ import store from '../store';
         },
         });
         if (response.ok)
-        return await response.json();
+        return response.json();
         return [{}];
     },
 
@@ -253,7 +253,7 @@ import store from '../store';
             },
         });
         if (response.ok)
-          return await response.json();
+          return response.json();
         return {};
     },
 
@@ -288,7 +288,7 @@ import store from '../store';
             "Cache-Control": "no-cache",
           },
         });
-        if (response.ok) return await response.json();
+        if (response.ok) return response.json();
         return false;
       }
 }

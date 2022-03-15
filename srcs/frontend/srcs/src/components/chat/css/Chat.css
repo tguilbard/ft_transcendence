@@ -16,8 +16,7 @@
 
 .btn_chan p:hover {
     color: #fff12c;
-    cursor: grabbing;
-    -webkit-text-stroke: 1px;
+    cursor: pointer;    -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
 }
 
@@ -56,8 +55,7 @@
 
 .btn_select input:hover, .btn_select button:hover {
     color: #fff12c;
-    cursor: grabbing;
-    -webkit-text-stroke: 1px;
+    cursor: pointer;    -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
     border-color: #fff12c;
 }
@@ -69,6 +67,7 @@
     margin-left: auto;
     margin-right: auto;
     width: 90vw;
+    max-width: 100vw;
     height: auto;
     min-height: 75vh;
     margin-top: 1vh;
@@ -105,16 +104,14 @@
 
 .list_user p:hover {
     color: #fff12c;
-    cursor: grabbing;
-    -webkit-text-stroke: 1px;
+    cursor: pointer;    -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
 }
 
 .link:hover
 {
     color: #fff12c;
-    cursor: grabbing;
-    -webkit-text-stroke: 1px;
+    cursor: pointer;    -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
 }
 
@@ -173,6 +170,7 @@ button {
 
 .mod {
     display: inline;
+    margin: 1px;
 }
 
 .channel {
@@ -196,8 +194,9 @@ button {
 }
 
 .banner img {
-    width: 2vmax;
-    height: 2vmax;
+    width: max(20px, 2.5vw);
+    height: max(20px, 2.5vw);
+    margin: 2px;
 }
 
 .banner {
@@ -334,8 +333,7 @@ button {
 
 .button:hover {
     color: #fff12c;
-    cursor: grabbing;
-    border-color: #fff12c;
+    cursor: pointer;    border-color: #fff12c;
 }
 
 .on {
@@ -370,8 +368,7 @@ button {
 
 .user_list_selected p {
     color: #fff12c;
-    cursor: grabbing;
-    -webkit-text-stroke: 1px;
+    cursor: pointer;    -webkit-text-stroke: 1px;
     -webkit-text-stroke-color: rgb(0, 0, 0);
     border-color: #fff12c;
 }

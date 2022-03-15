@@ -69,7 +69,7 @@ export default class Register extends Vue {}
     display: block;
     width: 100%;
     left: 0;
-    /* z-index: 0; */
+    z-index: -1;
     height: 50%;
     top: 50%;
   }

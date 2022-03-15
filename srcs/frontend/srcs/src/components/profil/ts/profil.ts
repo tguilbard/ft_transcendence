@@ -25,7 +25,7 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 			"GET_LIST_ACHIEVEMENTS",
 			"GET_LIST_MATCH",
 			"GET_FRIENDS",
-			"GET_SAVE_POPUP"
+			"GET_SAVE_POPUP",
 		]),
 	},
 	methods: {
@@ -61,7 +61,7 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 					"Cache-Control": "no-cache",
 				},
 			});
-			if (response.ok) return await response.json();
+			if (response.ok) return response.json();
 			return [];
 		},
 		async active_pop_profil(user: UserEntity): Promise<void> {
