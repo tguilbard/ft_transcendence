@@ -1,10 +1,17 @@
 # ft_transcendence
 
-## DATABASE
+## What is it ?
 
-### RUN
-docker-compose up
+Ft_transcendence is the last project of 42Paris.
+It consist of a website where every 42 students can connect it to play plong and chat.
+To do the project we follow the rules 
 
-### STOP AND DELETE
-docker stop postgres_container
-docker rm postgres_container
+PUT AN IMAGE HERE OF CONNECTION SCREEN / CHAT / GAME !!!!
+
+## How Run it ?
+
+git clone git@github.com:tguilbard/ft_transcendence.git ft_transcendence
+cd ft_transcendence
+docker compose up --build
+
+## Some information about project
