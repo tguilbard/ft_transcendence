@@ -2,7 +2,7 @@
     <div id="menu">
         <Menu  page="game" />
     </div>
-    <div v-if="GET_POPUP">
+    <div v-if="GET_POPUP && GET_USER && GET_USER.state != 'in match'">
         <PopUp />
     </div>
     <div id="grid">

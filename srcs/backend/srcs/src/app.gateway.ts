@@ -153,11 +153,11 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
 	@SubscribeMessage("leaveChanServer")
 	async leaveChan(client: Socket, chanName: string) {
-
 		let user = await this.userService.FindUserBySocket(client);
 		let chan = await this.chatService.GetChannel(chanName);
 		if (!chan)
-			return;
+		return;
+		console.log(chan);
 		let member = await this.chatService.GetMemberByUserIdAndChannelId(user.id, chan.id);
 		if (member && chan.name !== "General") {
 			await this.chatService.SoftDeleteMember(member.id);

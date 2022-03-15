@@ -202,10 +202,10 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 				}
 			});
 
-		store.state.socket.off('msgToClientPrivate').on('msgToClientPrivate', (newMsg: Message, channel: ChannelEntity) => {
-			store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
-			store.dispatch("SET_POPUP", 'alert');
-		});
+		// store.state.socket.off('msgToClientPrivate').on('msgToClientPrivate', (newMsg: Message, channel: ChannelEntity) => {
+		// 	store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
+		// 	store.dispatch("SET_POPUP", 'alert');
+		// });
 
 		store.state.socket.off("refreshAcheivements").on("refreshAcheivements", async (username: string) => {
 			if (store.getters.GET_USER_TARGET.username == username) {

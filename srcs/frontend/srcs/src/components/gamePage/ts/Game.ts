@@ -123,7 +123,7 @@ import store from "@/store";
 		store.state.socket
 			.off("msgToClientPrivate")
 			.on("msgToClientPrivate", (newMsg: Message, channel: ChannelEntity) => {
-				if (!store.getters.GET_DUEL) {
+				if (store.getters.GET_USER.state != 'in game') {
 					store.dispatch(
 						"SET_MSG_ALERT",
 						newMsg.username + " send to you a message private"
