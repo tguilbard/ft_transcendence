@@ -37,9 +37,7 @@ export default class App extends Vue {}
   
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    /* background: #888; */
     background: #c8c7c7;
-
   }
   
 hr {
