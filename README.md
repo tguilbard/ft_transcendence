@@ -4,9 +4,11 @@
 
 Ft_transcendence is the last project of 42Paris.
 It consist of a website where every 42 students can connect it to play plong and chat.
-To do the project we follow the rules 
+To do the project we follow this [rules](https://cdn.intra.42.fr/pdf/pdf/47609/fr.subject.pdf)
 
-PUT AN IMAGE HERE OF CONNECTION SCREEN / CHAT / GAME !!!!
+<p align="center">
+  <img src="https://cdn.intra.42.fr/pdf/pdf/47609/fr.subject.pdf" />
+</p>
 
 ## How Run it ?
 
