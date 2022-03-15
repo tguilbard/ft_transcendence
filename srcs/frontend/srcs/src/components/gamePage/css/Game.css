@@ -140,7 +140,9 @@ span {
     minmax(min-content, max-content) minmax(min-content, max-content)
     minmax(min-content, max-content);
   justify-content: end;
-  background-color:rgb(192, 151, 118);
+  /* background-color:rgb(192, 151, 118); */
+  /* background-color: rgb(237, 223, 244); */
+  background-color: rgb(197, 253, 253);
   align-items: center;
 }
 

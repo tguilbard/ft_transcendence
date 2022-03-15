@@ -1,3 +1,9 @@
+
+
+  hr {
+    height: 1px;
+  }
+
 .menu {
     display: block;
    position: relative; 
@@ -80,6 +86,7 @@
     box-sizing: border-box;
     height: 100%;
     overflow-x:hidden;
+    overflow-y:visible;
 }
 
 .block_list_user {
@@ -115,13 +122,14 @@
     display: grid;
     grid-template-columns: auto auto;
     grid-gap: 0.1vmax;
-    background-color: rgb(163, 162, 162);
-    border: 2px solid rgb(129, 129, 129);
+    /* background-color: rgb(163, 162, 162); */
+    /* border: 2px solid rgb(129, 129, 129); */
     padding: 5px;
     box-sizing: border-box;
     height: 100%;
     width: 100%;
-    overflow-x:hidden;
+    background-color: rgb(153, 153, 153);
+    /* overflow-x:hidden; */
 }
 
 @font-face {
@@ -175,6 +183,7 @@ button {
     box-sizing: border-box;
     height: 100%;
     overflow-x:hidden;
+    overflow-y:visible;
 }
 
 .block_list_channel {
@@ -299,7 +308,7 @@ button {
     position: relative;
     display: block;
     color: rgb(168, 76, 1);
-    font-size: small;
+    font-size: max(10px, 1vw);
 }
 
 .color {
@@ -307,9 +316,9 @@ button {
 }
 
 .button, .button_disabled {
-    white-space: nowrap;
+    /* white-space: nowrap;
     font-family: futura;
-    font-size: x-large;
+    font-size: x-large; */
     overflow-wrap: normal;
     border-radius: 0.3vmax 0.3vmax 0.3vmax 0.3vmax;
     -webkit-text-stroke: 1px;
@@ -378,7 +387,7 @@ button {
     }
 }
 
-@media (max-width: 1000px) {
+/* @media (max-width: 1000px) {
     h1 {
       font-size: x-large;
     }
@@ -386,7 +395,7 @@ button {
       font-size: large;
   }
   
-}
+} */
 
 @media (max-width: 700px) {
 
@@ -395,11 +404,11 @@ button {
         grid-template-columns: none;
         grid-template-columns: minmax(min-content, auto);
         grid-gap: none;
-        background-color: rgb(163, 162, 162);
-        border: none;
+        /* background-color: rgb(163, 162, 162); */
+        /* border: none; */
         height: 100%;
         width: 100%;
-        overflow-x:hidden;
+        /* overflow-x:hidden; */
     }
 
     .logo {
@@ -410,7 +419,7 @@ button {
 }
 
   
-  @media (max-width: 700px) {
+  /* @media (max-width: 700px) {
     h1 {
       font-size: large;
     }
@@ -427,4 +436,4 @@ button {
     .button, .button_disabled {
     font-size: small;
   }
-}
+} */

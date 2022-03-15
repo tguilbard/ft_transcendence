@@ -25,6 +25,28 @@ export default class App extends Vue {}
   left: 0px;
 }
 
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    /* background: #888; */
+    background: #c8c7c7;
+
+  }
+  
+hr {
+  background-color: #8f8f8f;
+  height: 2px;
+}
+
 .background_star {
    position: fixed;
     display: block;
@@ -37,23 +59,31 @@ export default class App extends Vue {}
 
 .html {
   font-family: futura;
-  font-size: large;
+  font-size: 2vw;
   cursor: default;
 }
 
 h1 {
-  font-size: xx-large;
-  font-weight: bold;
+  // font-size: 2.5vw;
+  font-size: max(20px, 2.5vw);
+  font-weight:900;
+  
 }
 
-button {
-    font-weight: bold;
-}
 
-p, label, input, span, button {
+button, label input{
   white-space: nowrap;
   font-family: futura;
-  font-size: x-large;
+  font-weight:900;
+  font-size: max(12px, 1.3vw);
+}
+
+p, span {
+  white-space: nowrap;
+  font-family: futura;
+  font-weight:500;
+
+  font-size: max(12px, 1.3vw);
 }
 
 .back {
@@ -87,34 +117,34 @@ p, label, input, span, button {
   }
 }
 
-@media (max-width: 1000px) {
-  h1 {
-    font-size: x-large;
-  }
-  p, label, input, span, button  {
-    font-size: large;
-}
+// @media (max-width: 1000px) {
+//   h1 {
+//     font-size: x-large;
+//   }
+//   p, label, input, span, button  {
+//     font-size: large;
+// }
 
-}
+// }
 
-@media (max-width: 700px) {
-  h1 {
-    font-size: large;
-  }
-  p, label, input, span, button {
-  font-size: medium;
-}
+// @media (max-width: 700px) {
+//   h1 {
+//     font-size: large;
+//   }
+//   p, label, input, span, button {
+//   font-size: medium;
+// }
 
-}
+// }
 
-@media (max-width: 500px) {
-  h1 {
-    font-size: medium;
-  }
-  p, label, input, span, button {
-  font-size: small;
-}
-}
+// @media (max-width: 500px) {
+//   h1 {
+//     font-size: medium;
+//   }
+//   p, label, input, span, button {
+//   font-size: small;
+// }
+// }
 
 
 </style>

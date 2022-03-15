@@ -108,6 +108,14 @@ export default defineComponent({
 
 <style scoped>
 
+p, span, input {
+  white-space: nowrap;
+  font-family: futura;
+  font-weight:900;
+
+  font-size: max(12px, 1.5vw);
+}
+
 .background {
   display: grid;
   position: absolute;

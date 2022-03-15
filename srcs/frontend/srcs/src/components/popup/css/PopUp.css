@@ -126,7 +126,6 @@ p, label, input, span {
 .grid_popup_mode {
     display: grid;
     grid-template-rows: auto;
-    /* gap: 1vw; */
     justify-items: center;
     align-items: center;
 }
@@ -137,14 +136,14 @@ p, label, input, span {
 }
 
 .grid_popup_mode img {
-    /* width: 4vw; */
-    height: 1.2vmax;
-    width: 1.2vmax;
+    height: 4vw;
+    min-height: 35px;
+    min-width: 35px;
+    width: 4vw;
 }
 
 .mod, .mod div {
     display: inline;
-    /* margin: 1px; */
 }
 
 .link:hover

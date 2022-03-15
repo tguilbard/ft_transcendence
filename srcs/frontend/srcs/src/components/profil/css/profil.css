@@ -99,15 +99,14 @@
   align-content: center;
 }
 
-.logo_connection img,
+/* .logo_connection img,
 .list_friends_popup p {
   margin: 0.2vw;
   padding: 0.4vw;
-  /* width: auto; */
   height: 1.2vmax;
   width: 1.2vmax;
   border-radius: 0px 0px 0.5vw 0.5vw;
-}
+} */
 
 .logo_connection {
   display: grid;
@@ -115,6 +114,7 @@
       min-content,
       max-content
     );
+    gap: 0px;
 }
 
 .logo_connection img {
@@ -187,7 +187,7 @@
   box-sizing: border-box;
   color: darkblue;
   border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
-  background-color: rgb(170, 240, 149);
+  /* background-color: rgb(170, 240, 149); */
   background-color: #f6ecd2;
   height: 100%;
   width: 100%;
@@ -280,18 +280,6 @@
   -webkit-text-stroke-color: rgb(0, 0, 0);
 }
 
-.btn_logout {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  display: block;
-  padding: 0.5vw;
-  margin: auto;
-  letter-spacing: 0.2vw;
-  text-align: center;
-  cursor: pointer;
-}
-
 .container_logout:hover {
   border: 1px solid #fff12c;
   color: #fff12c;
@@ -307,6 +295,21 @@
   background-color: black;
   border-radius: 0.5vw 0.5vw 0.5vw 0.5vw;
   background-color: rgb(57, 57, 73);
+}
+
+.btn_logout {
+  background: none;
+  border: none;
+  position: relative;
+  /* top: 50%; */
+  /* transform: translateY(-50%); */
+  color: white;
+  display: block;
+  padding: 0.5vw;
+  margin: auto;
+  letter-spacing: 0.2vw;
+  text-align: center;
+  cursor: pointer;
 }
 
 .link:hover {

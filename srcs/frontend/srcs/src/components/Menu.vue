@@ -36,7 +36,7 @@ import { Options, Vue } from "vue-class-component";
       if (this.page == "game") {
         return {
           color: "#fff12c",
-          "-webkit-text-stroke": "2px",
+          "-webkit-text-stroke": "1px",
           "-webkit-text-stroke-color": "black",
           "font-family": "futura",
         };
@@ -46,7 +46,7 @@ import { Options, Vue } from "vue-class-component";
       if (this.page == "chat") {
         return {
           color: "#fff12c",
-          "-webkit-text-stroke": "2px",
+          "-webkit-text-stroke": "1px",
           "-webkit-text-stroke-color": "black",
           "font-family": "futura",
         };
@@ -56,7 +56,7 @@ import { Options, Vue } from "vue-class-component";
       if (this.page == "profil") {
         return {
           color: "#fff12c",
-          "-webkit-text-stroke": "2px",
+          "-webkit-text-stroke": "1px",
           "-webkit-text-stroke-color": "black",
           "font-family": "futura",
         };
@@ -99,8 +99,8 @@ export default class Menu extends Vue {}
   width: 90%;
   left: 5%;
   align-content: center;
-  border-bottom-left-radius: 10vh;
-  border-bottom-right-radius: 10vh;
+  border-bottom-left-radius: 5vw;
+  border-bottom-right-radius: 5vw;
   text-align: center;
   gap: 1px;
 }
@@ -111,7 +111,7 @@ export default class Menu extends Vue {}
   flex-basis: calc(100% / 3);
   padding: auto;
   background-color: rgb(236, 236, 236);
-  font-size: 2.5vmax;
+  font-size: max(15px, 2.5vw);
   font-weight: 900;
   color: gray;
   text-decoration: none;
@@ -120,7 +120,7 @@ export default class Menu extends Vue {}
   border-bottom: 3px solid #8f8f8f;
   box-shadow: 0px 1px 1px 0px #fff12c;
   border-top: none;
-  -webkit-text-stroke: 2px;
+  -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: black;
 }
 
@@ -128,16 +128,16 @@ export default class Menu extends Vue {}
 #nav_hover #btn_chat:hover,
 #nav_hover #btn_profil:hover {
   color: #fff12c;
-  -webkit-text-stroke: 2px;
+  -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: black;
   font-family: futura;
 }
 
 #btn_game {
-  border-bottom-left-radius: 10vh;
+  border-bottom-left-radius: 5vw;
 }
 
 #btn_profil {
-  border-bottom-right-radius: 10vh;
+  border-bottom-right-radius: 5vw;
 }
 </style>

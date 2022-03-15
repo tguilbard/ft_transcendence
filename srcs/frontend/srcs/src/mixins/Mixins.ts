@@ -192,7 +192,7 @@ import store from '../store';
 
     async getListMatchs(username: string): Promise<string[]> {
         const response = await fetch(
-          "/game-history/" + username,
+          "http://localhost:3000/game-history/" + username,
           {
             method: "GET",
             mode: "cors",

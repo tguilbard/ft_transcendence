@@ -5,6 +5,12 @@
     width: 100%;
 }
 
+.chanButton p {
+    font-family: futura;
+    font-weight:900;
+    font-size: max(15px, 1.8vw);
+}
+
 .chanButton {
     margin: 0;
     box-sizing: border-box;
