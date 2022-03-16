@@ -60,7 +60,10 @@ export class UsersService {
 
 	async UpdateUser(id: number, userModification: Partial<UserEntity>)
 	{
-		return await this.usersRepositories.update({id: id}, {...userModification});
+		const user = await this.usersRepositories.update({id: id}, {...userModification});
+		if (user)
+			global.server.emit('refresh_user', "all");
+		return user;
 	}
 
 	async RemoveUser(id: number) {
@@ -299,7 +302,9 @@ export class UsersService {
 	async UpdateState(user: UserEntity, state: "login" | "logout" | "in match")
 	{
 		user.state = state;
-		return await this.usersRepositories.update(user.id, user);
+		if (user)
+			global.server.emit('refresh_user', "all");
+		await this.usersRepositories.update(user.id, user);
 	}
 
 	async AddFriend(user1Id: number, user2Id: number)

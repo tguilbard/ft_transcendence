@@ -38,6 +38,13 @@ export class ChatService {
 		return await channelRepo.getMany();
 	}
 
+	async getNumberOfMemberInChannel(channelId: number)
+    {
+        return await this.qbService.Create("member", this.memberRepository, {"relations": ["channel"]})
+                                    .where("member.channel.id = :channelId", {channelId: channelId})
+                                    .getCount();
+    }
+
 	async GetChannelsByMode(mode: number)
 	{
 		const channelRepo = this.qbService.Create("channel", this.channelRepository)

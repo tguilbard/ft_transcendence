@@ -23,6 +23,7 @@ let gameStarted = false;
 let buttonPong: Button;
 let buttonCustom: Button;
 let buttonReturn: Button;
+let buttonObs: Button;
 let returnText: Phaser.GameObjects.Text;
 let customText: Phaser.GameObjects.Text;
 let openingText: Phaser.GameObjects.Text;
@@ -40,7 +41,8 @@ let origin: number;
 
 const lGrey = 0xdcdcdc;
 const Grey = 0xb8b8b8;
-
+const lRed = 0xff0000;
+const Red = 0x8b0000;
 
 (async ()=>{
 
@@ -71,6 +73,7 @@ class Pong extends Phaser.Scene {
         this.load.image('button', './assets/button.png');
         this.load.image('star', './assets/astre.png');
         this.load.image('groundC', './assets/groundCustom.png');
+        this.load.image('close', './assets/close2.png');
     }
    
     create() {
@@ -115,10 +118,14 @@ class Pong extends Phaser.Scene {
     
             buttonReturn = new Button(this, Width / 2, Height * 0.75, 'button', lGrey).setDownTexture('button').setOverTint(Grey);
             buttonReturn.setDisplaySize(500, 100);
+
+            buttonObs = new Button(this, Width - 20, 20, 'close', lGrey).setDownTexture('close').setOverTint(lRed);
+            buttonObs.setDisplaySize(40, 40);
     
             buttonPong = this.add.existing(buttonPong);
             buttonCustom = this.add.existing(buttonCustom);
             buttonReturn = this.add.existing(buttonReturn);
+            buttonObs = this.add.existing(buttonObs);
     
             returnText = this.add.text(
                 Width / 2,
@@ -227,6 +234,7 @@ class Pong extends Phaser.Scene {
             player2ScoreText.setVisible(false);
             player1Name.setVisible(false);
             player2Name.setVisible(false);
+            buttonObs.setVisible(false);
 
             buttonPong.onClick().subscribe(() => {
                 if (this.lock === false)
@@ -259,6 +267,18 @@ class Pong extends Phaser.Scene {
             buttonReturn.onClick().subscribe(() => {
                 gameStarted = false;
                 store.dispatch("SET_DUEL", false);
+                let check = document.getElementById("grid");
+                if (check !== null) check.style.removeProperty("display");
+                check = document.getElementById("menu");
+                if (check !== null) check.style.removeProperty("display");
+                check = document.getElementById("PongBorder");
+                if (check !== null) check.style.setProperty("display", "none");
+            })
+
+            buttonObs.onClick().subscribe(() => {
+                gameStarted = false;
+                store.dispatch("SET_DUEL", false);
+                store.state.socket.emit("unspec");
                 let check = document.getElementById("grid");
                 if (check !== null) check.style.removeProperty("display");
                 check = document.getElementById("menu");
@@ -372,6 +392,9 @@ class Pong extends Phaser.Scene {
             End();
         });
 
+        store.state.socket.off("buttonObs").on("buttonObs", () => {
+            buttonObs.setVisible(true);
+        });
 
         if (myUser && myUser.state == 'in match')
         {
@@ -402,11 +425,11 @@ class Pong extends Phaser.Scene {
         } else if (keysDOWN.isDown) {
             store.state.socket.emit("players", "DOWN");
         }
-        if (game.input.mousePointer.isDown)
+        if (game.input.activePointer.isDown)
         {
-            if (game.input.mousePointer.y - origin < 0) {
+            if (game.input.activePointer.y - origin < 0) {
                 store.state.socket.emit("players", "UP");
-            } else if (game.input.mousePointer.y - origin > 0) {
+            } else if (game.input.activePointer.y - origin > 0) {
                 store.state.socket.emit("players", "DOWN");
             }
         }
@@ -431,6 +454,7 @@ async function End() {
     player2ScoreText.setVisible(false);
     player1Name.setVisible(false);
     player2Name.setVisible(false);
+    buttonObs.setVisible(false);
     returnText.setVisible(true);
     buttonPong.setVisible(true);
     buttonCustom.setVisible(true);

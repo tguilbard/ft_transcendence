@@ -66,6 +66,7 @@ class Game {
         this.spectators.push(user);
         user.socket.join(this.socketRoomName);
         this.server.to(user.socket.id).emit("start_game");
+        this.server.to(user.socket.id).emit("buttonObs");
     }
 
     leaveSpec(socket: Socket) {

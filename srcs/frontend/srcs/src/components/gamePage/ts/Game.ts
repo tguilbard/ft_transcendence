@@ -112,6 +112,7 @@ import store from "@/store";
 							store.getters.GET_USER_TARGET.username
 						)
 					);
+					store.dispatch("SET_USER", await shared.getMyUser());
 					if (store.getters.GET_POPUP)
 						store.dispatch(
 							"SET_LIST_MATCH_TARGET",
@@ -122,14 +123,9 @@ import store from "@/store";
 
 		store.state.socket
 			.off("msgToClientPrivate")
-			.on("msgToClientPrivate", (newMsg: Message, channel: ChannelEntity) => {
-				if (store.getters.GET_USER.state != 'in game') {
-					store.dispatch(
-						"SET_MSG_ALERT",
-						newMsg.username + " send to you a message private"
-					);
-					store.dispatch("SET_POPUP", "alert");
-				}
+			.on("msgToClientPrivate", async () => {
+				const user = await shared.getMyUser();
+				store.dispatch("SET_USER", user);
 			});
 
 		store.state.socket.off("changeUsername").on(
