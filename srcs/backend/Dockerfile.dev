@@ -1,9 +1,0 @@
-FROM node AS development
-
-WORKDIR /usr/src/app
-
-VOLUME srcs
-
-RUN echo "development"
-
-CMD ["npm", "run", "start:dev"]

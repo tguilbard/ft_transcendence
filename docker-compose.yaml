@@ -19,7 +19,7 @@ services:
 
   website:
     build: 
-      context: srcs/
+      context: srcs/srcs/
       dockerfile: Dockerfile
     image: website
     #hostname: 127.0.0.1
