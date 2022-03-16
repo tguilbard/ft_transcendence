@@ -1,4 +1,5 @@
 # ft_transcendence
+<img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/tguilbard/ft_transcendence?style=social">
 
 ## About The Project
 
