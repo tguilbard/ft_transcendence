@@ -347,31 +347,47 @@ export class UsersService {
 
 	async BlockUser(userWhoBlockId: number, userBlockedId: number)
 	{
-		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
-		const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
-		
-		const userWhoBlockUpdate = {
-			id: userWhoBlock.id,
-			blockedUsers: [...userWhoBlock.blockedUsers, userBlocked]
+		console.log("je suis dans block")
+		try {
+			const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
+			const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
+			console.log("userWhoBlock:\n", userWhoBlock.username)
+			console.log("userBlocked:\n", userBlocked.username)
+			const userWhoBlockUpdate = {
+				id: userWhoBlock.id,
+				blockedUsers: [...userWhoBlock.blockedUsers, userBlocked]
+			}
+			return await this.usersRepositories.save(userWhoBlockUpdate);
 		}
-		return await this.usersRepositories.save(userWhoBlockUpdate);
+		catch
+		{
+
+		}
 	}
 
 	async UnblockUser(userWhoBlockId: number, userBlockedId: number)
 	{
-		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
-		const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
+		console.log("je suis dans unblock")
 
-		const index = userWhoBlock.blockedUsers.findIndex(element => element.id == userBlockedId);
-		if (index == -1)
-			return;
-		
-		userWhoBlock.blockedUsers.splice(index, 1);
-		const userWhoBlockUpdate = {
-			id: userWhoBlock.id,
-			blockedUsers: userWhoBlock.blockedUsers
+		try {
+			const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
+			const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
+			console.log("userWhoBlock:\n", userWhoBlock.username)
+			console.log("userBlocked:\n", userBlocked.username)
+			const index = userWhoBlock.blockedUsers.findIndex(element => element.id == userBlockedId);
+			if (index == -1)
+				return;
+			
+			userWhoBlock.blockedUsers.splice(index, 1);
+			const userWhoBlockUpdate = {
+				id: userWhoBlock.id,
+				blockedUsers: userWhoBlock.blockedUsers
+			}
+			return await this.usersRepositories.save(userWhoBlockUpdate);
 		}
-		return await this.usersRepositories.save(userWhoBlockUpdate);
+		catch {
+			
+		}
 	}
 
 	async getBlocked(id: number)

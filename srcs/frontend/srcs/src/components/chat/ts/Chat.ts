@@ -36,7 +36,6 @@ import { MemberType } from "@/enums/enums";
 export default class Chat extends Vue {
 	private inputMsg = '';
 	private colored = false;
-	private log = false;
 	private listUsers = false;
 	private size = 0;
 
@@ -65,13 +64,10 @@ export default class Chat extends Vue {
 		const user = await shared.getMyUser();
 		if (user.state == 'logout')
 			user.state = 'login';
-
 		store.dispatch("SET_USER", user);
 		store.dispatch("SET_LIST_BLOCKED", await shared.getListBlocked());
-
 		await this.listen();
 		await this.initClient();
-		this.log = true;
 	}
 
 	private async initClient() {
@@ -670,6 +666,7 @@ export default class Chat extends Vue {
 				}
 
 			}
+			this.refresh();
 		});
 	
 		store.state.socket.off('refreshAvatar').on('refreshAvatar', async (username: string) => {
@@ -693,20 +690,24 @@ export default class Chat extends Vue {
 		});
 	
 		store.state.socket.off('rcvInvite').on('rcvInvite', (channel_target: ChannelEntity, user_target: UserEntity) => {
+			if (this.isBlock(user_target.username))
+				return;
 			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
 				return;
 			store.dispatch("SET_CHANNEL_TARGET", channel_target);
-			store.dispatch("SET_USER_TARGET", user_target);
+			store.dispatch("SET_USER_TARGET_ALERT", user_target);
 			this.conf(channel_target);
 		});
 	
 		store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity, game: string) => {
+			if (this.isBlock(user_target.username))
+				return;
 			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
 				return;
 			store.dispatch("SET_SAVE_POPUP");
-			store.dispatch("SET_USER_TARGET", user_target);
+			store.dispatch("SET_USER_TARGET_ALERT", user_target);
 			store.dispatch("SET_GAME", game);
-			store.dispatch("SET_POPUP", 'alert' + store.getters.GET_POPUP);
+			store.dispatch("SET_POPUP", store.getters.GET_POPUP);
 			this.setPopup('inv_game')
 		});
 	

@@ -169,8 +169,8 @@
                             {{ item.user2.username }}
                           </span>
                         </div>
+                        <hr><hr><hr>
                       </div>
-                      <hr>
                     </div>
                   </div>
                 </div>

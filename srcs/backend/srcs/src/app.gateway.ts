@@ -502,7 +502,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		}
 		if (memberSocket && this.modeService.modeIsSet(memberSocket.mode, MemberType.admin)) {
 			let socket = ChatGateway.findSocketInUserSocketObject(userTarget.id);
-			this.server.to(socket.id).emit('rcvInvite', {name: chan.name, mode: chan.mode}, {username: userSocket.username, state: userSocket.state});
+			this.server.to(socket.id).emit('rcvInvite', chan, userSocket);
 		}
 		else {
 			this.server.to(client.id).emit('alertMessage', "Forbidden Command");

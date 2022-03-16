@@ -6,6 +6,10 @@ import store from '../store';
         store.state.socket.emit('joinPrivate', name);
       },
 
+    isBlock(username: string) {
+        return store.getters.GET_LIST_BLOCKED.find(e => e == username);
+    },
+
     joinPublic(name: string, mdp: string): void {
         store.state.socket.emit('joinPublic', name, mdp);
     },

@@ -48,9 +48,13 @@ const Red = 0x8b0000;
 
 if (await shared.isLogin())
 {
+    myUser = await shared.getMyUser();
     if (!store.state.sock_init)
         store.commit("SET_SOCKET");
-    myUser = await shared.getMyUser();
+}
+while (store.state.socket.disconnected)
+{
+    await delay(100);
 }
 
 class Pong extends Phaser.Scene {
@@ -276,6 +280,29 @@ class Pong extends Phaser.Scene {
             })
 
             buttonObs.onClick().subscribe(() => {
+                ball.setVisible(false);
+                background.setVisible(false);
+                backgroundC.setVisible(false);
+                player1.setVisible(false);
+                player2.setVisible(false);
+                star.setVisible(false);
+                TimerText.setVisible(false);
+                player1ScoreText.setVisible(false);
+                player2ScoreText.setVisible(false);
+                player1Name.setVisible(false);
+                player2Name.setVisible(false);
+                buttonObs.setVisible(false);
+                returnText.setVisible(true);
+                buttonPong.setVisible(true);
+                buttonCustom.setVisible(true);
+                buttonReturn.setVisible(true);
+                customText.setVisible(true);
+                openingText.setVisible(true);
+            
+                openingText.setText('Press to Search');
+                player1ScoreText.setText('0');
+                player2ScoreText.setText('0');
+                TimerText.setText('0:00');
                 gameStarted = false;
                 store.dispatch("SET_DUEL", false);
                 store.state.socket.emit("unspec");
@@ -396,7 +423,7 @@ class Pong extends Phaser.Scene {
             buttonObs.setVisible(true);
         });
 
-        if (myUser && myUser.state == 'in match')
+        if (myUser && myUser.state === 'in match')
         {
             player1.setVisible(true);
             player2.setVisible(true);
@@ -414,25 +441,31 @@ class Pong extends Phaser.Scene {
             gameStarted = true;
             store.state.socket.emit("init_score");
         }
-        this.input.on('pointerdown', function (p) {
-            origin = p.y;
-        });
+        // this.input.on('pointerdown', function (p) {
+        //     origin = p.y;
+        // });
     }
    
+
+
     public update() {
-        if (keysUP.isDown) {
-            store.state.socket.emit("players", "UP");
-        } else if (keysDOWN.isDown) {
-            store.state.socket.emit("players", "DOWN");
-        }
-        if (game.input.activePointer.isDown)
+        if (gameStarted === true)
         {
-            if (game.input.activePointer.y - origin < 0) {
+            if (keysUP.isDown) {
                 store.state.socket.emit("players", "UP");
-            } else if (game.input.activePointer.y - origin > 0) {
+            } else if (keysDOWN.isDown) {
                 store.state.socket.emit("players", "DOWN");
             }
-        }
+
+            if (game.input.activePointer.isDown)
+            { 
+                if (game.input.activePointer.y - (Height / 2) < 0) {
+                    store.state.socket.emit("players", "UP");
+                } else if (game.input.activePointer.y - (Height / 2) > 0) {
+                    store.state.socket.emit("players", "DOWN");
+                }
+            }
+        }   
     }
 }
 
