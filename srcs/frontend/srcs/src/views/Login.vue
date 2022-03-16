@@ -47,7 +47,6 @@ import store from "../store/index";
           "login",
           await JSON.stringify(response.login)
         );
-        store.dispatch("SET_USERNAME", await JSON.stringify(response.username));
         if (response.state == "register") return router.push("register");
         else if (response.state == "2fa") return this.$router.push("authLogin");
         else if (response.state == "ok") return this.$router.push("/");

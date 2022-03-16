@@ -151,24 +151,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		}
 	}
 
-	// @SubscribeMessage("leaveChanServer")
-	// async leaveChan(client: Socket, chanName: string) {
-	// 	let user = await this.userService.FindUserBySocket(client);
-	// 	let chan = await this.chatService.GetChannel(chanName);
-	// 	if (!chan)
-	// 	return;
-	// 	console.log(chan);
-	// 	let member = await this.chatService.GetMemberByUserIdAndChannelId(user.id, chan.id);
-	// 	if (member && chan.name !== "General") {
-	// 		await this.chatService.SoftDeleteMember(member.id);
-	// 		this.server.in(chanName).emit('refresh_user', chanName);
-	// 		client.leave(chanName);
-	// 		client.emit('leave_channel', chan);
-	// 	}
-	// 	member = null;
-	// 	member = await this.chatService.GetMemberByUserIdAndChannelId(user.id, chan.id);
-	// }
-
 	@SubscribeMessage("leaveChanServer")
     async leaveChan(client: Socket, chanName: string) {
 
@@ -178,12 +160,10 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
             return;
         if (chan.mode == ChannelType.private && await this.chatService.getNumberOfMemberInChannel(chan.id) - 1 == 0)
         {
-            console.log(await this.chatService.getNumberOfMemberInChannel(chan.id));
             this.server.in(chanName).emit('refresh_user', chanName);
             client.leave(chanName);
             client.emit('leave_channel', chan);
             await this.chatService.DeleteChannel(chan.id);
-            
         }
         else
         {

@@ -134,9 +134,7 @@ export class UsersService {
 		{
 			try {
 				if (await this.FindUserById(req.User.id))
-				{
 					return { log: true };
-				}
 			}
 			catch{}
 		}
@@ -209,14 +207,15 @@ export class UsersService {
 	}
 
 	async login(res: Response, request: Request) {
-		if (!(await this.isLogin(request)).log) {
+		const ret = await this.isLogin(request);
+		if (!ret.log) {
 			const code = request.body['code'];
 			const url = 'https://api.intra.42.fr/oauth/token';
 			const postData = {
 				grant_type: 'authorization_code',
 				client_id: process.env.API_42_ID,
 				client_secret: process.env.API_42_SECRET,
-				redirect_uri: `http://localhost:3000/ok`,
+				redirect_uri: 'http://localhost:3000/ok',
 				code: code
 			}
 			var result;
@@ -347,12 +346,9 @@ export class UsersService {
 
 	async BlockUser(userWhoBlockId: number, userBlockedId: number)
 	{
-		console.log("je suis dans block")
 		try {
 			const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
 			const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
-			console.log("userWhoBlock:\n", userWhoBlock.username)
-			console.log("userBlocked:\n", userBlocked.username)
 			const userWhoBlockUpdate = {
 				id: userWhoBlock.id,
 				blockedUsers: [...userWhoBlock.blockedUsers, userBlocked]
@@ -367,13 +363,9 @@ export class UsersService {
 
 	async UnblockUser(userWhoBlockId: number, userBlockedId: number)
 	{
-		console.log("je suis dans unblock")
-
 		try {
 			const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
 			const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
-			console.log("userWhoBlock:\n", userWhoBlock.username)
-			console.log("userBlocked:\n", userBlocked.username)
 			const index = userWhoBlock.blockedUsers.findIndex(element => element.id == userBlockedId);
 			if (index == -1)
 				return;

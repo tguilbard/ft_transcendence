@@ -97,11 +97,10 @@ import store from "../store/index";
       })
         .then((response) => {
           if (response.ok) {
-            store.dispatch("SET_USERNAME", this.username);
             return router.push("/auth");
           } else {
             return response.json();
-          }
+          }a
         })
         .then((responseJson) => {
           throw responseJson;
