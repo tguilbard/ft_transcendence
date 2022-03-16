@@ -1,8 +1,6 @@
-
-
-  hr {
+hr {
     height: 1px;
-  }
+}
 
 .menu {
     display: block;
@@ -119,14 +117,11 @@
     display: grid;
     grid-template-columns: auto auto;
     grid-gap: 0.1vmax;
-    /* background-color: rgb(163, 162, 162); */
-    /* border: 2px solid rgb(129, 129, 129); */
     padding: 5px;
     box-sizing: border-box;
     height: 100%;
     width: 100%;
     background-color: rgb(153, 153, 153);
-    /* overflow-x:hidden; */
 }
 
 @font-face {
@@ -284,8 +279,6 @@ button {
     border-radius: 7px 7px 7px 7px;
     position: relative;
     width: auto;
-    color: rgb(188, 87, 255);
-    color: rgb(0, 207, 62);
     color: rgb(0, 0, 255);
 }
 
@@ -297,9 +290,6 @@ button {
     background-color: rgba(153, 0, 255, 0.15);
     padding: 5px;
     border-radius: 7px 7px 7px 7px;
-    color: rgb(245, 151, 0);
-    color: rgb(3, 199, 62);
-    color: rgb(0, 0, 255);
     color: rgb(153, 0, 255);
 }
 
@@ -315,9 +305,6 @@ button {
 }
 
 .button, .button_disabled {
-    /* white-space: nowrap;
-    font-family: futura;
-    font-size: x-large; */
     overflow-wrap: normal;
     border-radius: 0.3vmax 0.3vmax 0.3vmax 0.3vmax;
     -webkit-text-stroke: 1px;
@@ -384,16 +371,6 @@ button {
     }
 }
 
-/* @media (max-width: 1000px) {
-    h1 {
-      font-size: x-large;
-    }
-   .button, .button_disabled {
-      font-size: large;
-  }
-  
-} */
-
 @media (max-width: 700px) {
 
     .block_channel {
@@ -401,11 +378,8 @@ button {
         grid-template-columns: none;
         grid-template-columns: minmax(min-content, auto);
         grid-gap: none;
-        /* background-color: rgb(163, 162, 162); */
-        /* border: none; */
         height: 100%;
         width: 100%;
-        /* overflow-x:hidden; */
     }
 
     .logo {
@@ -414,23 +388,3 @@ button {
         width: 100%;
     }
 }
-
-  
-  /* @media (max-width: 700px) {
-    h1 {
-      font-size: large;
-    }
-    .button, .button_disabled {
-    font-size: medium;
-  }
-  
-}
-  
-  @media (max-width: 500px) {
-    h1 {
-      font-size: medium;
-    }
-    .button, .button_disabled {
-    font-size: small;
-  }
-} */

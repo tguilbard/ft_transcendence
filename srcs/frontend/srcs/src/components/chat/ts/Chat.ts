@@ -71,39 +71,41 @@ export default class Chat extends Vue {
 	}
 
 	private async initClient() {
-
 		await store.dispatch("SET_MY_MODE", await this.getMyMode());
 		await this.getMessagesInChannel(store.getters.GET_CHAN_CURRENT.realname);
 
 		let tmp = await this.getChanListByMode('public');
-		tmp.forEach(e => {
-			e.realname = e.name;
-			e.name = '';
-		})
-		if (!store.getters.GET_CHAN.realname && tmp.length)
-			store.dispatch("SET_CHAN", tmp[0]);
-		await store.dispatch("SET_LIST_CHAN_PUBLIC", tmp);
-
+		if (tmp && tmp.length)
+		{
+			tmp.forEach(e => {
+				e.realname = e.name;
+				e.name = '';
+			})
+			if (!store.getters.GET_CHAN.realname && tmp.length)
+				store.dispatch("SET_CHAN", tmp[0]);
+			await store.dispatch("SET_LIST_CHAN_PUBLIC", tmp);
+	
+		}
 		tmp = await this.getChanListByMode('private');
-		tmp.forEach(e => {
-			e.realname = e.name;
-			e.name = '';
-			if (e.mode == 8) {
-				e.name = e.realname.substring(e.realname.indexOf('-') + 2);
-				if (e.name == store.getters.GET_USER.username)
-					e.name = e.realname.substring(0, e.realname.indexOf('-') - 1);
+		if (tmp && tmp.length)
+		{
+			tmp.forEach(e => {
+				e.realname = e.name;
+				e.name = '';
+				if (e.mode == 8) {
+					e.name = e.realname.substring(e.realname.indexOf('-') + 2);
+					if (e.name == store.getters.GET_USER.username)
+						e.name = e.realname.substring(0, e.realname.indexOf('-') - 1);
+				}
+			})
+			if (!store.getters.GET_CHAN_PRIVATE.realname && tmp.length) {
+				store.dispatch("SET_CHAN_PRIVATE", tmp[0]);
 			}
-		})
-
-		if (!store.getters.GET_CHAN_PRIVATE.realname && tmp.length) {
-			store.dispatch("SET_CHAN_PRIVATE", tmp[0]);
 		}
 		if (store.getters.GET_ROOM)
 			store.dispatch("SET_CHAN_CURRENT", store.getters.GET_CHAN);
 		else
 			store.dispatch("SET_CHAN_CURRENT", store.getters.GET_CHAN_PRIVATE);
-
-
 		await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
 		store.dispatch("SET_LIST_CHAN_PRIVATE", tmp);
 	}
@@ -517,17 +519,18 @@ export default class Chat extends Vue {
 						listMessage[channel.realname] = [];
 						store.dispatch("SET_LIST_MESSAGES_BY_CHAN", listMessage)
 	
-	
-						store.dispatch("SET_CHAN_CURRENT", channel);
-						store.dispatch("SET_CHAN_PRIVATE", channel);
-	
 						tmp.push(channel);
-						store.dispatch("SET_ROOM", false);
-						store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
-						store.dispatch("SET_POPUP", 'alert');
 						store.dispatch("SET_LIST_CHAN_PRIVATE", tmp)
+						
+						if (!store.getters.GET_POPUP)
+						{
+							store.dispatch("SET_CHAN_CURRENT", channel);
+							store.dispatch("SET_CHAN_PRIVATE", channel);
+							store.dispatch("SET_ROOM", false);
+							store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
+							store.dispatch("SET_POPUP", 'alert');
+						}
 					}
-	
 					this.outputMessage(newMsg, channel);
 				}
 			}
@@ -664,7 +667,6 @@ export default class Chat extends Vue {
 					store.dispatch("SET_LIST_MESSAGES_BY_CHAN", [])
 					store.dispatch("SET_LIST_MESSAGES", []);
 				}
-
 			}
 			this.refresh();
 		});

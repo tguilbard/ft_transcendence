@@ -33,7 +33,7 @@ import store from '../store';
             "Cache-Control": "no-cache",
           },
         });
-        if (response.ok) return response.json();
+        if (response.ok) return await response.json();
         return [];
       },
 
@@ -66,7 +66,7 @@ import store from '../store';
             },
         });
         if (response.ok)
-            return response.json()
+            return await response.json()
         return [];
     },
 
@@ -82,7 +82,7 @@ import store from '../store';
             },
         });
         if (response.ok)
-            return response.json()
+            return await response.json()
         return [{}];
     },
 
@@ -191,7 +191,7 @@ import store from '../store';
             },
           }
         );
-        if (response.ok) return response.json();
+        if (response.ok) return await response.json();
         return [];
       },
 
@@ -224,7 +224,7 @@ import store from '../store';
         },
         });
         if (response.ok)
-        return response.json();
+            return await response.json();
         return [{}];
     },
 
@@ -240,7 +240,7 @@ import store from '../store';
             },
         });
         if (response.ok)
-          return response.json();
+          return await response.json();
         return {};
     },
 
@@ -260,7 +260,7 @@ import store from '../store';
             },
         });
         if (response.ok)
-            return response.json();
+            return await response.json();
         return {};
     },
     
@@ -275,7 +275,7 @@ import store from '../store';
             "Cache-Control": "no-cache",
           },
         });
-        if (response.ok) return response.json();
+        if (response.ok) return await response.json();
         return false;
       }
 }

@@ -106,11 +106,7 @@ export class UsersService {
 	}
 
 	async FindUserByUsername(username: string): Promise<UserEntity> {
-		const userToFind = await this.usersRepositories.findOne({ username: username });
-		if (!userToFind) {
-			return null;
-		}
-		return userToFind;
+		return await this.usersRepositories.findOne({ username: username });
 	}
 
 	async register(body, req: Request) {
