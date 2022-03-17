@@ -6,7 +6,7 @@
       </div>
       <div class="block_avatar">
         <label for="avatar" class="btn_avatar"
-          ><h2>Choisis un avatar</h2></label
+          ><h2>Choose an avatar</h2></label
         >
         <input
           type="file"
@@ -25,7 +25,7 @@
         class="username"
         type="pseudo"
         name="pseudo"
-        placeholder="Entre ton pseudo"
+        placeholder="Enter your nickname"
         v-model="username"
         required
         minlength="3"
@@ -39,7 +39,7 @@
         </div>
       </div>
       <div>
-        <input class="valider" type="submit" value="ENREGISTRER" />
+        <input class="valider" type="submit" value="SAVE" />
       </div>
     </form>
   </div>

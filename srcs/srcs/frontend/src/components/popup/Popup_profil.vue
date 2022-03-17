@@ -50,7 +50,7 @@
                     <input
                       type="pseudo"
                       name="pseudo"
-                      placeholder="Entre ton pseudo"
+                      placeholder="Enter your nickname"
                       v-model="username"
                       required
                       minlength="3"
@@ -83,7 +83,7 @@
                       <input
                         type="text"
                         name="code"
-                        placeholder="Entre le code recus"
+                        placeholder="Enter the code"
                         maxlength="6"
                         minlength="6"
                         required
@@ -129,7 +129,7 @@
             <div id="a">
                 <div class="friends_content">
                   <div>
-                    <h1>GAMES HISTORY</h1>
+                    <h1>GAME HISTORY</h1>
                   </div>
                   <div class="list_history">
                     <div v-if="GET_LIST_MATCH_TARGET">

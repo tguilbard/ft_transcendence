@@ -11,7 +11,7 @@
         class="code"
         type="text"
         name="code"
-        placeholder="Entre le code recus"
+        placeholder="Enter the code"
         v-model="code"
         required
         minlength="6"
@@ -22,8 +22,8 @@
           <p style="color: red" v-if="msg.code">{{ msg.code }}</p>
         </div>
       </div>
-      <input class="valider" type="submit" value="VALIDER" />
-      <button class="next" @click="passed">PASSER</button>
+      <input class="valider" type="submit" value="SUBMIT" />
+      <button class="next" @click="passed">SKIP</button>
     </form>
   </div>
   <img class="background_pong" v-bind:src="require('../assets/background_pong.gif')"/>

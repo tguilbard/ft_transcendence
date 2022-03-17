@@ -11,7 +11,7 @@
         class="code"
         type="text"
         name="code"
-        placeholder="Entre le code recus"
+        placeholder="Enter the code"
         v-model="code"
         required
         minlength="6"
