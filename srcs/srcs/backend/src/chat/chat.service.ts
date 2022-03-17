@@ -14,6 +14,7 @@ import { MemberType } from './enum/member-type.enum';
 import { SqlFunctionService } from './utils/services/sql-function.service';
 import { MemberModes } from './interfaces/user-selection-right.interface';
 import { channel } from 'diagnostics_channel';
+import { ChatGateway } from 'src/app.gateway';
 
 @Injectable()
 export class ChatService {
@@ -423,6 +424,13 @@ export class ChatService {
 			.getMany()
 	}
 
+	findSocketInUserSocketObject(id: number) {
+		const sockUser = global.socketUserList.find(elem => elem.user.id === id);
+		if (sockUser && sockUser.socket)
+			return sockUser.socket;
+		return null;
+	}
+
 	async checkModeInMembers(server: any)
 	{
 		const list = await this.GetMembers();
@@ -440,11 +448,11 @@ export class ChatService {
 			if (e.BanUntil && e.BanUntil <= date)
 			{
 				this.SetUnbanMember(e);
+				let socket =  this.findSocketInUserSocketObject(e.user.id);
+				if (socket)
+					socket.join(e.channel.name);
 				if (server)
 					server.emit("new_mode", e.channel.name, e.user.username, e.mode);
-
-				// server.to(payload[1]).emit('setMod', e.mode);
-				// server.to(client.id).emit('setMyMod', member.mode, chanTarget.name);
 			}
 
 		} )

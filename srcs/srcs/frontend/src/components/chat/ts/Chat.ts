@@ -36,7 +36,6 @@ import { MemberType } from "@/enums/enums";
 export default class Chat extends Vue {
 	private inputMsg = '';
 	private colored = false;
-	private log = false;
 	private listUsers = false;
 	private size = 0;
 
@@ -65,49 +64,48 @@ export default class Chat extends Vue {
 		const user = await shared.getMyUser();
 		if (user.state == 'logout')
 			user.state = 'login';
-
 		store.dispatch("SET_USER", user);
 		store.dispatch("SET_LIST_BLOCKED", await shared.getListBlocked());
-
 		await this.listen();
 		await this.initClient();
-		this.log = true;
 	}
 
 	private async initClient() {
-
 		await store.dispatch("SET_MY_MODE", await this.getMyMode());
 		await this.getMessagesInChannel(store.getters.GET_CHAN_CURRENT.realname);
 
 		let tmp = await this.getChanListByMode('public');
-		tmp.forEach(e => {
-			e.realname = e.name;
-			e.name = '';
-		})
-		if (!store.getters.GET_CHAN.realname && tmp.length)
-			store.dispatch("SET_CHAN", tmp[0]);
-		await store.dispatch("SET_LIST_CHAN_PUBLIC", tmp);
-
+		if (tmp && tmp.length)
+		{
+			tmp.forEach(e => {
+				e.realname = e.name;
+				e.name = '';
+			})
+			if (!store.getters.GET_CHAN.realname && tmp.length)
+				store.dispatch("SET_CHAN", tmp[0]);
+			await store.dispatch("SET_LIST_CHAN_PUBLIC", tmp);
+	
+		}
 		tmp = await this.getChanListByMode('private');
-		tmp.forEach(e => {
-			e.realname = e.name;
-			e.name = '';
-			if (e.mode == 8) {
-				e.name = e.realname.substring(e.realname.indexOf('-') + 2);
-				if (e.name == store.getters.GET_USER.username)
-					e.name = e.realname.substring(0, e.realname.indexOf('-') - 1);
+		if (tmp && tmp.length)
+		{
+			tmp.forEach(e => {
+				e.realname = e.name;
+				e.name = '';
+				if (e.mode == 8) {
+					e.name = e.realname.substring(e.realname.indexOf('-') + 2);
+					if (e.name == store.getters.GET_USER.username)
+						e.name = e.realname.substring(0, e.realname.indexOf('-') - 1);
+				}
+			})
+			if (!store.getters.GET_CHAN_PRIVATE.realname && tmp.length) {
+				store.dispatch("SET_CHAN_PRIVATE", tmp[0]);
 			}
-		})
-
-		if (!store.getters.GET_CHAN_PRIVATE.realname && tmp.length) {
-			store.dispatch("SET_CHAN_PRIVATE", tmp[0]);
 		}
 		if (store.getters.GET_ROOM)
 			store.dispatch("SET_CHAN_CURRENT", store.getters.GET_CHAN);
 		else
 			store.dispatch("SET_CHAN_CURRENT", store.getters.GET_CHAN_PRIVATE);
-
-
 		await store.dispatch("SET_LIST_USER_CURRENT", await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname));
 		store.dispatch("SET_LIST_CHAN_PRIVATE", tmp);
 	}
@@ -521,17 +519,18 @@ export default class Chat extends Vue {
 						listMessage[channel.realname] = [];
 						store.dispatch("SET_LIST_MESSAGES_BY_CHAN", listMessage)
 	
-	
-						store.dispatch("SET_CHAN_CURRENT", channel);
-						store.dispatch("SET_CHAN_PRIVATE", channel);
-	
 						tmp.push(channel);
-						store.dispatch("SET_ROOM", false);
-						store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
-						store.dispatch("SET_POPUP", 'alert');
 						store.dispatch("SET_LIST_CHAN_PRIVATE", tmp)
+						
+						if (!store.getters.GET_POPUP)
+						{
+							store.dispatch("SET_CHAN_CURRENT", channel);
+							store.dispatch("SET_CHAN_PRIVATE", channel);
+							store.dispatch("SET_ROOM", false);
+							store.dispatch("SET_MSG_ALERT", newMsg.username + " send to you a message private");
+							store.dispatch("SET_POPUP", 'alert');
+						}
 					}
-	
 					this.outputMessage(newMsg, channel);
 				}
 			}
@@ -668,8 +667,8 @@ export default class Chat extends Vue {
 					store.dispatch("SET_LIST_MESSAGES_BY_CHAN", [])
 					store.dispatch("SET_LIST_MESSAGES", []);
 				}
-
 			}
+			this.refresh();
 		});
 	
 		store.state.socket.off('refreshAvatar').on('refreshAvatar', async (username: string) => {
@@ -693,20 +692,24 @@ export default class Chat extends Vue {
 		});
 	
 		store.state.socket.off('rcvInvite').on('rcvInvite', (channel_target: ChannelEntity, user_target: UserEntity) => {
+			if (this.isBlock(user_target.username))
+				return;
 			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
 				return;
 			store.dispatch("SET_CHANNEL_TARGET", channel_target);
-			store.dispatch("SET_USER_TARGET", user_target);
+			store.dispatch("SET_USER_TARGET_ALERT", user_target);
 			this.conf(channel_target);
 		});
 	
 		store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity, game: string) => {
+			if (this.isBlock(user_target.username))
+				return;
 			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
 				return;
 			store.dispatch("SET_SAVE_POPUP");
-			store.dispatch("SET_USER_TARGET", user_target);
+			store.dispatch("SET_USER_TARGET_ALERT", user_target);
 			store.dispatch("SET_GAME", game);
-			store.dispatch("SET_POPUP", 'alert' + store.getters.GET_POPUP);
+			store.dispatch("SET_POPUP", store.getters.GET_POPUP);
 			this.setPopup('inv_game')
 		});
 	

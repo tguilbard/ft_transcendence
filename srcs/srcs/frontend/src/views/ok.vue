@@ -5,7 +5,6 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import shared from "../mixins/Mixins";
-import store from "../store/index";
 
 @Options({
   data() {
@@ -30,8 +29,6 @@ import store from "../store/index";
       const data = await response.json();
       await sessionStorage.setItem("login", await JSON.stringify(data.login));
       await sessionStorage.setItem("src", await JSON.stringify(data.src));
-      store.dispatch("SET_USERNAME", await JSON.stringify(data.username));
-
       if (data.state == "ok") {
         return this.$router.push("/");
       } else if (data.state == "register") {

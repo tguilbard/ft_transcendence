@@ -50,7 +50,6 @@
 import router from "@/router";
 import { Options, Vue } from "vue-class-component";
 import shared from "../mixins/Mixins";
-import store from "../store/index";
 
 @Options({
   data() {
@@ -62,21 +61,6 @@ import store from "../store/index";
       myerror: {},
       activate: false,
     };
-  },
-  computed: {
-    // inf() {
-    //   return {
-    //     width: "100%",
-    //     left: "0",
-    //     overflow: "hidden",
-    //     "z-index": "-1",
-    //     position: "absolute",
-    //     height: "50%",
-    //     top: "50%",
-    //     "background-image": `url(https://profgra.org/lycee/img/pong.gif)`,
-    //     "background-size": "100% 100%",
-    //   };
-    // },
   },
   methods: {
     
@@ -97,7 +81,6 @@ import store from "../store/index";
       })
         .then((response) => {
           if (response.ok) {
-            store.dispatch("SET_USERNAME", this.username);
             return router.push("/auth");
           } else {
             return response.json();

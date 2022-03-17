@@ -57,6 +57,8 @@ class Game {
         this.users[0].socket.leave(this.socketRoomName);
         this.users[1].socket.leave(this.socketRoomName);
         this.phaserServer.leave(this.socketRoomName);
+        for (let spec of this.spectators)
+            spec.socket.leave(this.socketRoomName);
     }
 
     addToSpec(user: SocketUser) {
@@ -291,6 +293,8 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
         {return;}
 
         let g = this.games.find(game => game.phaserServer.id === client.id);
+        if (!g)
+           return ;
         g.sendMessage(payload);
     }
 
@@ -404,6 +408,9 @@ export class PongGateway implements OnGatewayConnection, OnGatewayDisconnect, On
 		await this.gameHistoryService.AddMatchInHistory(history);
 
         g.endGame();
+        let index = this.games.findIndex(e => e.socketRoomName === g.socketRoomName)
+        if (index != -1)
+            this.games.splice(index, 1);
     }
     
     private async matching() {

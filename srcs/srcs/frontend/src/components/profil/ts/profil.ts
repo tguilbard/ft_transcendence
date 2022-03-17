@@ -11,11 +11,6 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 		Menu,
 		Popup,
 	},
-	data() {
-		return {
-			log: false,
-		};
-	},
 	computed: {
 		...mapGetters([
 			"GET_USER",
@@ -107,10 +102,12 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 		});
 
 		store.state.socket.off('rcv_inv_game').on('rcv_inv_game', (user_target: UserEntity, game: string) => {
+			if (shared.isBlock(user_target.username))
+				return;
 			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game")
 				return;
 			store.dispatch("SET_SAVE_POPUP");
-			store.dispatch("SET_USER_TARGET", user_target);
+			store.dispatch("SET_USER_TARGET_ALERT", user_target);
 			store.dispatch("SET_GAME", game);
 			store.dispatch("SET_INV", false);
 			store.dispatch("SET_POPUP", store.getters.GET_POPUP);
@@ -220,17 +217,17 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 		});
 
 		store.state.socket.off('rcvInvite').on('rcvInvite', (channel_target: ChannelEntity, user_target: UserEntity) => {
+			if (shared.isBlock(user_target.username))
+				return;
 			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game")
 				return;
-			store.dispatch("SET_CHANNEL_TARGET", channel_target);
+			store.dispatch("SET_CHANNEL_TARGET_ALERT", channel_target);
 			store.dispatch("SET_USER_TARGET", user_target);
 			if (typeof channel_target !== 'undefined') {
 				store.dispatch("SET_SAVE_POPUP");
 				store.dispatch("SET_POPUP", 'inv');
 			}
 		});
-
-		this.log = true;
 	},
 })
 export default class Profil extends Vue { }

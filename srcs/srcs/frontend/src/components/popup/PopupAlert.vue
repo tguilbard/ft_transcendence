@@ -6,7 +6,6 @@
         <h1>ALERT</h1>
         <div class="grid_popup_inv">
           <div>
-            <p>STATE = {{GET_USER.state}}</p>
             <p>{{ GET_MSG_ALERT }}</p>
           </div>
           <div class="btn_select">

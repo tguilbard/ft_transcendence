@@ -16,6 +16,11 @@ h1 {
   display: block;
 }
 
+.title {
+  font-size: max(20px, 5vw);
+  font-weight: 1200;
+}
+
 .left {
   background-color: rgb(237, 223, 244);
 }

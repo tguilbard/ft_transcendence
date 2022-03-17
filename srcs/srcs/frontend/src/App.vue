@@ -81,7 +81,6 @@ p, span {
   white-space: nowrap;
   font-family: futura;
   font-weight:500;
-
   font-size: max(12px, 1.3vw);
 }
 

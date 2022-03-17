@@ -106,11 +106,7 @@ export class UsersService {
 	}
 
 	async FindUserByUsername(username: string): Promise<UserEntity> {
-		const userToFind = await this.usersRepositories.findOne({ username: username });
-		if (!userToFind) {
-			return null;
-		}
-		return userToFind;
+		return await this.usersRepositories.findOne({ username: username });
 	}
 
 	async register(body, req: Request) {
@@ -134,9 +130,7 @@ export class UsersService {
 		{
 			try {
 				if (await this.FindUserById(req.User.id))
-				{
 					return { log: true };
-				}
 			}
 			catch{}
 		}
@@ -209,14 +203,15 @@ export class UsersService {
 	}
 
 	async login(res: Response, request: Request) {
-		if (!(await this.isLogin(request)).log) {
+		const ret = await this.isLogin(request);
+		if (!ret.log) {
 			const code = request.body['code'];
 			const url = 'https://api.intra.42.fr/oauth/token';
 			const postData = {
 				grant_type: 'authorization_code',
 				client_id: process.env.API_42_ID,
 				client_secret: process.env.API_42_SECRET,
-				redirect_uri: `http://localhost:3000/ok`,
+				redirect_uri: 'http://localhost:3000/ok',
 				code: code
 			}
 			var result;
@@ -347,31 +342,40 @@ export class UsersService {
 
 	async BlockUser(userWhoBlockId: number, userBlockedId: number)
 	{
-		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
-		const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
-		
-		const userWhoBlockUpdate = {
-			id: userWhoBlock.id,
-			blockedUsers: [...userWhoBlock.blockedUsers, userBlocked]
+		try {
+			const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
+			const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
+			const userWhoBlockUpdate = {
+				id: userWhoBlock.id,
+				blockedUsers: [...userWhoBlock.blockedUsers, userBlocked]
+			}
+			return await this.usersRepositories.save(userWhoBlockUpdate);
 		}
-		return await this.usersRepositories.save(userWhoBlockUpdate);
+		catch
+		{
+
+		}
 	}
 
 	async UnblockUser(userWhoBlockId: number, userBlockedId: number)
 	{
-		const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
-		const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
-
-		const index = userWhoBlock.blockedUsers.findIndex(element => element.id == userBlockedId);
-		if (index == -1)
-			return;
-		
-		userWhoBlock.blockedUsers.splice(index, 1);
-		const userWhoBlockUpdate = {
-			id: userWhoBlock.id,
-			blockedUsers: userWhoBlock.blockedUsers
+		try {
+			const userWhoBlock = await this.GetUser(userWhoBlockId, {relation: ["blockedUsers"]});
+			const userBlocked = await this.GetUser(userBlockedId, {relation: ["blockedUsers"]});
+			const index = userWhoBlock.blockedUsers.findIndex(element => element.id == userBlockedId);
+			if (index == -1)
+				return;
+			
+			userWhoBlock.blockedUsers.splice(index, 1);
+			const userWhoBlockUpdate = {
+				id: userWhoBlock.id,
+				blockedUsers: userWhoBlock.blockedUsers
+			}
+			return await this.usersRepositories.save(userWhoBlockUpdate);
 		}
-		return await this.usersRepositories.save(userWhoBlockUpdate);
+		catch {
+			
+		}
 	}
 
 	async getBlocked(id: number)

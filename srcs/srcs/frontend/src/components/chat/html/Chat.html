@@ -1,4 +1,4 @@
-<section v-if="log">
+<section>
     <Menu class="menu" page="chat"/>
     <div v-if="GET_POPUP">
         <PopUp/>
@@ -34,7 +34,7 @@
                 </div>
                 <div v-if="!getUserBtn || (getUserBtn && getListUsers)" class="block_list_user">
                     <div class="list_user">
-                        <div v-if="(GET_ROOM || GET_LIST_CHAN_PRIVATE.length) && GET_LIST_USER_CURRENT" v-for="item in GET_LIST_USER_CURRENT">
+                        <div v-if="(GET_ROOM || GET_LIST_CHAN_PRIVATE.length)" v-for="item in GET_LIST_USER_CURRENT">
                             <div class="logo_connection">
                                 <div>
                                     <div v-if="(item.username == GET_USER.username)">
@@ -49,19 +49,19 @@
                                 </div>
                                 <div>
                                     <div v-if="isBlock(item.username)" class="mod">
-                                        <img src="../../../assets/unblock3.png" alt="blocked">
+                                        <img src="../../../assets/unblock.png" alt="blocked">
                                     </div>
                                     <div v-if="item.mode == 4" class="mod">
-                                        <img src="../../../assets/unmute3.png" alt="engrenage">
+                                        <img src="../../../assets/unmute.png" alt="engrenage">
                                     </div>
                                     <div v-if="item.mode == 8 || item.mode == 12" class="mod">
-                                        <img src="../../../assets/unban3.png" alt="engrenage">
+                                        <img src="../../../assets/unban.png" alt="engrenage">
                                     </div>
                                     <div v-if="item.mode == 2 || item.mode == 6 || item.mode == 10 || item.mode == 14" class="mod">
-                                        <img src="../../../assets/unadmin3.png" alt="engrenage">
+                                        <img src="../../../assets/unadmin.png" alt="engrenage">
                                     </div>
                                     <div v-if="item.mode == 3" class="mod">
-                                        <img src="../../../assets/uowner.png" alt="engrenage">
+                                        <img src="../../../assets/unowner.png" alt="engrenage">
                                     </div>
                                     <div v-if="item.state == 'login'" class="mod">
                                         <img src="../../../assets/circle_green.png" alt="login">
@@ -109,17 +109,17 @@
                 </div>
                 <div>
                     <div class="mod" v-if="modeIsSet(GET_MY_MODE, 'mute') && !modeIsSet(GET_MY_MODE, 'ban')">
-                        <img class="link" src="../../../assets/mute3.png" alt="BAN">
+                        <img class="link" src="../../../assets/mute.png" alt="BAN">
                     </div>
                     <div class="mod" v-if="modeIsSet(GET_MY_MODE, 'ban')">
-                        <img class="link" src="../../../assets/ban3.png" alt="BAN">
+                        <img class="link" src="../../../assets/ban.png" alt="BAN">
                     </div>
                     <div class="mod" v-if="modeIsSet(GET_MY_MODE, 'owner')">
                         <img src="../../../assets/owner.png" alt="BAN">
                         <img v-if="GET_ROOM" class="link" @click="active_pop_pass" src="../../../assets/engrenage.png" alt="BAN">
                     </div>
                     <div class="mod" v-else-if="modeIsSet(GET_MY_MODE, 'admin')">
-                        <img class="link" src="../../../assets/admin3.png" alt="BAN">
+                        <img class="link" src="../../../assets/admin.png" alt="BAN">
                     </div>
 
                     <div v-if="(GET_CHAN_CURRENT).mode != 8 && GET_CHAN_CURRENT.realname != 'General'" class="mod">
@@ -134,7 +134,7 @@
                             <p class="time">{{ item.time }}</p><br>
                             <span class="span_color link" @click="active_pop_profil_mode({username: item.username, state: ''})">{{ item.username }}
                                 :</span>
-                            <p>{{ item.message }}</p>
+                            <p style="color: rgb(153, 0, 255);">{{ item.message }}</p>
                         </div>
                         <div v-else class="message">
                             <p class="time">{{ item.time }}</p><br>

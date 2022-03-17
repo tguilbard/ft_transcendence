@@ -39,7 +39,9 @@ export default defineComponent({
 			'GET_MSG_ALERT',
 			'GET_MODE',
 			'GET_MY_MODE',
-			'GET_SAVE_POPUP'
+			'GET_SAVE_POPUP',
+			'GET_LIST_BLOCKED',
+			'GET_USER_TARGET_ALERT'
 		]),
 		isAlert() {
 			if (store.getters.GET_POPUP.substring(0, 5) == 'alert')
@@ -94,14 +96,14 @@ export default defineComponent({
 		response_inv(ret: boolean) {
 			store.dispatch("SET_POPUP", store.getters.GET_SAVE_POPUP);
 			store.dispatch("SET_SAVE_POPUP");
-			store.state.socket.emit('valInvite', ret, store.getters.GET_CHANNEL_TARGET.name, store.getters.GET_USER_TARGET.username);
+			store.state.socket.emit('valInvite', ret, store.getters.GET_CHANNEL_TARGET.name, store.getters.GET_USER_TARGET_ALERT.username);
 		},
 		response_inv_game(ret: boolean) {
 			store.dispatch("SET_POPUP", store.getters.GET_SAVE_POPUP);
 			if (store.getters.GET_GAME == 'pong')
-				store.state.socket.emit('duel', ret, store.getters.GET_USER_TARGET, store.getters.GET_USER, 0);
+				store.state.socket.emit('duel', ret, store.getters.GET_USER_TARGET_ALERT, store.getters.GET_USER, 0);
 			else if (store.getters.GET_GAME == 'star')
-				store.state.socket.emit('duel', ret, store.getters.GET_USER_TARGET, store.getters.GET_USER, 1);
+				store.state.socket.emit('duel', ret, store.getters.GET_USER_TARGET_ALERT, store.getters.GET_USER, 1);
 		},
 		async set_ban() {
 			if (this.modeIsSet(store.getters.GET_MODE, 'ban'))

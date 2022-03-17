@@ -6,6 +6,10 @@ import store from '../store';
         store.state.socket.emit('joinPrivate', name);
       },
 
+    isBlock(username: string) {
+        return store.getters.GET_LIST_BLOCKED.find(e => e == username);
+    },
+
     joinPublic(name: string, mdp: string): void {
         store.state.socket.emit('joinPublic', name, mdp);
     },
@@ -29,7 +33,7 @@ import store from '../store';
             "Cache-Control": "no-cache",
           },
         });
-        if (response.ok) return response.json();
+        if (response.ok) return await response.json();
         return [];
       },
 
@@ -62,7 +66,7 @@ import store from '../store';
             },
         });
         if (response.ok)
-            return response.json()
+            return await response.json()
         return [];
     },
 
@@ -78,7 +82,7 @@ import store from '../store';
             },
         });
         if (response.ok)
-            return response.json()
+            return await response.json()
         return [{}];
     },
 
@@ -187,7 +191,7 @@ import store from '../store';
             },
           }
         );
-        if (response.ok) return response.json();
+        if (response.ok) return await response.json();
         return [];
       },
 
@@ -220,7 +224,7 @@ import store from '../store';
         },
         });
         if (response.ok)
-        return response.json();
+            return await response.json();
         return [{}];
     },
 
@@ -236,7 +240,7 @@ import store from '../store';
             },
         });
         if (response.ok)
-          return response.json();
+          return await response.json();
         return {};
     },
 
@@ -256,7 +260,7 @@ import store from '../store';
             },
         });
         if (response.ok)
-            return response.json();
+            return await response.json();
         return {};
     },
     
@@ -271,7 +275,7 @@ import store from '../store';
             "Cache-Control": "no-cache",
           },
         });
-        if (response.ok) return response.json();
+        if (response.ok) return await response.json();
         return false;
       }
 }

@@ -15,6 +15,7 @@ export default createStore({
 		room: true,
 		popup: '',
 		user_target: {} as UserEntity,
+		user_target_alert: {} as UserEntity,
 		listUsersGeneral: [{} as UserEntity],
 		listChannelPublic: [{} as ChannelEntity],
 		channel_target: {} as ChannelEntity,
@@ -39,7 +40,7 @@ export default createStore({
 		listBlocked: [],
 		game: '',
 		save_popup: '',
-		inv: false
+		inv: false,
 	},
 	mutations: {
 		SET_INV(state, value: boolean) {
@@ -148,6 +149,9 @@ export default createStore({
 		SET_USER_TARGET(state, value: UserEntity): void {
 			state.user_target = value;
 		},
+		SET_USER_TARGET_ALERT(state, value: UserEntity): void {
+			state.user_target_alert = value;
+		},
 	},
 	getters: {
 		GET_SCOKET_INIT(state) {
@@ -158,6 +162,9 @@ export default createStore({
 		},
 		GET_USER_TARGET(state) {
 			return state.user_target
+		},
+		GET_USER_TARGET_ALERT(state) {
+			return state.user_target_alert
 		},
 		GET_CHAN_CURRENT(state) {
 			return state.channelCurrent;
@@ -262,6 +269,9 @@ export default createStore({
 		},
 		SET_USER_TARGET(context, value: UserEntity): void {
 			context.commit("SET_USER_TARGET", value);
+		},
+		SET_USER_TARGET_ALERT(context, value: UserEntity): void {
+			context.commit("SET_USER_TARGET_ALERT", value);
 		},
 		SET_ROOM(context, value: string): void {
 			context.commit("SET_ROOM", value);
