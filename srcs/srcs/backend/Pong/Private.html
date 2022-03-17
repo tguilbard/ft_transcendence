@@ -24,7 +24,7 @@
 
         var lock = true;
 
-         const socket = io("http://localhost:3000");
+         const socket = io(`http://${process.env.VUE_APP_ADDRESS}`);
  
         socket.off('start_game').on('start_game', (message) => {
             lock = false;

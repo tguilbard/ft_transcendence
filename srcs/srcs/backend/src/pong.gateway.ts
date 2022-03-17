@@ -99,7 +99,7 @@ interface range{
 function lunchServerPhaser(left: string, right: string, flag: number, pflag: number) {
     JSDOM.fromFile(join(process.cwd(), '/Pong/Private.html'), {
         // To run the scripts in the html file
-        url: "http://localhost:3000",
+        url: `http://${process.env.VUE_APP_ADDRESS}`,
         runScripts: "dangerously",
         // Also load supported external resources
         resources: "usable",

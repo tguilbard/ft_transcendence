@@ -339,7 +339,7 @@ export default defineComponent({
 
     async blockUser() {
       const response = await fetch(
-        `http://localhost:3000/users/block/` +
+        `http://${process.env.VUE_APP_ADDRESS}/users/block/` +
           store.getters.GET_USER.id +
           "/" +
           store.getters.GET_USER_TARGET.id,
@@ -363,7 +363,7 @@ export default defineComponent({
 
     async unBlockUser() {
       const response = await fetch(
-        `http://localhost:3000/users/unblock/` +
+        `http://${process.env.VUE_APP_ADDRESS}/users/unblock/` +
           store.getters.GET_USER.id +
           "/" +
           store.getters.GET_USER_TARGET.id,
@@ -394,7 +394,7 @@ export default defineComponent({
       this.$router.push("/");
     },
     async desactivedQrCode() {
-      await fetch(`http://localhost:3000/2fa`, {
+      await fetch(`http://${process.env.VUE_APP_ADDRESS}/2fa`, {
         method: "DELETE",
         mode: "cors",
         credentials: "include",
@@ -421,7 +421,7 @@ export default defineComponent({
         });
     },
     async submit_code() {
-      await fetch(`http://localhost:3000/2fa/activate`, {
+      await fetch(`http://${process.env.VUE_APP_ADDRESS}/2fa/activate`, {
         method: "POST",
         mode: "cors",
         credentials: "include",
@@ -469,7 +469,7 @@ export default defineComponent({
     },
     async get_user() {
       var response = await fetch(
-        `http://localhost:3000/users/` + this.save_username,
+        `http://${process.env.VUE_APP_ADDRESS}/users/` + this.save_username,
         {
           method: "GET",
           mode: "cors",
@@ -491,7 +491,7 @@ export default defineComponent({
       var formData = new FormData();
       if (!img || !formData) return;
       if (img) formData.append("img", img);
-      fetch(`http://localhost:3000/avatar`, {
+      fetch(`http://${process.env.VUE_APP_ADDRESS}/avatar`, {
         method: "PATCH",
         mode: "cors",
         credentials: "include",
@@ -524,7 +524,7 @@ export default defineComponent({
         });
     },
     async submit() {
-      let response = await fetch(`http://localhost:3000/users/update`, {
+      let response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/users/update`, {
         method: "PATCH",
         mode: "cors",
         credentials: "include",

@@ -348,7 +348,7 @@ export default class Chat extends Vue {
 	}
 
 	private async getMode(user_target: string) {
-		const response = await fetch("http://localhost:3000/channel/mode/" + store.getters.GET_CHAN_CURRENT.realname + "/" + user_target, {
+		const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/channel/mode/` + store.getters.GET_CHAN_CURRENT.realname + "/" + user_target, {
 			method: "GET",
 			mode: "cors",
 			credentials: "include",
@@ -367,7 +367,7 @@ export default class Chat extends Vue {
 		const chanCurrent = store.getters.GET_CHAN_CURRENT;
 		if (!chanCurrent || !chanCurrent.realname)
 			return;
-		const response = await fetch("http://localhost:3000/channel/mode/" + store.getters.GET_CHAN_CURRENT.realname + "/" + store.getters.GET_USER.username, {
+		const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/channel/mode/` + store.getters.GET_CHAN_CURRENT.realname + "/" + store.getters.GET_USER.username, {
 			method: "GET",
 			mode: "cors",
 			credentials: "include",
@@ -383,7 +383,7 @@ export default class Chat extends Vue {
 	}
 
 	private async getListChannelPublic() {
-		const response = await fetch("http://localhost:3000/channel/ListChannelPublic", {
+		const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/channel/ListChannelPublic`, {
 			method: "GET",
 			mode: "cors",
 			credentials: "include",
@@ -399,7 +399,7 @@ export default class Chat extends Vue {
 	}
 
 	private async getMessagesInChannel(chanName: string) {
-		const response = await fetch("http://localhost:3000/channel/MessagesInChannel/" + chanName, {
+		const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/channel/MessagesInChannel/` + chanName, {
 			method: "GET",
 			mode: "cors",
 			credentials: "include",
@@ -419,7 +419,7 @@ export default class Chat extends Vue {
 	}
 
 	private async getChanListByMode(chanMode: string): Promise<ChannelEntity[]> {
-		const response = await fetch("http://localhost:3000/getChanListByMode/" + chanMode, {
+		const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/getChanListByMode/` + chanMode, {
 			method: "GET",
 			mode: "cors",
 			credentials: "include",
