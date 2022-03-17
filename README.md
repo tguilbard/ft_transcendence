@@ -19,8 +19,8 @@ It consist of a website where every 42 students can connect it to play pong and 
 ## Getting Started
 
 ### Prerequisites
-  - [docker](https://docs.docker.com/get-docker/)
-  - [docker-compose](https://docs.docker.com/compose/install/)
+  - [docker 20.10.12](https://docs.docker.com/get-docker/)
+  - [docker-compose 2.2.3](https://docs.docker.com/compose/install/)
 ### Installation
 First install project :
 ```
