@@ -25,7 +25,7 @@ class Game {
     server: Server;
 
     constructor(user1: SocketUser, user2: SocketUser, phaserServer: Socket, server: Server, GameFlag = 0, privateFlag=0) {
-        this.id = gameId + 1
+        this.id = gameId++;
         this.users = [user1, user2]
         this.socketRoomName = 'game : ' + this.id.toString();
         this.phaserServer = phaserServer;

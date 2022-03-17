@@ -39,7 +39,23 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 			store.state.socket.close();
 			store.state.sock_init = false;
 			store.dispatch("SET_POPUP", '');
+			await this.logOutToIntra();
 			return this.$router.push("/login");
+		},
+		async logOutToIntra(user: UserEntity): Promise<void> {
+			const response = await fetch("http://localhost:3000/users/logout", {
+				method: "GET",
+				mode: "cors",
+				credentials: "include",
+				headers: {
+					Accept: "application/json",
+					"Access-Control-Max-Age": "600",
+					"Cache-Control": "no-cache",
+				},
+			});
+			if (response.ok) 
+				return;
+			return;
 		},
 		getImg(event: { target: { files: File[] } }) {
 			this.file = event.target.files[0];

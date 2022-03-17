@@ -8,6 +8,7 @@ import { Request, Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import AvatarService from './avatar/avatar.service';
 import { UpdateResult } from 'typeorm';
+import * as jwt from 'jsonwebtoken';
 
 @Controller('users')
 export class UsersController {
@@ -42,6 +43,28 @@ export class UsersController {
 		if (!friend)
 			return false;
 		return true;
+	}
+
+	@Get('logout')
+	async logout(@Req() req: Request, @Res() res: Response)
+	{
+		res.clearCookie('access_token');
+		const accessToken = await jwt.sign(
+			{ login: req.User.login, 'ses': req.sessionID, state: 'logout', id: req.User.id, username: req.User.username, guest: req.User.guest },
+			'secret',
+			{
+				algorithm: "HS256"
+			}
+		);
+		res.status(204).cookie('access_token', accessToken, {
+			httpOnly: true,
+			secure: false
+		});
+		res.send(
+			{
+				status: 'ok'
+			}
+		);
 	}
 
 	@Get('MyUser')
