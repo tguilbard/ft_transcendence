@@ -168,7 +168,7 @@ import { Socket } from "socket.io-client";
 				return;
 			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
 				return;
-			store.dispatch("SET_CHANNEL_TARGET", channel_target);
+			store.dispatch("SET_CHANNEL_TARGET_ALERT", channel_target);
 			store.dispatch("SET_USER_TARGET_ALERT", user_target);
 			if (typeof channel_target !== 'undefined') {
 				store.dispatch("SET_SAVE_POPUP");

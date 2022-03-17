@@ -441,9 +441,6 @@ class Pong extends Phaser.Scene {
             gameStarted = true;
             store.state.socket.emit("init_score");
         }
-        // this.input.on('pointerdown', function (p) {
-        //     origin = p.y;
-        // });
     }
    
 

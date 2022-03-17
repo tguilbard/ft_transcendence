@@ -203,7 +203,7 @@ button {
 button:hover,
 .on {
   color: #fff12c;
-  cursor: grabbing;
+  cursor: pointer;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
   border-color: #fff12c;

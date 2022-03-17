@@ -130,6 +130,19 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 			this.setPopup('inv_game')
 		});
 
+		store.state.socket.off('rcvInvite').on('rcvInvite', (channel_target: ChannelEntity, user_target: UserEntity) => {
+			if (shared.isBlock(user_target.username))
+				return;
+			if (store.getters.GET_POPUP == "alert" || store.getters.GET_POPUP == "inv" || store.getters.GET_POPUP == "inv_game" )
+				return;
+			store.dispatch("SET_CHANNEL_TARGET_ALERT", channel_target);
+			store.dispatch("SET_USER_TARGET_ALERT", user_target);
+			if (typeof channel_target !== 'undefined') {
+				store.dispatch("SET_SAVE_POPUP");
+				store.dispatch("SET_POPUP", 'inv');
+			}
+		});
+
 		store.state.socket.off('refresh_user').on('refresh_user', async (chanName: string) => {
 			if (chanName == "all" || store.getters.GET_CHAN_CURRENT.realname == chanName) {
 				store.dispatch("SET_USER_TARGET", await shared.getUserByUsername(store.getters.GET_USER_TARGET.username));

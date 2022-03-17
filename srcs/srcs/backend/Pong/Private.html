@@ -24,7 +24,7 @@
 
         var lock = true;
 
-         const socket = io(`http://${process.env.VUE_APP_ADDRESS}`);
+         const socket = io();
  
         socket.off('start_game').on('start_game', (message) => {
             lock = false;
@@ -142,41 +142,38 @@
         
         function update() {
 
-            if (gameStarted === true)
-            {
-                if (isPlayer1Point()) {
-                    speed = 0;
-                    VelocityX = 400;
-                    player1Score++;
-                    socket.emit("phaser", "1Score", player1Score);
-                    reset();
-                    return;
-                }
-
-                if (isPlayer2Point()) {
-                    speed = 0;
-                    VelocityX = -400;
-                    player2Score++;
-                    socket.emit("phaser", "2Score", player2Score);
-                    reset();
-                    return;
-                }
-
-                if (player1Score >= 11) {
-                    socket.emit("phaser", "1Victory", 0);
-                    socket.emit("ROOT", player1Score, player2Score, window.left, window.right);
-                    End();
-                }
-                if (player2Score >= 11) {
-                    socket.emit("phaser", "2Victory", 0);
-                    socket.emit("ROOT", player1Score, player2Score, window.left, window.right);
-                    End();
-                }
-                player1.body.setVelocityY(0);
-                player2.body.setVelocityY(0);
-
-                emitDraw();
+            if (isPlayer1Point()) {
+                speed = 0;
+                VelocityX = 400;
+                player1Score++;
+                socket.emit("phaser", "1Score", player1Score);
+                reset();
+                return;
             }
+
+            if (isPlayer2Point()) {
+                speed = 0;
+                VelocityX = -400;
+                player2Score++;
+                socket.emit("phaser", "2Score", player2Score);
+                reset();
+                return;
+            }
+
+            if (player1Score >= 11) {
+                socket.emit("phaser", "1Victory", 0);
+                socket.emit("ROOT", player1Score, player2Score, window.left, window.right);
+                End();
+            }
+            if (player2Score >= 11) {
+                socket.emit("phaser", "2Victory", 0);
+                socket.emit("ROOT", player1Score, player2Score, window.left, window.right);
+                End();
+            }
+            player1.body.setVelocityY(0);
+            player2.body.setVelocityY(0);
+
+            emitDraw();
         }
 
         function emitDraw() {

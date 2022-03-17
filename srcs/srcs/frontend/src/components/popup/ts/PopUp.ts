@@ -36,6 +36,7 @@ export default defineComponent({
 			'GET_LIST_USER_GENERAL',
 			'GET_LIST_CHANNEL_PUBLIC',
 			'GET_CHANNEL_TARGET',
+			'GET_CHANNEL_TARGET_ALERT',
 			'GET_MSG_ALERT',
 			'GET_MODE',
 			'GET_MY_MODE',
@@ -96,7 +97,7 @@ export default defineComponent({
 		response_inv(ret: boolean) {
 			store.dispatch("SET_POPUP", store.getters.GET_SAVE_POPUP);
 			store.dispatch("SET_SAVE_POPUP");
-			store.state.socket.emit('valInvite', ret, store.getters.GET_CHANNEL_TARGET.name, store.getters.GET_USER_TARGET_ALERT.username);
+			store.state.socket.emit('valInvite', ret, store.getters.GET_CHANNEL_TARGET_ALERT.name, store.getters.GET_USER_TARGET_ALERT.username);
 		},
 		response_inv_game(ret: boolean) {
 			store.dispatch("SET_POPUP", store.getters.GET_SAVE_POPUP);

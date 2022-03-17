@@ -23,7 +23,7 @@
                 </div>
                 <div id="ac">
                   <div class="block_avatar_inf">
-                    <label for="avatar">Change</label>
+                    <label style="cursor: pointer;" for="avatar">Change</label>
                     <input
                       type="file"
                       id="avatar"
@@ -48,14 +48,15 @@
                   <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
                   <form @submit.prevent="submit">
                     <input
-                      type="pseudo"
+                      type="text"
                       name="pseudo"
                       placeholder="Enter your nickname"
                       v-model="username"
                       required
                       minlength="3"
-                      maxlength="10"
+                      maxlength="8"
                       :disabled="desable ? '' : disabled"
+                      pattern="[a-zA-Z0-9]+"
                     />
                     <div v-if="myerror && myerror.message">
                       <div class="block_error" v-for="msg in myerror.message" :key="msg">
@@ -88,6 +89,7 @@
                         minlength="6"
                         required
                         v-model="code"
+                        pattern="[0-9]+"
                       />
                       <div class="block_error" v-if="myerror && myerror.message">
                         <div v-for="msg in myerror.message" :key="msg">
@@ -144,9 +146,7 @@
                               item.user1.username == GET_USER_TARGET.username
                                 ? 'color1'
                                 : 'color2',
-                              'link',
                             ]"
-                            @click="active_pop_profil(item.user1)"
                           >
                             {{ item.user1.username }}
                           </span>
@@ -162,9 +162,7 @@
                               item.user2.username == GET_USER_TARGET.username
                                 ? 'color1'
                                 : 'color2',
-                              'link',
                             ]"
-                            @click="active_pop_profil(item.user2)"
                           >
                             {{ item.user2.username }}
                           </span>
@@ -828,7 +826,7 @@ label {
 .btn_select input:hover,
 .btn_select button:hover {
   color: #fff12c;
-  cursor: grabbing;
+  cursor: pointer;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
   border-color: #fff12c;
@@ -843,7 +841,7 @@ label {
 
 .btn_chan_profil p {
   color: #fff12c;
-  cursor: grabbing;
+  cursor: pointer;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
   font-size: max(27px, 5vw);
@@ -924,7 +922,7 @@ label {
 .grid_modify button:hover,
 .btn:hover {
   color: #fff12c;
-  cursor: grabbing;
+  cursor: pointer;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
 }
@@ -950,7 +948,7 @@ label {
 
 .link:hover {
   color: #fff12c;
-  cursor: grabbing;
+  cursor: pointer;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
 }

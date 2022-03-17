@@ -99,16 +99,8 @@
   align-content: center;
 }
 
-/* .logo_connection img,
-.list_friends_popup p {
-  margin: 0.2vw;
-  padding: 0.4vw;
-  height: 1.2vmax;
-  width: 1.2vmax;
-  border-radius: 0px 0px 0.5vw 0.5vw;
-} */
-
 .logo_connection {
+  cursor: pointer;
   display: grid;
   grid-template-columns: minmax(min-content, auto) minmax(
       min-content,
@@ -269,7 +261,7 @@
 }
 
 .user_list_selected {
-  cursor: grabbing;
+  cursor: pointer;
   color: none;
 }
 
@@ -314,7 +306,7 @@
 
 .link:hover {
   color: #fff12c;
-  cursor: grabbing;
+  cursor: pointer;
   -webkit-text-stroke: 1px;
   -webkit-text-stroke-color: rgb(0, 0, 0);
 }

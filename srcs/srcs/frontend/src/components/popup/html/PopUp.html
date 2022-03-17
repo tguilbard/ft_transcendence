@@ -140,8 +140,8 @@
                                 </div>
                                 <div>
                                     <div>
-                                        <input required="required" minlength="3" maxlength="7" type="text" id="name" name="name"
-                                            v-model="GET_CHANNEL_TARGET.name">
+                                        <input required="required" minlength="3" maxlength="8" type="text" id="name" name="name"
+                                            v-model="GET_CHANNEL_TARGET.name" pattern="[a-zA-Z0-9]+">
                                     </div>
                                     <div v-if="GET_ROOM">
                                         <input type="password" id="mdp" name="mdp" v-model="mdp" maxlength="15">
@@ -270,7 +270,7 @@
                         <div class="btn_select">
                             <div class="grid_popup_inv">
                                 <div>
-                                    <p>{{GET_USER_TARGET_ALERT.username}} invite you on {{GET_CHANNEL_TARGET.name}} private
+                                    <p>{{GET_USER_TARGET_ALERT.username}} invite you on {{GET_CHANNEL_TARGET_ALERT.name}} private
                                         channel</p>
                                 </div>
                                 <div class="btn_select">

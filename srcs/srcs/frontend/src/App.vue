@@ -62,9 +62,9 @@ hr {
 }
 
 h1 {
-  // font-size: 2.5vw;
   font-size: max(20px, 2.5vw);
   font-weight:900;
+  cursor: default;
 }
 
 
@@ -75,9 +75,8 @@ button, label, input{
   font-size: max(12px, 1.3vw);
 }
 
-// input[type=submit]
-
 p, span {
+  cursor: default;
   white-space: nowrap;
   font-family: futura;
   font-weight:500;
@@ -114,35 +113,5 @@ p, span {
     }
   }
 }
-
-// @media (max-width: 1000px) {
-//   h1 {
-//     font-size: x-large;
-//   }
-//   p, label, input, span, button  {
-//     font-size: large;
-// }
-
-// }
-
-// @media (max-width: 700px) {
-//   h1 {
-//     font-size: large;
-//   }
-//   p, label, input, span, button {
-//   font-size: medium;
-// }
-
-// }
-
-// @media (max-width: 500px) {
-//   h1 {
-//     font-size: medium;
-//   }
-//   p, label, input, span, button {
-//   font-size: small;
-// }
-// }
-
 
 </style>

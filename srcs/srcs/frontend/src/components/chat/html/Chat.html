@@ -21,60 +21,67 @@
                 <hr class="sep">
             </div>
             <div class="block_channel">
-                <div v-if="!getUserBtn || (getUserBtn && !getListUsers)" class="block_list_channel">
-                    <div class="channel" id="channel">
-                        <ChanBut v-if="GET_ROOM && GET_LIST_CHAN_PUBLIC" v-for="button in GET_LIST_CHAN_PUBLIC" :mod="button.mode == 5" :name="button.realname"
-                        :state="button.realname == GET_CHAN.realname" @click="changeChannel(button)">
-                        </ChanBut>
-                        <ChanBut v-else-if="GET_LIST_CHAN_PRIVATE" v-for="button in GET_LIST_CHAN_PRIVATE" :name="(button.name? button.name: button.realname)"
-                            :state="button.realname == GET_CHAN_CURRENT.realname"
-                            @click="changeChannel(button)">
-                        </ChanBut>
+
+                <div class="block_list_channel" v-if="!getUserBtn || (getUserBtn && !getListUsers)">
+                    <div>
+                        <div class="channel" id="channel">
+                            <ChanBut v-if="GET_ROOM && GET_LIST_CHAN_PUBLIC" v-for="button in GET_LIST_CHAN_PUBLIC" :mod="button.mode == 5" :name="button.realname"
+                            :state="button.realname == GET_CHAN.realname" @click="changeChannel(button)">
+                            </ChanBut>
+                            <ChanBut v-else-if="GET_LIST_CHAN_PRIVATE" v-for="button in GET_LIST_CHAN_PRIVATE" :name="(button.name? button.name: button.realname)"
+                                :state="button.realname == GET_CHAN_CURRENT.realname"
+                                @click="changeChannel(button)">
+                            </ChanBut>
+                        </div>
                     </div>
                 </div>
-                <div v-if="!getUserBtn || (getUserBtn && getListUsers)" class="block_list_user">
-                    <div class="list_user">
-                        <div v-if="(GET_ROOM || GET_LIST_CHAN_PRIVATE.length)" v-for="item in GET_LIST_USER_CURRENT">
-                            <div class="logo_connection">
-                                <div>
-                                    <div v-if="(item.username == GET_USER.username)">
-                                        <p class="link" @click="active_pop_profil_mode(item)"
-                                            style="color: rgb(160, 28, 28); text-align: left;">{{
-                                            item.username }}</p>
+
+
+                <div class="block_list_user" v-if="!getUserBtn || (getUserBtn && getListUsers)" >
+                    <div>
+                        <div class="list_user">
+                            <div v-if="(GET_ROOM || GET_LIST_CHAN_PRIVATE.length)" v-for="item in GET_LIST_USER_CURRENT">
+                                <div class="logo_connection">
+                                    <div>
+                                        <div v-if="(item.username == GET_USER.username)">
+                                            <p class="link" @click="active_pop_profil_mode(item)"
+                                                style="color: rgb(160, 28, 28); text-align: left;">{{
+                                                item.username }}</p>
+                                        </div>
+                                        <div v-else>
+                                            <p class="link" @click="active_pop_profil_mode(item)" style="text-align: left;">{{
+                                                item.username }}</p>
+                                        </div>
                                     </div>
-                                    <div v-else>
-                                        <p class="link" @click="active_pop_profil_mode(item)" style="text-align: left;">{{
-                                            item.username }}</p>
+                                    <div>
+                                        <div v-if="isBlock(item.username)" class="mod">
+                                            <img src="../../../assets/unblock.png" alt="blocked">
+                                        </div>
+                                        <div v-if="item.mode == 4" class="mod">
+                                            <img src="../../../assets/unmute.png" alt="engrenage">
+                                        </div>
+                                        <div v-if="item.mode == 8 || item.mode == 12" class="mod">
+                                            <img src="../../../assets/unban.png" alt="engrenage">
+                                        </div>
+                                        <div v-if="item.mode == 2 || item.mode == 6 || item.mode == 10 || item.mode == 14" class="mod">
+                                            <img src="../../../assets/unadmin.png" alt="engrenage">
+                                        </div>
+                                        <div v-if="item.mode == 3" class="mod">
+                                            <img src="../../../assets/unowner.png" alt="engrenage">
+                                        </div>
+                                        <div v-if="item.state == 'login'" class="mod">
+                                            <img src="../../../assets/circle_green.png" alt="login">
+                                        </div>
+                                        <div v-else-if="item.state == 'in match'" class="mod">
+                                            <img src="../../../assets/circle_orange.png" alt="in match">
+                                        </div>
+                                        <div v-else class="mod">
+                                            <img src="../../../assets/circle_grey.png" alt="logout">
+                                        </div>
                                     </div>
                                 </div>
-                                <div>
-                                    <div v-if="isBlock(item.username)" class="mod">
-                                        <img src="../../../assets/unblock.png" alt="blocked">
-                                    </div>
-                                    <div v-if="item.mode == 4" class="mod">
-                                        <img src="../../../assets/unmute.png" alt="engrenage">
-                                    </div>
-                                    <div v-if="item.mode == 8 || item.mode == 12" class="mod">
-                                        <img src="../../../assets/unban.png" alt="engrenage">
-                                    </div>
-                                    <div v-if="item.mode == 2 || item.mode == 6 || item.mode == 10 || item.mode == 14" class="mod">
-                                        <img src="../../../assets/unadmin.png" alt="engrenage">
-                                    </div>
-                                    <div v-if="item.mode == 3" class="mod">
-                                        <img src="../../../assets/unowner.png" alt="engrenage">
-                                    </div>
-                                    <div v-if="item.state == 'login'" class="mod">
-                                        <img src="../../../assets/circle_green.png" alt="login">
-                                    </div>
-                                    <div v-else-if="item.state == 'in match'" class="mod">
-                                        <img src="../../../assets/circle_orange.png" alt="in match">
-                                    </div>
-                                    <div v-else class="mod">
-                                        <img src="../../../assets/circle_grey.png" alt="logout">
-                                    </div>
-                                </div>
+                                <hr>
                             </div>
-                            <hr>
                         </div>
                     </div>
                 </div>

@@ -16,6 +16,7 @@
         required
         minlength="6"
         maxlength="6"
+        pattern="[0-9]+"
       />
       <div v-if="myerror && myerror.message">
         <div v-for="msg in myerror.message" :key="msg">

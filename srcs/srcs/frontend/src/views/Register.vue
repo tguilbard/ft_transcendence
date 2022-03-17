@@ -23,13 +23,14 @@
     <form @submit.prevent="submit">
       <input
         class="username"
-        type="pseudo"
+        type="text"
         name="pseudo"
         placeholder="Enter your nickname"
         v-model="username"
         required
         minlength="3"
-        maxlength="7"
+        maxlength="8"
+        pattern="[a-zA-Z0-9]+"
       />
       <div v-if="myerror && myerror.message">
         <div v-for="msg in myerror.message" :key="msg">

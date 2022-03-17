@@ -16,6 +16,7 @@ p {
 }
 
 .chanButton {
+    cursor: pointer;
     margin: 0;
     box-sizing: border-box;
     padding: 0.2px;

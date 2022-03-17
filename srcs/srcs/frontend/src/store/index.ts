@@ -19,6 +19,7 @@ export default createStore({
 		listUsersGeneral: [{} as UserEntity],
 		listChannelPublic: [{} as ChannelEntity],
 		channel_target: {} as ChannelEntity,
+		channel_target_alert: {} as ChannelEntity,
 		listChannel: [{} as ChannelEntity],
 		chanPrivate: [{} as ChannelEntity],
 		messages: [{} as unknown as Message],
@@ -115,6 +116,9 @@ export default createStore({
 		SET_CHANNEL_TARGET(state, value: ChannelEntity) {
 			state.channel_target = value;
 		},
+		SET_CHANNEL_TARGET_ALERT(state, value: ChannelEntity) {
+			state.channel_target_alert = value;
+		},
 		SET_LIST_USER_GENERAL(state, value: UserEntity[]) {
 			state.listUsersGeneral = value;
 		},
@@ -186,6 +190,9 @@ export default createStore({
 		},
 		GET_LIST_CHANNEL_PUBLIC(state) {
 			return state.listChannelPublic;
+		},
+		GET_CHANNEL_TARGET_ALERT(state) {
+			return state.channel_target_alert;
 		},
 		GET_CHANNEL_TARGET(state) {
 			return state.channel_target;
@@ -293,6 +300,9 @@ export default createStore({
 		},
 		SET_CHANNEL_TARGET(context, value: ChannelEntity) {
 			context.commit("SET_CHANNEL_TARGET", value);
+		},
+		SET_CHANNEL_TARGET_ALERT(context, value: ChannelEntity) {
+			context.commit("SET_CHANNEL_TARGET_ALERT", value);
 		},
 		SET_LIST_CHAN_PUBLIC(context, value: ChannelEntity[]) {
 			context.commit("SET_LIST_CHAN_PUBLIC", value);
