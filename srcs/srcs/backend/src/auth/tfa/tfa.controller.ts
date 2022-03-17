@@ -33,7 +33,7 @@ export class TfaController {
             await this.usersService.ActivateTfa(user.id);
             const accessToken = await jwt.sign(
                 { login: req.User.login, 'ses': req.sessionID, state: 'ok', id: user.id, username: req.User.username, guest: req.User.guest },
-                'secret',
+                process.env.SESSION_SECRET,
                 {
                     algorithm: "HS256"
                 }

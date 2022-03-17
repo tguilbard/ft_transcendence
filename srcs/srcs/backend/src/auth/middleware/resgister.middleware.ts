@@ -30,7 +30,7 @@ export class AuthMiddleware implements NestMiddleware {
         if (cookies && cookies.access_token) {
           const accessToken = cookies.access_token;
           /* On vérifie et décode le JWT à l'aide du secret et de l'algorithme utilisé pour le générer */
-          const decodedToken = jwt.verify(accessToken, 'secret', {
+          const decodedToken = jwt.verify(accessToken, process.env.SESSION_SECRET, {
             algorithms: ['HS256']
           });
 

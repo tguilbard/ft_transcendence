@@ -51,7 +51,7 @@ export class UsersController {
 		res.clearCookie('access_token');
 		const accessToken = await jwt.sign(
 			{ login: req.User.login, 'ses': req.sessionID, state: 'logout', id: req.User.id, username: req.User.username, guest: req.User.guest },
-			'secret',
+			process.env.SESSION_SECRET,
 			{
 				algorithm: "HS256"
 			}

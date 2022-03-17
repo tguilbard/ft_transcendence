@@ -24,7 +24,7 @@ services:
     image: website
     #hostname: 127.0.0.1
     ports:
-      - "${FRONT_HOST}:${FRONT_PORT}:${FRONT_PORT}"
+      - "127.0.0.1:${VUE_APP_PORT}:${VUE_APP_PORT}"
     container_name: website_container
     depends_on:
       database:
@@ -34,6 +34,7 @@ services:
       VUE_APP_HOST:  ${VUE_APP_HOST}
       VUE_APP_ADDRESS: ${VUE_APP_ADDRESS}
 
+      SESSION_SECRET: ${SESSION_SECRET}
       DATABASE_TYPE: ${DATABASE_TYPE}
       DATABASE_HOST: ${DATABASE_LINK}
       DATABASE_PORT: ${DATABASE_PORT}

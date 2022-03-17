@@ -168,7 +168,7 @@ export class UsersService {
 			state = '2fa';
 		const accessToken = await jwt.sign(
 			{ login: login, 'ses': request.sessionID, state: state, id: id, guest: true, username: username },
-			'secret',
+			process.env.SESSION_SECRET,
 			{
 				algorithm: "HS256"
 			}
@@ -280,7 +280,7 @@ export class UsersService {
 			return null;
 		if (!access_token)
 			null;
-		const decodedToken = jwt.verify(access_token, 'secret', {
+		const decodedToken = jwt.verify(access_token, process.env.SESSION_SECRET, {
             algorithms: ['HS256']
           });
         const id = decodedToken['id']

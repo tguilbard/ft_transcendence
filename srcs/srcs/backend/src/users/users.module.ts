@@ -20,7 +20,7 @@ import { ChatModule } from 'src/chat/chat.module';
   HttpModule,
   AchievementModule,
   JwtModule.register({
-    secret: 'secret',
+    secret: process.env.SESSION_SECRET,
     signOptions: { expiresIn: '60s' },
   }),
   AvatarModule],

@@ -15,7 +15,7 @@ export class TfaService {
     {
         const secret = authenticator.generateSecret()
 
-        const otpauthURL = await authenticator.keyuri(user.login, "A Changer", secret);
+        const otpauthURL = await authenticator.keyuri(user.login, "Ft_transcendence", secret);
         await this.usersService.SetTfaSecret(user.id, secret);
         //I would like replace by the previous line by -> await this.usersService.UpdateUser(user.id, ); 
         //but that doesnt work
