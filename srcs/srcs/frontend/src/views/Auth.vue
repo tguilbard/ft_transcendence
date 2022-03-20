@@ -61,7 +61,7 @@ import shared from "../mixins/Mixins";
   methods: {
     async submit() {
       // Création d'un formData obligatoire pour submit de l'image
-      await fetch(`http://${process.env.VUE_APP_ADDRESS}/2fa/activate`, {
+      await fetch(`/2fa/activate`, {
         method: "POST",
         mode: "cors",
         credentials: "include",

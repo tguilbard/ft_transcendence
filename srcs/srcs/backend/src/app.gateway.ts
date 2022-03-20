@@ -7,7 +7,7 @@ import {
 	OnGatewayDisconnect,
 } from '@nestjs/websockets';
 
-import { Logger } from '@nestjs/common';
+import { forwardRef, Inject, Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 import { UsersService } from './users/users.service';
 import { UserEntity } from './users/entities/users.entity';
@@ -28,6 +28,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 	private logger: Logger = new Logger('ChatGateway');
 
 	constructor(
+		@Inject(forwardRef(() => UsersService))
 		private readonly userService: UsersService,
 		private readonly modeService: ModeService,
 		private readonly chatService: ChatService

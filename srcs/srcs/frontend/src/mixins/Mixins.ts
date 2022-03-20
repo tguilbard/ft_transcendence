@@ -23,7 +23,7 @@ import store from '../store';
       },
 
     async getListBlocked(): Promise<string[]> {
-        const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/users/blocked`, {
+        const response = await fetch(`/users/blocked`, {
           method: "GET",
           mode: "cors",
           credentials: "include",
@@ -39,7 +39,7 @@ import store from '../store';
 
     async isLogin(): Promise<boolean> {
         alert
-        const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/users/isLogin`, {
+        const response = await fetch(`/users/isLogin`, {
             method: "GET",
             mode: "cors",
             credentials: "include",
@@ -55,7 +55,7 @@ import store from '../store';
     },
 
     async getAchievements(username: string): Promise<Achievements[]> {
-        const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/users/` + username + "/achievements", {
+        const response = await fetch(`/users/` + username + "/achievements", {
             method: "GET",
             mode: "cors",
             credentials: "include",
@@ -71,7 +71,7 @@ import store from '../store';
     },
 
     async getLeaderBoard(): Promise<[UserEntity]> {
-        const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/users/leaderboard`, {
+        const response = await fetch(`/users/leaderboard`, {
             method: "GET",
             mode: "cors",
             credentials: "include",
@@ -88,7 +88,7 @@ import store from '../store';
 
 
     async isAccess(p_path: string): Promise<boolean> {
-        const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/access/` + p_path, {
+        const response = await fetch(`/access/` + p_path, {
             method: "GET",
             mode: "cors",
             credentials: "include",
@@ -104,7 +104,7 @@ import store from '../store';
     },
 
     async isGuest(username: string): Promise<boolean> {
-        const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/users/isGuest/` + username, {
+        const response = await fetch(`/users/isGuest/` + username, {
             method: "GET",
             mode: "cors",
             credentials: "include",
@@ -119,7 +119,7 @@ import store from '../store';
         return false;
     },
     async myGuest(): Promise<boolean> {
-        const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/users/myGuest`, {
+        const response = await fetch(`/users/myGuest`, {
             method: "GET",
             mode: "cors",
             credentials: "include",
@@ -135,7 +135,7 @@ import store from '../store';
     },
 
     async getQrCode(): Promise<string> {
-        return await fetch(`http://${process.env.VUE_APP_ADDRESS}/2fa/generate`, {
+        return await fetch(`/2fa/generate`, {
             method: "POST",
             mode: "cors",
             credentials: "include",
@@ -179,7 +179,7 @@ import store from '../store';
 
     async getListMatchs(username: string): Promise<string[]> {
         const response = await fetch(
-          `http://${process.env.VUE_APP_ADDRESS}/game-history/` + username,
+          `/game-history/` + username,
           {
             method: "GET",
             mode: "cors",
@@ -196,7 +196,7 @@ import store from '../store';
       },
 
     async get_avatar(username: string): Promise<string> {
-        const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/avatar/` + username , {
+        const response = await fetch(`/avatar/` + username , {
           method: "GET",
           mode: "cors",
           credentials: "include",
@@ -213,7 +213,7 @@ import store from '../store';
       },
 
       async getUserInChan(chanName: string): Promise<UserEntity[]> {
-        const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/userInChan/` + chanName, {
+        const response = await fetch(`/userInChan/` + chanName, {
         method: "GET",
         mode: "cors",
         credentials: "include",
@@ -229,7 +229,7 @@ import store from '../store';
     },
 
     async getMyUser(): Promise<UserEntity> {
-        const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/users/MyUser`, {
+        const response = await fetch(`/users/MyUser`, {
             method: "GET",
             mode: "cors",
             credentials: "include",
@@ -249,7 +249,7 @@ import store from '../store';
       },
 
       async getUserByUsername(username: string): Promise<UserEntity> {
-        const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/users/other/` + username, {
+        const response = await fetch(`/users/other/` + username, {
             method: "GET",
             mode: "cors",
             credentials: "include",
@@ -265,7 +265,7 @@ import store from '../store';
     },
     
     async isFriendByUsername(): Promise<boolean> {
-        const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/users/isFriend/` + store.getters.GET_USER_TARGET.username, {
+        const response = await fetch(`/users/isFriend/` + store.getters.GET_USER_TARGET.username, {
           method: "GET",
           mode: "cors",
           credentials: "include",

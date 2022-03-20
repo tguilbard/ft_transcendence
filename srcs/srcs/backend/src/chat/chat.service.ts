@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryBuilderService } from 'src/generics/class/query-builder.service';
 import { UserEntity } from 'src/users/entities/users.entity';
-import { Brackets, Column, Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { ChannelEntity } from './entities/channel.entity';
 import { MemberEntity } from './entities/member.entity';
 import { MessageEntity } from './entities/message.entity';
@@ -13,8 +13,6 @@ import * as bcrypt from 'bcrypt';
 import { MemberType } from './enum/member-type.enum';
 import { SqlFunctionService } from './utils/services/sql-function.service';
 import { MemberModes } from './interfaces/user-selection-right.interface';
-import { channel } from 'diagnostics_channel';
-import { ChatGateway } from 'src/app.gateway';
 
 @Injectable()
 export class ChatService {

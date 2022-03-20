@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { TfaModule } from './auth/tfa/tfa.module';
 import { NestModule, MiddlewareConsumer, Module } from '@nestjs/common';
-import { NODE_ENV_DEV, NODE_ENV_PROD } from './constant';
 import { AuthMiddleware } from './auth/middleware/resgister.middleware';
 import { QueryBuilderService } from './generics/class/query-builder.service';
 import { ChatGateway } from './app.gateway';
@@ -23,9 +22,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 	}),
     ConfigModule.forRoot({
       isGlobal: true,
-      ignoreEnvFile: false, //any .env file
-	  envFilePath: ['.env', process.env.NODE_ENV ? `.env.${ process.env.NODE_ENV}` : `.env.${NODE_ENV_DEV}`] //choice between development and production env
-      //cache: true //fastest
+      ignoreEnvFile: true, //any .env file
    }),
     TypeOrmModule.forRootAsync({
       imports:[ConfigModule],
@@ -39,15 +36,12 @@ import { ServeStaticModule } from '@nestjs/serve-static';
         database: configService.get('DATABASE_NAME'),
         autoLoadEntities: true,
         entities: ["dist/**/*.entity{.ts,.js}"],
-	    synchronize: configService.get('NODE_ENV') == NODE_ENV_PROD ? false : true
+	      synchronize: true
       }),
       inject: [ConfigService]
   }),
     UsersModule,
     TfaModule,
-	// MessageModule,
-	// ChannelModule,
-	// MemberModule,
 	AchievementModule,
     GameHistoryModule,
     ChatModule,

@@ -70,7 +70,7 @@ import shared from "../mixins/Mixins";
       this.srcImg = URL.createObjectURL(this.file);
     },
     addUser(formData: FormData) {
-      fetch(`http://${process.env.VUE_APP_ADDRESS}/users/register`, {
+      fetch(`/users/register`, {
         method: "POST",
         mode: "cors",
         credentials: "include",

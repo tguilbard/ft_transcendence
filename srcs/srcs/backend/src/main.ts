@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ConfigService } from '@nestjs/config';
+// import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
-import * as session from 'express-session';
+import * as session from 'cookie-session';
 import * as cookieParser from 'cookie-parser';
 import { UsersService } from './users/users.service'
 import { GlobalExceptionFilter } from './auth/filter/GlobalExceptionFilter';
@@ -12,12 +12,11 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  const configService = app.get(ConfigService);
+  // const configService = app.get(ConfigService);
   const usersService = app.get(UsersService);
 
   app.useGlobalFilters(new GlobalExceptionFilter());
   app.useGlobalPipes(new ValidationPipe());
-  
   app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -28,8 +27,6 @@ async function bootstrap() {
   
 
   app.useStaticAssets(join(__dirname, '..', 'dist'));
- // app.setBaseViewsDir(join(__dirname, '..', 'views'));
- // app.setViewEngine('hbs');
 
   app.enableCors({
     origin: true,
@@ -38,7 +35,7 @@ async function bootstrap() {
   });
   
   await usersService.InitStateUsersInDB();
-  await app.listen(configService.get('PORT'));
+  await app.listen(process.env.VUE_APP_PORT);
 
   global.init = true;
   global.socketUserList = [];

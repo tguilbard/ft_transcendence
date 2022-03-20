@@ -43,7 +43,7 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 			return this.$router.push("/login");
 		},
 		async logOutToIntra(user: UserEntity): Promise<void> {
-			const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/users/logout`, {
+			const response = await fetch(`/users/logout`, {
 				method: "GET",
 				mode: "cors",
 				credentials: "include",
@@ -62,7 +62,7 @@ import { ChannelEntity, UserEntity, Achievements, Message } from "@/interface/in
 			store.dispatch("SET_IMG", URL.createObjectURL(this.file));
 		},
 		async getListFriends(): Promise<UserEntity[]> {
-			const response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/users/friends`, {
+			const response = await fetch(`/users/friends`, {
 				method: "GET",
 				mode: "cors",
 				credentials: "include",

@@ -4,7 +4,7 @@ import { Achievements, ChannelEntity, Match, Message, MessagesList, UserEntity }
 
 export default createStore({
 	state: {
-		socket: io('http://0.0.0.1:2000', { transports: ['websocket', 'polling', 'flashsocket'], reconnection: false, autoConnect:false }),
+		socket: io('http://0.0.0.1:2000', {reconnection: false, autoConnect:false }),
 		sock_init: false,
 		listUsersCurrent: [{} as UserEntity],
 		user: {} as UserEntity,
@@ -130,7 +130,7 @@ export default createStore({
 		},
 		SET_SOCKET(state) {
 			state.sock_init = true;
-			state.socket = io(`http://${process.env.VUE_APP_ADDRESS}`, { transports: ['websocket', 'polling', 'flashsocket'] });
+			state.socket = io();
 		},
 		SET_LIST_USER_CURRENT(state, list: UserEntity[]) {
 			state.listUsersCurrent = list;

@@ -2,6 +2,10 @@ FROM node:lts-alpine3.15
 
 ARG BACK_PATH=backend
 ARG FRONT_PATH=frontend
+
+ARG VUE_APP_HOST=127.0.0.1
+ARG VUE_APP_PORT=3000
+
 #BACK
 WORKDIR /usr/src/app/back
 
@@ -20,6 +24,7 @@ RUN npm run build
 
 #RUN rm -rf srcs
 
+
 #FRONT
 WORKDIR /usr/src/app/front
 
@@ -31,6 +36,9 @@ RUN npm install
 
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY ${FRONT_PATH} .
+
+RUN sed -i 's/${SED_REPLACE_HOST}'/${VUE_APP_HOST}/g .env.production \
+&& sed -i 's/${SED_REPLACE_PORT}'/${VUE_APP_PORT}/g .env.production
 
 # build app for production with minification
 RUN npm run build

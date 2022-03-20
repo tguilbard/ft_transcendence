@@ -61,7 +61,7 @@ import store from "../store/index";
   methods: {
     async submit() {
       // Création d'un formData obligatoire pour submit de l'image
-      await fetch(`http://${process.env.VUE_APP_ADDRESS}/2fa/activate`, {
+      await fetch(`/2fa/activate`, {
         method: "POST",
         mode: "cors",
         credentials: "include",
@@ -88,7 +88,7 @@ import store from "../store/index";
         });
     },
     async get_img() {
-      let response = await fetch(`http://${process.env.VUE_APP_ADDRESS}/avatar`, {
+      let response = await fetch(`/avatar`, {
         method: "GET",
         mode: "cors",
         credentials: "include",
