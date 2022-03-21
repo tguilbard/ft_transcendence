@@ -10,10 +10,7 @@
 [Ft_transcendence](https://cdn.intra.42.fr/pdf/pdf/47609/fr.subject.pdf) is the last project of 42Paris. \
 It consist of a website where every 42 students can connect it to play pong and chat.
 
-#PUT HERE IMAGE
-<p align="center">
-  <img src="https://cdn.intra.42.fr/pdf/pdf/47609/fr.subject.pdf" />
-</p>
+![PONG GAME PAGE](image.png)
 
 ### Built With
 ![vue.js](https://img.shields.io/static/v1?label=vue.js&labelColor=30485e&logo=vue.js&message=5.0.3&color=3fb985&style=for-the-badge)
