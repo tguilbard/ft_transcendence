@@ -1,5 +1,5 @@
 # ft_transcendence
-![42](https://img.shields.io/static/v1?label=&labelColor=000000e&logo=42&message=project&color=000000&style=flate) 
+![42](https://img.shields.io/static/v1?label=&labelColor=000000e&logo=42&message=project&color=000000&style=flate)
 ![Stars](https://img.shields.io/github/stars/tguilbard/ft_transcendence?style=social)
 ![GitHub mapapin](https://img.shields.io/github/followers/mapapin?label=mapapin&style=social)
 ![GitHub tguilbard](https://img.shields.io/github/followers/tguilbard?label=tguilbard&style=social)
