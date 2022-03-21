@@ -19,8 +19,8 @@ It consist of a website where every 42 students can connect it to play pong and 
 ## Getting Started
 
 ### Prerequisites
-  - [docker 20.10.12](https://docs.docker.com/get-docker/)
-  - [docker-compose 2.2.3](https://docs.docker.com/compose/install/)
+  ![Custom badge](https://img.shields.io/static/v1?label=docker&labelColor=31C4F3&logo=docker&logoColor=white&message=20.10.12&color=389AD5&style=for-the-badge)
+  ![Custom badge](https://img.shields.io/static/v1?label=docker-compose&labelColor=31C4F3&logo=docker&logoColor=white&message=2.2.3&color=389AD5&style=for-the-badge)
 ### Installation
 First install project :
 ```
