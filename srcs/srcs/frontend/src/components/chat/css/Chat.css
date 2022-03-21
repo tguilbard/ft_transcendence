@@ -176,6 +176,7 @@ button {
     box-sizing: border-box;
     height: 100%;
     overflow-x:hidden;
+    cursor: pointer;
 }
 
 .block_list_channel {

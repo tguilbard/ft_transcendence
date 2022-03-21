@@ -196,7 +196,14 @@ export default class Chat extends Vue {
 	private async active_pop_add(): Promise<void> {
 		store.dispatch("SET_CHANNEL_TARGET", {})
 		await store.dispatch("SET_LIST_CHANNEL_PUBLIC", await this.getListChannelPublic());
-		await store.dispatch("SET_LIST_USER_GENERAL", await shared.getUserInChan("General"));
+		const listGeneral = await shared.getUserInChan("General");
+		const listUsers = await shared.getUserInChan(store.getters.GET_CHAN_CURRENT.realname);
+		const list = [];
+		listGeneral.forEach(e => {
+			if (!listUsers.find(ee => ee.id == e.id))
+				list.push(e);
+		})
+		await store.dispatch("SET_LIST_USER_GENERAL", list);
 		store.dispatch("SET_POPUP", 'add');
 		store.dispatch("SET_SAVE_POPUP");
 	}

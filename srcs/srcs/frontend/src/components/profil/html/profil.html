@@ -47,7 +47,7 @@
           </div>
           <div class="list_friends_popup">
             <div v-if="GET_FRIENDS" v-for="item in GET_FRIENDS" :key="item">
-              <div v-if="item.username != GET_USER.username" @click="active_pop_profil(item)" class="logo_connection link">
+              <div v-if="item.username != GET_USER.username" @click="active_pop_profil(item)" class="logo_connection">
                 <div>
                   <p style="text-align: left">
                     {{ item.username }}

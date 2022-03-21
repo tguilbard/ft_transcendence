@@ -30,15 +30,15 @@
                                 <div class="left">
                                     <p>{{ item.elo }}</p>
                                 </div>
-                                <div class="logo_connection right link" @click="active_pop_profil(item)">
+                                <div class="logo_connection right" @click="active_pop_profil(item)">
                                     <div>
                                         <div v-if="item.username == GET_USER.username">
-                                            <p class="link" style="color: rgb(160, 28, 28); text-align: left">
+                                            <p style="color: rgb(160, 28, 28); text-align: left">
                                                 {{ item.username }}
                                             </p>
                                         </div>
                                         <div v-else>
-                                            <p class="link" style="text-align: left">
+                                            <p style="text-align: left">
                                                 {{ item.username }}
                                             </p>
                                         </div>

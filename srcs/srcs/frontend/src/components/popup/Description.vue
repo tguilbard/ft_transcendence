@@ -108,6 +108,10 @@ export default defineComponent({
 
 <style scoped>
 
+button {
+  cursor: pointer;
+}
+
 p, span, input {
   white-space: nowrap;
   font-family: futura;

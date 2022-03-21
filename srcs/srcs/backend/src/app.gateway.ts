@@ -82,11 +82,6 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		this.server.emit('refresh_user', "all");
 	}
 
-	// @SubscribeMessage('logout')
-	// async logout(client: Socket) {
-	// 	client.close();
-	// }
-
 	@SubscribeMessage('msgToServer')
 	async handleMessage(client: Socket, payload: any) {
 		let chanTarget = await this.chatService.GetChannel(payload[1]);
@@ -464,7 +459,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 		let userTarget = await this.userService.FindUserByUsername(userTargetName);
 		try {
 			if (await this.chatService.GetMemberByUserIdAndChannelId(userTarget.id, chan.id) ){
-				this.server.to(client.id).emit('alertMessage', userTarget.username + " already exist");
+				this.server.to(client.id).emit('alertMessage', userTarget.username + " already into this channel");
 				return;
 			}
 		}

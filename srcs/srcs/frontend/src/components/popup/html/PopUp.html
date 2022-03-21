@@ -231,10 +231,10 @@
         
                         <div class="list_chan_popup">
                             <div v-if="GET_LIST_USER_GENERAL" v-for="item in GET_LIST_USER_GENERAL">
-                                <div v-if="((item.username != GET_USER.username) && item.state == 'login')"
+                                <div v-if="item.username != GET_USER.username && item.state == 'login'"
                                     :class="[ (item.username == GET_USER_TARGET.username)? 'user_list_selected': '', 'logo_connection']">
                                     <div>
-                                        <p class="link" @click="setUserTarget(item)" style="text-align: left;">{{
+                                        <p @click="setUserTarget(item)" style="text-align: left;">{{
                                             item.username }}</p>
                                     </div>
                                     <div>
@@ -245,7 +245,7 @@
                                             <img src="@/assets/circle_orange.png" alt="in match">
                                         </div>
                                     </div>
-                                    <hr>
+                                    <hr><hr>
                                 </div>
                             </div>
                         </div>

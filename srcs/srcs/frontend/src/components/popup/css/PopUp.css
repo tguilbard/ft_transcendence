@@ -192,6 +192,18 @@
     align-items: center;
 }
 
+.logo_connection p, .logo_connection img {
+    cursor: pointer;
+  }
+  
+  .btn_chan p, .btn_chan img {
+    cursor: pointer;
+  }
+
+  .logo_connection:hover, .btn_chan:hover {
+    background-color: rgb(145, 229, 229);
+  }
+
 .logo_connection img {
     width: 1.2vmax;
     height: 1.2vmax;

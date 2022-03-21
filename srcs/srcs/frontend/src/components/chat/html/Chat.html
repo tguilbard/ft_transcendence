@@ -95,7 +95,7 @@
                     <div v-if="GET_ROOM">
                         <button class="of button" @click="active_pop_add">ADD ROOM</button>
                     </div>
-                    <div v-else-if="GET_LIST_CHAN_PRIVATE && GET_LIST_CHAN_PRIVATE.length && (GET_CHAN_CURRENT).mode == 2">
+                    <div v-else-if="GET_LIST_CHAN_PRIVATE && GET_LIST_CHAN_PRIVATE.length && (GET_CHAN_CURRENT).mode == 2 && (modeIsSet(GET_MY_MODE, 'owner') || modeIsSet(GET_MY_MODE, 'admin'))">
                         <button class="of button" @click="active_pop_add">INVITE USER</button>
                     </div>
                     <div v-else>
@@ -155,7 +155,7 @@
             <div class="post">
                 <form @submit="postMSG" id='chat-form'>
                     <input v-model="inputMsg" id="msg" type="text" placeholder="Enter Message" required
-                    class="input">
+                    autocomplete="off" class="input">
                 </form>
             </div>
         </div>

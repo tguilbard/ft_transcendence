@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
-import { Subject } from 'rxjs'
-import { Observable } from '../../../../node_modules/rxjs/internal/Observable';
+import  { Subject } from 'rxjs'
+import { Observable } from 'rxjs/internal/Observable';
+
 
 const WHITE = 0xffffff
 

@@ -96,7 +96,7 @@
                           <p style="color: red" v-if="msg.code">{{ msg.code }}</p>
                         </div>
                       </div>
-                      <input type="submit" value="DONE" />
+                      <input class="btn" type="submit" value="DONE" />
                     </form>
                   </div>
                 </div>
