@@ -51,3 +51,5 @@ docker compose up --build
 ```
 
 ## Some information about project
+
+![database graphique](database.png)
