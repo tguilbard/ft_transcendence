@@ -211,7 +211,7 @@ export class UsersService {
 				grant_type: 'authorization_code',
 				client_id: process.env.API_42_ID,
 				client_secret: process.env.API_42_SECRET,
-				redirect_uri: `/ok`,
+				redirect_uri: `http://${process.env.VUE_APP_ADDRESS}/ok`,
 				code: code
 			}
 			var result;
