@@ -12,9 +12,11 @@ It consist of a website where every 42 students can connect it to play pong and 
 </p>
 
 ### Built With
-  - [Vue.js](https://vuejs.org/)
-  - [Nest.js](https://nestjs.com/)
-  - [Postgresql](https://www.postgresql.org/)
+![Custom badge](https://img.shields.io/static/v1?label=vue.js&labelColor=30485e&logo=vue.js&message=20.10.12&color=3fb985&style=for-the-badge)
+![Custom badge](https://img.shields.io/static/v1?label=nestjs&labelColor=DD0000&logo=nestjs&message=20.10.12&color=BF0303&style=for-the-badge)
+![Custom badge](https://img.shields.io/static/v1?label=postgreSQL&labelColor=DDDDDD&logo=postgreSQL&message=20.10.12&color=6a86e0&style=for-the-badge)
+![Custom badge](https://img.shields.io/static/v1?label=docker&labelColor=31C4F3&logo=docker&logoColor=white&message=20.10.12&color=389AD5&style=for-the-badge)
+![Custom badge](https://img.shields.io/static/v1?label=docker-compose&labelColor=31C4F3&logo=docker&logoColor=white&message=2.2.3&color=389AD5&style=for-the-badge)
 
 ## Getting Started
 
